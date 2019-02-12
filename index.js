@@ -1,5 +1,5 @@
 const Haxroomie = require('./src/Haxroomie');
-const createActionFactory = require('haxball-action-factory');
+const createActionFactory = require('haxroomie-action-factory');
 
 module.exports = {
   Haxroomie,
