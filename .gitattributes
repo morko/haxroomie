@@ -1,0 +1,3 @@
+# Prevents windows from adding crlf line endings with npm command.
+package.json text eol=lf
+package-lock.json text eol=lf
