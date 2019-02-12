@@ -75,11 +75,14 @@ const argv = require(`yargs`)
 
 function loadHHMConfig(file, client) {
 	if (!fs.existsSync(file)) {
-		client.prompt.send(`ERROR`, `Could not load hhm config ${file}`);
+		client.commandPrompt.send(
+			`ERROR`, 
+			`Could not load hhm config ${file}`
+		);
 		return null;
 	}
 	let hhmConfig = fs.readFileSync(file, { encoding: 'utf-8'});
-	client.prompt.send(
+	client.commandPrompt.send(
 		`LOAD_CONFIG`, 
 		`Loaded hhm config from ${file}`
 	);

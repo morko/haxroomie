@@ -16,8 +16,8 @@
     "haxroomie": "./src/cli/index.js"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/morko/haxroomie.git"
+    "type": "git",
+    "url": "https://github.com/morko/haxroomie.git"
   },
   "engines": {
     "node": ">=10.5.1"
