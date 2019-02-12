@@ -25,6 +25,12 @@ module.exports = class Haxroomie {
       throw new Error('INVALID_PORT: 0');
     }
     this.port = opt.port || 3066;
+
+    /**
+     * Makes chrome run without sandbox. Useful only if chrome wont launch in
+     * sandboxed mode.
+     */
+    this.noSandbox = opt.noSandbox || false;
     /**
      * Setting this to false will make puppeteer try to spawn a window. Normally
      * you don't need this unless debugging.
@@ -54,7 +60,8 @@ module.exports = class Haxroomie {
         headless: this.headless,
         devtools: !this.headless,
         args: [
-          '--remote-debugging-port=' + this.port
+          `--remote-debugging-port=${this.port}`,
+          `--no-sandbox=${this.noSandbox}`
         ]
       });
     }

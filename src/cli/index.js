@@ -49,6 +49,11 @@ const argv = require(`yargs`)
 	.describe(`config`, `custom headless host manager config 
 		(relative to current working directory or absolute path)`)
 
+	.alias(`s`, `no-sandbox`)
+	.boolean(`no-sandbox`)
+	.describe(`no-sancbox`, `makes chrome run without sandbox (useful only if
+		running with sandbox wont work in your machine)`)
+
 	.alias(`w`, `window`)
 	.boolean(`window`)
 	.describe(`window`, `spawn a browser window for debugging`)
@@ -56,6 +61,8 @@ const argv = require(`yargs`)
 	.argv;
 
 const token = argv._[0] || process.env.TOKEN;
+const noSandbox = argv.noSandbox || process.env.NO_SANDBOX;
+
 if (!token) {
 	console.error(`You need to provide a token to start the room!\n` +
 	`Get it from https://www.haxball.com/headlesstoken. ` +
@@ -65,7 +72,10 @@ if (!token) {
 	
 (async function bootstrap() {
 	try {
-		let haxroomie = new Haxroomie({headless: !argv.window});
+		let haxroomie = new Haxroomie({
+			headless: !argv.window, 
+			noSandbox: noSandbox
+		});
 		let session = await haxroomie.getSession(SESSION_ID);
 		let client = new RoomClient(CLIENT_ID, session);
 		
