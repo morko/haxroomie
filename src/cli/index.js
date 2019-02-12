@@ -53,11 +53,16 @@ const argv = require(`yargs`)
 	.boolean(`window`)
 	.describe(`window`, `spawn a browser window for debugging`)
 
-	.demandCommand(1, `You need to provide a token to start the room!\n` +
-		`Get it from https://www.haxball.com/headlesstoken`)
-
 	.argv;
 
+const token = argv._[0] || process.env.TOKEN;
+if (!token) {
+	console.error(`You need to provide a token to start the room!\n` +
+	`Get it from https://www.haxball.com/headlesstoken. ` +
+	`See haxroomie --help for more information`);
+	process.exit(1);
+}
+	
 (async function bootstrap() {
 	try {
 		let haxroomie = new Haxroomie({headless: !argv.window});
@@ -98,7 +103,7 @@ function parseArguments(client) {
 		maxPlayers: argv.maxPlayers,
 		password: argv.password,
 		public: argv.public,
-		token: argv._[0],
+		token: token,
 		adminPassword: argv.adminPassword,
 		hhmConfig: argv.config ? loadHHMConfig(argv.config, client) : undefined
 	};
