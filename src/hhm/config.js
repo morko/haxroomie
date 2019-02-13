@@ -5,8 +5,9 @@ HHM.config = HHM.config || {};
 HHM.config.room = {
   roomName: haxroomie.roomName || `haxroomie`,
   playerName : haxroomie.playerName || `host`,
-  maxPlayers: haxroomie.maxPlayers || 10 ,
+  maxPlayers: haxroomie.maxPlayers || 10,
   public : haxroomie.hasOwnProperty('public') ? haxroomie.public : false,
+  password: haxroomie.password || undefined,
   geo: haxroomie.geo || {code: `FI`, lat: 60.192059, lon: 24.945831},
   token: haxroomie.token
 };
