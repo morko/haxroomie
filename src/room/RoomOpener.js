@@ -41,9 +41,6 @@ module.exports = class RoomOpener extends EventEmitter {
     this.onRoomEvent = opt.onRoomEvent;
     this.timeout = opt.timeout || 8;
 
-    /** puppeteer.ElementHandle object (the haxball iframe) */
-    this.haxframe = null;
-
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
   }
@@ -179,11 +176,9 @@ module.exports = class RoomOpener extends EventEmitter {
    * webpage are.
    */
   async getHaxframe() {
-    if (!this.haxframe) {
-      let elementHandle = await this.page.$("iframe");
-      this.haxframe = await elementHandle.contentFrame();
-    }
-    return this.haxframe
+    let elementHandle = await this.page.$("iframe");
+    let haxframe = await elementHandle.contentFrame();
+    return haxframe;
   }
 
   openRoomError(msg) {
