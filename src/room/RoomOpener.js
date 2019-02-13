@@ -153,8 +153,11 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Get the room info from HHM.');
-    let roomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
+    let hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
 
+    // merge the roomInfo to the config so all properties get returned
+    let roomInfo = Object.assign({}, config, hhmRoomInfo);
+    // add the roomlink to the roomInfo
     roomInfo.roomlink = roomlink;
 
     return this.actionFactory.create(
