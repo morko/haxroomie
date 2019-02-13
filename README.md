@@ -268,7 +268,7 @@ Server => ROOM_CLOSED
 
 Actions the server emits/sends and the client can listen to with the function defined in `session.subscribe('sessionID', function)`.
 
-#### CONNECTED (broadcast)
+#### CLIENT_CONNECTED (broadcast)
 
 Sent when a new client connects to the session.
 
@@ -302,7 +302,7 @@ or if room is not running
 }
 ```
 
-#### DISCONNECTED (broadcast)
+#### CLIENT_DISCONNECTED (broadcast)
 
 Sent when a client disconnects.
 
