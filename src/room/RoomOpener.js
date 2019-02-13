@@ -79,6 +79,9 @@ module.exports = class RoomOpener extends EventEmitter {
       return this.openRoomError('config is missing token');
     }
 
+    // set default admin password or use the one provided
+    config.adminPassword = config.adminPassword || 'haxroomie';
+
     logger.debug('OPEN_ROOM: Navigating to ' + this.url);
     try {
       await this.page.goto(this.url);
