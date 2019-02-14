@@ -51,7 +51,7 @@ const argv = require(`yargs`)
 
 	.alias(`s`, `no-sandbox`)
 	.boolean(`no-sandbox`)
-	.describe(`no-sancbox`, `makes chrome run without sandbox (useful only if
+	.describe(`no-sandbox`, `makes chrome run without sandbox (useful only if
 		running with sandbox wont work in your machine)`)
 
 	.alias(`w`, `window`)
