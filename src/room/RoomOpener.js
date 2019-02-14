@@ -97,23 +97,28 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
-    let hhmConfig;
-    if (config.hhmConfig) {
-      hhmConfig = new Function('haxroomie', config.hhmConfig);
-    } else {
-      hhmConfig = new Function(
-        'haxroomie',
-        fs.readFileSync(
-          path.join(__dirname, '..', 'hhm', 'config.js'),
-          { encoding: 'utf-8'}
-        )
-      );
+    try {
+      let hhmConfig;
+      if (config.hhmConfig) {
+        hhmConfig = new Function('haxroomie', config.hhmConfig);
+      } else {
+        hhmConfig = new Function(
+          'haxroomie',
+          fs.readFileSync(
+            path.join(__dirname, '..', 'hhm', 'config.js'),
+            { encoding: 'utf-8'}
+          )
+        );
+      }
+    } catch (err) {
+      return this.openRoomError('Invalid HHM config!');
     }
+
     try {
       await this.page.evaluate(hhmConfig, config);
     } catch (err) {
       return this.openRoomError(
-        `Unable to start Headless Host Manager: ${err}`
+        `Unable to start Headless Host Manager!`
       );
     }
 
@@ -137,7 +142,7 @@ module.exports = class RoomOpener extends EventEmitter {
       await this.injectHaxroomiePlugin();
     } catch (err) {
       return this.openRoomError(
-        `Unable to inject haxroomie HHM plugin: ${err}`
+        `Unable to inject haxroomie HHM plugin!`
       );
     }
 
@@ -145,18 +150,24 @@ module.exports = class RoomOpener extends EventEmitter {
       logger.debug('OPEN_ROOM: Injecting custom plugins.');
       for (let p of config.plugins) {
         if (typeof p !== 'string') {
-          return this.openRoomError('typeof plugin has to be string');
+          return this.openRoomError('Invalid plugin: has to be a string!');
         }
         try {
           await this.injectPlugin(p);
         } catch (err) {
-          return this.openRoomError(`Unable to inject plugin: ${p}`)
+          return this.openRoomError(`Unable to inject plugin: ${err.stack} \n ${p}`)
         }
       }
     }
 
     logger.debug('OPEN_ROOM: Get the room info from HHM.');
-    let hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
+    let hhmRoomInfo;
+    try {
+      hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
+    } catch (err) {
+      return this.openRoomError(`Unable to get the room info from HHM.`)
+    }
+    
 
     // merge the roomInfo to the config so all properties get returned
     let roomInfo = Object.assign({}, config, hhmRoomInfo);
