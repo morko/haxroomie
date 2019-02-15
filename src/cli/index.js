@@ -76,6 +76,7 @@ if (!token) {
 			headless: !argv.window, 
 			noSandbox: noSandbox
 		});
+		await haxroomie.createBrowser();
 		let session = await haxroomie.getSession(SESSION_ID);
 		let client = new RoomClient(CLIENT_ID, session);
 		

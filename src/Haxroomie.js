@@ -39,16 +39,10 @@ module.exports = class Haxroomie {
   }
 
   async createBrowser() {
-    
     // make sure there isnt a browser running already
-    try {
-      this.browser = await puppeteer.connect({
-        browserURL: `http://localhost:${this.port}`
-      });
-    // ignore the error that happens if there is no browser
-    } catch (err) {}
+    let browser = await this.getRunningBrowser();
     // if there is a browser running throw an error
-    if (this.browser) {
+    if (browser) {
       throw new Error(
         `BROWSER_RUNNING: http://localhost:${this.port}.
         Use another port or close the browser.`
@@ -68,16 +62,27 @@ module.exports = class Haxroomie {
     return this.browser;
   }
 
+  async getRunningBrowser() {
+    try {
+      this.browser = await puppeteer.connect({
+        browserURL: `http://localhost:${this.port}`
+      });
+    } catch (err) {
+      return null;
+    }
+    return this.browser;
+  }
+
   async closeBrowser() {
     if (this.browser) await this.browser.close();
   }
 
   async getSession(sessionID) {
+    if (!this.browser) {
+      throw new Error(`Browser is not running!`)
+    }
     if (!sessionID && sessionID !== 0) {
       throw new Error('Missing required argument: sessionID');
-    }
-    if (!this.browser) {
-      await this.createBrowser();
     }
     // if there are no sessions get the default page
     if (Object.keys(this.roomSessions).length === 0) {
