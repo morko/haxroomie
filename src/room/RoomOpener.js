@@ -49,7 +49,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * Opens the haxball room.
    * 
    * The config object can contain any properties you want to use in your
-   * own HHM config file given in config.hhmConfig. The config object is
+   * own HHM config file given in config.hhmConfigFile. The config object is
    * usable globally from within the HHM config as the **haxroomie** object.
    * 
    * The parameters that the default HHM config uses are listed below.
@@ -58,13 +58,13 @@ module.exports = class RoomOpener extends EventEmitter {
    *    as **haxroomie**
    * @param {string} config.token token to start the room with from 
    *    https://www.haxball.com/headlesstoken
-   * @param {string} [config.hhmConfig] configuration for the headless host manager
+   * @param {string} [config.hhmConfigFile] configuration for the headless host manager
    * @param {string} [config.roomName] room name
    * @param {string} [config.playerName] host player name
    * @param {int} [config.maxPlayers] max players
    * @param {boolean} [config.public] should the room be public
    * @param {string} [config.adminPassword] admin role password in room
-   * @param {Array.<string>} [config.plugins] optional HHM plugins to load when 
+   * @param {Array.<string>} [config.pluginFiles] optional HHM plugins to load when 
    *    starting the room
    * 
    * @returns {action} action containing roomInfo or error
@@ -97,12 +97,12 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
+    let hhmConfigFile;
     try {
-      let hhmConfig;
-      if (config.hhmConfig) {
-        hhmConfig = new Function('haxroomie', config.hhmConfig);
+      if (config.hhmConfigFile) {
+        hhmConfigFile = new Function('haxroomie', config.hhmConfigFile);
       } else {
-        hhmConfig = new Function(
+        hhmConfigFile = new Function(
           'haxroomie',
           fs.readFileSync(
             path.join(__dirname, '..', 'hhm', 'config.js'),
@@ -115,7 +115,7 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     try {
-      await this.page.evaluate(hhmConfig, config);
+      await this.page.evaluate(hhmConfigFile, config);
     } catch (err) {
       return this.openRoomError(
         `Unable to start Headless Host Manager!`
@@ -146,9 +146,9 @@ module.exports = class RoomOpener extends EventEmitter {
       );
     }
 
-    if (config.plugins) {
+    if (config.pluginFiles) {
       logger.debug('OPEN_ROOM: Injecting custom plugins.');
-      for (let p of config.plugins) {
+      for (let p of config.pluginFiles) {
         if (typeof p !== 'string') {
           return this.openRoomError('Invalid plugin: has to be a string!');
         }
