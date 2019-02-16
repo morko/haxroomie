@@ -103,7 +103,7 @@ function loadHHMConfig(file, client) {
 		`Loaded hhm config from ${file}`
 	);
 
-	return hhmConfig;
+	return {name: file, content: hhmConfig};
 }
 
 function parseArguments(client) {
@@ -116,7 +116,7 @@ function parseArguments(client) {
 		public: argv.public,
 		token: token,
 		adminPassword: argv.adminPassword,
-		hhmConfig: argv.config ? loadHHMConfig(argv.config, client) : undefined
+		hhmConfigFile: argv.config ? loadHHMConfig(argv.config, client) : undefined
 	};
 
 	if (argv.options) {
@@ -129,8 +129,11 @@ function parseArguments(client) {
 	}
 
 	if (argv.plugins) {
-		config.plugins = argv.plugins.split(`,`)
-		.map(e => { return fs.readFileSync(e, { encoding: 'utf-8'})});
+		config.pluginFiles = argv.plugins.split(`,`)
+		.map(e => { return {
+			name: e, 
+			content: fs.readFileSync(e, { encoding: 'utf-8'})
+		}});
 	}
 	return config;
 }
