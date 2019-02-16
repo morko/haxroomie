@@ -52,8 +52,6 @@ module.exports = class RoomOpener extends EventEmitter {
    * own HHM config file given in config.hhmConfigFile. The config object is
    * usable globally from within the HHM config as the **haxroomie** object.
    * 
-   * The parameters that the default HHM config uses are listed below.
-   * 
    * @param {object} config config object that gets injected to HHM config
    *    as **haxroomie**
    * @param {string} config.token token to start the room with from 
