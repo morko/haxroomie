@@ -198,7 +198,8 @@ module.exports = class RoomOpener extends EventEmitter {
     return haxframe;
   }
 
-  openRoomError(msg) {
+  async openRoomError(msg) {
+    await this.close();
     return this.actionFactory.createError('OPEN_ROOM_STOP', msg)
   }
 
