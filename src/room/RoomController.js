@@ -78,7 +78,7 @@ module.exports = class RoomController {
     let roomOpener = new RoomOpener({
       page: this.page,
       actionFactory: this.actionFactory,
-      onRoomEvent: (action) => this.onRoomEvent(action),
+      onEventFromBrowser: (action) => this.onEventFromBrowser(action),
       timeout: this.timeout
     });
     return roomOpener;
@@ -206,7 +206,7 @@ module.exports = class RoomController {
    */
   async onCallRoom(fn, ...args) {
     let result = await this.page.evaluate((fn, args) => {
-      return window.hrCallRoom(fn, ...args);
+      return window.hroomie.callRoom(fn, ...args);
     }, fn, args);
     if (result.error) {
       throw new Error(result.payload);
@@ -220,46 +220,46 @@ module.exports = class RoomController {
    */
   async onGetPlugins() {
     let result = await this.page.evaluate(() => {
-      return window.hrGetPlugins();
+      return window.hroomie.getPlugins();
     });
     return result;
   }
 
   /**
-   * Returns PluginData of the given plugin id.
+   * Returns PluginData of the given plugin name.
    * 
-   * @param {number} id - id of the plugin
-   * @returns {Promise<PluginData>|null} - data of the plugin or null if
+   * @param {string} name - name of the plugin
+   * @returns {Promise<PluginData|null>} - data of the plugin or null if
    *    plugin was not found
    */
   async onGetPlugin(name) {
     let result = await this.page.evaluate((name) => {
-      return window.hrGetPlugin(name);
+      return window.hroomie.getPlugin(name);
     }, name);
     return result;
   }
   /**
-   * Enables a HHM plugin with the given id.
+   * Enables a HHM plugin with the given name.
    * 
-   * @param {number} id - id of the plugin
+   * @param {string} name - name of the plugin
    * @returns {Promise<boolean} - was the plugin enabled or not?
    */
   async onEnablePlugin(name) {
     let result = await this.page.evaluate((name) => {
-      return window.hrEnablePlugin(name);
+      return window.hroomie.enablePlugin(name);
     }, name);
     return result;
   }
 
   /**
-   * Disables a HHM plugin with the given id.
+   * Disables a HHM plugin with the given name.
    * 
-   * @param {number} id - id of the plugin
+   * @param {string} name - name of the plugin
    * @returns {Promise<boolean} - was the plugin disabled or not?
    */
   async onDisablePlugin(name) {
     let result = await this.page.evaluate((name) => {
-      return window.hrDisablePlugin(name);
+      return window.hroomie.disablePlugin(name);
     }, name);
     return result;
   }
@@ -278,7 +278,7 @@ module.exports = class RoomController {
    *
    * @param {Action} action
    */
-  async onRoomEvent(action) {
+  async onEventFromBrowser(action) {
     action.sender = this.id;
     this.broadcast(action);
   }

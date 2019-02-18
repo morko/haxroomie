@@ -30,15 +30,15 @@ module.exports = class RoomOpener extends EventEmitter {
     if (!opt.actionFactory) {
       throw new Error('Missing required argument: opt.actionFactory');
     }
-    if (!opt.onRoomEvent) {
-      throw new Error('Missing required argument: opt.onRoomEvent');
+    if (!opt.onEventFromBrowser) {
+      throw new Error('Missing required argument: opt.onEventFromBrowser');
     }
-    if (typeof opt.onRoomEvent !== 'function') {
-      throw new Error('opt.onRoomEvent has to be typeof function');
+    if (typeof opt.onEventFromBrowser !== 'function') {
+      throw new Error('opt.onEventFromBrowser has to be typeof function');
     }
     this.page = opt.page;
     this.actionFactory = opt.actionFactory;
-    this.onRoomEvent = opt.onRoomEvent;
+    this.onEventFromBrowser = opt.onEventFromBrowser;
     this.timeout = opt.timeout || 8;
 
     /** URL of the HaxBall headless host site. */
@@ -131,15 +131,6 @@ module.exports = class RoomOpener extends EventEmitter {
       return this.openRoomError('Timeout when waiting for the room link!');
     }
 
-    // expose function in the headless browser context to be able to recieve messages
-    let hasSend = await this.page.evaluate(() => {return window.hrSend});
-    if (!hasSend) {
-      await this.page.exposeFunction(
-        'hrSend',
-        this.onRoomEvent
-      );
-    }
-
     logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
     try {
       await this.injectHaxroomiePlugin();
@@ -148,6 +139,12 @@ module.exports = class RoomOpener extends EventEmitter {
         `Unable to inject haxroomie HHM plugin!`
       );
     }
+
+    // expose function in the headless browser context to be able to recieve messages
+    await this.page.exposeFunction(
+      'sendToHaxroomie',
+      this.onEventFromBrowser
+    );
 
     if (config.pluginFiles) {
       logger.debug('OPEN_ROOM: Injecting custom plugins.');
@@ -212,7 +209,7 @@ module.exports = class RoomOpener extends EventEmitter {
     await this.page.evaluate((plugin) => {
       window.HHM.manager.addPluginByCode(plugin, 'salamini/haxroomie')
         .then(() => {
-          window.hrRegisterHandlers();
+          window.hroomie.registerHandlers();
         });
     }, this.readHRPlugin());
   }
