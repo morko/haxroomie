@@ -46,6 +46,11 @@ module.exports = class Session extends EventEmitter {
     this.onCallRoom = opt.onCallRoom;
     this.onClientAction = opt.onClientAction;
 
+    this.onGetPlugins = opt.onGetPlugins;
+    this.onGetPlugin = opt.onGetPlugin;
+    this.onEnablePlugin = opt.onEnablePlugin;
+    this.onDisablePlugin = opt.onDisablePlugin;
+
     this.actionFactory = require('haxroomie-action-factory')(this.id);
 
     this.subscriptions = {};
@@ -137,6 +142,58 @@ module.exports = class Session extends EventEmitter {
     }
     logger.debug(`CALL_ROOM: ${JSON.stringify(fn)} ARGS: ${JSON.stringify(args)}`);
     return this.onCallRoom(fn, ...args);
+  }
+ 
+  /**
+   * Object containing information about a plugin.
+   * 
+   * @typedef {Object} PluginData
+   * @property {number} id - The plugin id
+   * @property {boolean} isEnabled - Indicates whether the plugin is enabled or disabled.
+   * @property {object|undefined} pluginSpec - HHM pluginSpec property.
+   */
+
+  /**
+   * Returns a list of PluginData objects.
+   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   */
+  async getPlugins() {
+    logger.debug(`GET_PLUGINS`);
+    return this.onGetPlugins();
+  }
+
+  /**
+   * Returns PluginData of the given plugin id.
+   * 
+   * @param {number} id - id of the plugin
+   * @returns {Promise<PluginData>|null} - data of the plugin or null if
+   *    plugin was not found
+   */
+  async getPlugin(name) {
+    logger.debug(`GET_PLUGIN: ${name}`);
+    return this.onGetPlugin(name);
+  }
+
+  /**
+   * Enables a HHM plugin with the given id.
+   * 
+   * @param {number} name - name of the plugin
+   * @returns {Promise<boolean} - was the plugin enabled or not?
+   */
+  async enablePlugin(name) {
+    logger.debug(`ENABLE_PLUGIN: ${name}`);
+    return this.onEnablePlugin(name);
+  }
+
+  /**
+   * Disables a HHM plugin with the given id.
+   * 
+   * @param {number} name - name of the plugin
+   * @returns {Promise<boolean} - was the plugin disabled or not?
+   */
+  async disablePlugin(name) {
+    logger.debug(`DISABLE_PLUGIN: ${name}`);
+    return this.onDisablePlugin(name);
   }
 
   broadcast(action) {

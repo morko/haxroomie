@@ -63,7 +63,11 @@ module.exports = class RoomController {
     let session = new Session({
       id: this.id,
       onClientAction: (action) => this.onClientAction(action),
-      onCallRoom: (fn, ...args) => this.onCallRoom(fn, ...args)
+      onCallRoom: (fn, ...args) => this.onCallRoom(fn, ...args),
+      onGetPlugins: () => this.onGetPlugins(),
+      onGetPlugin: (id) => this.onGetPlugin(id),
+      onEnablePlugin: (name) => this.onEnablePlugin(name),
+      onDisablePlugin: (name) => this.onDisablePlugin(name)
     });
     session.on('client_connected', this.onClientConnected.bind(this));
     session.on('client_disconnected', this.onClientDisconnected.bind(this));
@@ -211,30 +215,71 @@ module.exports = class RoomController {
   }
 
   /**
+   * Returns a list of PluginData objects.
+   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   */
+  async onGetPlugins() {
+    let result = await this.page.evaluate(() => {
+      return window.hrGetPlugins();
+    });
+    return result;
+  }
+
+  /**
+   * Returns PluginData of the given plugin id.
+   * 
+   * @param {number} id - id of the plugin
+   * @returns {Promise<PluginData>|null} - data of the plugin or null if
+   *    plugin was not found
+   */
+  async onGetPlugin(name) {
+    let result = await this.page.evaluate((name) => {
+      return window.hrGetPlugin(name);
+    }, name);
+    return result;
+  }
+  /**
+   * Enables a HHM plugin with the given id.
+   * 
+   * @param {number} id - id of the plugin
+   * @returns {Promise<boolean} - was the plugin enabled or not?
+   */
+  async onEnablePlugin(name) {
+    let result = await this.page.evaluate((name) => {
+      return window.hrEnablePlugin(name);
+    }, name);
+    return result;
+  }
+
+  /**
+   * Disables a HHM plugin with the given id.
+   * 
+   * @param {number} id - id of the plugin
+   * @returns {Promise<boolean} - was the plugin disabled or not?
+   */
+  async onDisablePlugin(name) {
+    let result = await this.page.evaluate((name) => {
+      return window.hrDisablePlugin(name);
+    }, name);
+    return result;
+  }
+
+
+  /**
    * This function receives the actions sent from the headless browser context.
    *
-   * If action type is **'room-event'**, then the payload contains args and
-   * handlerName properties.
+   * If action type is **'ROOM_EVENT'**, then the payload contains *args* and
+   * *handlerName* properties. The default event handlers are listed in
+   * https://github.com/morko/haxroomie/blob/master/src/hhm/haxroomie-plugin.js
+   * 
+   * If action type is **'HHM_EVENT'**, then the payload contains *args* and
+   * *eventType* properties. The event types are listed in
+   * https://github.com/saviola777/haxball-headless-manager/blob/master/src/namespace.js
    *
-   * For example if headless browser sends the onPlayerJoin room event, the payload is
-   * ```
-   * {
-   *   handlerName: 'onPlayerJoin',
-   *   args: [
-   *     playerObject
-   *   ]
-   * }
-   * ```
-   *
-   * @param {string} eventName
-   * @param {Object} data
-   * @param {string} handlerName
+   * @param {Action} action
    */
   async onRoomEvent(action) {
-    action.sender = this.session.id;
-    if (action.type === 'ROOM_EVENT') {
-      action.sender = this.id;
-      this.broadcast(action);
-    }
+    action.sender = this.id;
+    this.broadcast(action);
   }
 }
