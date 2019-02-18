@@ -57,16 +57,16 @@ window.hrRegisterHandlers = function hrRegisterHandlers(eventHandlers) {
       });
     };
   }
-}
 
-/**
- * Handles actions that are sent from the main context through hrRecieve
- * function.
- */
-window.hrReceive = function hrReceive(action) {
-  if (action.type === 'CALL_ROOM') {
-
-	
+  // send all HHM events to the main context
+  const eventTypes = Object.keys(window.HHM.events).map(e => window.HHM.events[e]);
+  for (let eventType of eventTypes) {
+    window.HHM.manager.registerEventHandler((args) => {
+      window.hrSend({
+        type: 'HHM_EVENT',
+        payload: { eventType: eventType, args: args }
+      });
+    }, [eventType]);
   }
 }
 
@@ -91,4 +91,53 @@ window.hrCallRoom = function hrCallRoom(fn, ...args) {
       result: result
     }
   };
+}
+
+window.hrGetPluginById = function hrGetPluginById(id) {
+  let name = HHM.manager.getPluginName(id);
+  if (!name) return null;
+  const plugin = room.getPlugin(name);
+  let pluginData = {
+    id: id,
+    isEnabled: plugin.isEnabled(),
+    pluginSpec: plugin.pluginSpec
+  }
+  return pluginData;
+}
+
+window.hrGetPlugin = function hrGetPlugin(name) {
+  const plugin = room.getPlugin(name);
+  if (!plugin) return null;
+  let pluginData = {
+    id: plugin._id,
+    isEnabled: plugin.isEnabled(),
+    pluginSpec: plugin.pluginSpec
+  }
+  return pluginData;
+}
+
+window.hrGetPlugins = function hrGetPlugins() {
+  let plugins = HHM.manager.getLoadedPluginIds()
+    .map(id => window.hrGetPluginById(id))
+    .filter(pluginData => {
+      const name = pluginData.pluginSpec.name;
+      // ignore these plugins
+      return (
+        name !== '_user/postInit' 
+        && name !== 'salamini/haxroomie'
+      );
+    });
+  return plugins;
+}
+
+window.hrEnablePlugin = function hrEnablePlugin(name) {
+  const plugin = room.getPlugin(name);
+  if (!plugin) return false;
+  return HHM.manager.enablePluginById(plugin._id);
+}
+
+window.hrDisablePlugin = function hrDisablePlugin(name) {
+  const plugin = room.getPlugin(name);
+  if (!plugin) return false;
+  return HHM.manager.disablePluginById(plugin._id);
 }

@@ -8,7 +8,11 @@ module.exports = function createCommands(session) {
     banPlayer,
     giveAdmin,
     removeAdmin,
-    clearBans
+    clearBans,
+    getPlugins,
+    getPlugin,
+    enablePlugin,
+    disablePlugin
   };
 
   async function callRoom(fn, ...args) {
@@ -84,5 +88,21 @@ module.exports = function createCommands(session) {
 
   async function clearBans() {
     return callRoom('clearBans');
+  }
+
+  async function getPlugins() {
+    return session.getPlugins();
+  }
+
+  async function getPlugin(name) {
+    return session.getPlugin(name);
+  }
+
+  async function enablePlugin(name) {
+    return session.enablePlugin(name);
+  }
+
+  async function disablePlugin(name) {
+    return session.disablePlugin(name);
   }
 }

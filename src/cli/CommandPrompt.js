@@ -14,14 +14,16 @@ const COLORS = {
   PLAYERS: colors.green,
   ERROR: colors.red,
   BROWSER_ERROR: colors.red,
-  INVALID_COMMAND: colors.red
+  INVALID_COMMAND: colors.red,
+  PLUGIN_ENABLED: colors.green,
+  PLUGIN_NOT_ENABLED: colors.red,
+  PLUGIN_DISABLED: colors.cyan,
+  PLUGIN_NOT_DISABLED: colors.red
 }
-
 
 /**
  * Command prompt for displaying messages in terminal.
  */
-
 module.exports = class CommandPrompt {
   constructor(opt) {
     if (!opt) {
@@ -36,7 +38,7 @@ module.exports = class CommandPrompt {
     this.cmd = opt.commands;
     this.actionHandler = opt.actionHandler;
     
-    this.maxTypeLength = 16;
+    this.maxTypeLength = 20;
 
     this.promptString = `> `;
 
@@ -73,11 +75,16 @@ module.exports = class CommandPrompt {
   }
 
   send(type, msg) {
-
     readline.clearLine(process.stdout, 0);
     readline.cursorTo(process.stdout, 0);
     msg = this.createMessage(type, msg);
-    this.rl.write(`# ${msg}\0\n`);
+    this.write(`${msg}`);
+  }
+
+  write(msg) {
+    // modify the new lines so can detect when to insert prompt
+    msg = msg.replace(/\n/g, `\n\0# `);
+    this.rl.write(`\0# ${msg}\0\n`)
   }
 
   createMessage(type, msg) {
@@ -93,7 +100,6 @@ module.exports = class CommandPrompt {
     }
     // indentation
     for (let i = 0; i < this.maxTypeLength - type.length; i++) fullMsg += ` `;
-    msg = msg.replace(/\n/g, `\n# `);
     fullMsg += ` ${msg}`;
     return fullMsg;
   }
@@ -113,21 +119,13 @@ module.exports = class CommandPrompt {
         this.showHelp();
 
       } else if (line.startsWith(`link`)) {
-        this.rl.write(`# ${this.roomLink}\0\n`);
+        this.write(`${this.roomLink}`);
 
       } else if (line.startsWith(`chat `)) {
-        this.cmd.sendChat(line.slice(5));
+        await this.cmd.sendChat(line.slice(5));
 
       } else if (line.startsWith(`players`)) {
-        let playerList = await this.cmd.getPlayerList();
-        let players = `${playerList.length - 1}`;
-        if (playerList.length > 1) players += `\n`;
-				for(let i = 0; i < playerList.length; i++) {
-          if (!playerList[i]) continue;
-          players += `${playerList[i].name} | admin: ${playerList[i].admin}`;
-          if (i !== playerList.length - 1) players += `\n`;
-				}
-				this.send(`PLAYERS`, players);
+        await this.onPlayers();
 
       } else if (line.startsWith(`kick `)) {
         await this.cmd.kickPlayer(line.slice(5));
@@ -144,10 +142,19 @@ module.exports = class CommandPrompt {
       } else if (line.startsWith(`unadmin `)) {
         await this.cmd.removeAdmin(line.slice(8));
 
+      } else if (line.startsWith(`plugins`)) {
+        await this.onPlugins();
+
+      } else if (line.startsWith(`enable `)) {
+        await this.onEnablePlugin(line.slice(7));
+
+      } else if (line.startsWith(`disable `)) {
+        await this.onDisablePlugin(line.slice(8));
+
       } else if (line === `q`) {
         process.exit(0);
 
-      } else if (!line.startsWith(`# `)) {
+      } else if (!line.startsWith(`\0# `)) {
         this.send(`INVALID_COMMAND`, `Type "help" for available commands`);
       }
     } catch (err) {
@@ -159,16 +166,98 @@ module.exports = class CommandPrompt {
   }
 
   showHelp() {
-    this.rl.write(`# Commands: \n`);
-    this.rl.write(`# link:      get the room link\n`);
-    this.rl.write(`# chat:      sends a chat message to the room\n`);
-    this.rl.write(`# players:   get a list of players in the room\n`);
-    this.rl.write(`# kick:      kicks a player with given id from the room\n`);
-    this.rl.write(`# ban:       bans a player with given id from the room\n`);
-    this.rl.write(`# admin:     gives admin to a player with given id\n`);
-    this.rl.write(`# unadmin:   removes admin from a player with given id\n`);
-    this.rl.write(`# clearbans: clears all the bans id\n`);
-    this.rl.write(`# q:         exits the program\0\n`);
 
+    let help = 
+      `Commands: 
+      link:      get the room link
+      chat:      sends a chat message to the room
+      players:   get a list of players in the room
+      kick:      kicks a player with given id from the room
+      ban:       bans a player with given id from the room
+      admin:     gives admin to a player with given id
+      unadmin:   removes admin from a player with given id
+      clearbans: clears all the bans
+      plugins:   gets a list of plugins
+      enable:    enables the plugin with given name
+      disable:   disables the plugin with given name
+      q:         exits the program`;
+
+    this.write(help);
+  }
+
+
+  async onPlayers() {
+    let playerList = await this.cmd.getPlayerList();
+    let players = `Amount of players: ${playerList.length - 1}\n`;
+  
+    for(let player of playerList) {
+      if (!player) continue;
+      players += `${player.name} | admin: ${player.admin}\n`;
+    }
+    this.send(`PLAYERS`, players);
+  }
+
+  async onPlugins() {
+    let plugins = await this.cmd.getPlugins();
+    this.printPlugins(plugins);
+  }
+
+  printPlugins(plugins) {
+
+    let pluginsString = '';
+    for (let p of plugins) {
+      pluginsString += `${this.pluginDataToString(p)}\n`;
+    }
+    this.write(pluginsString);
+  }
+
+  pluginDataToString(pluginData) {
+    const p = pluginData;
+    let isEnabled = p.isEnabled ? 'enabled' : 'disabled';
+
+    let string = 
+      `${p.pluginSpec.name} (${isEnabled}): 
+        id: ${p.id} 
+        name: ${p.pluginSpec.name}
+        author: ${p.pluginSpec.author}
+        version: ${p.pluginSpec.version}
+        dependencies: ${p.pluginSpec.dependencies}
+        order: ${JSON.stringify(p.pluginSpec.order)}
+        config: ${JSON.stringify(p.pluginSpec.config)}`;
+
+    return string;
+  }
+
+  async onEnablePlugin(name) {
+    let pluginData = await this.cmd.getPlugin(name);
+    if (!pluginData) this.send('ERROR', `No plugin with id ${name}!`)
+    let success = await this.cmd.enablePlugin(name);
+    
+    pluginData = await this.cmd.getPlugin(name);
+    let pluginString = this.pluginDataToString(pluginData);
+    
+    if (success) {
+      this.send('PLUGIN_ENABLED', pluginString);
+    } else {
+      this.send('PLUGIN_NOT_ENABLED', pluginString);
+    }
+  }
+
+  async onDisablePlugin(name) {
+    let pluginData = await this.cmd.getPlugin(name);
+    if (!pluginData) this.send('ERROR', `No plugin with id ${name}!`)
+    let success = await this.cmd.disablePlugin(name);
+    
+    pluginData = await this.cmd.getPlugin(name);
+    let pluginString = this.pluginDataToString(pluginData);
+    
+    if (success) {
+      this.send('PLUGIN_DISABLED', pluginString);
+    } else {
+      this.send(
+        'PLUGIN_NOT_DISABLED', 
+        `Disable the plugins that depend on ${name} first.`
+      );
+    }
   }
 }

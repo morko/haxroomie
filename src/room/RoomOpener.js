@@ -210,15 +210,25 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async injectHaxroomiePlugin() {
     await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin).then(() => {
-        window.hrRegisterHandlers();
-      });
-    }, fs.readFileSync(path.join(
-      __dirname, "..", "hhm", "haxroomie-plugin.js"), "utf8"
-    ));
+      window.HHM.manager.addPluginByCode(plugin, 'salamini/haxroomie')
+        .then(() => {
+          window.hrRegisterHandlers();
+        });
+    }, this.readHRPlugin());
   }
 
-   /**
+  /**
+   * @private
+   * Reads the haxroomie plugin for haxball headless manager from the file
+   * system to a string.
+   */
+  readHRPlugin() {
+    return fs.readFileSync(
+      path.join(__dirname, "..", "hhm", "haxroomie-plugin.js"), "utf8"
+    );
+  }
+
+  /**
    * @private
    * Injects the given headless host manager plugin to the headless
    * browser context.
