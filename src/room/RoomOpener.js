@@ -209,7 +209,7 @@ module.exports = class RoomOpener extends EventEmitter {
     await this.page.evaluate((plugin) => {
       window.HHM.manager.addPluginByCode(plugin, 'salamini/haxroomie')
         .then(() => {
-          window.hroomie.registerHandlers();
+          window.hroomie.registerEventHandlers();
         });
     }, this.readHRPlugin());
   }

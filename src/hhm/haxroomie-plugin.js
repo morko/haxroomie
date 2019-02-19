@@ -6,7 +6,7 @@
  * Haxroomie exposes a function as window.sendToHaxroomie that the browser 
  * scripts can use to send actions to haxroomie.
  * 
- * window.hroomie.registerHandlers is called from haxroomie to register the
+ * window.hroomie.registerEventHandlers is called from haxroomie to register the
  * handlers for roomObject and HHM events.
  */
 let room = HBInit();
@@ -28,7 +28,7 @@ window.hroomie = (function(){
    * List of default roomObject event handlers that the plugin will send 
    * to the main process.
   */
-  var defaultEventHandlers = [
+  var defaultRoomEventHandlers = [
     'onPlayerJoin',
     'onPlayerLeave',
     'onTeamVictory',
@@ -44,9 +44,16 @@ window.hroomie = (function(){
     'onPositionsReset',
     'onStadiumChange'
   ];
+
+  var defaultHHMEvents = [
+    window.HHM.events.PLUGIN_DISABLED,
+    window.HHM.events.PLUGIN_ENABLED,
+    window.HHM.events.PLUGIN_LOADED,
+    window.HHM.events.PLUGIN_REMOVED,
+  ];
   
   return {
-    registerHandlers,
+    registerEventHandlers,
     callRoom,
     getPluginById,
     getPlugin,
@@ -57,15 +64,16 @@ window.hroomie = (function(){
     
   /**
    * Registers handlers for the HaxBall roomObject and for the HHM manager
-   * that send the events to the main context of haxroomie.
+   * events. Send all events to the main context of haxroomie.
    *
-   * @param {Array.<string>} eventHandlers - handler names to listen for
+   * @param {Array.<string>} roomEventHandlers - handler names to attach 
+   *    listeners for
    */  
-  function registerHandlers(eventHandlers) {
-    eventHandlers = eventHandlers || defaultEventHandlers;
+  function registerEventHandlers(roomEventHandlers) {
+    roomEventHandlers = roomEventHandlers || defaultRoomEventHandlers;
 
-    // send all roomObject events to the main context
-    for (let handlerName of eventHandlers) {
+    // send roomObject events to the main context
+    for (let handlerName of roomEventHandlers) {
       room[handlerName] = function(...args) {
         window.sendToHaxroomie({
           type: 'ROOM_EVENT',
@@ -74,9 +82,8 @@ window.hroomie = (function(){
       };
     }
   
-    // send all HHM events to the main context
-    const eventTypes = Object.keys(window.HHM.events).map(e => window.HHM.events[e]);
-    for (let eventType of eventTypes) {
+    // send HHM events to the main context
+    for (let eventType of defaultHHMEvents) {
       window.HHM.manager.registerEventHandler((args) => {
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
