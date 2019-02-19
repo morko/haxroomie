@@ -171,6 +171,7 @@ window.hroomie = (function(){
       return (
         name !== '_user/postInit' 
         && name !== 'salamini/haxroomie'
+        && name !== 'hhm/core'
       );
     });
   return plugins;
