@@ -62,13 +62,13 @@ module.exports = class RoomController {
   createSession(id) {
     let session = new Session({
       id: this.id,
-      onClientAction: (action) => this.onClientAction(action),
-      onCallRoom: (fn, ...args) => this.onCallRoom(fn, ...args),
-      onGetPlugins: () => this.onGetPlugins(),
-      onGetPlugin: (id) => this.onGetPlugin(id),
-      onEnablePlugin: (name) => this.onEnablePlugin(name),
-      onDisablePlugin: (name) => this.onDisablePlugin(name),
-      onGetDependentPlugins: (name) => this.onGetDependentPlugins(name)
+      onClientAction: (action) => this.handleClientAction(action),
+      onCallRoom: (fn, ...args) => this.handleCallRoom(fn, ...args),
+      onGetPlugins: () => this.handleGetPlugins(),
+      onGetPlugin: (id) => this.handleGetPlugin(id),
+      onEnablePlugin: (name) => this.handleEnablePlugin(name),
+      onDisablePlugin: (name) => this.handleDisablePlugin(name),
+      onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name)
     });
     session.on('client_connected', this.onClientConnected.bind(this));
     session.on('client_disconnected', this.onClientDisconnected.bind(this));
@@ -144,7 +144,7 @@ module.exports = class RoomController {
   /**
    * Receives actions from session.
    */
-  async onClientAction(action) {
+  async handleClientAction(action) {
     switch (action.type) {
 
       case 'OPEN_ROOM':
@@ -205,7 +205,7 @@ module.exports = class RoomController {
    * @param {string} fn - name of the haxball roomObject function
    * @param {any} ...args - arguments for the function
    */
-  async onCallRoom(fn, ...args) {
+  async handleCallRoom(fn, ...args) {
     let result = await this.page.evaluate((fn, args) => {
       return window.hroomie.callRoom(fn, ...args);
     }, fn, args);
@@ -219,7 +219,7 @@ module.exports = class RoomController {
    * Returns a list of PluginData objects.
    * @returns {Promise<Array.<PluginData>>} - array of plugins
    */
-  async onGetPlugins() {
+  async handleGetPlugins() {
     let result = await this.page.evaluate(() => {
       return window.hroomie.getPlugins();
     });
@@ -233,7 +233,7 @@ module.exports = class RoomController {
    * @returns {Promise<PluginData|null>} - data of the plugin or null if
    *    plugin was not found
    */
-  async onGetPlugin(name) {
+  async handleGetPlugin(name) {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.getPlugin(name);
     }, name);
@@ -245,7 +245,7 @@ module.exports = class RoomController {
    * @param {string} name - name of the plugin
    * @returns {Promise<boolean} - was the plugin enabled or not?
    */
-  async onEnablePlugin(name) {
+  async handleEnablePlugin(name) {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.enablePlugin(name);
     }, name);
@@ -259,7 +259,7 @@ module.exports = class RoomController {
    * @param {string|Array} name - name or array of names of the plugin(s)
    * @returns {Promise<boolean} - was the plugin disabled or not?
    */
-  async onDisablePlugin(name) {
+  async handleDisablePlugin(name) {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.disablePlugin(name);
     }, name);
@@ -272,7 +272,7 @@ module.exports = class RoomController {
    * @param {string} name - name of the plugin
    * @returns {Promise<Array.<PluginData>>} - array of plugins
    */
-  async onGetDependentPlugins(name) {
+  async handleGetDependentPlugins(name) {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.getDependentPlugins(name);
     }, name);
