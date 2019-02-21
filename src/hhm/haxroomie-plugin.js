@@ -59,7 +59,8 @@ window.hroomie = (function(){
     getPlugin,
     getPlugins,
     enablePlugin,
-    disablePlugin
+    disablePlugin,
+    getDependentPlugins
   };
     
   /**
@@ -188,14 +189,41 @@ window.hroomie = (function(){
   }
 
   /**
-   * Disables a plugin with given name.
+   * Disables a HHM plugin with the given id. If the name is an Array then
+   * it disables all the plugins in the given order.
    * 
-   * @param {string} - name of the plugin
-   * @returns {boolean} - false if plugin could not be disabled because some
-   *    other plugins depend on it
+   * @param {string|Array} name - name or array of names of the plugin(s)
+   * @returns {boolean} - False if plugin could not be disabled because some
+   *    other plugins depend on it. If name is array and some of the plugins
+   *    could not be disabled, then it leaves every plugin enabled.
    */
   function disablePlugin(name) {
+    if (Array.isArray(name)) {
+      for (let i = 0; i < name.length; i++) {
+        const plugin = room.getPlugin(name[i]);
+        const success = HHM.manager.disablePluginById(plugin._id);
+        if (!success) {
+          for (let j = 0; j < i; j++) {
+            const plugin = room.getPlugin(name[i - j]);
+            HHM.manager.enablePluginById(plugin._id);
+          }
+          return false;
+        }
+      }
+      return true;
+    }
     const plugin = room.getPlugin(name);
     return HHM.manager.disablePluginById(plugin._id);
+  }
+
+  /**
+   * Gets the plugins that depend on the given plugin.
+   * 
+   * @returns {Array.<PluginData>} - array of dependent plugins
+   */
+  function getDependentPlugins(name) {
+    const pluginId = HHM.manager.getPluginId(name);
+    return HHM.manager.getDependentPluginsById(pluginId)
+      .map(id => getPluginById(id));
   }
 })();

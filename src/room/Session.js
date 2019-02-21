@@ -50,6 +50,7 @@ module.exports = class Session extends EventEmitter {
     this.onGetPlugin = opt.onGetPlugin;
     this.onEnablePlugin = opt.onEnablePlugin;
     this.onDisablePlugin = opt.onDisablePlugin;
+    this.onGetDependentPlugins = opt.onGetDependentPlugins;
 
     this.actionFactory = require('haxroomie-action-factory')(this.id);
 
@@ -165,7 +166,7 @@ module.exports = class Session extends EventEmitter {
   /**
    * Returns PluginData of the given plugin id.
    * 
-   * @param {number} id - id of the plugin
+   * @param {string} name - name of the plugin
    * @returns {Promise<PluginData>|null} - data of the plugin or null if
    *    plugin was not found
    */
@@ -177,7 +178,7 @@ module.exports = class Session extends EventEmitter {
   /**
    * Enables a HHM plugin with the given id.
    * 
-   * @param {number} name - name of the plugin
+   * @param {string} name - name of the plugin
    * @returns {Promise<boolean} - was the plugin enabled or not?
    */
   async enablePlugin(name) {
@@ -186,14 +187,26 @@ module.exports = class Session extends EventEmitter {
   }
 
   /**
-   * Disables a HHM plugin with the given id.
+   * Disables a HHM plugin with the given id. If the name is an Array then
+   * it disables all the plugins in the given order.
    * 
-   * @param {number} name - name of the plugin
+   * @param {string|Array} name - name or array of names of the plugin(s)
    * @returns {Promise<boolean} - was the plugin disabled or not?
    */
   async disablePlugin(name) {
     logger.debug(`DISABLE_PLUGIN: ${name}`);
     return this.onDisablePlugin(name);
+  }
+
+  /**
+   * Gets a list of plugins that depend on the given plugin.
+   * 
+   * @param {string} name - name of the plugin
+   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   */
+  async getDependentPlugins(name) {
+    logger.debug(`GET_DEPENDENT_PLUGINS: ${name}`);
+    return this.onGetDependentPlugins(name);
   }
 
   broadcast(action) {

@@ -67,7 +67,8 @@ module.exports = class RoomController {
       onGetPlugins: () => this.onGetPlugins(),
       onGetPlugin: (id) => this.onGetPlugin(id),
       onEnablePlugin: (name) => this.onEnablePlugin(name),
-      onDisablePlugin: (name) => this.onDisablePlugin(name)
+      onDisablePlugin: (name) => this.onDisablePlugin(name),
+      onGetDependentPlugins: (name) => this.onGetDependentPlugins(name)
     });
     session.on('client_connected', this.onClientConnected.bind(this));
     session.on('client_disconnected', this.onClientDisconnected.bind(this));
@@ -252,9 +253,10 @@ module.exports = class RoomController {
   }
 
   /**
-   * Disables a HHM plugin with the given name.
+   * Disables a HHM plugin with the given id. If the name is an Array then
+   * it disables all the plugins in the given order.
    * 
-   * @param {string} name - name of the plugin
+   * @param {string|Array} name - name or array of names of the plugin(s)
    * @returns {Promise<boolean} - was the plugin disabled or not?
    */
   async onDisablePlugin(name) {
@@ -264,6 +266,18 @@ module.exports = class RoomController {
     return result;
   }
 
+  /**
+   * Gets a list of plugins that depend on the given plugin.
+   * 
+   * @param {string} name - name of the plugin
+   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   */
+  async onGetDependentPlugins(name) {
+    let result = await this.page.evaluate((name) => {
+      return window.hroomie.getDependentPlugins(name);
+    }, name);
+    return result;
+  }
 
   /**
    * This function receives the actions sent from the headless browser context.

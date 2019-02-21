@@ -145,6 +145,9 @@ module.exports = class CommandPrompt {
       } else if (line.startsWith(`plugins`)) {
         await this.onPlugins();
 
+      } else if (line.startsWith(`depplugins `)) {
+        await this.onGetDependentPlugins(line.slice(11));
+
       } else if (line.startsWith(`enable `)) {
         await this.onEnablePlugin(line.slice(7));
 
@@ -169,18 +172,19 @@ module.exports = class CommandPrompt {
 
     let help = 
       `Commands: 
-      link:      get the room link
-      chat:      sends a chat message to the room
-      players:   get a list of players in the room
-      kick:      kicks a player with given id from the room
-      ban:       bans a player with given id from the room
-      admin:     gives admin to a player with given id
-      unadmin:   removes admin from a player with given id
-      clearbans: clears all the bans
-      plugins:   gets a list of plugins
-      enable:    enables the plugin with given name
-      disable:   disables the plugin with given name
-      q:         exits the program`;
+      link:       get the room link
+      chat:       sends a chat message to the room
+      players:    get a list of players in the room
+      kick:       kicks a player with given id from the room
+      ban:        bans a player with given id from the room
+      admin:      gives admin to a player with given id
+      unadmin:    removes admin from a player with given id
+      clearbans:  clears all the bans
+      plugins:    gets a list of plugins
+      depplugins: gets plugins that depend on given plugin
+      enable:     enables the plugin with given name
+      disable:    disables the plugin with given name
+      q:          exits the program`;
 
     this.write(help);
   }
@@ -259,5 +263,18 @@ module.exports = class CommandPrompt {
         `Disable the plugins that depend on ${name} first.`
       );
     }
+  }
+
+  async onGetDependentPlugins(name) {
+    let plugins = await this.cmd.getDependentPlugins(name);
+    if (!plugins || plugins.length < 1) {
+      this.write(`Plugin ${name} has no dependent plugins.`);
+      return;
+    }
+    let result = `Plugins that depend on ${name}:\n`;
+    for (let p of plugins) {
+      result += `${p.pluginSpec.name}\n`
+    }
+    this.write(result);
   }
 }
