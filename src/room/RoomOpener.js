@@ -141,10 +141,13 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     // expose function in the headless browser context to be able to recieve messages
-    await this.page.exposeFunction(
-      'sendToHaxroomie',
-      this.onEventFromBrowser
-    );
+    let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
+    if (!hasSend) {
+      await this.page.exposeFunction(
+        'sendToHaxroomie',
+        this.onEventFromBrowser
+      );
+    }
 
     if (config.pluginFiles) {
       logger.debug('OPEN_ROOM: Injecting custom plugins.');
