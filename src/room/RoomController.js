@@ -28,7 +28,7 @@ module.exports = class RoomController {
      * Holds the room info if the room has been opened.
      *
      * The roomInfo Object contains the HaxBall roomConfig Object with with
-     * roomlink property attached to it.
+     * roomLink property attached to it.
      */
     this.roomInfo = null;
 
@@ -44,7 +44,7 @@ module.exports = class RoomController {
     this.actionFactory = require('haxroomie-action-factory')(this.id);
 
     /**
-     * How many seconds to wait for the roomlink when opening the haxball room
+     * How many seconds to wait for the roomLink when opening the haxball room
      * before failing.
      */
     this.timeout = 8;
@@ -62,7 +62,8 @@ module.exports = class RoomController {
   createSession(id) {
     let session = new Session({
       id: this.id,
-      onClientAction: (action) => this.handleClientAction(action),
+      onOpenRoom: (config) => this.handleOpenRoom(config),
+      onCloseRoom: () => this.handleCloseRoom(),
       onCallRoom: (fn, ...args) => this.handleCallRoom(fn, ...args),
       onGetPlugins: () => this.handleGetPlugins(),
       onGetPlugin: (id) => this.handleGetPlugin(id),
@@ -70,8 +71,8 @@ module.exports = class RoomController {
       onDisablePlugin: (name) => this.handleDisablePlugin(name),
       onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name)
     });
-    session.on('client_connected', this.onClientConnected.bind(this));
-    session.on('client_disconnected', this.onClientDisconnected.bind(this));
+    session.on('client_connected', this.handleClientConnected.bind(this));
+    session.on('client_disconnected', this.handleClientDisconnected.bind(this));
     return session;
   }
 
@@ -83,6 +84,24 @@ module.exports = class RoomController {
       timeout: this.timeout
     });
     return roomOpener;
+  }
+  
+  /**
+   * This function receives the actions sent from the headless browser context.
+   *
+   * If action type is **'ROOM_EVENT'**, then the payload contains *args* and
+   * *handlerName* properties. The default event handlers are listed in
+   * https://github.com/morko/haxroomie/blob/master/src/hhm/haxroomie-plugin.js
+   * 
+   * If action type is **'HHM_EVENT'**, then the payload contains *args* and
+   * *eventType* properties. The event types are listed in
+   * https://github.com/saviola777/haxball-headless-manager/blob/master/src/namespace.js
+   *
+   * @param {Action} action
+   */
+  async onEventFromBrowser(action) {
+    action.sender = this.id;
+    this.broadcast(action);
   }
 
   /**
@@ -113,97 +132,70 @@ module.exports = class RoomController {
    * 
    * @param {any} id id of client that subscribed to session
    */
-  onClientConnected(id) {
-
-    let action = this.actionFactory.create(
-      'CLIENT_CONNECTED',
-      {
+  handleClientConnected(id) {
+    let message = {
+      type: 'CLIENT_CONNECTED',
+      sender: this.id,
+      payload: {
         roomInfo: this.roomInfo,
         clientID: id,
         sessionID: this.session.id,
       }
-    );
-    this.broadcast(action);
+    }
+    this.broadcast(message);
   }
   /**
-   * This gets called when a client unsubscribes from this rooms session.
+   * This gets called when a client unsubscribes from this.session.
    * Broadcasts the information to all subscribed clients.
    * 
    * @param {any} id id of client that unsubscribed from session
    */
-  onClientDisconnected(id) {
-
-    let action = this.actionFactory.create(
-      'CLIENT_DISCONNECTED',
-      { clientID: id }
-    );
-    this.broadcast(action);
-
+  handleClientDisconnected(id) {
+    let message = {
+      type: 'CLIENT_DISCONNECTED',
+      sender: this.id,
+      payload: { clientID: id }
+    }
+    this.broadcast(message);
   }
 
   /**
-   * Receives actions from session.
+   * Handler for the openRoom function in this.session.
+   * See Session for documentation.
    */
-  async handleClientAction(action) {
-    switch (action.type) {
-
-      case 'OPEN_ROOM':
-        await this.onOpenRoom(action);
-        break;
-      case 'CLOSE_ROOM':
-        await this.onCloseRoom(action);
-        break;
-      default:
-        break;
-    }  
-  }
-
-  /**
-   * Gets called when a client has sent OPEN_ROOM action through this rooms
-   * session.
-   * 
-   * @param {action} action - the action object client has sent
-   */
-  async onOpenRoom(action) {
+  async handleOpenRoom(config) {
 
     if (this.openRoomInProcess !== null) {
-      this.send(action.sender, this.actionFactory.createError(
-        'OPEN_ROOM_START',
-        'Someone else is already opening the room'
-      ));
-      return;
+      throw new Error('Room is already being opened!');
     }
 
-    this.openRoomInProcess = action.sender;
-    this.broadcast(this.actionFactory.create(
-      'OPEN_ROOM_START',
-      { clientID: action.sender }
-    ));
+    this.openRoomInProcess = true;
+    this.broadcast({
+      type: 'OPEN_ROOM_START',
+      sender: this.id
+    });
 
-    let result = await this.roomOpener.open(action.payload.roomConfig);
-    this.openRoomInProcess = null;
+    let result = await this.roomOpener.open(config);
+    this.openRoomInProcess = false;
     if (!result.error) this.roomInfo = result.payload.roomInfo;
     this.broadcast(result);
   }
 
   /**
-   * Gets called when a client has sent CLOSE_ROOM action through this rooms
-   * session.
-   * 
-   * @param {action} action - the action object client has sent
+   * Handler for the closeRoom function in this.session.
+   * See Session for documentation.
    */
-  async onCloseRoom(action) {
+  async handleCloseRoom() {
     await this.roomOpener.close();
     this.roomInfo = null;
-    this.broadcast(this.actionFactory.create('ROOM_CLOSED'));
+    this.broadcast({
+      type: 'ROOM_CLOSED'
+    });
   }
 
   /**
-   * Calls a function of the haxball roomObject in headless browser context.
-   * This gets called from this rooms session.
-   * 
-   * @param {string} fn - name of the haxball roomObject function
-   * @param {any} ...args - arguments for the function
+   * Handler for the callRoom function in this.session.
+   * See Session for documentation.
    */
   async handleCallRoom(fn, ...args) {
     let result = await this.page.evaluate((fn, args) => {
@@ -216,8 +208,8 @@ module.exports = class RoomController {
   }
 
   /**
-   * Returns a list of PluginData objects.
-   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   * Handler for the getPlugins function in this.session.
+   * See Session for documentation.
    */
   async handleGetPlugins() {
     let result = await this.page.evaluate(() => {
@@ -227,11 +219,8 @@ module.exports = class RoomController {
   }
 
   /**
-   * Returns PluginData of the given plugin name.
-   * 
-   * @param {string} name - name of the plugin
-   * @returns {Promise<PluginData|null>} - data of the plugin or null if
-   *    plugin was not found
+   * Handler for the getPlugin function in this.session.
+   * See Session for documentation.
    */
   async handleGetPlugin(name) {
     let result = await this.page.evaluate((name) => {
@@ -239,11 +228,10 @@ module.exports = class RoomController {
     }, name);
     return result;
   }
+
   /**
-   * Enables a HHM plugin with the given name.
-   * 
-   * @param {string} name - name of the plugin
-   * @returns {Promise<boolean} - was the plugin enabled or not?
+   * Handler for the enablePlugin function in this.session.
+   * See Session for documentation.
    */
   async handleEnablePlugin(name) {
     let result = await this.page.evaluate((name) => {
@@ -253,11 +241,8 @@ module.exports = class RoomController {
   }
 
   /**
-   * Disables a HHM plugin with the given id. If the name is an Array then
-   * it disables all the plugins in the given order.
-   * 
-   * @param {string|Array} name - name or array of names of the plugin(s)
-   * @returns {Promise<boolean} - was the plugin disabled or not?
+   * Handler for the disablePlugin function in this.session.
+   * See Session for documentation.
    */
   async handleDisablePlugin(name) {
     let result = await this.page.evaluate((name) => {
@@ -267,33 +252,13 @@ module.exports = class RoomController {
   }
 
   /**
-   * Gets a list of plugins that depend on the given plugin.
-   * 
-   * @param {string} name - name of the plugin
-   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   * Handler for the getDependentPlugins function in this.session.
+   * See Session for documentation.
    */
   async handleGetDependentPlugins(name) {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.getDependentPlugins(name);
     }, name);
     return result;
-  }
-
-  /**
-   * This function receives the actions sent from the headless browser context.
-   *
-   * If action type is **'ROOM_EVENT'**, then the payload contains *args* and
-   * *handlerName* properties. The default event handlers are listed in
-   * https://github.com/morko/haxroomie/blob/master/src/hhm/haxroomie-plugin.js
-   * 
-   * If action type is **'HHM_EVENT'**, then the payload contains *args* and
-   * *eventType* properties. The event types are listed in
-   * https://github.com/saviola777/haxball-headless-manager/blob/master/src/namespace.js
-   *
-   * @param {Action} action
-   */
-  async onEventFromBrowser(action) {
-    action.sender = this.id;
-    this.broadcast(action);
   }
 }

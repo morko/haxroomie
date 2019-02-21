@@ -85,11 +85,12 @@ npm install morko/haxroomie
 
 ## Haxroomie object
 
-To get started it is required to create a Haxroom object.
+To get started it is required to create an instance of Haxroomie and then call createBrowser() to spawn a chrome browser.
 
 ```js
 const { Haxroomie } = require('haxroomie');
 let haxroomie = new Haxroomie();
+await createBrowser();
 ```
 
 You can also give Haxroomie some options:
@@ -102,6 +103,7 @@ let config = {
   port: 3066 // port that the browser will use (default is 3066)
 }
 let haxroomie = new Haxroomie(config);
+await haxroomie.createBrowser();
 ```
 
 When choosing a port, take care that it is not visible outside your network.
@@ -110,9 +112,13 @@ When choosing a port, take care that it is not visible outside your network.
 
 After creating the Haxroomie object it is required for the client to request a session.
 
-The [session object](https://www.github.com/morko/haxroomie/src/master/src/room/Session.js) allows clients to communicate with the haxball room and the headless browser by sending and receiving [actions](#haxroomie-actions).
+The [session object](https://www.github.com/morko/haxroomie/src/master/src/room/Session.js) acts as an interface between the user and Haxroomie. Each new session gets a new tab in the browser running in the background.
 
-[Session](https://www.github.com/morko/haxroomie/src/master/src/room/Session.js) can be requested from the Haxroomie with `haxroomie.getSession(sessionID)` which will return a session with the given id if it exists or initialize a new one. On the first time the `getSession` is called, it will also spawn the headless chromium browser.
+[Session](https://www.github.com/morko/haxroomie/src/master/src/room/Session.js) can be requested from the Haxroomie with 
+```js
+haxroomie.getSession(sessionID)
+```
+which will return a session with the given id if it exists or initialize a new one.
 
 Every new session gets a new tab in the headless browser.
 
@@ -122,15 +128,15 @@ Every new session gets a new tab in the headless browser.
 After getting the session the client must subscribe to the session actions with
 `session.subscribe(id, callback)`, where 
 
-- `id` can be almost anything and
-- `callback` is a function that receives the action that is sent through session to
-the given `id` as an argument to the function.
+- `id` can be number, string or object
+- `callback` is a function that receives the messages
 
 Example of a client and registering it:
 ```js
 const { Haxroomie } = require('haxroomie');
 
 let haxroomie = new Haxroomie();
+await haxroomie.createBrowser();
 let session = await haxroomie.getSession('sessionID');
 
 let client = {
@@ -142,46 +148,69 @@ let client = {
 session.subscribe(client.id, client.onReceivedAction.bind(client));
 ```
 
-Clients can send actions to each other and haxroomie through the session object.
+Clients can send actions to each other with the send or broadcast functions of the session, but they must be in correct format as described in [Session message](#session-message).
 
-Broadcasting action to all subscribed clients and haxroomie:
+Broadcasting message to all subscribed clients and haxroomie:
 ```js
-session.broadcast(action);
+session.broadcast(message);
 ```
-Sending action to another client:
+Sending message to another client:
 ```js
-session.send(clientID, action);
+session.send(clientID, message);
 ```
-Sending action to haxroomie:
+
+To control the haxball room, clients can use the Session objects methods:
+
 ```js
-await session.sendToRoom(action);
+await session.openRoom(config);
+```
+```js
+await session.closeRoom();
 ```
 Calling a function in the [room object](https://github.com/haxball/haxball-issues/wiki/Headless-Host)
 ```js
-let result = await session.callRoom('kickPlayer', 1, 'Bye!', true);
+await session.callRoom('kickPlayer', 1, 'Bye!', true);
 ```
 
-## Haxroomie actions
+To communicate with haxball headless manager, clients can use these Session object methods:
+```js
+await session.getPlugins();
+```
+```js
+await session.getPlugin(name);
+```
+```js
+await session.enablePlugin(name);
+```
+```js
+await session.disablePlugin(name);
+```
+```js
+await session.getDependentPlugins(name)
+```
 
-The action Object is almost similar to
+## Session message
+
+The messages that get sent to the subscribed function is almost similar to
 [Flux Standard Action](https://github.com/redux-utilities/flux-standard-action).
 
 **The difference is** that each action MUST contain the sender.
 
 If the action came from the room, then `sender === session.id`.
 
-### Example of an action
+### Example of a message
+
 ```js
 {
   type: 'OPEN_ROOM',
+  sender: 'sessionID',
   payload: {
-    token: "qweqweqwe",
-  },
-  sender: 'clientID'
+    clientID: any
+  }
 }
 ```
 
-### Example of an error action
+### Example of an error message
 ```js
 {
   type: 'OPEN_ROOM_STOP',
@@ -191,93 +220,20 @@ If the action came from the room, then `sender === session.id`.
 }
 ```
 
-Actions can be created manually or using the [action factory](https://www.github.com/morko/haxroomie-action-factory) to create actions with the given sender id.
+### Session messages
 
-Action factory accepts *action type* as first argument and *action payload* as second.
-
-```js
-const actionFactory = require('haxball-action-factory')('senderID');
-let action = actionFactory.create(
-  'OPEN_ROOM',
-  { roomConfig: { token: 'qweqweqwe' } }
-);
-```
-The above example will result action to be:
-```js
-{
-  type: 'OPEN_ROOM',
-  payload: {
-    roomConfig: {
-      token: "qweqweqwe"
-    }
-  },
-  sender: 'senderID'
-}
-```
-
-### Actions that client can send to haxroomie
-
-This section lists action types that client can send to haxroomie with
-`session.sendToRoom(action)`.
-
-#### OPEN_ROOM
-
-Starts the process of creating the [HaxBall Headless Host roomObject](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject), thus opening the room.
-
-##### Action payload
-```js
-{
-  roomConfig: {
-    token: string,
-    roomName: string, // optional
-    playerName: string, // optional
-    maxPlayers: int, // optional
-    password: string, // optional
-    public: boolean, // optional
-    geo: {code: string, lat: float, lon: float}, // optional
-    adminPassword: string // optional
-  }
-}
-```
-
-##### Action flow
-
-```
-Client => OPEN_ROOM
-Server => OPEN_ROOM_START
-Server => OPEN_ROOM_STOP
-```
-
-#### CLOSE_ROOM
-
-Closes the room by navigating the session tab to a blank page.
-
-##### Action payload
-
-```js
-undefined
-```
-
-##### Action flow in case of success
-
-```
-Client => CLOSE_ROOM
-Server => ROOM_CLOSED
-```
-### Actions that haxroomie sends to clients
-
-Actions the server emits/sends and the client can listen to with the function defined in `session.subscribe('sessionID', function)`.
+Messages Haxroomie sends and the client can listen to with the function defined in `session.subscribe('sessionID', function)`.
 
 #### CLIENT_CONNECTED (broadcast)
 
 Sent when a new client connects to the session.
 
-##### Action payload
+##### Message payload
 
 ```js
 {
   roomInfo: {
-    roomlink: string,
+    roomLink: string,
     token: string,
     roomName: string,
     playerName: string,
@@ -306,7 +262,7 @@ or if room is not running
 
 Sent when a client disconnects.
 
-##### Action payload
+##### Message payload
 ```js
 {
   clientID: any
@@ -316,23 +272,17 @@ Sent when a client disconnects.
 
 Sent when OPEN_ROOM has been requested.
 
-##### Action payload
-```js
-{
-  clientID: any
-}
-```
 #### OPEN_ROOM_STOP (broadcast)
 
-If the room was not opened, then the action payload will contain the error.
+If the room was not opened, then the message payload will be instanceof Error.
 
 On success it will contain the room information.
 
-##### Action payload
+##### Message payload
 ```js
 {
   roomInfo: {
-    roomlink: string,
+    roomLink: string,
     token: string,
     roomName: string,
     playerName: string,
@@ -347,10 +297,6 @@ On success it will contain the room information.
 
 Sent when the room was closed.
 
-##### Action payload
-```js
-undefined
-```
 #### ROOM_EVENT (broadcast)
 
 Sent when some [HaxBall Headless Host roomObject](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject)
@@ -362,7 +308,7 @@ List of events that are sent can be seen in [haxroomie-plugins.js](https://www.g
 
 **IMPORTANT: args are not sanitized and can contain harmful data!**
 
-##### Action payload
+##### Message payload
 ```js
 {
   handlerName: string,

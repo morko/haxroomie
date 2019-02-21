@@ -45,32 +45,11 @@ module.exports = class RoomOpener extends EventEmitter {
     this.url = 'https://haxball.com/headless';
   }
 
-  /**
-   * Opens the haxball room.
-   * 
-   * The config object can contain any properties you want to use in your
-   * own HHM config file given in config.hhmConfigFile. The config object is
-   * usable globally from within the HHM config as the **haxroomie** object.
-   * 
-   * @param {object} config config object that gets injected to HHM config
-   *    as **haxroomie**
-   * @param {string} config.token token to start the room with from 
-   *    https://www.haxball.com/headlesstoken
-   * @param {string} [config.roomName] room name
-   * @param {string} [config.playerName] host player name
-   * @param {int} [config.maxPlayers] max players
-   * @param {boolean} [config.public] should the room be public
-   * @param {string} [config.adminPassword] admin role password in room
-   * @param {object} [config.hhmConfigFile] Configuration for the headless host
-   *    manager. Object must contain name and content properties where
-   *    name is the file/config name and content has the file contents. Both
-   *    properties shold be strings.
-   * @param {Array.<objects>} [config.pluginFiles] Optional HHM plugins to load when 
-   *    starting the room. Objects must contain name and content properties where
-   *    name is the file/plugin name and content has the file contents. Both
-   *    properties shold be strings.
-   * 
-   * @returns {action} action containing roomInfo or error
+  /** 
+   * Opens the room.
+   * See Session for documentation.
+   *
+   * @returns {object} - action object containing roomInfo or error
    */
   async open(config) {
 
@@ -126,8 +105,8 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Waiting for the room link.');
-    let roomlink = await this.waitForRoomLink(this.timeout * 1000);
-    if (!roomlink) {
+    let roomLink = await this.waitForRoomLink(this.timeout * 1000);
+    if (!roomLink) {
       return this.openRoomError('Timeout when waiting for the room link!');
     }
 
@@ -140,7 +119,7 @@ module.exports = class RoomOpener extends EventEmitter {
       );
     }
 
-    // expose function in the headless browser context to be able to recieve messages
+    // expose function in the browser context to be able to recieve messages
     let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
     if (!hasSend) {
       await this.page.exposeFunction(
@@ -171,8 +150,8 @@ module.exports = class RoomOpener extends EventEmitter {
 
     // merge the roomInfo to the config so all properties get returned
     let roomInfo = Object.assign({}, config, hhmRoomInfo);
-    // add the roomlink to the roomInfo
-    roomInfo.roomlink = roomlink;
+    // add the roomLink to the roomInfo
+    roomInfo.roomLink = roomLink;
 
     return this.actionFactory.create(
       'OPEN_ROOM_STOP',
@@ -210,7 +189,7 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async injectHaxroomiePlugin() {
     await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin, 'salamini/haxroomie')
+      window.HHM.manager.addPluginByCode(plugin, 'hr/core')
         .then(() => {
           window.hroomie.registerEventHandlers();
         });
@@ -241,12 +220,12 @@ module.exports = class RoomOpener extends EventEmitter {
   }
   /**
    * @private
-   * Creates a loop that polls for the roomlink to appear on the webpage.
-   * Stops if roomlink is found or the time runs out.
+   * Creates a loop that polls for the roomLink to appear on the webpage.
+   * Stops if roomLink is found or the time runs out.
    * 
    * @param {int} timeout Time to wait in ms before failing.
    * 
-   * @returns {string|null} the roomlink
+   * @returns {string|null} the roomLink
    */
   async waitForRoomLink(timeout) {
     let haxframe = await this.getHaxframe();
@@ -254,10 +233,10 @@ module.exports = class RoomOpener extends EventEmitter {
 
     let startTime = new Date().getTime();
     let currentTime = new Date().getTime();
-    let roomlink = null;
+    let roomLink = null;
 
-    while (!roomlink && (timeout > currentTime - startTime)) {
-      roomlink = await haxframe.$eval('#roomlink', e => e.innerHTML);
+    while (!roomLink && (timeout > currentTime - startTime)) {
+      roomLink = await haxframe.$eval('#roomlink', e => e.innerHTML);
       await sleep(1000);
       currentTime = new Date().getTime();
     }

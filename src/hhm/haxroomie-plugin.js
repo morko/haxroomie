@@ -12,7 +12,7 @@
 let room = HBInit();
 
 room.pluginSpec = {
-  name: `salamini/haxroomie`,
+  name: `hr/core`,
   author: `salamini`,
   version: `1.0.0`,
   config: {},
@@ -171,7 +171,7 @@ window.hroomie = (function(){
       // ignore these plugins
       return (
         name !== '_user/postInit' 
-        && name !== 'salamini/haxroomie'
+        && name !== 'hr/core'
         && name !== 'hhm/core'
       );
     });

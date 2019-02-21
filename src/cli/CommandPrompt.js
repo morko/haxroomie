@@ -32,11 +32,11 @@ module.exports = class CommandPrompt {
     if (!opt.commands) {
       throw new Error(`Missing required argument: opt.commands`);
     }
-    if (!opt.actionHandler) {
-      throw new Error(`Missing required argument: opt.actionHandler`);
+    if (!opt.eventHandler) {
+      throw new Error(`Missing required argument: opt.eventHandler`);
     }
     this.cmd = opt.commands;
-    this.actionHandler = opt.actionHandler;
+    this.eventHandler = opt.eventHandler;
     
     this.maxTypeLength = 20;
 
@@ -49,8 +49,8 @@ module.exports = class CommandPrompt {
 
     this.rl.on(`line`, (result) => this.onNewLine(result));
 
-    this.registerActionListeners(
-      this.actionHandler,
+    this.registerEventListeners(
+      this.eventHandler,
       (t, m) => this.send(t, m)
     );
 
@@ -58,20 +58,20 @@ module.exports = class CommandPrompt {
 
   }
 
-  registerActionListeners(actionHandler, send) {
-    actionHandler.on(`open-room-start`, () => send(`OPEN_ROOM_START`));
-    actionHandler.on(`open-room-stop`, l => {
+  registerEventListeners(eventHandler, send) {
+    eventHandler.on(`open-room-start`, () => send(`OPEN_ROOM_START`));
+    eventHandler.on(`open-room-stop`, l => {
       this.roomLink = l;
       send(`OPEN_ROOM_STOP`, l);
     });
-    actionHandler.on(`open-room-error`, e => send(`OPEN_ROOM_START`, e));
-    actionHandler.on(`browser-error`, e => send(`BROWSER_ERROR`, e));
-    actionHandler.on(`player-chat`, m => send(`PLAYER_CHAT`, m));
-    actionHandler.on(`player-join`, m => send(`PLAYER_JOIN`, m));
-    actionHandler.on(`player-leave`, m => send(`PLAYER_LEAVE`, m));
-    actionHandler.on(`player-kicked`, m => send(`PLAYER_KICKED`, m));
-    actionHandler.on(`player-banned`, m => send(`PLAYER_BANNED`, m));
-    actionHandler.on(`admin-changed`, m => send(`ADMIN_CHANGED`, m));
+    eventHandler.on(`open-room-error`, e => send(`OPEN_ROOM_START`, e));
+    eventHandler.on(`browser-error`, e => send(`BROWSER_ERROR`, e));
+    eventHandler.on(`player-chat`, m => send(`PLAYER_CHAT`, m));
+    eventHandler.on(`player-join`, m => send(`PLAYER_JOIN`, m));
+    eventHandler.on(`player-leave`, m => send(`PLAYER_LEAVE`, m));
+    eventHandler.on(`player-kicked`, m => send(`PLAYER_KICKED`, m));
+    eventHandler.on(`player-banned`, m => send(`PLAYER_BANNED`, m));
+    eventHandler.on(`admin-changed`, m => send(`ADMIN_CHANGED`, m));
   }
 
   send(type, msg) {

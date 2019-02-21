@@ -1,32 +1,32 @@
 const EventEmitter = require('events');
 
 /**
- * @fires ActionHandler#open-room-start
- * @fires ActionHandler#open-room-stop
- * @fires ActionHandler#open-room-error
- * @fires ActionHandler#browser-error
- * @fires ActionHandler#player-chat
- * @fires ActionHandler#player-join
- * @fires ActionHandler#player-leave
- * @fires ActionHandler#player-kicked
- * @fires ActionHandler#player-banned
- * @fires ActionHandler#admin-changed
+ * @fires EventHandler#open-room-start
+ * @fires EventHandler#open-room-stop
+ * @fires EventHandler#open-room-error
+ * @fires EventHandler#browser-error
+ * @fires EventHandler#player-chat
+ * @fires EventHandler#player-join
+ * @fires EventHandler#player-leave
+ * @fires EventHandler#player-kicked
+ * @fires EventHandler#player-banned
+ * @fires EventHandler#admin-changed
  */
-module.exports = class ActionHandler extends EventEmitter{
+module.exports = class EventHandler extends EventEmitter{
 
-	handle(action) {
-		switch (action.type) {
+	handle(message) {
+		switch (message.type) {
 			case "OPEN_ROOM_START":
-				this.handleOpenRoomStartEvent(action);
+				this.handleOpenRoomStartEvent(message);
 				break;
 			case "OPEN_ROOM_STOP":
-				this.handleOpenRoomStopEvent(action);
+				this.handleOpenRoomStopEvent(message);
 				break;
 			case "BROWSER_ERROR":
-				this.handleBrowserErrorEvent(action);
+				this.handleBrowserErrorEvent(message);
 				break;
 			case "ROOM_EVENT":
-				this.handleRoomEvent(action);
+				this.handleRoomEvent(message);
 				break;
 			default:
 				return;
@@ -34,34 +34,34 @@ module.exports = class ActionHandler extends EventEmitter{
 
 	}
 
-	handleOpenRoomStartEvent(action) {
-		if (action.error) {
-			this.emit('open-room-error', action.payload.message);
+	handleOpenRoomStartEvent(message) {
+		if (message.error) {
+			this.emit('open-room-error', message.payload.message);
 			//process.exit(1);
 		}
 		this.emit('open-room-start');
 	}
 
-	handleOpenRoomStopEvent(action) {
-		if (action.error) {
-			this.emit('open-room-error', action.payload.message);
+	handleOpenRoomStopEvent(message) {
+		if (message.error) {
+			this.emit('open-room-error', message.payload.message);
 			//process.exit(1);
 		}
-		let roomInfo = action.payload.roomInfo;
-		this.emit('open-room-stop', roomInfo.roomlink);
+		let roomInfo = message.payload.roomInfo;
+		this.emit('open-room-stop', roomInfo.roomLink);
 	}
 	
-	handleRoomEvent(action) {
-		let handlerName = action.payload.handlerName;
-		let args = action.payload.args || [];
+	handleRoomEvent(message) {
+		let handlerName = message.payload.handlerName;
+		let args = message.payload.args || [];
 
 		if (typeof this[handlerName] === 'function') {
 			this[handlerName](...args);
 		}
 	}
 
-	handleBrowserErrorEvent(action) {
-		this.emit('browser-error', action.payload.message);
+	handleBrowserErrorEvent(message) {
+		this.emit('browser-error', message.payload.message);
 	}
 
 	onPlayerChat(player, message) {

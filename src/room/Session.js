@@ -15,44 +15,23 @@ module.exports = class Session extends EventEmitter {
    * 
    * @param {object} opt - options
    * @param {object} opt.id - id of the session
-   * @param {function} opt.onClientAction - handler for the actions that are sent 
-   *    by clients
    * @param {function} opt.onCallRoom - handler for requests to call a function
    *    in the haxball room object
    */
   constructor(opt) {
-    super(opt);
-    if (!opt) {
-      throw new Error('Missing required argument: opt');
-    }
-    if (!opt.id && opt.id !== 0) {
-      throw new Error('Missing required argument: opt.id');
-    }
-    if (!opt.onClientAction) {
-      throw new Error('Missing required argument: opt.onClientAction');
-    }
-    if (!opt.onCallRoom) {
-      throw new Error('Missing required argument: opt.onCallRoom');
-    }
-    if (typeof opt.onClientAction !== 'function') {
-      throw new Error('opt.onClientAction needs to be typeof function');
-    }
-    if (typeof opt.onCallRoom !== 'function') {
-      throw new Error('opt.onCallRoom needs to be typeof function');
-    }
+    super();
 
-    this.opt = opt;
-    this.id = this.opt.id;
+    this.validateArguments(opt);
+
+    this.id = opt.id;
+    this.onOpenRoom = opt.onOpenRoom;
+    this.onCloseRoom = opt.onCloseRoom;
     this.onCallRoom = opt.onCallRoom;
-    this.onClientAction = opt.onClientAction;
-
     this.onGetPlugins = opt.onGetPlugins;
     this.onGetPlugin = opt.onGetPlugin;
     this.onEnablePlugin = opt.onEnablePlugin;
     this.onDisablePlugin = opt.onDisablePlugin;
     this.onGetDependentPlugins = opt.onGetDependentPlugins;
-
-    this.actionFactory = require('haxroomie-action-factory')(this.id);
 
     this.subscriptions = {};
   }
@@ -61,19 +40,52 @@ module.exports = class Session extends EventEmitter {
     return 'Session';
   }
 
+  /**
+   * @private
+   * Validates the arguments for this sessions constructor.
+   * 
+   * @param {object} opt - argument object for the constructor
+   */
   validateArguments(opt) {
+    if (!opt) {
+      throw new Error('Missing required argument: opt');
+    }
+    if (!opt.id && opt.id !== 0) {
+      throw new Error('Missing required argument: opt.id');
+    }
 
-    return opt;
+    let requiredHandlers = [
+      'onOpenRoom',
+      'onCloseRoom',
+      'onCallRoom',
+      'onGetPlugins',
+      'onGetPlugin',
+      'onEnablePlugin',
+      'onDisablePlugin',
+      'onGetDependentPlugins'
+    ];
+
+    for (let handler of requiredHandlers) {
+
+      if (!opt[handler]) {
+        throw new Error(`Missing required handler: ${handler}`);
+      }
+      if (typeof opt[handler] !== 'function') {
+        throw new Error(`${handler} needs to be typeof function`);
+      }
+    }
   }
 
   /**
+   * Subscribes to the events send by this session.
+   * 
    * @param {string|number|object} id identifier of the subscriber
-   * @param {function} actionHandler function that handles the incoming actions
+   * @param {function} handler function that handles the incoming messages
    */
-  subscribe(id, actionHandler) {
+  subscribe(id, handler) {
     if (!id && id !== 0) throw new Error('Missing required argument: id');
-    if (!actionHandler || typeof actionHandler !== 'function') {
-      throw new Error('Missing required argument: "actionHandler" function');
+    if (!handler || typeof handler !== 'function') {
+      throw new Error('Missing required argument: handler (has to be function)');
     }
     if (this.subscriptions.hasOwnProperty(id)) {
       throw new Error('Session already has subscriber with id ' + id);
@@ -82,11 +94,16 @@ module.exports = class Session extends EventEmitter {
       throw new Error('Client can not have the same id as the Session.');
     }
     logger.debug(`SUBSCRIBED "${id}" FOR SESSION "${this.id}"`);
-    this.subscriptions[id] = actionHandler;
+    this.subscriptions[id] = handler;
 
     this.emit('client_connected', id);
   }
 
+  /**
+   * Unsubscribes the subscriber with given id from this session.
+   * 
+   * @param {string|number|object} id identifier of the subscriber
+   */
   unsubscribe(id) {
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     if (!this.subscriptions.hasOwnProperty(id)) {
@@ -94,49 +111,126 @@ module.exports = class Session extends EventEmitter {
     }
     logger.debug(`UNSUBSCRIBE "${id}" FROM SESSION "${this.id}"`);
 
-    let action = this.actionFactory.create('CLIENT_DISCONNECTED', { id: id });
-
     delete this.subscriptions[id];
     this.emit('client_disconnected', id);
-
   }
 
-  send(id, action) {
-    if (!action) throw new Error('Missing required argument: action');
-    if (!action.hasOwnProperty('type')) {
-      throw new Error('Invalid action: missing action.type property');
-    }
-    if (!action.hasOwnProperty('sender')) {
-      throw new Error('Invalid action: missing action.sender property');
-    }
-    if (!id && id !== 0) throw new Error('Missing required argument: id');
+   
+  /**
+   * Message object that can be sent with the sessions send method.
+   * 
+   * @typedef {Object} Message
+   * @property {string} type - type of message
+   * @property {string|number|object} sender - sender of the message
+   * @property {object|Error} [payload] - Data of the message. Should be
+   *    instanceof Error if error === true.
+   * @property {boolean} [error] - Should be true if 
+   *    (payload instanceof Error) === true. In other words when the sender
+   *    wants to send an error to the receiver.
+   */
 
+  /**
+   * Validates the give object to be valid Message object.
+   * 
+   * @param {Message} message - Message object to be validated
+   */
+  validateMessage(message) {
+    if (!message) throw new Error('Missing required argument: message');
+    if (!message.hasOwnProperty('type')) {
+      throw new Error('Invalid message: missing message.type property');
+    }
+    if (!message.hasOwnProperty('sender')) {
+      throw new Error('Invalid message: missing message.sender property');
+    }
+    if (message.error && (message.payload instanceof Error !== true)) {
+      throw new Error(
+        'payload should be instance of Error if error === true'
+      );
+    }
+  }
+
+  /**
+   * Sends a message to the subscriber with given id.
+   * 
+   * @param {string|number|object} id - the id of subscriber that will receive
+   *    the message
+   * @param {Message} message - message to the receiver
+   */
+  send(id, message) {
+    if (!id && id !== 0) throw new Error('Missing required argument: id');
     if (!this.subscriptions[id]) {
       throw new Error(`No session subscription for ${id}.`)
     }
+    this.validateMessage(message);
 
-    logger.debug(`SEND_TO ${id}: ${JSON.stringify(action)}`);
-    this.subscriptions[id](action);
+    logger.debug(`SEND_TO ${id}: ${JSON.stringify(message)}`);
+    this.subscriptions[id](message);
   }
 
-  async sendToRoom(action) {
-    if (!action) throw new Error('Missing required argument: action');
-    if (!action.hasOwnProperty('type')) {
-      throw new Error('Invalid action: missing action.type property');
-    }
-    if (!action.hasOwnProperty('sender')) {
-      throw new Error('Invalid action: missing action.sender property');
-    }
-    logger.debug(`SEND_TO_ROOM ${this.id}: ${JSON.stringify(action)}`);
+  /**
+   * Sends a message to all subscribers.
+   * 
+   * @param {Message} message - message to the subscribers
+   */
+  broadcast(message) {
+    this.validateMessage(message);
 
-    try {
-      return await this.onClientAction(action);
-    } catch (err) {
-      logger.error(`SEND_TO_ROOM_ERROR (${this.id}): ${err.stack}`);
-      return null;
+    logger.debug(`BROADCAST ${JSON.stringify(message)}`);
+    for (let subID in this.subscriptions) {
+      this.subscriptions[subID](message);
     }
   }
 
+  /**
+   * Opens a headless haxball room in this sessions browser tab.
+   * 
+   * The config object can contain any properties you want to use in your
+   * own HHM config file given in config.hhmConfigFile. The config object is
+   * usable globally from within the HHM config as the **haxroomie** object.
+   * 
+   * The parameters that are used by the default HHM config are listed here
+   * as optional parameters (except `hhmConfigFile` and `pluginFiles` that
+   * are used anyways)
+   * 
+   * @param {object} config - config object that gets injected to HHM config
+   *    as **haxroomie**
+   * @param {string} config.token - token to start the room with from 
+   *    https://www.haxball.com/headlesstoken
+   * @param {string} [config.roomName] - room name
+   * @param {string} [config.playerName] - host player name
+   * @param {int} [config.maxPlayers] - max players
+   * @param {boolean} [config.public] - should the room be public
+   * @param {string} [config.adminPassword] - admin role password in room
+   * @param {object} [config.hhmConfigFile] - Configuration for the haxball 
+   *    headless manager (HHM). Object must contain name and content properties
+   *    where name is the file/config name and content has the file contents.
+   *    Both properties shold be strings.
+   * @param {Array.<objects>} [config.pluginFiles] - Optional HHM plugins to load when 
+   *    starting the room. Objects must contain name and content properties where
+   *    name is the file/plugin name and content has the file contents. Both
+   *    properties shold be strings.
+   * 
+   * @returns {object} - config object with a roomLink property
+   */
+  async openRoom(config) {
+    logger.debug(`OPEN_ROOM: ${JSON.stringify(config)}`);
+    return this.onOpenRoom(config);
+  }
+
+  /**
+   * Closes the headless haxball room in this sessions browser tab.
+   */
+  async closeRoom() {
+    logger.debug(`CLOSE_ROOM`);
+    return this.onCloseRoom();
+  }
+
+  /**
+   * Calls a function of the haxball roomObject in the browsers context.
+   * 
+   * @param {string} fn - name of the haxball roomObject function
+   * @param {any} ...args - arguments for the function
+   */
   async callRoom(fn, ...args) {
     if (!fn) {
       throw new Error('Missing required argument: fn');
@@ -151,7 +245,7 @@ module.exports = class Session extends EventEmitter {
    * @typedef {Object} PluginData
    * @property {number} id - The plugin id
    * @property {boolean} isEnabled - Indicates whether the plugin is enabled or disabled.
-   * @property {object|undefined} pluginSpec - HHM pluginSpec property.
+   * @property {object} [pluginSpec] - HHM pluginSpec property.
    */
 
   /**
@@ -207,20 +301,5 @@ module.exports = class Session extends EventEmitter {
   async getDependentPlugins(name) {
     logger.debug(`GET_DEPENDENT_PLUGINS: ${name}`);
     return this.onGetDependentPlugins(name);
-  }
-
-  broadcast(action) {
-    if (!action) throw new Error('Missing required argument: action');
-    if (!action.hasOwnProperty('type')) {
-      throw new Error('Invalid action: missing action.type property');
-    }
-    if (!action.hasOwnProperty('sender')) {
-      throw new Error('Invalid action: missing action.sender property');
-    }
-
-    logger.debug(`BROADCAST ${JSON.stringify(action)}`);
-    for (let subID in this.subscriptions) {
-      this.subscriptions[subID](action);
-    }
   }
 }
