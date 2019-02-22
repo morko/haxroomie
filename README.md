@@ -1,6 +1,37 @@
 # Installation
 
-To be able to install and run haxroomie [Node.js](https://nodejs.org) version 10.15.1 or newer is required. When [Node.js](https://nodejs.org) is installed you can install haxroomie from command line with:
+To be able to install and run haxroomie 
+
+- [Node.js](https://nodejs.org) version 10.15.1 or newer and
+- [Git](https://git-scm.com/)
+
+are required. 
+
+To install haxroomie, clone the repository with git:
+```sh
+git clone https://www.github.com/morko/haxroomie
+```
+Then go to the directory you cloned it and install dependencies with npm:
+```sh
+cd haxroomie
+npm install
+```
+
+You can run the CLI from `haxroomie` directory using node.
+```sh
+node src/cli --help
+```
+**or**
+```sh
+npm start -- --help
+```
+Note the extra "--" that is required to pass npm scripts arguments.
+
+## Alternative installation
+
+You can also install haxroomie to a global npm installatio directory. This will give you a `haxroomie` command that you can run from anywhere if your npm configuration is correct.
+
+To install with npm run:
 ```sh
 npm install morko/haxroomie -g
 ```
@@ -48,23 +79,36 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 
 # CLI usage
 
-Haxroomie provides a simple command-line interface which is a client for the 
-haxroomie API and can be used to start haxball rooms from the command line.
+Haxroomie provides a command-line interface which is a client for the 
+Haxroomie API and can be used to start and control haxball rooms.
 
 To be able to start a room you must obtain a token from https://www.haxball.com/headlesstoken
-and give it to the cli script as an argument:
+and give it to the CLI script as an argument:
 
 ```sh
 haxroomie <token>
 ```
 
-Haxroomie has also simple interactive command-line interface. Once haxroomie is started you can type `help` for available commands.
+Haxroomie has also simple interactive command-line interface. Once Haxroomie CLI is running and the haxball room has opened you can type `help` for available commands.
 
-For other options like changing the room name run `haxroomie --help` to see available options.
+## Custom room scripts/plugins
 
-Haxroomie supports loading the options from a [haxball headless manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). You can give the file with `--config <file>` or `-c <file>` argument. See https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration for information about the configuration file.
+The awesome project by [saviola777](https://github.com/saviola777) allows users to run multiple scripts/plugins on the same haxball room instance. The plugins/scripts can be either in a HHM plugin format or regular vanilla scripts with few restrictions mentioned in HHM wiki.
 
-**THE CONFIG FILES HHM.config.room MUST HAVE A `token` PROPERTY LIKE THIS:**
+Plugins/scripts can be loaded when starting the haxroomie CLI using:
+```sh
+haxroomie <token> --plugins pluginPath1.js,pluginPath2.js
+```
+
+## Custom HHM config
+
+Haxroomie supports loading the options from a [haxball headless manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). 
+
+You can give the file with `--config <file>` or `-c <file>` argument. 
+
+See https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration for information about the configuration file.
+
+**THE CUSTOM CONFIG FILES HHM.config.room PROPERTY MUST HAVE A `token` PROPERTY LIKE THIS:**
 
 ```
 HHM.config.room = {
@@ -72,7 +116,9 @@ HHM.config.room = {
 }
 ```
 
-See the default configuration file in https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js for a complete example. Haxroomie injects a **haxroomie** object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with `--options` argument. Plugins can be loaded from a file with the `--plugins` argument.
+See the default configuration file in https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js for a complete example.
+
+Haxroomie injects a **haxroomie** object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with `--options` argument.
 
 # API usage
 
