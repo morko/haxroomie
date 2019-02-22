@@ -189,7 +189,8 @@ module.exports = class RoomController {
     await this.roomOpener.close();
     this.roomInfo = null;
     this.broadcast({
-      type: 'ROOM_CLOSED'
+      type: 'ROOM_CLOSED',
+      sender: this.id
     });
   }
 
