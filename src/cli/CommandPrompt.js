@@ -145,6 +145,10 @@ module.exports = class CommandPrompt {
       } else if (line.startsWith(`plugins`)) {
         await this.onPlugins();
 
+      } else if (line.startsWith(`plugin `)) {
+        let plugin = await this.cmd.getPlugin(line.slice(7));
+        this.write(this.pluginDataToString(plugin));
+
       } else if (line.startsWith(`depplugins `)) {
         await this.onGetDependentPlugins(line.slice(11));
 
@@ -181,7 +185,8 @@ module.exports = class CommandPrompt {
       unadmin:    removes admin from a player with given id
       clearbans:  clears all the bans
       plugins:    gets a list of plugins
-      depplugins: gets plugins that depend on given plugin
+      plugin:     get detailed information about given plugin name
+      depplugins: gets plugins that depend on given plugin name
       enable:     enables the plugin with given name
       disable:    disables the plugin with given name
       q:          exits the program`;
@@ -210,14 +215,15 @@ module.exports = class CommandPrompt {
 
     let pluginsString = '';
     for (let p of plugins) {
-      pluginsString += `${this.pluginDataToString(p)}\n`;
+      const isEnabled = p.isEnabled ? 'enabled' : 'disabled';
+      pluginsString += `${p.pluginSpec.name} (${isEnabled})\n`;
     }
     this.write(pluginsString);
   }
 
   pluginDataToString(pluginData) {
     const p = pluginData;
-    let isEnabled = p.isEnabled ? 'enabled' : 'disabled';
+    const isEnabled = p.isEnabled ? 'enabled' : 'disabled';
 
     let string = 
       `${p.pluginSpec.name} (${isEnabled}): 
