@@ -115,55 +115,7 @@ module.exports = class CommandPrompt {
   async onNewLine(line) {
 
     try {
-      if (line.startsWith(`help`)) {
-        this.showHelp();
-
-      } else if (line.startsWith(`link`)) {
-        this.write(`${this.roomLink}`);
-
-      } else if (line.startsWith(`chat `)) {
-        await this.cmd.sendChat(line.slice(5));
-
-      } else if (line.startsWith(`players`)) {
-        await this.onPlayers();
-
-      } else if (line.startsWith(`kick `)) {
-        await this.cmd.kickPlayer(line.slice(5));
-
-      } else if (line.startsWith(`ban `)) {
-        await this.cmd.banPlayer(line.slice(4));
-
-      } else if (line.startsWith(`clearbans`)) {
-        await this.cmd.clearBans();
-
-      } else if (line.startsWith(`admin `)) {
-        await this.cmd.giveAdmin(line.slice(6));
-        
-      } else if (line.startsWith(`unadmin `)) {
-        await this.cmd.removeAdmin(line.slice(8));
-
-      } else if (line.startsWith(`plugins`)) {
-        await this.onPlugins();
-
-      } else if (line.startsWith(`plugin `)) {
-        let plugin = await this.cmd.getPlugin(line.slice(7));
-        this.write(this.pluginDataToString(plugin));
-
-      } else if (line.startsWith(`depplugins `)) {
-        await this.onGetDependentPlugins(line.slice(11));
-
-      } else if (line.startsWith(`enable `)) {
-        await this.onEnablePlugin(line.slice(7));
-
-      } else if (line.startsWith(`disable `)) {
-        await this.onDisablePlugin(line.slice(8));
-
-      } else if (line === `q`) {
-        process.exit(0);
-
-      } else if (!line.startsWith(`\0# `)) {
-        this.send(`INVALID_COMMAND`, `Type "help" for available commands`);
-      }
+      await this.handleCommand(line);
     } catch (err) {
       this.send(`ERROR`, err.message);
     }
@@ -172,24 +124,75 @@ module.exports = class CommandPrompt {
     }
   }
 
+  async handleCommand(cmd) {
+    if (cmd.startsWith(`help`)) {
+      this.showHelp();
+
+    } else if (cmd.startsWith(`link`)) {
+      this.write(`${this.roomLink}`);
+
+    } else if (cmd.startsWith(`chat `)) {
+      await this.cmd.sendChat(cmd.slice(5));
+
+    } else if (cmd.startsWith(`players`)) {
+      await this.onPlayers();
+
+    } else if (cmd.startsWith(`kick `)) {
+      await this.cmd.kickPlayer(cmd.slice(5));
+
+    } else if (cmd.startsWith(`ban `)) {
+      await this.cmd.banPlayer(cmd.slice(4));
+
+    } else if (cmd.startsWith(`clearbans`)) {
+      await this.cmd.clearBans();
+
+    } else if (cmd.startsWith(`admin `)) {
+      await this.cmd.giveAdmin(cmd.slice(6));
+      
+    } else if (cmd.startsWith(`unadmin `)) {
+      await this.cmd.removeAdmin(cmd.slice(8));
+
+    } else if (cmd.startsWith(`plugins`)) {
+      await this.onPlugins();
+
+    } else if (cmd.startsWith(`plugin `)) {
+      let plugin = await this.cmd.getPlugin(cmd.slice(7));
+      this.write(this.pluginDataToString(plugin));
+
+    } else if (cmd.startsWith(`depplugins `)) {
+      await this.onGetDependentPlugins(cmd.slice(11));
+
+    } else if (cmd.startsWith(`enable `)) {
+      await this.onEnablePlugin(cmd.slice(7));
+
+    } else if (cmd.startsWith(`disable `)) {
+      await this.onDisablePlugin(cmd.slice(8));
+
+    } else if (cmd === `q`) {
+      process.exit(0);
+
+    } else if (!cmd.startsWith(`\0# `)) {
+      this.send(`INVALID_COMMAND`, `Type "help" for available commands`);
+    }
+  }
+
   showHelp() {
 
-    let help = 
-      `Commands: 
-      link:       get the room link
-      chat:       sends a chat message to the room
-      players:    get a list of players in the room
-      kick:       kicks a player with given id from the room
-      ban:        bans a player with given id from the room
-      admin:      gives admin to a player with given id
-      unadmin:    removes admin from a player with given id
-      clearbans:  clears all the bans
-      plugins:    gets a list of plugins
-      plugin:     get detailed information about given plugin name
-      depplugins: gets plugins that depend on given plugin name
-      enable:     enables the plugin with given name
-      disable:    disables the plugin with given name
-      q:          exits the program`;
+    let help = `Commands:\n`
+      + `link:       get the room link\n`
+      + `chat:       sends a chat message to the room\n`
+      + `players:    get a list of players in the room\n`
+      + `kick:       kicks a player with given id from the room\n`
+      + `ban:        bans a player with given id from the room\n`
+      + `admin:      gives admin to a player with given id\n`
+      + `unadmin:    removes admin from a player with given id\n`
+      + `clearbans:  clears all the bans\n`
+      + `plugins:    gets a list of plugins\n`
+      + `plugin:     get detailed information about given plugin name\n`
+      + `depplugins: gets plugins that depend on given plugin name\n`
+      + `enable:     enables the plugin with given name\n`
+      + `disable:    disables the plugin with given name\n`
+      + `q:          exits the program`;
 
     this.write(help);
   }
@@ -226,14 +229,14 @@ module.exports = class CommandPrompt {
     const isEnabled = p.isEnabled ? 'enabled' : 'disabled';
 
     let string = 
-      `${p.pluginSpec.name} (${isEnabled}): 
-        id: ${p.id} 
-        name: ${p.pluginSpec.name}
-        author: ${p.pluginSpec.author}
-        version: ${p.pluginSpec.version}
-        dependencies: ${p.pluginSpec.dependencies}
-        order: ${JSON.stringify(p.pluginSpec.order)}
-        config: ${JSON.stringify(p.pluginSpec.config)}`;
+      `${p.pluginSpec.name} (${isEnabled}):\n`
+      + `  id: ${p.id}\n`
+      + `  name: ${p.pluginSpec.name}\n`
+      + `  author: ${p.pluginSpec.author}\n`
+      + `  version: ${p.pluginSpec.version}\n`
+      + `  dependencies: ${p.pluginSpec.dependencies}\n`
+      + `  order: ${JSON.stringify(p.pluginSpec.order)}\n`
+      + `  config: ${JSON.stringify(p.pluginSpec.config)}`;
 
     return string;
   }
