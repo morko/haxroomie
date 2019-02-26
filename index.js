@@ -3,5 +3,12 @@ const createActionFactory = require('haxroomie-action-factory');
 
 module.exports = {
   Haxroomie,
-  createActionFactory
+  createActionFactory,
+  createHaxroomie
+}
+
+async function createHaxroomie(opt) {
+  let haxroomie = new Haxroomie(opt);
+  await haxroomie.createBrowser();
+  return haxroomie;
 }
