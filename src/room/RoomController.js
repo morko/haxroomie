@@ -176,8 +176,7 @@ module.exports = class RoomController {
       sender: this.id,
       payload: {
         roomInfo: this.roomInfo,
-        clientID: id,
-        sessionID: this.session.id,
+        clientID: id
       }
     }
     this.broadcast(message);
