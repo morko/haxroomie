@@ -1,6 +1,5 @@
 const { RoomController } = require('./room');
 const puppeteer = require('puppeteer');
-const logger = require('./logger');
 
 module.exports = class Haxroomie {
 
@@ -107,9 +106,6 @@ module.exports = class Haxroomie {
    * @private
    */
   async initSession(page, sessionID) {
-    page.on('console', (msg) => {
-      logger.debug(`ROOM_LOG (${sessionID}): ${msg.text()}`);
-    });
 
     const device = {
       'name': 'Galaxy S5',
@@ -129,13 +125,6 @@ module.exports = class Haxroomie {
     let room = new RoomController({
       page: page,
       id: sessionID,
-    });
-    page.on('pageerror', (error) => {
-      let errorAction = room.actionFactory.createError(
-        `BROWSER_ERROR`,
-        `(${sessionID}): ${error.message}`
-      );
-      room.session.broadcast(errorAction);
     });
 
     this.roomSessions[sessionID] = room;

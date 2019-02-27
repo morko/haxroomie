@@ -171,7 +171,7 @@ Every new session gets a new tab in the headless browser.
 
 ### Using the session
 
-After getting the session the client must subscribe to the session actions with
+After getting the session the client must subscribe to the session messages/events with
 `session.subscribe(id, callback)`, where 
 
 - `id` can be number, string or object
@@ -187,14 +187,14 @@ let session = await haxroomie.getSession('sessionID');
 
 let client = {
   id: 1,
-  onReceivedAction: function(action) {
-    console.log(action);
+  onReceivedMessage: function(message) {
+    console.log(message);
   }
 }
-session.subscribe(client.id, client.onReceivedAction.bind(client));
+session.subscribe(client.id, client.onReceivedMessage.bind(client));
 ```
 
-Clients can send actions to each other with the send or broadcast functions of the session, but they must be in correct format as described in [Session message](#session-message).
+Clients can send message to each other with the send or broadcast functions of the session, but they must be in correct format as described in [Session message](#session-message).
 
 Broadcasting message to all subscribed clients and haxroomie:
 ```js
@@ -240,9 +240,9 @@ await session.getDependentPlugins(name)
 The messages that get sent to the subscribed function is almost similar to
 [Flux Standard Action](https://github.com/redux-utilities/flux-standard-action).
 
-**The difference is** that each action MUST contain the sender.
+**The difference is** that each message MUST contain the sender.
 
-If the action came from the room, then `sender === session.id`.
+If the message came from the room, then `sender === session.id`.
 
 ### Example of a message
 

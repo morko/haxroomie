@@ -8,17 +8,19 @@ const COLORS = {
   OPEN_ROOM_ERROR: colors.red.bold,
   PLAYER_CHAT: colors.white.bold,
   PLAYER_JOIN: colors.green,
-  PLAYER_LEAVE: colors.blue,
+  PLAYER_LEAVE: colors.cyan,
   PLAYER_KICKED: colors.yellow,
   PLAYER_BANNED: colors.red,
   PLAYERS: colors.green,
   ERROR: colors.red,
-  BROWSER_ERROR: colors.red,
+  PAGE_ERROR: colors.red,
   INVALID_COMMAND: colors.red,
   PLUGIN_ENABLED: colors.green,
   PLUGIN_NOT_ENABLED: colors.red,
   PLUGIN_DISABLED: colors.cyan,
-  PLUGIN_NOT_DISABLED: colors.red
+  PLUGIN_NOT_DISABLED: colors.red,
+  SESSION_CLOSED: colors.green,
+  SESSION_ERROR: colors.red
 }
 
 /**
@@ -32,11 +34,11 @@ module.exports = class CommandPrompt {
     if (!opt.commands) {
       throw new Error(`Missing required argument: opt.commands`);
     }
-    if (!opt.eventHandler) {
-      throw new Error(`Missing required argument: opt.eventHandler`);
+    if (!opt.messageHandler) {
+      throw new Error(`Missing required argument: opt.messageHandler`);
     }
     this.cmd = opt.commands;
-    this.eventHandler = opt.eventHandler;
+    this.messageHandler = opt.messageHandler;
     
     this.maxTypeLength = 20;
 
@@ -50,7 +52,7 @@ module.exports = class CommandPrompt {
     this.rl.on(`line`, (result) => this.onNewLine(result));
 
     this.registerEventListeners(
-      this.eventHandler,
+      this.messageHandler,
       (t, m) => this.send(t, m)
     );
 
@@ -58,20 +60,24 @@ module.exports = class CommandPrompt {
 
   }
 
-  registerEventListeners(eventHandler, send) {
-    eventHandler.on(`open-room-start`, () => send(`OPEN_ROOM_START`));
-    eventHandler.on(`open-room-stop`, l => {
+  registerEventListeners(messageHandler, send) {
+    messageHandler.on(`open-room-start`, () => send(`OPEN_ROOM_START`));
+    messageHandler.on(`open-room-stop`, l => {
       this.roomLink = l;
       send(`OPEN_ROOM_STOP`, l);
     });
-    eventHandler.on(`open-room-error`, e => send(`OPEN_ROOM_START`, e));
-    eventHandler.on(`browser-error`, e => send(`BROWSER_ERROR`, e));
-    eventHandler.on(`player-chat`, m => send(`PLAYER_CHAT`, m));
-    eventHandler.on(`player-join`, m => send(`PLAYER_JOIN`, m));
-    eventHandler.on(`player-leave`, m => send(`PLAYER_LEAVE`, m));
-    eventHandler.on(`player-kicked`, m => send(`PLAYER_KICKED`, m));
-    eventHandler.on(`player-banned`, m => send(`PLAYER_BANNED`, m));
-    eventHandler.on(`admin-changed`, m => send(`ADMIN_CHANGED`, m));
+    messageHandler.on(`open-room-error`, e => send(`OPEN_ROOM_START`, e));
+    messageHandler.on(`browser-error`, e => send(`PAGE_ERROR`, e));
+    messageHandler.on(`player-chat`, m => send(`PLAYER_CHAT`, m));
+    messageHandler.on(`player-join`, m => send(`PLAYER_JOIN`, m));
+    messageHandler.on(`player-leave`, m => send(`PLAYER_LEAVE`, m));
+    messageHandler.on(`player-kicked`, m => send(`PLAYER_KICKED`, m));
+    messageHandler.on(`player-banned`, m => send(`PLAYER_BANNED`, m));
+    messageHandler.on(`admin-changed`, m => send(`ADMIN_CHANGED`, m));
+    messageHandler.on(`session-closed`, () => send('SESSION_CLOSED'));
+    messageHandler.on(`session-error`, errorStack => {
+      send('SESSION_ERROR', errorStack)
+    });  
   }
 
   send(type, msg) {

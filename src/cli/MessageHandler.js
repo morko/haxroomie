@@ -1,32 +1,48 @@
 const EventEmitter = require('events');
 
 /**
- * @fires EventHandler#open-room-start
- * @fires EventHandler#open-room-stop
- * @fires EventHandler#open-room-error
- * @fires EventHandler#browser-error
- * @fires EventHandler#player-chat
- * @fires EventHandler#player-join
- * @fires EventHandler#player-leave
- * @fires EventHandler#player-kicked
- * @fires EventHandler#player-banned
- * @fires EventHandler#admin-changed
+ * @fires MessageHandler#open-room-start
+ * @fires MessageHandler#open-room-stop
+ * @fires MessageHandler#open-room-error
+ * @fires MessageHandler#browser-error
+ * @fires MessageHandler#player-chat
+ * @fires MessageHandler#player-join
+ * @fires MessageHandler#player-leave
+ * @fires MessageHandler#player-kicked
+ * @fires MessageHandler#player-banned
+ * @fires MessageHandler#admin-changed
+ * @fires MessageHandler#session-closed
+ * @fires MessageHandler#session-error
  */
-module.exports = class EventHandler extends EventEmitter{
+module.exports = class MessageHandler extends EventEmitter{
+	constructor(opt) {
+		if (!opt) throw new Error('Missing argument: opt');
+		if (!opt.messageTypes) {
+			throw new Error('Missing argument: opt.messageTypes');
+		}
+		super();
 
+		this.messageTypes = opt.messageTypes;
+	}
 	handle(message) {
 		switch (message.type) {
-			case "OPEN_ROOM_START":
+			case this.messageTypes.OPEN_ROOM_START:
 				this.handleOpenRoomStartEvent(message);
 				break;
-			case "OPEN_ROOM_STOP":
+			case this.messageTypes.OPEN_ROOM_STOP:
 				this.handleOpenRoomStopEvent(message);
 				break;
-			case "BROWSER_ERROR":
-				this.handleBrowserErrorEvent(message);
+			case this.messageTypes.PAGE_ERROR:
+				this.handlePageErrorEvent(message);
 				break;
-			case "ROOM_EVENT":
+			case this.messageTypes.ROOM_EVENT:
 				this.handleRoomEvent(message);
+				break;
+			case this.messageTypes.SESSION_ERROR:
+				this.handleSessionErrorEvent(message);
+				break;
+			case this.messageTypes.SESSION_CLOSED:
+				this.handleSessionClosedEvent();
 				break;
 			default:
 				return;
@@ -34,10 +50,18 @@ module.exports = class EventHandler extends EventEmitter{
 
 	}
 
+	handleSessionClosedEvent() {
+		this.emit('session-closed');
+	}
+
+
+	handleSessionErrorEvent(message) {
+		this.emit('session-error', message.payload.stack);
+	}
+
 	handleOpenRoomStartEvent(message) {
 		if (message.error) {
 			this.emit('open-room-error', message.payload.message);
-			//process.exit(1);
 		}
 		this.emit('open-room-start');
 	}
@@ -45,7 +69,6 @@ module.exports = class EventHandler extends EventEmitter{
 	handleOpenRoomStopEvent(message) {
 		if (message.error) {
 			this.emit('open-room-error', message.payload.message);
-			//process.exit(1);
 		}
 		let roomInfo = message.payload.roomInfo;
 		this.emit('open-room-stop', roomInfo.roomLink);
@@ -60,8 +83,8 @@ module.exports = class EventHandler extends EventEmitter{
 		}
 	}
 
-	handleBrowserErrorEvent(message) {
-		this.emit('browser-error', message.payload.message);
+	handlePageErrorEvent(message) {
+		this.emit('page-error', message.payload.message);
 	}
 
 	onPlayerChat(player, message) {

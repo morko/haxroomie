@@ -1,5 +1,6 @@
 const Session = require('./Session');
 const RoomOpener = require('./RoomOpener');
+const logger = require('../logger');
 
 module.exports = class RoomController {
 
@@ -14,7 +15,7 @@ module.exports = class RoomController {
     this.page = opt.page;
 
     /**
-     * ID is used to be able to send and recieve actions from clients through 
+     * ID is used to be able to send and recieve messages from clients through 
      * the Session object. The session.id will be equal to this.
      */
     this.id = opt.id;
@@ -37,11 +38,6 @@ module.exports = class RoomController {
      * OPEN_ROOM. Other clients can not request OPEN_ROOM when this is not null.
      */
     this.openRoomInProcess = null;
-    
-    /**
-     * Creates actions and error actions easily
-     */
-    this.actionFactory = require('haxroomie-action-factory')(this.id);
 
     /**
      * How many seconds to wait for the roomLink when opening the haxball room
@@ -53,10 +49,51 @@ module.exports = class RoomController {
      * Handles the opening and closing processes room.
      */
     this.roomOpener = this.createRoomOpener();
+
+    /**
+     * Register puppeteer page listeners for the events happening in the page
+     * that is assigned to this session.
+     */
+    this.registerPageListeners(this.page);
   }
 
   get [Symbol.toStringTag]() {
     return 'RoomController';
+  }
+
+  registerPageListeners(page) {
+        
+    page.on('pageerror', (error) => {
+      this.session.broadcast({
+        type: this.session.messageTypes.PAGE_ERROR,
+        sender: this.id,
+        error: true,
+        payload: error
+      });
+    });
+
+    page.on('error', (error) => {
+      this.session.broadcast({
+        type: this.session.messageTypes.SESSION_ERROR,
+        sender: this.id,
+        error: true,
+        payload: error
+      });
+      this.session.active = false;
+    });
+
+    page.on('console', (msg) => {
+      logger.debug(`ROOM_LOG (${this.id}): ${msg.text()}`);
+    });
+
+    page.on('close', () => {
+      this.session.broadcast({
+        type: this.session.messageTypes.SESSION_CLOSED,
+        sender: this.id,
+      });
+      this.session.active = false;
+    });
+
   }
 
   createSession(id) {
@@ -79,50 +116,51 @@ module.exports = class RoomController {
   createRoomOpener() {
     let roomOpener = new RoomOpener({
       page: this.page,
-      actionFactory: this.actionFactory,
-      onEventFromBrowser: (action) => this.onEventFromBrowser(action),
+      messageTypes: this.session.messageTypes,
+      sessionID: this.session.id,
+      onEventFromBrowser: (message) => this.onEventFromBrowser(message),
       timeout: this.timeout
     });
     return roomOpener;
   }
   
   /**
-   * This function receives the actions sent from the headless browser context.
+   * This function receives the messages sent from the headless browser context.
    *
-   * If action type is **'ROOM_EVENT'**, then the payload contains *args* and
+   * If message type is **'ROOM_EVENT'**, then the payload contains *args* and
    * *handlerName* properties. The default event handlers are listed in
    * https://github.com/morko/haxroomie/blob/master/src/hhm/haxroomie-plugin.js
    * 
-   * If action type is **'HHM_EVENT'**, then the payload contains *args* and
+   * If message type is **'HHM_EVENT'**, then the payload contains *args* and
    * *eventType* properties. The event types are listed in
    * https://github.com/saviola777/haxball-headless-manager/blob/master/src/namespace.js
    *
-   * @param {Action} action
+   * @param {object} message - message object
    */
-  async onEventFromBrowser(action) {
-    action.sender = this.id;
-    this.broadcast(action);
+  async onEventFromBrowser(message) {
+    message.sender = this.id;
+    this.broadcast(message);
   }
 
   /**
-   * Broadcast action to all clients subscribed to the Session.
+   * Broadcast message to all clients subscribed to the Session.
    */
-  broadcast(action) {
+  broadcast(message) {
     if(!this.session) return false;
-    this.session.broadcast(action);
+    this.session.broadcast(message);
     return true;
   }
   /**
-   * Send an action to a client with clientID that is subscribed to the 
+   * Send an message to a client with clientID that is subscribed to the 
    * Session.
    * 
    * @param {any} clientID id of the client
-   * @param {action} action action to send to the client
+   * @param {object} message message to send to the client
    * @return {boolean} was sending successfull
    */
-  send(clientID, action) {
+  send(clientID, message) {
     if(!this.session) return false;
-    this.session.send(clientID, action);
+    this.session.send(clientID, message);
     return true;
   }
 
@@ -134,7 +172,7 @@ module.exports = class RoomController {
    */
   handleClientConnected(id) {
     let message = {
-      type: 'CLIENT_CONNECTED',
+      type: this.session.messageTypes.CLIENT_CONNECTED,
       sender: this.id,
       payload: {
         roomInfo: this.roomInfo,
@@ -152,7 +190,7 @@ module.exports = class RoomController {
    */
   handleClientDisconnected(id) {
     let message = {
-      type: 'CLIENT_DISCONNECTED',
+      type: this.session.messageTypes.CLIENT_DISCONNECTED,
       sender: this.id,
       payload: { clientID: id }
     }
@@ -171,14 +209,32 @@ module.exports = class RoomController {
 
     this.openRoomInProcess = true;
     this.broadcast({
-      type: 'OPEN_ROOM_START',
+      type: this.session.messageTypes.OPEN_ROOM_START,
       sender: this.id
     });
 
-    let result = await this.roomOpener.open(config);
+    let roomInfo;
+    try {
+      roomInfo = await this.roomOpener.open(config);
+    } catch (err) {
+      this.openRoomInProcess = false;
+      this.roomOpener.close();
+      this.broadcast({
+        type: this.session.messageTypes.OPEN_ROOM_STOP,
+        sender: sessionID,
+        error: true,
+        payload: err
+      });
+      return;
+    }
     this.openRoomInProcess = false;
-    if (!result.error) this.roomInfo = result.payload.roomInfo;
-    this.broadcast(result);
+    this.broadcast({
+      type: this.session.messageTypes.OPEN_ROOM_STOP,
+      sender: this.session.id,
+      payload: {
+        roomInfo: roomInfo
+      }
+    });
   }
 
   /**
@@ -189,7 +245,7 @@ module.exports = class RoomController {
     await this.roomOpener.close();
     this.roomInfo = null;
     this.broadcast({
-      type: 'ROOM_CLOSED',
+      type: this.session.messageTypes.ROOM_CLOSED,
       sender: this.id
     });
   }

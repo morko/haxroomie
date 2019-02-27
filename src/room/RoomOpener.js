@@ -15,8 +15,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * 
    * @param {object} opt - options
    * @param {object} opt.page - puppeteer.Page object
-   * @param {object} opt.actionFactory - haxroomie action factory object
-   * @param {function} opt.onRoomEvent - function that gets called from the
+   * @param {function} opt.onEventFromBrowser - function that gets called from the
    *    headless browser context when a haxball roomObject event happens
    * @param {object} [opt.timeout] - time to wait for the room link before
    *    failing
@@ -27,9 +26,6 @@ module.exports = class RoomOpener extends EventEmitter {
     if (!opt.page) {
       throw new Error('Missing required argument: opt.page');
     }
-    if (!opt.actionFactory) {
-      throw new Error('Missing required argument: opt.actionFactory');
-    }
     if (!opt.onEventFromBrowser) {
       throw new Error('Missing required argument: opt.onEventFromBrowser');
     }
@@ -37,7 +33,8 @@ module.exports = class RoomOpener extends EventEmitter {
       throw new Error('opt.onEventFromBrowser has to be typeof function');
     }
     this.page = opt.page;
-    this.actionFactory = opt.actionFactory;
+    this.messageTypes = opt.messageTypes;
+    this.sessionID = opt.sessionID;
     this.onEventFromBrowser = opt.onEventFromBrowser;
     this.timeout = opt.timeout || 8;
 
@@ -49,16 +46,17 @@ module.exports = class RoomOpener extends EventEmitter {
    * Opens the room.
    * See Session for documentation.
    *
-   * @returns {object} - action object containing roomInfo or error
+   * @returns {object} - config object merged with HHM config and 
+   *    roomLink property attached to it
    */
   async open(config) {
 
     if (!config) {
-      return this.openRoomError('Missing config');
+      throw new Error('Missing config');
     }
 
     if (!config.token) {
-      return this.openRoomError('config is missing token');
+      throw new Error('config is missing token');
     }
 
     // set default admin password or use the one provided
@@ -68,14 +66,14 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.page.goto(this.url);
     } catch (err) {
-      return this.openRoomError(this.url + ' is unreachable!');
+      throw new Error(this.url + ' is unreachable!');
     }
 
     logger.debug('OPEN_ROOM: Waiting for HBInit to become available');
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {
-      return this.openRoomError('Could not find the HBInit function!');
+      throw new Error('Could not find the HBInit function!');
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
@@ -93,13 +91,13 @@ module.exports = class RoomOpener extends EventEmitter {
         );
       }
     } catch (err) {
-      return this.openRoomError('Invalid HHM config!');
+      throw new Error('Invalid HHM config!');
     }
 
     try {
       await this.page.evaluate(hhmConfig, config);
     } catch (err) {
-      return this.openRoomError(
+      throw new Error(
         `Unable to start Headless Host Manager!`
       );
     }
@@ -107,14 +105,14 @@ module.exports = class RoomOpener extends EventEmitter {
     logger.debug('OPEN_ROOM: Waiting for the room link.');
     let roomLink = await this.waitForRoomLink(this.timeout * 1000);
     if (!roomLink) {
-      return this.openRoomError('Timeout when waiting for the room link!');
+      throw new Error('Timeout when waiting for the room link!');
     }
 
     logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
     try {
       await this.injectHaxroomiePlugin();
     } catch (err) {
-      return this.openRoomError(
+      throw new Error(
         `Unable to inject haxroomie HHM plugin!`
       );
     }
@@ -134,7 +132,7 @@ module.exports = class RoomOpener extends EventEmitter {
         try {
           await this.injectPlugin(p.content);
         } catch (err) {
-          return this.openRoomError(`Unable to inject plugin ${p.name}: \n${err.stack}`)
+          throw new Error(`Unable to inject plugin ${p.name}: \n${err.stack}`)
         }
       }
     }
@@ -144,7 +142,7 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
     } catch (err) {
-      return this.openRoomError(`Unable to get the room info from HHM.`)
+      throw new Error(`Unable to get the room info from HHM.`)
     }
     
 
@@ -153,10 +151,7 @@ module.exports = class RoomOpener extends EventEmitter {
     // add the roomLink to the roomInfo
     roomInfo.roomLink = roomLink;
 
-    return this.actionFactory.create(
-      'OPEN_ROOM_STOP',
-      { roomInfo: roomInfo}
-    );
+    return roomInfo;
   }
 
   /**
@@ -175,11 +170,6 @@ module.exports = class RoomOpener extends EventEmitter {
     let elementHandle = await this.page.$("iframe");
     let haxframe = await elementHandle.contentFrame();
     return haxframe;
-  }
-
-  async openRoomError(msg) {
-    await this.close();
-    return this.actionFactory.createError('OPEN_ROOM_STOP', msg)
   }
 
   /**

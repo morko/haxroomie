@@ -4,7 +4,7 @@
  * roomObject and act as an adaptor between haxroomie and HHM.
  * 
  * Haxroomie exposes a function as window.sendToHaxroomie that the browser 
- * scripts can use to send actions to haxroomie.
+ * scripts can use to send messages to haxroomie.
  * 
  * window.hroomie.registerEventHandlers is called from haxroomie to register the
  * handlers for roomObject and HHM events.
@@ -101,7 +101,7 @@ window.hroomie = (function(){
    * @param {string} fn - function name to be called
    * @param {...any} args - arguments for the function
    * 
-   * @returns {Action} - haxroomie action object without the sender id
+   * @returns {object} - haxroomie message object without the sender id
    */
   function callRoom(fn, ...args) {
     if (typeof room[fn] !== 'function') {

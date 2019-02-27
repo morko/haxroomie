@@ -34,6 +34,26 @@ module.exports = class Session extends EventEmitter {
     this.onGetDependentPlugins = opt.onGetDependentPlugins;
 
     this.subscriptions = {};
+
+    this.messageTypes = {
+      CLIENT_CONNECTED: 'CLIENT_CONNECTED',
+      CLIENT_DISCONNECTED: 'CLIENT_DISCONNECTED',
+      OPEN_ROOM_START: 'OPEN_ROOM_START',
+      OPEN_ROOM_STOP: 'OPEN_ROOM_STOP',
+      ROOM_CLOSED: 'ROOM_CLOSED',
+      ROOM_EVENT: 'ROOM_EVENT',
+      HHM_EVENT: 'HHM_EVENT',
+      PAGE_ERROR: 'PAGE_ERROR',
+      SESSION_CLOSED: 'SESSION_CLOSED',
+      SESSION_ERROR: 'SESSION_ERROR'
+    }
+
+    /**
+     * Flag for telling if this session is still usable. If 
+     * SESSION_CLOSED or SESSION_ERROR happens the RoomController also sets
+     * this false.
+     */
+    this.active = true;
   }
 
   get [Symbol.toStringTag]() {
@@ -83,6 +103,7 @@ module.exports = class Session extends EventEmitter {
    * @param {function} handler function that handles the incoming messages
    */
   subscribe(id, handler) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     if (!handler || typeof handler !== 'function') {
       throw new Error('Missing required argument: handler (has to be function)');
@@ -105,6 +126,7 @@ module.exports = class Session extends EventEmitter {
    * @param {string|number|object} id identifier of the subscriber
    */
   unsubscribe(id) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     if (!this.subscriptions.hasOwnProperty(id)) {
       throw new Error ('No subscriptions found for id ' + id);
@@ -135,6 +157,7 @@ module.exports = class Session extends EventEmitter {
    * @param {Message} message - Message object to be validated
    */
   validateMessage(message) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     if (!message) throw new Error('Missing required argument: message');
     if (!message.hasOwnProperty('type')) {
       throw new Error('Invalid message: missing message.type property');
@@ -157,6 +180,7 @@ module.exports = class Session extends EventEmitter {
    * @param {Message} message - message to the receiver
    */
   send(id, message) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     if (!this.subscriptions[id]) {
       throw new Error(`No session subscription for ${id}.`)
@@ -173,6 +197,7 @@ module.exports = class Session extends EventEmitter {
    * @param {Message} message - message to the subscribers
    */
   broadcast(message) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     this.validateMessage(message);
 
     logger.debug(`BROADCAST ${JSON.stringify(message)}`);
@@ -205,7 +230,7 @@ module.exports = class Session extends EventEmitter {
    *    headless manager (HHM). Object must contain name and content properties
    *    where name is the file/config name and content has the file contents.
    *    Both properties shold be strings.
-   * @param {Array.<objects>} [config.pluginFiles] - Optional HHM plugins to load when 
+   * @param {Array.<object>} [config.pluginFiles] - Optional HHM plugins to load when 
    *    starting the room. Objects must contain name and content properties where
    *    name is the file/plugin name and content has the file contents. Both
    *    properties shold be strings.
@@ -213,6 +238,7 @@ module.exports = class Session extends EventEmitter {
    * @returns {object} - config object with a roomLink property
    */
   async openRoom(config) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`OPEN_ROOM: ${JSON.stringify(config)}`);
     return this.onOpenRoom(config);
   }
@@ -221,6 +247,7 @@ module.exports = class Session extends EventEmitter {
    * Closes the headless haxball room in this sessions browser tab.
    */
   async closeRoom() {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`CLOSE_ROOM`);
     return this.onCloseRoom();
   }
@@ -232,6 +259,7 @@ module.exports = class Session extends EventEmitter {
    * @param {any} ...args - arguments for the function
    */
   async callRoom(fn, ...args) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     if (!fn) {
       throw new Error('Missing required argument: fn');
     }
@@ -253,6 +281,7 @@ module.exports = class Session extends EventEmitter {
    * @returns {Promise<Array.<PluginData>>} - array of plugins
    */
   async getPlugins() {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`GET_PLUGINS`);
     return this.onGetPlugins();
   }
@@ -265,6 +294,7 @@ module.exports = class Session extends EventEmitter {
    *    plugin was not found
    */
   async getPlugin(name) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`GET_PLUGIN: ${name}`);
     return this.onGetPlugin(name);
   }
@@ -276,6 +306,7 @@ module.exports = class Session extends EventEmitter {
    * @returns {Promise<boolean} - was the plugin enabled or not?
    */
   async enablePlugin(name) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`ENABLE_PLUGIN: ${name}`);
     return this.onEnablePlugin(name);
   }
@@ -288,6 +319,7 @@ module.exports = class Session extends EventEmitter {
    * @returns {Promise<boolean} - was the plugin disabled or not?
    */
   async disablePlugin(name) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`DISABLE_PLUGIN: ${name}`);
     return this.onDisablePlugin(name);
   }
@@ -299,6 +331,7 @@ module.exports = class Session extends EventEmitter {
    * @returns {Promise<Array.<PluginData>>} - array of plugins
    */
   async getDependentPlugins(name) {
+    if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`GET_DEPENDENT_PLUGINS: ${name}`);
     return this.onGetDependentPlugins(name);
   }
