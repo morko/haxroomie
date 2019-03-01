@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/cli",
-    "test": "mocha"
+    "test": "mocha",
+    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/session ./README.md -d ./docs -c ./jsdoc-config.js"
   },
   "keywords": [
     "haxball"
