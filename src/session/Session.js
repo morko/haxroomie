@@ -2,21 +2,38 @@ const logger = require('../logger');
 const EventEmitter = require('events');
 
 /**
- * Mediator that handles the communication between RoomController and its clients.
- * Clients can subscribe to the events with the subscribe function.
+ * Session class acts as an interface between the Haxroomie clients and the
+ * headless browser. Session allows clients to subscribe to the different
+ * [messages]{@link module:haxroomie.messageTypes} (events) that get sent by Haxroomie, 
+ * [haxball roomObject]{@link https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject}
+ * and 
+ * [haxball headless manager (HHM)]{@link https://github.com/saviola777/haxball-headless-manager}. 
+ * It also has methods to send requests to the
+ * roomObject and HHM.
+ * 
+ * **Request/create new sessions with the
+ * [Haxroomie#getSession]{@link module:haxroomie.Haxroomie#getSession}
+ * method.
+ * The constructor is not ment to be called directly!**
+ * 
+ * After getting hold of the Session object clients can listen to the events
+ * when they have used the [subscribe method]{@link Session#subscribe} to 
+ * register a handler function for them. 
+ * 
+ * See [Message]{@link module:haxroomie~Message} for definition
+ * of the message format and 
+ * [message types]{@link module:haxroomie.messageTypes} for 
+ * the types of messages that Haxroomie sends.
+ * 
+ * Session follows the mediator design pattern loosely.
  * 
  * @fires Session#client_connected
  * @fires Session#client_disconnected
  */
-module.exports = class Session extends EventEmitter {
+class Session extends EventEmitter {
   
   /**
    * Constructs a new Session object.
-   * 
-   * @param {object} opt - options
-   * @param {object} opt.id - id of the session
-   * @param {function} opt.onCallRoom - handler for requests to call a function
-   *    in the haxball room object
    */
   constructor(opt) {
     super();
@@ -35,20 +52,7 @@ module.exports = class Session extends EventEmitter {
 
     this.subscriptions = {};
 
-    this.messageTypes = {
-      CLIENT_CONNECTED: 'CLIENT_CONNECTED',
-      CLIENT_DISCONNECTED: 'CLIENT_DISCONNECTED',
-      OPEN_ROOM_START: 'OPEN_ROOM_START',
-      OPEN_ROOM_STOP: 'OPEN_ROOM_STOP',
-      ROOM_CLOSED: 'ROOM_CLOSED',
-      ROOM_EVENT: 'ROOM_EVENT',
-      HHM_EVENT: 'HHM_EVENT',
-      PAGE_ERROR: 'PAGE_ERROR',
-      SESSION_CLOSED: 'SESSION_CLOSED',
-      SESSION_ERROR: 'SESSION_ERROR'
-    }
-
-    /**
+    /*
      * Flag for telling if this session is still usable. If 
      * SESSION_CLOSED or SESSION_ERROR happens the RoomController also sets
      * this false.
@@ -61,10 +65,10 @@ module.exports = class Session extends EventEmitter {
   }
 
   /**
-   * @private
    * Validates the arguments for this sessions constructor.
    * 
    * @param {object} opt - argument object for the constructor
+   * @private
    */
   validateArguments(opt) {
     if (!opt) {
@@ -137,24 +141,10 @@ module.exports = class Session extends EventEmitter {
     this.emit('client_disconnected', id);
   }
 
-   
-  /**
-   * Message object that can be sent with the sessions send method.
-   * 
-   * @typedef {Object} Message
-   * @property {string} type - type of message
-   * @property {string|number|object} sender - sender of the message
-   * @property {object|Error} [payload] - Data of the message. Should be
-   *    instanceof Error if error === true.
-   * @property {boolean} [error] - Should be true if 
-   *    (payload instanceof Error) === true. In other words when the sender
-   *    wants to send an error to the receiver.
-   */
-
   /**
    * Validates the give object to be valid Message object.
    * 
-   * @param {Message} message - Message object to be validated
+   * @param {module:message~Message} message - Message object to be validated
    */
   validateMessage(message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -177,7 +167,7 @@ module.exports = class Session extends EventEmitter {
    * 
    * @param {string|number|object} id - the id of subscriber that will receive
    *    the message
-   * @param {Message} message - message to the receiver
+   * @param {module:message~Message} message - message to the receiver
    */
   send(id, message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -194,7 +184,7 @@ module.exports = class Session extends EventEmitter {
   /**
    * Sends a message to all subscribers.
    * 
-   * @param {Message} message - message to the subscribers
+   * @param {module:message~Message} message - message to the subscribers
    */
   broadcast(message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -303,7 +293,7 @@ module.exports = class Session extends EventEmitter {
    * Enables a HHM plugin with the given id.
    * 
    * @param {string} name - name of the plugin
-   * @returns {Promise<boolean} - was the plugin enabled or not?
+   * @returns {Promise<boolean>} - was the plugin enabled or not?
    */
   async enablePlugin(name) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -316,7 +306,7 @@ module.exports = class Session extends EventEmitter {
    * it disables all the plugins in the given order.
    * 
    * @param {string|Array} name - name or array of names of the plugin(s)
-   * @returns {Promise<boolean} - was the plugin disabled or not?
+   * @returns {Promise<boolean>} - was the plugin disabled or not?
    */
   async disablePlugin(name) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -336,3 +326,5 @@ module.exports = class Session extends EventEmitter {
     return this.onGetDependentPlugins(name);
   }
 }
+
+module.exports = Session;

@@ -1,4 +1,4 @@
-const Session = require('./Session');
+const { Session, messageTypes } = require('../session');
 const RoomOpener = require('./RoomOpener');
 const logger = require('../logger');
 
@@ -65,7 +65,7 @@ module.exports = class RoomController {
         
     page.on('pageerror', (error) => {
       this.session.broadcast({
-        type: this.session.messageTypes.PAGE_ERROR,
+        type: messageTypes.PAGE_ERROR,
         sender: this.id,
         error: true,
         payload: error
@@ -74,7 +74,7 @@ module.exports = class RoomController {
 
     page.on('error', (error) => {
       this.session.broadcast({
-        type: this.session.messageTypes.SESSION_ERROR,
+        type: messageTypes.SESSION_ERROR,
         sender: this.id,
         error: true,
         payload: error
@@ -88,7 +88,7 @@ module.exports = class RoomController {
 
     page.on('close', () => {
       this.session.broadcast({
-        type: this.session.messageTypes.SESSION_CLOSED,
+        type: messageTypes.SESSION_CLOSED,
         sender: this.id,
       });
       this.session.active = false;
@@ -116,7 +116,6 @@ module.exports = class RoomController {
   createRoomOpener() {
     let roomOpener = new RoomOpener({
       page: this.page,
-      messageTypes: this.session.messageTypes,
       sessionID: this.session.id,
       onEventFromBrowser: (message) => this.onEventFromBrowser(message),
       timeout: this.timeout
@@ -172,12 +171,11 @@ module.exports = class RoomController {
    */
   handleClientConnected(id) {
     let message = {
-      type: this.session.messageTypes.CLIENT_CONNECTED,
+      type: messageTypes.CLIENT_CONNECTED,
       sender: this.id,
       payload: {
         roomInfo: this.roomInfo,
-        clientID: id,
-        sessionID: this.session.id,
+        clientID: id
       }
     }
     this.broadcast(message);
@@ -190,7 +188,7 @@ module.exports = class RoomController {
    */
   handleClientDisconnected(id) {
     let message = {
-      type: this.session.messageTypes.CLIENT_DISCONNECTED,
+      type: messageTypes.CLIENT_DISCONNECTED,
       sender: this.id,
       payload: { clientID: id }
     }
@@ -209,7 +207,7 @@ module.exports = class RoomController {
 
     this.openRoomInProcess = true;
     this.broadcast({
-      type: this.session.messageTypes.OPEN_ROOM_START,
+      type: messageTypes.OPEN_ROOM_START,
       sender: this.id
     });
 
@@ -220,7 +218,7 @@ module.exports = class RoomController {
       this.openRoomInProcess = false;
       this.roomOpener.close();
       this.broadcast({
-        type: this.session.messageTypes.OPEN_ROOM_STOP,
+        type: messageTypes.OPEN_ROOM_STOP,
         sender: sessionID,
         error: true,
         payload: err
@@ -229,7 +227,7 @@ module.exports = class RoomController {
     }
     this.openRoomInProcess = false;
     this.broadcast({
-      type: this.session.messageTypes.OPEN_ROOM_STOP,
+      type: messageTypes.OPEN_ROOM_STOP,
       sender: this.session.id,
       payload: {
         roomInfo: roomInfo
@@ -245,7 +243,7 @@ module.exports = class RoomController {
     await this.roomOpener.close();
     this.roomInfo = null;
     this.broadcast({
-      type: this.session.messageTypes.ROOM_CLOSED,
+      type: messageTypes.ROOM_CLOSED,
       sender: this.id
     });
   }

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: session/message.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: session/message.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This module contains definitions and explanations for the different 
+ * [message types]{@link message~messageTypes} that 
+ * the Haxroomie sends to the clients.
+ * 
+ * All messages follow a format explained 
+ * in [Message]{@link module:message~Message}.
+ * 
+ * @module message
+ */
+
+    
+/**
+ * The Haxroomie messages are almost similar to
+ * [Flux Standard Action](https://github.com/redux-utilities/flux-standard-action).
+ * 
+ * **The difference is** that each message MUST contain the sender.
+ * 
+ * If the message came from the room, then `sender === session.id`.
+ * 
+ * Message objects can be sent with {@link Session#send} and 
+ * {@link Session#broadcast}.
+ * 
+ * @typedef {Object} Message
+ * @property {string} type - type of message
+ * @property {string|number|object} sender - sender of the message
+ * @property {object|Error} [payload] - Data of the message. Should be
+ *    `instanceof Error` if `error === true`.
+ * @property {boolean} [error] - Should be true if 
+ *    `(payload instanceof Error) === true`. In other words when the sender
+ *    wants to send an error to the receiver.
+ */
+
+/**
+ * Contains message/event types that Haxroomie sends to the clients
+ * subscribed to a session.
+ * @namespace
+ */
+const messageTypes = {
+  /**
+   * Broadcasted when a new client connects to the session with the subscribe method.
+   * 
+   * Payload:
+   * ```js
+   * {
+   *   roomInfo: object containing information about the running room | undefined,
+   *   clientID: id of the client that connected
+   * }
+   * ```
+   */
+  CLIENT_CONNECTED: 'CLIENT_CONNECTED',
+  /**
+   * Broadcasted when client disconnects from the session with the unsubscribe method.
+   * 
+   * Payload:
+   * ```js
+   * {
+    *   clientID: id of the client that disconnected
+    * }
+    * ```
+   */
+  CLIENT_DISCONNECTED: 'CLIENT_DISCONNECTED',
+  /**
+   * Broadcasted when one of the clients successfully requests haxroomie to
+   * open a new haxball headless room with the session.openRoom method.
+   * 
+   * When the opening is in process, other clients can not request to open
+   * room. When the process is done an OPEN_ROOM_STOP message will be
+   * broadcasted.
+   * 
+   * Payload:
+   * ```js
+   * undefined
+   * ```
+   */
+  OPEN_ROOM_START: 'OPEN_ROOM_START',
+  /**
+   * Broadcasted when the process of opening the haxball headless room has
+   * completed.
+   * 
+   * Payload:
+   * ```js
+   * {
+   *   roomInfo: object containing information about the running room
+   * }
+   * ```
+   */
+  OPEN_ROOM_STOP: 'OPEN_ROOM_STOP',
+  /**
+   * Broadcasted when one of the clients has requested to close the room
+   * with the session.closeRoom method.
+   * 
+   * Payload:
+   * ```js
+   * undefined
+   * ```
+   */
+  ROOM_CLOSED: 'ROOM_CLOSED',
+  /**
+   * Broadcasted when haxball headless roomObject emits some event.
+   * 
+   * Payload:
+   * ```js
+   * {
+   *   handlerName: name of the roomObject handler function,
+   *   args: arguments that the handler receives
+   * }
+   * ```
+   */
+  ROOM_EVENT: 'ROOM_EVENT',
+  /**
+   * Broadcasted when haxball headless manager (HHM) emits some event.
+   * 
+   * Payload:
+   * ```js
+   * {
+   *   eventType: name of the roomObject handler function,
+   *   args: arguments that the handler receives
+   * }
+   * ```
+   */
+  HHM_EVENT: 'HHM_EVENT',
+  /**
+   * Broadcasted when the page (tab) in the browser encounters some error.
+   * 
+   * Payload:
+   * ```js
+   * instanceof Error
+   * ```
+   */
+  PAGE_ERROR: 'PAGE_ERROR',
+  /**
+   * Broadcasted when the browser page (tab) gets closed. This happens when
+   * user manually closes the tab that this session is attached to.
+   * 
+   * This also renders the session unusable.
+   * 
+   * Payload:
+   * ```js
+   * undefined
+   * ```
+   */
+  SESSION_CLOSED: 'SESSION_CLOSED',
+  /**
+   * Broadcasted when the browser page (tab) crashes.
+   * 
+   * This also renders the session unusable.
+   * 
+   * Payload:
+   * ```js
+   * instanceof Error
+   * ```
+   */
+  SESSION_ERROR: 'SESSION_ERROR'
+}
+
+module.exports = messageTypes;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-message.html">message</a></li></ul><h3>Classes</h3><ul><li><a href="Haxroomie.html">Haxroomie</a></li><li><a href="Session.html">Session</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-message-messageTypes.html">messageTypes</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 01 2019 08:49:19 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

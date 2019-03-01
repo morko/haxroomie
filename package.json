@@ -1,11 +1,12 @@
 {
   "name": "haxroomie",
-  "version": "1.0.0-beta0",
+  "version": "1.0.0-beta.1",
   "description": "Host haxball rooms without GUI.",
   "main": "index.js",
   "scripts": {
     "start": "node src/cli",
-    "test": "mocha"
+    "test": "mocha",
+    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/session ./README.md -d ./docs -c ./jsdoc-config.js"
   },
   "keywords": [
     "haxball"

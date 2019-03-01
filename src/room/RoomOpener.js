@@ -33,8 +33,6 @@ module.exports = class RoomOpener extends EventEmitter {
       throw new Error('opt.onEventFromBrowser has to be typeof function');
     }
     this.page = opt.page;
-    this.messageTypes = opt.messageTypes;
-    this.sessionID = opt.sessionID;
     this.onEventFromBrowser = opt.onEventFromBrowser;
     this.timeout = opt.timeout || 8;
 

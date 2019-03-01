@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+const { messageTypes } = require('../session');
 
 /**
  * @fires MessageHandler#open-room-start
@@ -15,33 +16,25 @@ const EventEmitter = require('events');
  * @fires MessageHandler#session-error
  */
 module.exports = class MessageHandler extends EventEmitter{
-	constructor(opt) {
-		if (!opt) throw new Error('Missing argument: opt');
-		if (!opt.messageTypes) {
-			throw new Error('Missing argument: opt.messageTypes');
-		}
-		super();
 
-		this.messageTypes = opt.messageTypes;
-	}
 	handle(message) {
 		switch (message.type) {
-			case this.messageTypes.OPEN_ROOM_START:
+			case messageTypes.OPEN_ROOM_START:
 				this.handleOpenRoomStartEvent(message);
 				break;
-			case this.messageTypes.OPEN_ROOM_STOP:
+			case messageTypes.OPEN_ROOM_STOP:
 				this.handleOpenRoomStopEvent(message);
 				break;
-			case this.messageTypes.PAGE_ERROR:
+			case messageTypes.PAGE_ERROR:
 				this.handlePageErrorEvent(message);
 				break;
-			case this.messageTypes.ROOM_EVENT:
+			case messageTypes.ROOM_EVENT:
 				this.handleRoomEvent(message);
 				break;
-			case this.messageTypes.SESSION_ERROR:
+			case messageTypes.SESSION_ERROR:
 				this.handleSessionErrorEvent(message);
 				break;
-			case this.messageTypes.SESSION_CLOSED:
+			case messageTypes.SESSION_CLOSED:
 				this.handleSessionClosedEvent();
 				break;
 			default:
