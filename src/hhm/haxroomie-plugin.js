@@ -1,17 +1,18 @@
 /**
  * This is a haxball headless manager plugin for haxroomie to be able to send
- * the room events from browser to the haxroomie.
+ * the room events from browser to the haxroomie, call functions in the
+ * roomObject and act as an adaptor between haxroomie and HHM.
  * 
- * The "main process" exposes a function to the browser context called
- * hrSend that the browser context can use to send actions to haxroomie.
+ * Haxroomie exposes a function as window.sendToHaxroomie that the browser 
+ * scripts can use to send messages to haxroomie.
  * 
- * hrRegisterHandlers is called from haxroomie and it registers handlers
- * for the actions that haxroomie sends.
+ * window.hroomie.registerEventHandlers is called from haxroomie to register the
+ * handlers for roomObject and HHM events.
  */
 let room = HBInit();
 
 room.pluginSpec = {
-  name: `salamini/haxroomie`,
+  name: `hr/core`,
   author: `salamini`,
   version: `1.0.0`,
   config: {},
@@ -20,75 +21,209 @@ room.pluginSpec = {
   incompatible_with: [],
 };
 
-/**
- * List of default room event handlers that the plugin will send to the main process.
-*/
-defaultEventHandlers = [
-  'onPlayerJoin',
-  'onPlayerLeave',
-  'onTeamVictory',
-  'onPlayerChat',
-  'onTeamGoal',
-  'onGameStart',
-  'onGameStop',
-  'onPlayerAdminChange',
-  'onPlayerTeamChange',
-  'onPlayerKicked',
-  'onGamePause',
-  'onGameUnpause',
-  'onPositionsReset',
-  'onStadiumChange'
-];
 
-/**
- * Sets handlers listed in eventHandlers to the trapped HaxBall roomObject.
- *
- * The handlers wrap the event in haxroomie action Object without the sender
- * id. RoomController sets the sender when it receives the action.
- */
-window.hrRegisterHandlers = function hrRegisterHandlers(eventHandlers) {
-  eventHandlers = eventHandlers || defaultEventHandlers;
+window.hroomie = (function(){
 
-  for (let handlerName of eventHandlers) {
-    room[handlerName] = function(...args) {
-      window.hrSend({
-        type: 'ROOM_EVENT',
-        payload: { handlerName: handlerName, args: args }
-      });
-    };
+  /**
+   * List of default roomObject event handlers that the plugin will send 
+   * to the main process.
+  */
+  var defaultRoomEventHandlers = [
+    'onPlayerJoin',
+    'onPlayerLeave',
+    'onTeamVictory',
+    'onPlayerChat',
+    'onTeamGoal',
+    'onGameStart',
+    'onGameStop',
+    'onPlayerAdminChange',
+    'onPlayerTeamChange',
+    'onPlayerKicked',
+    'onGamePause',
+    'onGameUnpause',
+    'onPositionsReset',
+    'onStadiumChange'
+  ];
+
+  var defaultHHMEvents = [
+    window.HHM.events.PLUGIN_DISABLED,
+    window.HHM.events.PLUGIN_ENABLED,
+    window.HHM.events.PLUGIN_LOADED,
+    window.HHM.events.PLUGIN_REMOVED,
+  ];
+  
+  return {
+    registerEventHandlers,
+    callRoom,
+    getPluginById,
+    getPlugin,
+    getPlugins,
+    enablePlugin,
+    disablePlugin,
+    getDependentPlugins
+  };
+    
+  /**
+   * Registers handlers for the HaxBall roomObject and for the HHM manager
+   * events. Send all events to the main context of haxroomie.
+   *
+   * @param {Array.<string>} roomEventHandlers - handler names to attach 
+   *    listeners for
+   */  
+  function registerEventHandlers(roomEventHandlers) {
+    roomEventHandlers = roomEventHandlers || defaultRoomEventHandlers;
+
+    // send roomObject events to the main context
+    for (let handlerName of roomEventHandlers) {
+      room[handlerName] = function(...args) {
+        window.sendToHaxroomie({
+          type: 'ROOM_EVENT',
+          payload: { handlerName: handlerName, args: args }
+        });
+      };
+    }
+  
+    // send HHM events to the main context
+    for (let eventType of defaultHHMEvents) {
+      window.HHM.manager.registerEventHandler((args) => {
+        window.sendToHaxroomie({
+          type: 'HHM_EVENT',
+          payload: { eventType: eventType, args: args }
+        });
+      }, [eventType]);
+    }
   }
-}
 
-/**
- * Handles actions that are sent from the main context through hrRecieve
- * function.
- */
-window.hrReceive = function hrReceive(action) {
-  if (action.type === 'CALL_ROOM') {
-
-	
-  }
-}
-
-/**
- * This function can be used to call functions of the haxball headless host
- * room object from the main context.
- */
-window.hrCallRoom = function hrCallRoom(fn, ...args) {
-	if (typeof room[fn] !== 'function') {
+  /**
+   * This function can be used to call functions of the haxball headless host
+   * roomObject from the main context.
+   * 
+   * @param {string} fn - function name to be called
+   * @param {...any} args - arguments for the function
+   * 
+   * @returns {object} - haxroomie message object without the sender id
+   */
+  function callRoom(fn, ...args) {
+    if (typeof room[fn] !== 'function') {
+      return {
+        type: 'CALL_ROOM_RESULT',
+        payload: `room.${fn} is not a function`,
+        error: true,
+      };
+    }
+    
+    let result = room[fn](...args);
     return {
       type: 'CALL_ROOM_RESULT',
-      payload: `room.${fn} is not a function`,
-      error: true,
+      payload: {
+        fn: fn,
+        result: result
+      }
     };
   }
-  
-  let result = room[fn](...args);
-  return {
-    type: 'CALL_ROOM_RESULT',
-    payload: {
-      fn: fn,
-      result: result
+
+  /**
+   * Returns PluginData of HHM plugin with the given id or null if not found.
+   * 
+   * @param {number} - id of the plugin
+   * @returns {PluginData|null} - data of plugin or null
+   */
+  function getPluginById(id) {
+    let name = HHM.manager.getPluginName(id);
+    if (!name) return null;
+    const plugin = room.getPlugin(name);
+    let pluginData = {
+      id: id,
+      isEnabled: plugin.isEnabled(),
+      pluginSpec: plugin.pluginSpec
     }
-  };
-}
+    return pluginData;
+  }
+
+  /**
+   * Returns PluginData of HHM plugin with the given name or null if not found.
+   * 
+   * @param {string} - name of the plugin
+   * @returns {PluginData|null} - data of plugin or null
+   */
+  function getPlugin(name) {
+    const plugin = room.getPlugin(name);
+    if (!plugin) return null;
+    let pluginData = {
+      id: plugin._id,
+      isEnabled: plugin.isEnabled(),
+      pluginSpec: plugin.pluginSpec
+    }
+    return pluginData;
+  }
+
+  /**
+   * Returns array of PluginData objects containing plugins that have been
+   * loaded into HHM.
+   * 
+   * @returns {Array.<PluginData>} - array of laoded plugins
+   */
+  function getPlugins() {
+    let plugins = HHM.manager.getLoadedPluginIds()
+    .map(id => this.getPluginById(id))
+    .filter(pluginData => {
+      const name = pluginData.pluginSpec.name;
+      // ignore these plugins
+      return (
+        name !== '_user/postInit' 
+        && name !== 'hr/core'
+        && name !== 'hhm/core'
+      );
+    });
+  return plugins;
+  }
+
+  /**
+   * Enables a plugin with given name.
+   * 
+   * @param {string} - name of the plugin
+   */
+  function enablePlugin(name) {
+    const plugin = room.getPlugin(name);
+    return HHM.manager.enablePluginById(plugin._id);
+  }
+
+  /**
+   * Disables a HHM plugin with the given id. If the name is an Array then
+   * it disables all the plugins in the given order.
+   * 
+   * @param {string|Array} name - name or array of names of the plugin(s)
+   * @returns {boolean} - False if plugin could not be disabled because some
+   *    other plugins depend on it. If name is array and some of the plugins
+   *    could not be disabled, then it leaves every plugin enabled.
+   */
+  function disablePlugin(name) {
+    if (Array.isArray(name)) {
+      for (let i = 0; i < name.length; i++) {
+        const plugin = room.getPlugin(name[i]);
+        const success = HHM.manager.disablePluginById(plugin._id);
+        if (!success) {
+          for (let j = 0; j < i; j++) {
+            const plugin = room.getPlugin(name[i - j]);
+            HHM.manager.enablePluginById(plugin._id);
+          }
+          return false;
+        }
+      }
+      return true;
+    }
+    const plugin = room.getPlugin(name);
+    return HHM.manager.disablePluginById(plugin._id);
+  }
+
+  /**
+   * Gets the plugins that depend on the given plugin.
+   * 
+   * @returns {Array.<PluginData>} - array of dependent plugins
+   */
+  function getDependentPlugins(name) {
+    const pluginId = HHM.manager.getPluginId(name);
+    return HHM.manager.getDependentPluginsById(pluginId)
+      .map(id => getPluginById(id));
+  }
+})();

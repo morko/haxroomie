@@ -1,38 +1,48 @@
-const ActionHandler = require('./ActionHandler');
+const MessageHandler = require('./MessageHandler');
 const CommandPrompt = require('./CommandPrompt');
 const commands = require('./commands');
-
 
 module.exports = class RoomClient {
 	constructor(id, session) {
 		this.id = id;
 		this.session = session;
 		
-		this.actionFactory = require('haxroomie-action-factory')(this.id);
-		this.actionHandler = this.createActionHandler(this.session);
+		this.messageHandler = this.createMessageHandler(this.session);
 		this.commands = commands(this.session);
-		this.commandPrompt = this.createPrompt(this.commands, this.actionHandler);
+		this.commandPrompt = this.createPrompt(this.commands, this.messageHandler);
 
-		this.actionHandler.on(`open-room-error`, () => process.exit(1));
+		this.messageHandler.on(`open-room-error`, () => {
+			process.exit(1);
+		});
+		this.messageHandler.on(`session-closed`, () => {
+			process.exit(0);
+		});
+		this.messageHandler.on(`session-error`, () => {
+			process.exit(1);
+		});
 	}
 
-	openRoom(roomConfig) {
-		this.session.sendToRoom(this.actionFactory.create(
-			'OPEN_ROOM', 
-			{ roomConfig: roomConfig 	}
-		));	
+	async openRoom(roomConfig) {
+		try {
+			await this.session.openRoom(roomConfig);
+		} catch (err) {
+			this.commandPrompt.send('OPEN_ROOM_ERROR', err.stack);
+			process.exit(1);
+		}
 	}
 
-	createActionHandler(session) {
-		let handler = new ActionHandler();
-		session.subscribe(this.id, (action) => handler.handle(action));
+	createMessageHandler(session) {
+		let handler = new MessageHandler({
+			messageTypes: session.messageTypes
+		});
+		session.subscribe(this.id, (message) => handler.handle(message));
 		return handler;
 	}
 
-	createPrompt(commands, actionHandler) {
+	createPrompt(commands, messageHandler) {
 		return new CommandPrompt({
 			commands: commands,
-			actionHandler: actionHandler
+			messageHandler: messageHandler
 		});
 	}
 }

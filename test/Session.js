@@ -16,15 +16,15 @@ describe('Session', function() {
       await haxroomie.closeBrowser();
     });
 
-    it('should send back a CLIENT_CONNECTED action', async function() {
+    it('should send back a CLIENT_CONNECTED message', async function() {
       let haxroomie = new Haxroomie();
       let session = await haxroomie.getSession('sessionID1');
-      let fakeActionHandler = sinon.fake();
-      session.subscribe('clientID1', fakeActionHandler);
+      let messageHandler = sinon.fake();
+      session.subscribe('clientID1', messageHandler);
 
-      expect(fakeActionHandler.callCount).to.equal(1);
-      expect(fakeActionHandler.lastArg).to.deep.equal({
-        type: 'CLIENT_CONNECTED',
+      expect(messageHandler.callCount).to.equal(1);
+      expect(messageHandler.lastArg).to.deep.equal({
+        type: session.messageTypes.CLIENT_CONNECTED,
         payload: {
           roomInfo: null,
           clientID: 'clientID1',
@@ -41,8 +41,8 @@ describe('Session', function() {
     it('should remove the subscription', async function() {
       let haxroomie = new Haxroomie();
       let session = await haxroomie.getSession('sessionID1');
-      let fakeActionHandler = sinon.fake();
-      session.subscribe('clientID1', fakeActionHandler);
+      let messageHandler = sinon.fake();
+      session.subscribe('clientID1', messageHandler);
       session.unsubscribe('clientID1');
       expect(session.subscriptions).to.not.have.property('clientID1');
       await haxroomie.closeBrowser();
@@ -56,17 +56,22 @@ describe('Session', function() {
       let haxroomie = new Haxroomie();
       let session = await haxroomie.getSession('sessionID1');
 
-      let fakeActionHandler1 = sinon.fake();
-      let fakeActionHandler2 = sinon.fake();
-      session.subscribe('clientID1', fakeActionHandler1);
-      session.subscribe('clientID2', fakeActionHandler2);
+      let messageHandler1 = sinon.fake();
+      let messageHandler2 = sinon.fake();
+      session.subscribe('clientID1', messageHandler1);
+      session.subscribe('clientID2', messageHandler2);
 
-      const actionFactory = require('haxroomie-action-factory')('clientID1');
-      let action = actionFactory.create('HELLO', { test: 'test'} );
-      session.send('clientID2', action,);
+      let msg = {
+        type: 'HELLO',
+        sender: 'clientID1',
+        payload: { 
+          test: 'test'
+        }
+      };
+      session.send('clientID2', msg);
 
-      expect(fakeActionHandler2.callCount).to.equal(2);
-      expect(fakeActionHandler2.lastArg).to.deep.equal(action);
+      expect(messageHandler2.callCount).to.equal(2);
+      expect(messageHandler2.lastArg).to.deep.equal(msg);
       await haxroomie.closeBrowser();
     });
 
@@ -74,23 +79,28 @@ describe('Session', function() {
       let haxroomie = new Haxroomie();
       let session = await haxroomie.getSession('sessionID1');
 
-      let fakeActionHandler1 = sinon.fake();
-      let fakeActionHandler2 = sinon.fake();
-      let fakeActionHandler3 = sinon.fake();
-      session.subscribe('clientID1', fakeActionHandler1);
-      session.subscribe('clientID2', fakeActionHandler2);
-      session.subscribe('clientID3', fakeActionHandler3);
+      let messageHandler1 = sinon.fake();
+      let messageHandler2 = sinon.fake();
+      let messageHandler3 = sinon.fake();
+      session.subscribe('clientID1', messageHandler1);
+      session.subscribe('clientID2', messageHandler2);
+      session.subscribe('clientID3', messageHandler3);
 
-      const actionFactory = require('haxroomie-action-factory')('clientID1');
-      let action = actionFactory.create('HELLO', { test: 'test'} );
-      session.broadcast(action);
+      let msg = {
+        type: 'HELLO',
+        sender: 'clientID1',
+        payload: { 
+          test: 'test'
+        }
+      };
+      session.broadcast(msg);
 
-      expect(fakeActionHandler1.callCount).to.equal(4);
-      expect(fakeActionHandler1.lastArg).to.deep.equal(action);
-      expect(fakeActionHandler2.callCount).to.equal(3);
-      expect(fakeActionHandler2.lastArg).to.deep.equal(action);
-      expect(fakeActionHandler3.callCount).to.equal(2);
-      expect(fakeActionHandler3.lastArg).to.deep.equal(action);
+      expect(messageHandler1.callCount).to.equal(4);
+      expect(messageHandler1.lastArg).to.deep.equal(msg);
+      expect(messageHandler2.callCount).to.equal(3);
+      expect(messageHandler2.lastArg).to.deep.equal(msg);
+      expect(messageHandler3.callCount).to.equal(2);
+      expect(messageHandler3.lastArg).to.deep.equal(msg);
       await haxroomie.closeBrowser();
     });
   });

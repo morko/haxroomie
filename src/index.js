@@ -1,3 +1,7 @@
+const Haxroomie = require('./Haxroomie');
+const { messageTypes } = require('./session');
+
 module.exports = {
-  Haxroomie: require('./Haxroomie'),
-}
+  Haxroomie,
+  messageTypes
+};

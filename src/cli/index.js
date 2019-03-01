@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 const fs = require(`fs`);
-const Haxroomie = require(`../Haxroomie`);
+const { createHaxroomie } = require(`../../`);
 const RoomClient = require(`./RoomClient`);
 const logger = require('../logger');
 
@@ -72,11 +72,10 @@ if (!token) {
 	
 (async function bootstrap() {
 	try {
-		let haxroomie = new Haxroomie({
+		let haxroomie = await createHaxroomie({
 			headless: !argv.window, 
 			noSandbox: noSandbox
 		});
-		await haxroomie.createBrowser();
 		let session = await haxroomie.getSession(SESSION_ID);
 		let client = new RoomClient(CLIENT_ID, session);
 		

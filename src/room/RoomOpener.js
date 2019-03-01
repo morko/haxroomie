@@ -15,8 +15,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * 
    * @param {object} opt - options
    * @param {object} opt.page - puppeteer.Page object
-   * @param {object} opt.actionFactory - haxroomie action factory object
-   * @param {function} opt.onRoomEvent - function that gets called from the
+   * @param {function} opt.onEventFromBrowser - function that gets called from the
    *    headless browser context when a haxball roomObject event happens
    * @param {object} [opt.timeout] - time to wait for the room link before
    *    failing
@@ -27,59 +26,35 @@ module.exports = class RoomOpener extends EventEmitter {
     if (!opt.page) {
       throw new Error('Missing required argument: opt.page');
     }
-    if (!opt.actionFactory) {
-      throw new Error('Missing required argument: opt.actionFactory');
+    if (!opt.onEventFromBrowser) {
+      throw new Error('Missing required argument: opt.onEventFromBrowser');
     }
-    if (!opt.onRoomEvent) {
-      throw new Error('Missing required argument: opt.onRoomEvent');
-    }
-    if (typeof opt.onRoomEvent !== 'function') {
-      throw new Error('opt.onRoomEvent has to be typeof function');
+    if (typeof opt.onEventFromBrowser !== 'function') {
+      throw new Error('opt.onEventFromBrowser has to be typeof function');
     }
     this.page = opt.page;
-    this.actionFactory = opt.actionFactory;
-    this.onRoomEvent = opt.onRoomEvent;
+    this.onEventFromBrowser = opt.onEventFromBrowser;
     this.timeout = opt.timeout || 8;
 
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
   }
 
-  /**
-   * Opens the haxball room.
-   * 
-   * The config object can contain any properties you want to use in your
-   * own HHM config file given in config.hhmConfigFile. The config object is
-   * usable globally from within the HHM config as the **haxroomie** object.
-   * 
-   * @param {object} config config object that gets injected to HHM config
-   *    as **haxroomie**
-   * @param {string} config.token token to start the room with from 
-   *    https://www.haxball.com/headlesstoken
-   * @param {string} [config.roomName] room name
-   * @param {string} [config.playerName] host player name
-   * @param {int} [config.maxPlayers] max players
-   * @param {boolean} [config.public] should the room be public
-   * @param {string} [config.adminPassword] admin role password in room
-   * @param {object} [config.hhmConfigFile] Configuration for the headless host
-   *    manager. Object must contain name and content properties where
-   *    name is the file/config name and content has the file contents. Both
-   *    properties shold be strings.
-   * @param {Array.<objects>} [config.pluginFiles] Optional HHM plugins to load when 
-   *    starting the room. Objects must contain name and content properties where
-   *    name is the file/plugin name and content has the file contents. Both
-   *    properties shold be strings.
-   * 
-   * @returns {action} action containing roomInfo or error
+  /** 
+   * Opens the room.
+   * See Session for documentation.
+   *
+   * @returns {object} - config object merged with HHM config and 
+   *    roomLink property attached to it
    */
   async open(config) {
 
     if (!config) {
-      return this.openRoomError('Missing config');
+      throw new Error('Missing config');
     }
 
     if (!config.token) {
-      return this.openRoomError('config is missing token');
+      throw new Error('config is missing token');
     }
 
     // set default admin password or use the one provided
@@ -89,14 +64,14 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.page.goto(this.url);
     } catch (err) {
-      return this.openRoomError(this.url + ' is unreachable!');
+      throw new Error(this.url + ' is unreachable!');
     }
 
     logger.debug('OPEN_ROOM: Waiting for HBInit to become available');
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {
-      return this.openRoomError('Could not find the HBInit function!');
+      throw new Error('Could not find the HBInit function!');
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
@@ -114,38 +89,38 @@ module.exports = class RoomOpener extends EventEmitter {
         );
       }
     } catch (err) {
-      return this.openRoomError('Invalid HHM config!');
+      throw new Error('Invalid HHM config!');
     }
 
     try {
       await this.page.evaluate(hhmConfig, config);
     } catch (err) {
-      return this.openRoomError(
+      throw new Error(
         `Unable to start Headless Host Manager!`
       );
     }
 
     logger.debug('OPEN_ROOM: Waiting for the room link.');
-    let roomlink = await this.waitForRoomLink(this.timeout * 1000);
-    if (!roomlink) {
-      return this.openRoomError('Timeout when waiting for the room link!');
-    }
-
-    // expose function in the headless browser context to be able to recieve messages
-    let hasSend = await this.page.evaluate(() => {return window.hrSend});
-    if (!hasSend) {
-      await this.page.exposeFunction(
-        'hrSend',
-        this.onRoomEvent
-      );
+    let roomLink = await this.waitForRoomLink(this.timeout * 1000);
+    if (!roomLink) {
+      throw new Error('Timeout when waiting for the room link!');
     }
 
     logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
     try {
       await this.injectHaxroomiePlugin();
     } catch (err) {
-      return this.openRoomError(
+      throw new Error(
         `Unable to inject haxroomie HHM plugin!`
+      );
+    }
+
+    // expose function in the browser context to be able to recieve messages
+    let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
+    if (!hasSend) {
+      await this.page.exposeFunction(
+        'sendToHaxroomie',
+        this.onEventFromBrowser
       );
     }
 
@@ -155,7 +130,7 @@ module.exports = class RoomOpener extends EventEmitter {
         try {
           await this.injectPlugin(p.content);
         } catch (err) {
-          return this.openRoomError(`Unable to inject plugin ${p.name}: \n${err.stack}`)
+          throw new Error(`Unable to inject plugin ${p.name}: \n${err.stack}`)
         }
       }
     }
@@ -165,19 +140,16 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
     } catch (err) {
-      return this.openRoomError(`Unable to get the room info from HHM.`)
+      throw new Error(`Unable to get the room info from HHM.`)
     }
     
 
     // merge the roomInfo to the config so all properties get returned
     let roomInfo = Object.assign({}, config, hhmRoomInfo);
-    // add the roomlink to the roomInfo
-    roomInfo.roomlink = roomlink;
+    // add the roomLink to the roomInfo
+    roomInfo.roomLink = roomLink;
 
-    return this.actionFactory.create(
-      'OPEN_ROOM_STOP',
-      { roomInfo: roomInfo}
-    );
+    return roomInfo;
   }
 
   /**
@@ -198,11 +170,6 @@ module.exports = class RoomOpener extends EventEmitter {
     return haxframe;
   }
 
-  async openRoomError(msg) {
-    await this.close();
-    return this.actionFactory.createError('OPEN_ROOM_STOP', msg)
-  }
-
   /**
    * @private
    * Injects the haxroomies headless host manager plugin to the headless
@@ -210,15 +177,25 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async injectHaxroomiePlugin() {
     await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin).then(() => {
-        window.hrRegisterHandlers();
-      });
-    }, fs.readFileSync(path.join(
-      __dirname, "..", "hhm", "haxroomie-plugin.js"), "utf8"
-    ));
+      window.HHM.manager.addPluginByCode(plugin, 'hr/core')
+        .then(() => {
+          window.hroomie.registerEventHandlers();
+        });
+    }, this.readHRPlugin());
   }
 
-   /**
+  /**
+   * @private
+   * Reads the haxroomie plugin for haxball headless manager from the file
+   * system to a string.
+   */
+  readHRPlugin() {
+    return fs.readFileSync(
+      path.join(__dirname, "..", "hhm", "haxroomie-plugin.js"), "utf8"
+    );
+  }
+
+  /**
    * @private
    * Injects the given headless host manager plugin to the headless
    * browser context.
@@ -231,12 +208,12 @@ module.exports = class RoomOpener extends EventEmitter {
   }
   /**
    * @private
-   * Creates a loop that polls for the roomlink to appear on the webpage.
-   * Stops if roomlink is found or the time runs out.
+   * Creates a loop that polls for the roomLink to appear on the webpage.
+   * Stops if roomLink is found or the time runs out.
    * 
    * @param {int} timeout Time to wait in ms before failing.
    * 
-   * @returns {string|null} the roomlink
+   * @returns {string|null} the roomLink
    */
   async waitForRoomLink(timeout) {
     let haxframe = await this.getHaxframe();
@@ -244,10 +221,10 @@ module.exports = class RoomOpener extends EventEmitter {
 
     let startTime = new Date().getTime();
     let currentTime = new Date().getTime();
-    let roomlink = null;
+    let roomLink = null;
 
-    while (!roomlink && (timeout > currentTime - startTime)) {
-      roomlink = await haxframe.$eval('#roomlink', e => e.innerHTML);
+    while (!roomLink && (timeout > currentTime - startTime)) {
+      roomLink = await haxframe.$eval('#roomlink', e => e.innerHTML);
       await sleep(1000);
       currentTime = new Date().getTime();
     }

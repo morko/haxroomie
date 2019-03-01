@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Installation</h1><p>To be able to install and run haxroomie </p>
+<ul>
+<li><a href="https://nodejs.org">Node.js</a> version 10.15.1 or newer and</li>
+<li><a href="https://git-scm.com/">Git</a></li>
+</ul>
+<p>are required. </p>
+<p>To install haxroomie, clone the repository with git:</p>
+<pre class="prettyprint source lang-sh"><code>git clone https://www.github.com/morko/haxroomie</code></pre><p>Then go to the directory you cloned it and install dependencies with npm:</p>
+<pre class="prettyprint source lang-sh"><code>cd haxroomie
+npm install</code></pre><p>You can run the CLI from <code>haxroomie</code> directory using node.</p>
+<pre class="prettyprint source lang-sh"><code>node src/cli --help</code></pre><p><strong>or</strong></p>
+<pre class="prettyprint source lang-sh"><code>npm start -- --help</code></pre><p>Note the extra &quot;--&quot; that is required to pass npm scripts arguments.</p>
+<h2>Alternative installation</h2><p>You can also install haxroomie to a global npm installatio directory. This will give you a <code>haxroomie</code> command that you can run from anywhere if your npm configuration is correct.</p>
+<p>To install with npm run:</p>
+<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie -g</code></pre><p>This will probably fail if you havent set your global npm directory. In linux machines it is recommended to set the directory to somewhere where you dont need <code>sudo</code> to install npm packages. To do so you can follow the guide in <a href="https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3">https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3</a>:</p>
+<ol>
+<li><p>Create the .npm directory</p>
+<pre class="prettyprint source lang-sh"><code> mkdir ~/.npm</code></pre></li>
+<li><p>Set npm to use the .npm directory as the default global installation directory</p>
+<pre class="prettyprint source lang-sh"><code> npm config set prefix ~/.npm</code></pre></li>
+<li><p>Edit the .bashrc file</p>
+<pre class="prettyprint source lang-sh"><code> nano ~/.bashrc</code></pre></li>
+<li><p>Add this line to the .bashrc file so the shell can find the haxroomie &quot;executable&quot;</p>
+<pre class="prettyprint source lang-sh"><code> export PATH=&quot;$PATH:$HOME/.npm/bin&quot;</code></pre></li>
+<li><p>Reload the .bashrc file</p>
+<pre class="prettyprint source lang-sh"><code> source ~/.bashrc</code></pre></li>
+</ol>
+<h2>Troubleshooting</h2><p>From <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md">puppeteer troubleshooting</a>:</p>
+<p>Make sure all the necessary dependencies are installed. You can run <code>ldd chrome | grep not</code> on a Linux machine to check which dependencies are missing. The common ones are provided below.</p>
+<pre class="prettyprint source lang-sh"><code>sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget</code></pre><h1>CLI usage</h1><p>Haxroomie provides a command-line interface which is a client for the 
+Haxroomie API and can be used to start and control haxball rooms.</p>
+<p>To be able to start a room you must obtain a token from https://<a href="http://www.haxball.com/headlesstoken">www.haxball.com/headlesstoken</a>
+and give it to the CLI script as an argument:</p>
+<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token></code></pre><p>Haxroomie has also simple interactive command-line interface. Once Haxroomie CLI is running and the haxball room has opened you can type <code>help</code> for available commands.</p>
+<h2>Custom room scripts/plugins</h2><p>The awesome project by <a href="https://github.com/saviola777">saviola777</a> allows users to run multiple scripts/plugins on the same haxball room instance. The plugins/scripts can be either in a HHM plugin format or regular vanilla scripts with few restrictions mentioned in HHM wiki.</p>
+<p>Plugins/scripts can be loaded when starting the haxroomie CLI using:</p>
+<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token> --plugins pluginPath1.js,pluginPath2.js</code></pre><h2>Custom HHM config</h2><p>Haxroomie supports loading the options from a <a href="https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration">haxball headless manager configuration file</a>. </p>
+<p>You can give the file with <code>--config &lt;file&gt;</code> or <code>-c &lt;file&gt;</code> argument. </p>
+<p>See https://<a href="http://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration">www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration</a> for information about the configuration file.</p>
+<p><strong>THE CUSTOM CONFIG FILES HHM.config.room PROPERTY MUST HAVE A <code>token</code> PROPERTY LIKE THIS:</strong></p>
+<pre class="prettyprint source"><code>HHM.config.room = {
+  token: haxroomie.token
+}</code></pre><p>See the default configuration file in https://<a href="http://www.github.com/morko/haxroomie/src/master/src/hhm/config.js">www.github.com/morko/haxroomie/src/master/src/hhm/config.js</a> for a complete example.</p>
+<p>Haxroomie injects a <strong>haxroomie</strong> object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with <code>--options</code> argument.</p>
+<h1>API</h1><p>To install haxroomie for your project its preferred to install it locally with</p>
+<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie</code></pre><p>Easiest way to create Haxroomie instances is to use the factory function <code>createHaxroomie</code> exported by the haxroomie module. </p>
+<p>Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the Session object requested with <code>getSession</code>. Each Session controls one room / browser tab.</p>
+<h2>Example API usage</h2><p>Example that requires the token to be set as an environment variable named <code>HAXBALL_TOKEN</code>.</p>
+<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require('haxroomie');
+let haxroomie = createHaxroomie();
+let session = await haxroomie.getSession('example');
+
+function createHRClient(id) {
+  let id = id;
+  function onReceivedMessage(message) {
+    console.log(message);
+  }
+  return {
+    id,
+    onReceivedMessage
+  };
+};
+let client = createHRClient(1);
+
+session.subscribe(client.id, client.onReceivedMessage.bind(client));
+
+session.openRoom({
+  roomName: 'haxroomie',
+  playerName: 'host',
+  maxPlayers: 10,
+  public: false,
+  token: process.env.HAXBALL_TOKEN
+});</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-haxroomie.html">haxroomie</a></li></ul><h3>Classes</h3><ul><li><a href="module-haxroomie.Haxroomie.html">Haxroomie</a></li><li><a href="Session.html">Session</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-haxroomie.messageTypes.html">messageTypes</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 01 2019 09:45:58 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
