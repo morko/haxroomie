@@ -26,7 +26,8 @@ HHM.config.plugins = {
   },
   'sav/roles': {
     roles: {
-      'admin': haxroomie.adminPassword || 'haxroomie'
+      'host': haxroomie.hostPassword,
+      'admin': haxroomie.adminPassword,
     },
   },
   'sav/players': {},

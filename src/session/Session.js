@@ -215,6 +215,7 @@ class Session extends EventEmitter {
    * @param {string} [config.playerName] - host player name
    * @param {int} [config.maxPlayers] - max players
    * @param {boolean} [config.public] - should the room be public
+   * @param {string} [config.hostPassword] - host role password in room
    * @param {string} [config.adminPassword] - admin role password in room
    * @param {object} [config.hhmConfigFile] - Configuration for the haxball 
    *    headless manager (HHM). Object must contain name and content properties

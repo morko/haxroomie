@@ -31,9 +31,13 @@ const argv = require(`yargs`)
 	.default('public', false)
 
 	.alias(`a`, `admin-password`)
-	.describe(`admin-password`, `password for getting admin with
+	.describe(`admin-password`, `password for getting admin priviledges with
 		!auth admin <password>`)
 
+	.alias(`h`, `host-password`)
+	.describe(`host-password`, `password for getting host priviledges with
+		!auth host <password>`)
+	
 	.alias(`o`, `options`)
 	.describe(`options`, `comma separated list of custom variables that are
 		usable from within the headless host manager config through the haxroomie
@@ -115,6 +119,7 @@ function parseArguments(client) {
 		public: argv.public,
 		token: token,
 		adminPassword: argv.adminPassword,
+		hostPassword: argv.hostPassword,
 		hhmConfigFile: argv.config ? loadHHMConfig(argv.config, client) : undefined
 	};
 
