@@ -51,6 +51,13 @@ window.hroomie = (function(){
     window.HHM.events.PLUGIN_LOADED,
     window.HHM.events.PLUGIN_REMOVED,
   ];
+
+  var ignoredPlugins = new Set([
+    '_user/postInit',
+    'hr/core',
+    'hhm/core',
+    'hhm/persistence'
+  ]);
   
   return {
     registerEventHandlers,
@@ -86,6 +93,10 @@ window.hroomie = (function(){
     // send HHM events to the main context
     for (let eventType of defaultHHMEvents) {
       room[`onHhm_${eventType}`] = function(...args) {
+        // do not send events for ignored plugins
+        if (args[0].plugin && args[0].plugin.pluginSpec.name) {
+          if (ignoredPlugins.has(args[0].plugin.pluginSpec.name)) return;
+        }
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
           payload: { eventType: eventType, args: args }
@@ -169,11 +180,7 @@ window.hroomie = (function(){
     .filter(pluginData => {
       const name = pluginData.pluginSpec.name;
       // ignore these plugins
-      return (
-        name !== '_user/postInit' 
-        && name !== 'hr/core'
-        && name !== 'hhm/core'
-      );
+      return !ignoredPlugins.has(name);
     });
   return plugins;
   }
