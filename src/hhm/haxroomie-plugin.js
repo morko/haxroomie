@@ -85,12 +85,12 @@ window.hroomie = (function(){
   
     // send HHM events to the main context
     for (let eventType of defaultHHMEvents) {
-      window.HHM.manager.registerEventHandler((args) => {
+      room[`onHhm_${eventType}`] = function(...args) {
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
           payload: { eventType: eventType, args: args }
         });
-      }, [eventType]);
+      };
     }
   }
 
