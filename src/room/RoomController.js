@@ -201,7 +201,7 @@ module.exports = class RoomController {
    */
   async handleOpenRoom(config) {
 
-    if (this.openRoomInProcess !== null) {
+    if (this.openRoomInProcess) {
       throw new Error('Room is already being opened!');
     }
 
