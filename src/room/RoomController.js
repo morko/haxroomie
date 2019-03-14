@@ -35,9 +35,9 @@ module.exports = class RoomController {
 
     /**
      * This will be set to true when one of the clients request the
-     * OPEN_ROOM. Other clients can not request OPEN_ROOM when this is not null.
+     * OPEN_ROOM. Other clients can not request OPEN_ROOM when this is true.
      */
-    this.openRoomInProcess = null;
+    this.openRoomInProcess = false;
 
     /**
      * How many seconds to wait for the roomLink when opening the haxball room
@@ -218,7 +218,7 @@ module.exports = class RoomController {
       this.roomOpener.close();
       this.broadcast({
         type: messageTypes.OPEN_ROOM_STOP,
-        sender: sessionID,
+        sender: this.id,
         error: true,
         payload: err
       });
@@ -227,7 +227,7 @@ module.exports = class RoomController {
     this.openRoomInProcess = false;
     this.broadcast({
       type: messageTypes.OPEN_ROOM_STOP,
-      sender: this.session.id,
+      sender: this.id,
       payload: {
         roomInfo: this.roomInfo
       }
