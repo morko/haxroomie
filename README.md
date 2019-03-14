@@ -127,9 +127,11 @@ To install haxroomie for your project its preferred to install it locally with
 npm install morko/haxroomie
 ```
 
-Easiest way to create Haxroomie instances is to use the factory function `createHaxroomie` exported by the haxroomie module. 
+See https://morko.github.io/haxroomie/ for complete API documentation.
 
-Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the Session object requested with `getSession`. Each Session controls one room / browser tab.
+Easiest way to create [Haxroomie instances](https://morko.github.io/haxroomie/module-haxroomie.Haxroomie.html) is to use the asynchronous factory function `createHaxroomie` in the [haxroomie module](https://morko.github.io/haxroomie/module-haxroomie.html).
+
+Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the [Session](https://morko.github.io/haxroomie/Session.html) object requested with `getSession`. Each [Session](https://morko.github.io/haxroomie/Session.html) controls one room / browser tab.
 
 ## Example API usage
 
