@@ -211,9 +211,8 @@ module.exports = class RoomController {
       sender: this.id
     });
 
-    let roomInfo;
     try {
-      roomInfo = await this.roomOpener.open(config);
+      this.roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this.openRoomInProcess = false;
       this.roomOpener.close();
@@ -230,7 +229,7 @@ module.exports = class RoomController {
       type: messageTypes.OPEN_ROOM_STOP,
       sender: this.session.id,
       payload: {
-        roomInfo: roomInfo
+        roomInfo: this.roomInfo
       }
     });
   }
