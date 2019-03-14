@@ -69,7 +69,7 @@ window.hroomie = (function(){
     disablePlugin,
     getDependentPlugins
   };
-    
+  
   /**
    * Registers handlers for the HaxBall roomObject and for the HHM manager
    * events. Send all events to the main context of haxroomie.
@@ -93,16 +93,32 @@ window.hroomie = (function(){
     // send HHM events to the main context
     for (let eventType of defaultHHMEvents) {
       room[`onHhm_${eventType}`] = function(...args) {
-        // do not send events for ignored plugins
-        if (args[0].plugin && args[0].plugin.pluginSpec.name) {
-          if (ignoredPlugins.has(args[0].plugin.pluginSpec.name)) return;
-        }
+        // get the plugin data
+        let pluginData = getEventPluginData(args);
+        if (pluginData !== null) args[0] = pluginData;
+
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
           payload: { eventType: eventType, args: args }
         });
       };
     }
+  }
+
+  /**
+   * @private
+   * Returns PluginData for events that contain a plugin as their first
+   * argument. This is useful only to modify the HHM events so that
+   * additional data is included in the event (id and isEnabled).
+   * 
+   * @param {Array} args - Arguments that the event received. 
+   */
+  function getEventPluginData(args) {
+    let plugin = args[0].plugin || {};
+    let pluginSpec = plugin.pluginSpec || {};
+    let pluginName = pluginSpec.name || '';
+    if (!pluginName || ignoredPlugins.has(pluginName)) return null;
+    return getPlugin(pluginName);
   }
 
   /**
