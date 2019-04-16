@@ -35,9 +35,9 @@ module.exports = class RoomController {
 
     /**
      * This will be set to true when one of the clients request the
-     * OPEN_ROOM. Other clients can not request OPEN_ROOM when this is not null.
+     * OPEN_ROOM. Other clients can not request OPEN_ROOM when this is true.
      */
-    this.openRoomInProcess = null;
+    this.openRoomInProcess = false;
 
     /**
      * How many seconds to wait for the roomLink when opening the haxball room
@@ -106,7 +106,8 @@ module.exports = class RoomController {
       onGetPlugin: (id) => this.handleGetPlugin(id),
       onEnablePlugin: (name) => this.handleEnablePlugin(name),
       onDisablePlugin: (name) => this.handleDisablePlugin(name),
-      onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name)
+      onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name),
+      onEval: (js) => this.handleEval(js)
     });
     session.on('client_connected', this.handleClientConnected.bind(this));
     session.on('client_disconnected', this.handleClientDisconnected.bind(this));
@@ -196,12 +197,14 @@ module.exports = class RoomController {
   }
 
   /**
-   * Handler for the openRoom function in this.session.
-   * See Session for documentation.
+   * Handler for the openRoom function in this.session. Sets this.roomInfo
+   * to contain the information about opened room.
+   * 
+   * See Session for more documentation.
    */
   async handleOpenRoom(config) {
 
-    if (this.openRoomInProcess !== null) {
+    if (this.openRoomInProcess) {
       throw new Error('Room is already being opened!');
     }
 
@@ -211,15 +214,14 @@ module.exports = class RoomController {
       sender: this.id
     });
 
-    let roomInfo;
     try {
-      roomInfo = await this.roomOpener.open(config);
+      this.roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this.openRoomInProcess = false;
       this.roomOpener.close();
       this.broadcast({
         type: messageTypes.OPEN_ROOM_STOP,
-        sender: sessionID,
+        sender: this.id,
         error: true,
         payload: err
       });
@@ -228,15 +230,17 @@ module.exports = class RoomController {
     this.openRoomInProcess = false;
     this.broadcast({
       type: messageTypes.OPEN_ROOM_STOP,
-      sender: this.session.id,
+      sender: this.id,
       payload: {
-        roomInfo: roomInfo
+        roomInfo: this.roomInfo
       }
     });
   }
 
   /**
-   * Handler for the closeRoom function in this.session.
+   * Handler for the closeRoom function in this.session. Sets this.roomInfo
+   * to null.
+   * 
    * See Session for documentation.
    */
   async handleCloseRoom() {
@@ -314,6 +318,15 @@ module.exports = class RoomController {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.getDependentPlugins(name);
     }, name);
+    return result;
+  }
+
+  /**
+   * Handler for the eval function in this.session.
+   * See Session for documentation.
+   */
+  async handleEval(js) {
+    let result = await this.page.evaluate(js);
     return result;
   }
 }

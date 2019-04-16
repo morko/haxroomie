@@ -74,7 +74,7 @@ const messageTypes = {
    * ```js
    * {
    *   handlerName: name of the roomObject handler function,
-   *   args: arguments that the handler receives
+   *   args: array of arguments that the handler receives
    * }
    * ```
    */
@@ -85,8 +85,8 @@ const messageTypes = {
    * Payload:
    * ```js
    * {
-   *   eventType: name of the roomObject handler function,
-   *   args: arguments that the handler receives
+   *   eventType: name of the HHM event type,
+   *   args: array of arguments that the handler receives
    * }
    * ```
    */

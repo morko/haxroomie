@@ -25,11 +25,11 @@ node src/cli --help
 ```sh
 npm start -- --help
 ```
-Note the extra "--" that is required to pass npm scripts arguments.
+Note the extra "--" that is required to pass npm scripts arguments. The documentation uses `haxroomie` instead `npm start --` for the examples.
 
 ## Alternative installation
 
-You can also install haxroomie to a global npm installatio directory. This will give you a `haxroomie` command that you can run from anywhere if your npm configuration is correct.
+You can also install haxroomie to a global npm installation directory. This will give you a `haxroomie` command that you can run from anywhere if your npm configuration is correct.
 
 To install with npm run:
 ```sh
@@ -82,7 +82,7 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 Haxroomie provides a command-line interface which is a client for the 
 Haxroomie API and can be used to start and control haxball rooms.
 
-To be able to start a room you must obtain a token from https://www.haxball.com/headlesstoken
+To be able to start a room you must obtain a token from <https://www.haxball.com/headlesstoken>
 and give it to the CLI script as an argument:
 
 ```sh
@@ -91,22 +91,48 @@ haxroomie <token>
 
 Haxroomie has also simple interactive command-line interface. Once Haxroomie CLI is running and the haxball room has opened you can type `help` for available commands.
 
-## Custom room scripts/plugins
+## Running own room scripts
 
-The awesome project by [saviola777](https://github.com/saviola777) allows users to run multiple scripts/plugins on the same haxball room instance. The plugins/scripts can be either in a HHM plugin format or regular vanilla scripts with few restrictions mentioned in HHM wiki.
+The awesome project by [saviola777](https://github.com/saviola777) allows users to run multiple scripts/plugins on the same haxball room instance. The plugins/scripts can be either in a HHM plugin format or regular vanilla scripts with few restrictions mentioned in [HHM docs](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
 
-Plugins/scripts can be loaded when starting the haxroomie CLI using:
+You can run **one** room script by passing the haxroomie command line argument:
 ```sh
-haxroomie <token> --plugins pluginPath1.js,pluginPath2.js
+haxroomie <token> --room-script ./path/to/myscript.js
+```
+**Note that** running a script this way will disable the default HHM plugins that haxroomie runs.
+
+**Also note that** if your script uses localStorage to save some data and you want to run multiple instances of haxroomie the `user-data-dir` should be changed to different paths for these instances for the script to not overwrite other instances data. Use `--help` for more info about how to change this from the command line.
+
+To run **multiple** plugins you should create your own [HHM plugin repository](https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository). Read the guide for writing own HHM plugins at <https://haxplugins.tk/docs/tutorial-writing-plugins.html>.
+
+To pass the repository url from command line:
+```sh
+haxroomie <token> --repositories https://github.com/[user]/[repository]
 ```
 
-## Custom HHM config
+You can also pass multiple repositories by separating them with a comma.
 
-Haxroomie supports loading the options from a [haxball headless manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). 
+## Passing configuration options to plugins
 
-You can give the file with `--config <file>` or `-c <file>` argument. 
+You can pass the plugins options when starting haxroomie. The configuration file should be in [JSON format](https://en.wikipedia.org/wiki/JSON).
 
-See https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration for information about the configuration file.
+To pass the plugin configuration file from command line:
+```sh
+haxroomie <token> --pluginConfig ./path/to/myconfig.json
+```
+
+See <https://github.com/morko/haxroomie/tree/master/examples/plugin-config.json> for example on how to change the command plugins prefix from "!" to ".".
+
+## Using own HHM config
+
+Haxroomie supports loading the options from a [Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
+
+To pass the HHM configuration file from command line:
+```sh
+haxroomie <token> --config ./path/to/myconfig.json
+```
+
+See <https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration> for information about the configuration file.
 
 **THE CUSTOM CONFIG FILES HHM.config.room PROPERTY MUST HAVE A `token` PROPERTY LIKE THIS:**
 
@@ -116,9 +142,9 @@ HHM.config.room = {
 }
 ```
 
-See the default configuration file in https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js for a complete example.
-
 Haxroomie injects a **haxroomie** object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with `--options` argument.
+
+See the default configuration file in <https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js> for a complete example.
 
 # API
 
@@ -127,18 +153,20 @@ To install haxroomie for your project its preferred to install it locally with
 npm install morko/haxroomie
 ```
 
-Easiest way to create Haxroomie instances is to use the factory function `createHaxroomie` exported by the haxroomie module. 
+See <https://morko.github.io/haxroomie/> for complete API documentation.
 
-Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the Session object requested with `getSession`. Each Session controls one room / browser tab.
+Easiest way to create [Haxroomie instances](https://morko.github.io/haxroomie/module-haxroomie.Haxroomie.html) is to use the asynchronous factory function `createHaxroomie` in the [haxroomie module](https://morko.github.io/haxroomie/module-haxroomie.html).
+
+Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the [Session](https://morko.github.io/haxroomie/Session.html) object requested with `getSession`. Each [Session](https://morko.github.io/haxroomie/Session.html) controls one room / browser tab.
 
 ## Example API usage
 
 Example that requires the token to be set as an environment variable named `HAXBALL_TOKEN`.
 
 ```js
-const { createHaxroomie } = require('haxroomie');
-let haxroomie = createHaxroomie();
-let session = await haxroomie.getSession('example');
+const { createHaxroomie } = require(`haxroomie`);
+let haxroomie = await createHaxroomie();
+let session = await haxroomie.getSession(`example`);
 
 function createHRClient(id) {
   let id = id;
@@ -150,15 +178,25 @@ function createHRClient(id) {
     onReceivedMessage
   };
 };
-let client = createHRClient(1);
 
-session.subscribe(client.id, client.onReceivedMessage.bind(client));
+(async function bootstrap() {
+  try {
+    let haxroomie = await createHaxroomie();
+    let session = await haxroomie.getSession(`exampleSessionId`);
+    let client = createHRClient(1);
+		
+    session.subscribe(client.id, client.onReceivedMessage.bind(client));
+    session.openRoom({
+      roomName: `haxroomie`,
+      playerName: `host`,
+      maxPlayers: 10,
+      public: false,
+      token: process.env.HAXBALL_TOKEN
+    });
+  } catch (err) {
+    logger.error(err.stack);
+    process.exit(1);
+  }
+})();
 
-session.openRoom({
-  roomName: 'haxroomie',
-  playerName: 'host',
-  maxPlayers: 10,
-  public: false,
-  token: process.env.HAXBALL_TOKEN
-});
 ```

@@ -1,5 +1,6 @@
 const { RoomController } = require('./room');
 const puppeteer = require('puppeteer');
+const path = require('path');
 
 /**
  * Class for spawning the headless chrome browser and getting 
@@ -29,6 +30,9 @@ class Haxroomie {
    *    not recommended to set this true for security reasons.
    * @param {boolean} [opt.headless=true] - Setting this to false will make
    *    puppeteer try to spawn a browser window. Useful for debugging.
+   * @param {boolean} [opt.userDataDir] - Path to where
+   *    browser should store data like localStorage. Defaults to [project
+   *    root directory]/user-data-dir.
    */
   constructor(opt) {
     this.browser = null;
@@ -38,13 +42,15 @@ class Haxroomie {
 
     this.viewport = opt.viewport || { width: 400, height: 500 };
 
+    this.port = opt.port || 3066;
     if (this.port === 0) {
       throw new Error('INVALID_PORT: 0');
     }
-    this.port = opt.port || 3066;
 
     this.noSandbox = opt.noSandbox || false;
     this.headless = opt.hasOwnProperty('headless') ? opt.headless : true;
+    this.userDataDir = opt.userDataDir 
+      || path.resolve(path.join(__dirname, '..', 'user-data-dir'));
   }
 
   /**
@@ -67,6 +73,7 @@ class Haxroomie {
       this.browser = await puppeteer.launch({
         headless: this.headless,
         devtools: !this.headless,
+        userDataDir: this.userDataDir,
         args: [
           `--remote-debugging-port=${this.port}`,
           `--no-sandbox=${this.noSandbox}`

@@ -34,6 +34,7 @@ class Session extends EventEmitter {
   
   /**
    * Constructs a new Session object.
+   * @private
    */
   constructor(opt) {
     super();
@@ -49,6 +50,7 @@ class Session extends EventEmitter {
     this.onEnablePlugin = opt.onEnablePlugin;
     this.onDisablePlugin = opt.onDisablePlugin;
     this.onGetDependentPlugins = opt.onGetDependentPlugins;
+    this.onEval = opt.onEval;
 
     this.subscriptions = {};
 
@@ -86,7 +88,8 @@ class Session extends EventEmitter {
       'onGetPlugin',
       'onEnablePlugin',
       'onDisablePlugin',
-      'onGetDependentPlugins'
+      'onGetDependentPlugins',
+      'onEval'
     ];
 
     for (let handler of requiredHandlers) {
@@ -103,7 +106,7 @@ class Session extends EventEmitter {
   /**
    * Subscribes to the events send by this session.
    * 
-   * @param {string|number|object} id identifier of the subscriber
+   * @param {(string|number|object)} id identifier of the subscriber
    * @param {function} handler function that handles the incoming messages
    */
   subscribe(id, handler) {
@@ -127,7 +130,7 @@ class Session extends EventEmitter {
   /**
    * Unsubscribes the subscriber with given id from this session.
    * 
-   * @param {string|number|object} id identifier of the subscriber
+   * @param {(string|number|object)} id identifier of the subscriber
    */
   unsubscribe(id) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -142,9 +145,9 @@ class Session extends EventEmitter {
   }
 
   /**
-   * Validates the give object to be valid Message object.
+   * Checks that the given object is a valid [Message]{@link module:haxroomie~Message}.
    * 
-   * @param {module:message~Message} message - Message object to be validated
+   * @param {module:haxroomie~Message} message - Message object to be validated
    */
   validateMessage(message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -165,9 +168,9 @@ class Session extends EventEmitter {
   /**
    * Sends a message to the subscriber with given id.
    * 
-   * @param {string|number|object} id - the id of subscriber that will receive
+   * @param {(string|number|object)} id - the id of subscriber that will receive
    *    the message
-   * @param {module:message~Message} message - message to the receiver
+   * @param {module:haxroomie~Message} message - message to the receiver
    */
   send(id, message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -184,7 +187,7 @@ class Session extends EventEmitter {
   /**
    * Sends a message to all subscribers.
    * 
-   * @param {module:message~Message} message - message to the subscribers
+   * @param {module:haxroomie~Message} message - message to the subscribers
    */
   broadcast(message) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -195,37 +198,53 @@ class Session extends EventEmitter {
       this.subscriptions[subID](message);
     }
   }
+  /**
+   * Object containing files name and content.
+   * 
+   * @typedef {Object} FileDef
+   * @property {string} name - Files name.
+   * @property {string} content - UTF-8 encoded contents of the file.
+   */
+
 
   /**
    * Opens a headless haxball room in this sessions browser tab.
    * 
    * The config object can contain any properties you want to use in your
-   * own HHM config file given in config.hhmConfigFile. The config object is
+   * own HHM config file given in config.hhmConfig. The config object is
    * usable globally from within the HHM config as the **haxroomie** object.
-   * 
-   * The parameters that are used by the default HHM config are listed here
-   * as optional parameters (except `hhmConfigFile` and `pluginFiles` that
-   * are used anyways)
    * 
    * @param {object} config - config object that gets injected to HHM config
    *    as **haxroomie**
-   * @param {string} config.token - token to start the room with from 
-   *    https://www.haxball.com/headlesstoken
-   * @param {string} [config.roomName] - room name
-   * @param {string} [config.playerName] - host player name
-   * @param {int} [config.maxPlayers] - max players
-   * @param {boolean} [config.public] - should the room be public
-   * @param {string} [config.adminPassword] - admin role password in room
-   * @param {object} [config.hhmConfigFile] - Configuration for the haxball 
-   *    headless manager (HHM). Object must contain name and content properties
-   *    where name is the file/config name and content has the file contents.
-   *    Both properties shold be strings.
-   * @param {Array.<object>} [config.pluginFiles] - Optional HHM plugins to load when 
-   *    starting the room. Objects must contain name and content properties where
-   *    name is the file/plugin name and content has the file contents. Both
-   *    properties shold be strings.
+   * @param {string} config.token - Token to start the room with.
+   *    Obtain one from <https://www.haxball.com/headlesstoken>.
+   * @param {string} [config.roomName] - Room name.
+   * @param {string} [config.playerName] - Host player name.
+   * @param {int} [config.maxPlayers] - Max players.
+   * @param {boolean} [config.public] - Should the room be public?
+   * @param {object} [config.geo] - Geolocation override for the room.
+   * @param {string} [config.hostPassword] - Password for getting host 
+   *  priviledges with `!auth host <password>` if the roles plugin is enabled.
+   * @param {string} [config.adminPassword] - Password for getting admin 
+   *  priviledges with `!auth host <password>` if the roles plugin is enabled.
+   * @param {FileDef} [config.hhmConfig] - Configuration for the haxball 
+   *    headless manager (HHM).
+   * @param {FileDef} [config.roomScript] - Regular haxball
+   *    headless script to load when starting the room.
    * 
-   * @returns {object} - config object with a roomLink property
+   *    **Note that** if loading a
+   *    room script this way haxroomie will disable the default HHM plugins
+   *    rendering `config.hostPassword`, `config.adminPassword` and 
+   *    `config.pluginConfig` unused.
+   * 
+   *    To load multiple plugins set up a HHM repository.
+   * @param {object} [config.pluginConfig] - Haxball Headless Manager
+   *    plugin config object.
+   * @param {Array.<string>} [config.repositories] - Array of additional
+   *    HHM plugin repositories.
+   * @returns {object} - Config that the room was started with including
+   *    a `roomLink` property added to it containing the haxball rooms
+   *    link.
    */
   async openRoom(config) {
     if (!this.active) throw new Error('Session is no longer usable.');
@@ -280,7 +299,7 @@ class Session extends EventEmitter {
    * Returns PluginData of the given plugin id.
    * 
    * @param {string} name - name of the plugin
-   * @returns {Promise<PluginData>|null} - data of the plugin or null if
+   * @returns {?Promise<PluginData>} - data of the plugin or null if
    *    plugin was not found
    */
   async getPlugin(name) {
@@ -305,7 +324,7 @@ class Session extends EventEmitter {
    * Disables a HHM plugin with the given id. If the name is an Array then
    * it disables all the plugins in the given order.
    * 
-   * @param {string|Array} name - name or array of names of the plugin(s)
+   * @param {(string|Array.<string>)} name - name or array of names of the plugin(s)
    * @returns {Promise<boolean>} - was the plugin disabled or not?
    */
   async disablePlugin(name) {
@@ -324,6 +343,20 @@ class Session extends EventEmitter {
     if (!this.active) throw new Error('Session is no longer usable.');
     logger.debug(`GET_DEPENDENT_PLUGINS: ${name}`);
     return this.onGetDependentPlugins(name);
+  }
+
+  /**
+   * Evaluates the given code in this sessions browser tab. You can access
+   * the global room object with `HHM.manager.room`.
+   * E.g.
+   * ```js
+   * session.eval('HHM.manager.room.getPlayerList()');
+   * ```
+   * 
+   * @param {string} js - JavaScript to evaluate.
+   */
+  async eval(js) {
+    return this.onEval(js);
   }
 }
 

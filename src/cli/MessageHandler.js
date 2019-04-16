@@ -47,7 +47,6 @@ module.exports = class MessageHandler extends EventEmitter{
 		this.emit('session-closed');
 	}
 
-
 	handleSessionErrorEvent(message) {
 		this.emit('session-error', message.payload.stack);
 	}
@@ -81,34 +80,36 @@ module.exports = class MessageHandler extends EventEmitter{
 	}
 
 	onPlayerChat(player, message) {
-		this.emit('player-chat', `${player.name}#${player.id}> ${message}`);
+		this.emit('player-chat', `${player.name}> ${message}`);
 	}
+
 	onPlayerJoin(player) {
-		this.emit('player-join', `${player.name}#${player.id}`);
+		this.emit('player-join', `${player.name}`);
 	}
+
 	onPlayerLeave(player) {
-		this.emit('player-leave', `${player.name}#${player.id}`);
+		this.emit('player-leave', `${player.name}`);
 	}
+
 	onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
 		if (ban) {
 			this.emit('player-banned',
-				`${kickedPlayer.name}#${kickedPlayer.id} ` +
-					`was banned by ${byPlayer.name}#${byPlayer.id} | reason: ${reason}`
+				`${kickedPlayer.name} `
+				+	`was banned by ${byPlayer.name} | reason: ${reason}`
 			);
 		} else {
 			this.emit('player-kicked',
-				`${kickedPlayer.name}#${kickedPlayer.id} ` +
-					`was kicked by ${byPlayer.name}#${byPlayer.id} | reason: ${reason}`
+				`${kickedPlayer.name} `
+				+	`was kicked by ${byPlayer.name} | reason: ${reason}`
 			);		
 		}
 	}
 
 	onPlayerAdminChange(changedPlayer, byPlayer) {
 		this.emit('admin-changed',
-			`${changedPlayer.name}#${changedPlayer.id} ` +
-				`by ${byPlayer.name}#${byPlayer.id} | admin: ${changedPlayer.admin}`
-
-		)
+			`${changedPlayer.name} `
+			+	`by ${byPlayer.name} | admin: ${changedPlayer.admin}`
+		);
 	}
 }
 

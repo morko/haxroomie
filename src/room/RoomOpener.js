@@ -57,13 +57,11 @@ module.exports = class RoomOpener extends EventEmitter {
       throw new Error('config is missing token');
     }
 
-    // set default admin password or use the one provided
-    config.adminPassword = config.adminPassword || 'haxroomie';
-
     logger.debug('OPEN_ROOM: Navigating to ' + this.url);
     try {
       await this.page.goto(this.url);
     } catch (err) {
+      logger.error(err);
       throw new Error(this.url + ' is unreachable!');
     }
 
@@ -71,14 +69,15 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {
+      logger.error(err);
       throw new Error('Could not find the HBInit function!');
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
     let hhmConfig;
     try {
-      if (config.hhmConfigFile) {
-        hhmConfig = new Function('haxroomie', config.hhmConfigFile.content);
+      if (config.hhmConfig) {
+        hhmConfig = new Function('haxroomie', config.hhmConfig.content);
       } else {
         hhmConfig = new Function(
           'haxroomie',
@@ -89,12 +88,14 @@ module.exports = class RoomOpener extends EventEmitter {
         );
       }
     } catch (err) {
+      logger.error(err);
       throw new Error('Invalid HHM config!');
     }
 
     try {
       await this.page.evaluate(hhmConfig, config);
     } catch (err) {
+      logger.error(err);
       throw new Error(
         `Unable to start Headless Host Manager!`
       );
@@ -102,6 +103,7 @@ module.exports = class RoomOpener extends EventEmitter {
 
     logger.debug('OPEN_ROOM: Waiting for the room link.');
     let roomLink = await this.waitForRoomLink(this.timeout * 1000);
+   
     if (!roomLink) {
       throw new Error('Timeout when waiting for the room link!');
     }
@@ -110,6 +112,7 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.injectHaxroomiePlugin();
     } catch (err) {
+      logger.error(err);
       throw new Error(
         `Unable to inject haxroomie HHM plugin!`
       );
@@ -124,14 +127,13 @@ module.exports = class RoomOpener extends EventEmitter {
       );
     }
 
-    if (config.pluginFiles) {
-      logger.debug('OPEN_ROOM: Injecting custom plugins.');
-      for (let p of config.pluginFiles) {
-        try {
-          await this.injectPlugin(p.content);
-        } catch (err) {
-          throw new Error(`Unable to inject plugin ${p.name}: \n${err.stack}`)
-        }
+    if (config.roomScript) {
+      logger.debug('OPEN_ROOM: Injecting custom plugin/script.');
+      try {
+        await this.injectPlugin(config.roomScript.content);
+      } catch (err) {
+        logger.error(err);
+        throw new Error(`Unable to inject plugin ${config.roomScript.name}: \n${err.stack}`);
       }
     }
 
@@ -140,6 +142,7 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
     } catch (err) {
+      logger.error(err);
       throw new Error(`Unable to get the room info from HHM.`)
     }
     
@@ -224,6 +227,11 @@ module.exports = class RoomOpener extends EventEmitter {
     let roomLink = null;
 
     while (!roomLink && (timeout > currentTime - startTime)) {
+      // if the recaptcha appears the token must be invalid
+      let recaptcha = await haxframe.$eval('#recaptcha', e => e.innerHTML);
+      if (recaptcha) {
+        throw new Error(`Invalid token!`)
+      }
       roomLink = await haxframe.$eval('#roomlink', e => e.innerHTML);
       await sleep(1000);
       currentTime = new Date().getTime();

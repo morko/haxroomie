@@ -13,7 +13,8 @@ module.exports = function createCommands(session) {
     getPlugin,
     enablePlugin,
     disablePlugin,
-    getDependentPlugins
+    getDependentPlugins,
+    eval
   };
 
   async function callRoom(fn, ...args) {
@@ -106,7 +107,12 @@ module.exports = function createCommands(session) {
   async function disablePlugin(name) {
     return session.disablePlugin(name);
   }
+  
   async function getDependentPlugins(name) {
     return session.getDependentPlugins(name);
+  }
+
+  async function eval(js) {
+    return session.eval(js);
   }
 }

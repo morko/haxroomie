@@ -227,7 +227,7 @@ the types of messages that Haxroomie sends.</p>
             <td class="type">
             
                 
-<span class="param-type">module:message~Message</span>
+<span class="param-type"><a href="module-haxroomie.html#~Message">module:haxroomie~Message</a></span>
 
 
             
@@ -278,7 +278,7 @@ the types of messages that Haxroomie sends.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line189">line 189</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -436,7 +436,7 @@ the types of messages that Haxroomie sends.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line251">line 251</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line270">line 270</a>
     </li></ul></dd>
     
 
@@ -522,7 +522,7 @@ the types of messages that Haxroomie sends.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line239">line 239</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line258">line 258</a>
     </li></ul></dd>
     
 
@@ -610,7 +610,7 @@ it disables all the plugins in the given order.</p>
 <span class="param-type">string</span>
 |
 
-<span class="param-type">Array</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -661,7 +661,7 @@ it disables all the plugins in the given order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line311">line 311</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line330">line 330</a>
     </li></ul></dd>
     
 
@@ -820,7 +820,7 @@ it disables all the plugins in the given order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line298">line 298</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line317">line 317</a>
     </li></ul></dd>
     
 
@@ -867,6 +867,144 @@ it disables all the plugins in the given order.</p>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="eval"><span class="type-signature">(async) </span>eval<span class="signature">(js)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Evaluates the given code in this sessions browser tab. You can access
+the global room object with <code>HHM.manager.room</code>.
+E.g.</p>
+<pre class="prettyprint source lang-js"><code>session.eval('HHM.manager.room.getPlayerList()');</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>js</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>JavaScript to evaluate.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line358">line 358</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -979,7 +1117,7 @@ it disables all the plugins in the given order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line323">line 323</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line342">line 342</a>
     </li></ul></dd>
     
 
@@ -1037,7 +1175,7 @@ it disables all the plugins in the given order.</p>
     
 
     
-    <h4 class="name" id="getPlugin"><span class="type-signature">(async) </span>getPlugin<span class="signature">(name)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="global.html#PluginData">PluginData</a>>|null}</span></h4>
+    <h4 class="name" id="getPlugin"><span class="type-signature">(async) </span>getPlugin<span class="signature">(name)</span><span class="type-signature"> &rarr; (nullable) {Promise.&lt;<a href="global.html#PluginData">PluginData</a>>}</span></h4>
     
 
     
@@ -1138,7 +1276,7 @@ it disables all the plugins in the given order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line286">line 286</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line305">line 305</a>
     </li></ul></dd>
     
 
@@ -1180,9 +1318,6 @@ it disables all the plugins in the given order.</p>
     <dd>
         
 <span class="param-type">Promise.&lt;<a href="global.html#PluginData">PluginData</a>></span>
-|
-
-<span class="param-type">null</span>
 
 
     </dd>
@@ -1252,7 +1387,7 @@ it disables all the plugins in the given order.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line273">line 273</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line292">line 292</a>
     </li></ul></dd>
     
 
@@ -1320,11 +1455,8 @@ it disables all the plugins in the given order.</p>
 <div class="description">
     <p>Opens a headless haxball room in this sessions browser tab.</p>
 <p>The config object can contain any properties you want to use in your
-own HHM config file given in config.hhmConfigFile. The config object is
+own HHM config file given in config.hhmConfig. The config object is
 usable globally from within the HHM config as the <strong>haxroomie</strong> object.</p>
-<p>The parameters that are used by the default HHM config are listed here
-as optional parameters (except <code>hhmConfigFile</code> and <code>pluginFiles</code> that
-are used anyways)</p>
 </div>
 
 
@@ -1429,8 +1561,8 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>token to start the room with from 
-   https://<a href="http://www.haxball.com/headlesstoken">www.haxball.com/headlesstoken</a></p></td>
+            <td class="description last"><p>Token to start the room with.
+   Obtain one from <a href="https://www.haxball.com/headlesstoken">https://www.haxball.com/headlesstoken</a>.</p></td>
         </tr>
 
     
@@ -1463,7 +1595,7 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>room name</p></td>
+            <td class="description last"><p>Room name.</p></td>
         </tr>
 
     
@@ -1496,7 +1628,7 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>host player name</p></td>
+            <td class="description last"><p>Host player name.</p></td>
         </tr>
 
     
@@ -1529,7 +1661,7 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>max players</p></td>
+            <td class="description last"><p>Max players.</p></td>
         </tr>
 
     
@@ -1562,7 +1694,74 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>should the room be public</p></td>
+            <td class="description last"><p>Should the room be public?</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>geo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Geolocation override for the room.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hostPassword</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Password for getting host 
+ priviledges with <code>!auth host &lt;password&gt;</code> if the roles plugin is enabled.</p></td>
         </tr>
 
     
@@ -1595,14 +1794,88 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>admin role password in room</p></td>
+            <td class="description last"><p>Password for getting admin 
+ priviledges with <code>!auth host &lt;password&gt;</code> if the roles plugin is enabled.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>hhmConfigFile</code></td>
+                <td class="name"><code>hhmConfig</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#FileDef">FileDef</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Configuration for the haxball 
+   headless manager (HHM).</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roomScript</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#FileDef">FileDef</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Regular haxball
+   headless script to load when starting the room.</p>
+<p>   <strong>Note that</strong> if loading a
+   room script this way haxroomie will disable the default HHM plugins
+   rendering <code>config.hostPassword</code>, <code>config.adminPassword</code> and 
+   <code>config.pluginConfig</code> unused.</p>
+<p>   To load multiple plugins set up a HHM repository.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pluginConfig</code></td>
             
 
             <td class="type">
@@ -1628,23 +1901,21 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>Configuration for the haxball 
-   headless manager (HHM). Object must contain name and content properties
-   where name is the file/config name and content has the file contents.
-   Both properties shold be strings.</p></td>
+            <td class="description last"><p>Haxball Headless Manager
+   plugin config object.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>pluginFiles</code></td>
+                <td class="name"><code>repositories</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;object></span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -1664,10 +1935,8 @@ are used anyways)</p>
 
             
 
-            <td class="description last"><p>Optional HHM plugins to load when 
-   starting the room. Objects must contain name and content properties where
-   name is the file/plugin name and content has the file contents. Both
-   properties shold be strings.</p></td>
+            <td class="description last"><p>Array of additional
+   HHM plugin repositories.</p></td>
         </tr>
 
     
@@ -1715,7 +1984,7 @@ are used anyways)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line230">line 230</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -1743,7 +2012,9 @@ are used anyways)</p>
         
 <div class="param-desc">
     <ul>
-<li>config object with a roomLink property</li>
+<li>Config that the room was started with including
+ a <code>roomLink</code> property added to it containing the haxball rooms
+ link.</li>
 </ul>
 </div>
 
@@ -1853,7 +2124,7 @@ are used anyways)</p>
             <td class="type">
             
                 
-<span class="param-type">module:message~Message</span>
+<span class="param-type"><a href="module-haxroomie.html#~Message">module:haxroomie~Message</a></span>
 
 
             
@@ -1904,7 +2175,7 @@ are used anyways)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line172">line 172</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line175">line 175</a>
     </li></ul></dd>
     
 
@@ -2068,7 +2339,7 @@ are used anyways)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line109">line 109</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -2209,7 +2480,7 @@ are used anyways)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line132">line 132</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line135">line 135</a>
     </li></ul></dd>
     
 
@@ -2251,7 +2522,7 @@ are used anyways)</p>
 
 
 <div class="description">
-    <p>Validates the give object to be valid Message object.</p>
+    <p>Checks that the given object is a valid <a href="module-haxroomie.html#~Message">Message</a>.</p>
 </div>
 
 
@@ -2293,7 +2564,7 @@ are used anyways)</p>
             <td class="type">
             
                 
-<span class="param-type">module:message~Message</span>
+<span class="param-type"><a href="module-haxroomie.html#~Message">module:haxroomie~Message</a></span>
 
 
             
@@ -2344,7 +2615,7 @@ are used anyways)</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line149">line 149</a>
+        <a href="src_session_Session.js.html">src/session/Session.js</a>, <a href="src_session_Session.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -2394,7 +2665,7 @@ are used anyways)</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Fri Mar 01 2019 09:45:58 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 16 2019 17:59:01 GMT+0300 (Eastern European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

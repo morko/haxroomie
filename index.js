@@ -45,11 +45,13 @@ const haxroomie = {
 
 /**
  * Asynchronous factory function to create an instance of 
- * [Haxroomie]{@link module:haxroomie~Haxroomie} without
- * the need to call Haxroomie#createBrowser after constructing the object.
+ * [Haxroomie]{@link module:haxroomie.Haxroomie} without
+ * the need to call [Haxroomie#createBrowser]{@link module:haxroomie.Haxroomie#createBrowser}
+ * after constructing the object.
  * 
  * @param {object} opt - Options for the Haxroomie constructor.
- * @returns {module:haxroomie~Haxroomie} Ready to use instance of Haxroomie.
+ * @returns {module:haxroomie.Haxroomie} - Ready to use instance of 
+ * [Haxroomie]{@link module:haxroomie.Haxroomie}.
  */
 async function createHaxroomie(opt) {
   let haxroomie = new Haxroomie(opt);

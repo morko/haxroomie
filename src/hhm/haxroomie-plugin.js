@@ -51,6 +51,13 @@ window.hroomie = (function(){
     window.HHM.events.PLUGIN_LOADED,
     window.HHM.events.PLUGIN_REMOVED,
   ];
+
+  var ignoredPlugins = new Set([
+    '_user/postInit',
+    'hr/core',
+    'hhm/core',
+    'hhm/persistence'
+  ]);
   
   return {
     registerEventHandlers,
@@ -62,7 +69,7 @@ window.hroomie = (function(){
     disablePlugin,
     getDependentPlugins
   };
-    
+  
   /**
    * Registers handlers for the HaxBall roomObject and for the HHM manager
    * events. Send all events to the main context of haxroomie.
@@ -85,13 +92,37 @@ window.hroomie = (function(){
   
     // send HHM events to the main context
     for (let eventType of defaultHHMEvents) {
-      window.HHM.manager.registerEventHandler((args) => {
+      room[`onHhm_${eventType}`] = function(...args) {
+        // get the plugin data
+        let pluginData = getEventPluginData(args);
+
+        if (pluginData !== null) {
+          if (ignoredPlugins.has(pluginData.name)) return;
+          args[0] = pluginData;
+        }
+
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
           payload: { eventType: eventType, args: args }
         });
-      }, [eventType]);
+      };
     }
+  }
+
+  /**
+   * @private
+   * Returns PluginData for events that contain a plugin as their first
+   * argument. This is useful only to modify the HHM events so that
+   * additional data is included in the event (id and isEnabled).
+   * 
+   * @param {Array} args - Arguments that the event received. 
+   */
+  function getEventPluginData(args) {
+    let plugin = args[0].plugin || {};
+    let pluginSpec = plugin.pluginSpec || {};
+    let pluginName = pluginSpec.name || '';
+    if (!pluginName || ignoredPlugins.has(pluginName)) return null;
+    return getPlugin(pluginName);
   }
 
   /**
@@ -169,11 +200,7 @@ window.hroomie = (function(){
     .filter(pluginData => {
       const name = pluginData.pluginSpec.name;
       // ignore these plugins
-      return (
-        name !== '_user/postInit' 
-        && name !== 'hr/core'
-        && name !== 'hhm/core'
-      );
+      return !ignoredPlugins.has(name);
     });
   return plugins;
   }
@@ -203,7 +230,7 @@ window.hroomie = (function(){
         const plugin = room.getPlugin(name[i]);
         const success = HHM.manager.disablePluginById(plugin._id);
         if (!success) {
-          for (let j = 0; j < i; j++) {
+          for (let j = 0; j <= i; j++) {
             const plugin = room.getPlugin(name[i - j]);
             HHM.manager.enablePluginById(plugin._id);
           }
