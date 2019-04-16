@@ -144,7 +144,7 @@ HHM.config.room = {
 
 Haxroomie injects a **haxroomie** object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with `--options` argument.
 
-See the default configuration file in <https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js> for a complete example.
+See the default configuration file in <https://www.github.com/morko/haxroomie/tree/master/src/hhm/config.js> for a complete example.
 
 # API
 
