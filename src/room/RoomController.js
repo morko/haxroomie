@@ -106,7 +106,8 @@ module.exports = class RoomController {
       onGetPlugin: (id) => this.handleGetPlugin(id),
       onEnablePlugin: (name) => this.handleEnablePlugin(name),
       onDisablePlugin: (name) => this.handleDisablePlugin(name),
-      onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name)
+      onGetDependentPlugins: (name) => this.handleGetDependentPlugins(name),
+      onEval: (js) => this.handleEval(js)
     });
     session.on('client_connected', this.handleClientConnected.bind(this));
     session.on('client_disconnected', this.handleClientDisconnected.bind(this));
@@ -196,8 +197,10 @@ module.exports = class RoomController {
   }
 
   /**
-   * Handler for the openRoom function in this.session.
-   * See Session for documentation.
+   * Handler for the openRoom function in this.session. Sets this.roomInfo
+   * to contain the information about opened room.
+   * 
+   * See Session for more documentation.
    */
   async handleOpenRoom(config) {
 
@@ -235,7 +238,9 @@ module.exports = class RoomController {
   }
 
   /**
-   * Handler for the closeRoom function in this.session.
+   * Handler for the closeRoom function in this.session. Sets this.roomInfo
+   * to null.
+   * 
    * See Session for documentation.
    */
   async handleCloseRoom() {
@@ -313,6 +318,15 @@ module.exports = class RoomController {
     let result = await this.page.evaluate((name) => {
       return window.hroomie.getDependentPlugins(name);
     }, name);
+    return result;
+  }
+
+  /**
+   * Handler for the eval function in this.session.
+   * See Session for documentation.
+   */
+  async handleEval(js) {
+    let result = await this.page.evaluate(js);
     return result;
   }
 }

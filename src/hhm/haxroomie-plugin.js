@@ -95,7 +95,11 @@ window.hroomie = (function(){
       room[`onHhm_${eventType}`] = function(...args) {
         // get the plugin data
         let pluginData = getEventPluginData(args);
-        if (pluginData !== null) args[0] = pluginData;
+
+        if (pluginData !== null) {
+          if (ignoredPlugins.has(pluginData.name)) return;
+          args[0] = pluginData;
+        }
 
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
@@ -226,7 +230,7 @@ window.hroomie = (function(){
         const plugin = room.getPlugin(name[i]);
         const success = HHM.manager.disablePluginById(plugin._id);
         if (!success) {
-          for (let j = 0; j < i; j++) {
+          for (let j = 0; j <= i; j++) {
             const plugin = room.getPlugin(name[i - j]);
             HHM.manager.enablePluginById(plugin._id);
           }

@@ -2,7 +2,8 @@ const colors = require(`colors/safe`);
 const readline = require(`readline`);
 
 const COLORS = {
-  LOAD_CONFIG: colors.yellow,
+  LOAD_ROOM_SCRIPT: colors.yellow,
+  LOAD_PLUGIN_CONFIG: colors.yellow,
   OPEN_ROOM_START: colors.green,
   OPEN_ROOM_STOP: colors.green.bold,
   OPEN_ROOM_ERROR: colors.red.bold,
@@ -53,44 +54,39 @@ module.exports = class CommandPrompt {
 
     this.registerEventListeners(
       this.messageHandler,
-      (t, m) => this.send(t, m)
+      (msg, type) => this.print(msg, type)
     );
 
     this.roomLink = null;
 
   }
 
-  registerEventListeners(messageHandler, send) {
-    messageHandler.on(`open-room-start`, () => send(`OPEN_ROOM_START`));
-    messageHandler.on(`open-room-stop`, l => {
-      this.roomLink = l;
-      send(`OPEN_ROOM_STOP`, l);
+  registerEventListeners(messageHandler, print) {
+    messageHandler.on(`open-room-start`, () => print(`Starting the room`, `OPEN_ROOM_START`));
+    messageHandler.on(`open-room-stop`, roomLink => {
+      this.roomLink = roomLink;
+      print(roomLink, `OPEN_ROOM_STOP`);
     });
-    messageHandler.on(`open-room-error`, e => send(`OPEN_ROOM_START`, e));
-    messageHandler.on(`browser-error`, e => send(`PAGE_ERROR`, e));
-    messageHandler.on(`player-chat`, m => send(`PLAYER_CHAT`, m));
-    messageHandler.on(`player-join`, m => send(`PLAYER_JOIN`, m));
-    messageHandler.on(`player-leave`, m => send(`PLAYER_LEAVE`, m));
-    messageHandler.on(`player-kicked`, m => send(`PLAYER_KICKED`, m));
-    messageHandler.on(`player-banned`, m => send(`PLAYER_BANNED`, m));
-    messageHandler.on(`admin-changed`, m => send(`ADMIN_CHANGED`, m));
-    messageHandler.on(`session-closed`, () => send('SESSION_CLOSED'));
+    messageHandler.on(`open-room-error`, e => print(e, `OPEN_ROOM_START`));
+    messageHandler.on(`browser-error`, e => print(e, `PAGE_ERROR`));
+    messageHandler.on(`player-chat`, m => print(m, `PLAYER_CHAT`));
+    messageHandler.on(`player-join`, m => print(m, `PLAYER_JOIN`));
+    messageHandler.on(`player-leave`, m => print(m, `PLAYER_LEAVE`));
+    messageHandler.on(`player-kicked`, m => print(m, `PLAYER_KICKED`));
+    messageHandler.on(`player-banned`, m => print(m, `PLAYER_BANNED`));
+    messageHandler.on(`admin-changed`, m => print(m, `ADMIN_CHANGED`));
+    messageHandler.on(`session-closed`, () => print(``, `SESSION_CLOSED`));
     messageHandler.on(`session-error`, errorStack => {
-      send('SESSION_ERROR', errorStack)
+      print(errorStack, `SESSION_ERROR`);
     });  
   }
 
-  send(type, msg) {
+  print(msg, type) {
     readline.clearLine(process.stdout, 0);
     readline.cursorTo(process.stdout, 0);
-    msg = this.createMessage(type, msg);
-    this.write(`${msg}`);
-  }
-
-  write(msg) {
-    // modify the new lines so can detect when to insert prompt
-    msg = msg.replace(/\n/g, `\n\0# `);
-    this.rl.write(`\0# ${msg}\0\n`)
+    if (type) msg = this.createMessage(type, msg);
+    console.log(msg);
+    this.createPrompt();
   }
 
   createMessage(type, msg) {
@@ -111,7 +107,7 @@ module.exports = class CommandPrompt {
   }
 
   createPrompt() {
-    this.rl.prompt(false);
+    this.rl.prompt(true);
   }
 
   /**
@@ -123,10 +119,7 @@ module.exports = class CommandPrompt {
     try {
       await this.handleCommand(line);
     } catch (err) {
-      this.send(`ERROR`, err.message);
-    }
-    if (line.endsWith(`\0`)) {
-      this.createPrompt();
+      this.print(err.message, `ERROR`);
     }
   }
 
@@ -135,10 +128,11 @@ module.exports = class CommandPrompt {
       this.showHelp();
 
     } else if (cmd.startsWith(`link`)) {
-      this.write(`${this.roomLink}`);
+      this.print(`${this.roomLink}`);
 
     } else if (cmd.startsWith(`chat `)) {
       await this.cmd.sendChat(cmd.slice(5));
+      this.createPrompt();
 
     } else if (cmd.startsWith(`players`)) {
       await this.onPlayers();
@@ -163,10 +157,10 @@ module.exports = class CommandPrompt {
 
     } else if (cmd.startsWith(`plugin `)) {
       let plugin = await this.cmd.getPlugin(cmd.slice(7));
-      this.write(this.pluginDataToString(plugin));
+      this.print(this.pluginDataToString(plugin));
 
-    } else if (cmd.startsWith(`depplugins `)) {
-      await this.onGetDependentPlugins(cmd.slice(11));
+    } else if (cmd.startsWith(`dependsof `)) {
+      await this.onGetDependentPlugins(cmd.slice(10));
 
     } else if (cmd.startsWith(`enable `)) {
       await this.onEnablePlugin(cmd.slice(7));
@@ -174,11 +168,14 @@ module.exports = class CommandPrompt {
     } else if (cmd.startsWith(`disable `)) {
       await this.onDisablePlugin(cmd.slice(8));
 
+    } else if (cmd.startsWith(`eval `)) {
+      await this.onEval(cmd.slice(5));
+
     } else if (cmd === `q`) {
       process.exit(0);
 
-    } else if (!cmd.startsWith(`\0# `)) {
-      this.send(`INVALID_COMMAND`, `Type "help" for available commands`);
+    } else {
+      this.print(`Type "help" for available commands`, `INVALID_COMMAND`);
     }
   }
 
@@ -195,24 +192,25 @@ module.exports = class CommandPrompt {
       + `clearbans:  clears all the bans\n`
       + `plugins:    gets a list of plugins\n`
       + `plugin:     get detailed information about given plugin name\n`
-      + `depplugins: gets plugins that depend on given plugin name\n`
+      + `dependsof:  gets plugins that depend on given plugin name\n`
       + `enable:     enables the plugin with given name\n`
       + `disable:    disables the plugin with given name\n`
+      + `eval:       evaluate given JavaScript in browser\n`
       + `q:          exits the program`;
 
-    this.write(help);
+    this.print(help);
   }
 
 
   async onPlayers() {
     let playerList = await this.cmd.getPlayerList();
-    let players = `Amount of players: ${playerList.length - 1}\n`;
+    let players = [`Amount of players: ${playerList.length - 1}`];
   
     for(let player of playerList) {
       if (!player) continue;
-      players += `${player.name} | admin: ${player.admin}\n`;
+      players.push(`${player.name} | id: ${player.id} | admin: ${player.admin}`);
     }
-    this.send(`PLAYERS`, players);
+    this.print(players.join(`\n`), `PLAYERS`);
   }
 
   async onPlugins() {
@@ -222,17 +220,17 @@ module.exports = class CommandPrompt {
 
   printPlugins(plugins) {
 
-    let pluginsString = '';
+    let ps = [];
     for (let p of plugins) {
-      const isEnabled = p.isEnabled ? 'enabled' : 'disabled';
-      pluginsString += `${p.pluginSpec.name} (${isEnabled})\n`;
+      const isEnabled = p.isEnabled ? `enabled` : `disabled`;
+      ps.push(`${p.pluginSpec.name} (${isEnabled})`);
     }
-    this.write(pluginsString);
+    this.print(ps.join(`\n`));
   }
 
   pluginDataToString(pluginData) {
     const p = pluginData;
-    const isEnabled = p.isEnabled ? 'enabled' : 'disabled';
+    const isEnabled = p.isEnabled ? `enabled` : `disabled`;
 
     let string = 
       `${p.pluginSpec.name} (${isEnabled}):\n`
@@ -249,33 +247,33 @@ module.exports = class CommandPrompt {
 
   async onEnablePlugin(name) {
     let pluginData = await this.cmd.getPlugin(name);
-    if (!pluginData) this.send('ERROR', `No plugin with id ${name}!`)
+    if (!pluginData) this.print( `No plugin with id ${name}!`, `ERROR`);
     let success = await this.cmd.enablePlugin(name);
     
     pluginData = await this.cmd.getPlugin(name);
     let pluginString = this.pluginDataToString(pluginData);
     
     if (success) {
-      this.send('PLUGIN_ENABLED', pluginString);
+      this.print(pluginString, `PLUGIN_ENABLED`);
     } else {
-      this.send('PLUGIN_NOT_ENABLED', pluginString);
+      this.print(pluginString, `PLUGIN_NOT_ENABLED`);
     }
   }
 
   async onDisablePlugin(name) {
     let pluginData = await this.cmd.getPlugin(name);
-    if (!pluginData) this.send('ERROR', `No plugin with id ${name}!`)
+    if (!pluginData) this.print(`No plugin with id ${name}!`, `ERROR`);
     let success = await this.cmd.disablePlugin(name);
     
     pluginData = await this.cmd.getPlugin(name);
     let pluginString = this.pluginDataToString(pluginData);
     
     if (success) {
-      this.send('PLUGIN_DISABLED', pluginString);
+      this.print(pluginString, `PLUGIN_DISABLED`);
     } else {
-      this.send(
-        'PLUGIN_NOT_DISABLED', 
-        `Disable the plugins that depend on ${name} first.`
+      this.print(
+        `Disable the plugins that depend on ${name} first.`,
+        `PLUGIN_NOT_DISABLED`
       );
     }
   }
@@ -283,13 +281,18 @@ module.exports = class CommandPrompt {
   async onGetDependentPlugins(name) {
     let plugins = await this.cmd.getDependentPlugins(name);
     if (!plugins || plugins.length < 1) {
-      this.write(`Plugin ${name} has no dependent plugins.`);
+      this.print(`Plugin ${name} has no dependent plugins.`);
       return;
     }
-    let result = `Plugins that depend on ${name}:\n`;
+    let result = [`Plugins that depend on ${name}:`];
     for (let p of plugins) {
-      result += `${p.pluginSpec.name}\n`
+      result.push(`${p.pluginSpec.name}`);
     }
-    this.write(result);
+    this.print(result.join(`\n`));
+  }
+
+  async onEval(js) {
+    let result = await this.cmd.eval(js);
+    this.print(result);
   }
 }

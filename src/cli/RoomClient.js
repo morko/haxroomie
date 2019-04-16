@@ -1,6 +1,6 @@
-const MessageHandler = require('./MessageHandler');
-const CommandPrompt = require('./CommandPrompt');
-const commands = require('./commands');
+const MessageHandler = require(`./MessageHandler`);
+const CommandPrompt = require(`./CommandPrompt`);
+const commands = require(`./commands`);
 
 module.exports = class RoomClient {
 	constructor(id, session) {
@@ -26,7 +26,7 @@ module.exports = class RoomClient {
 		try {
 			await this.session.openRoom(roomConfig);
 		} catch (err) {
-			this.commandPrompt.send('OPEN_ROOM_ERROR', err.stack);
+			this.commandPrompt.print(err.stack, `OPEN_ROOM_ERROR`);
 			process.exit(1);
 		}
 	}
