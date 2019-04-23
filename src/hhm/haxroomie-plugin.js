@@ -94,12 +94,13 @@ window.hroomie = (function(){
     for (let eventType of defaultHHMEvents) {
       room[`onHhm_${eventType}`] = function(...args) {
         // get the plugin data
-        let pluginData = getEventPluginData(args);
+        let plugin = args[0].plugin || {};
+        let pluginSpec = plugin.pluginSpec || {};
+        let pluginName = pluginSpec.name || '';
+        if (!pluginName || ignoredPlugins.has(pluginName)) return;
+        args[0] = getPlugin(pluginName);
 
-        if (pluginData !== null) {
-          if (ignoredPlugins.has(pluginData.name)) return;
-          args[0] = pluginData;
-        }
+        if (!args[0]) return;
 
         window.sendToHaxroomie({
           type: 'HHM_EVENT',
@@ -107,22 +108,6 @@ window.hroomie = (function(){
         });
       };
     }
-  }
-
-  /**
-   * @private
-   * Returns PluginData for events that contain a plugin as their first
-   * argument. This is useful only to modify the HHM events so that
-   * additional data is included in the event (id and isEnabled).
-   * 
-   * @param {Array} args - Arguments that the event received. 
-   */
-  function getEventPluginData(args) {
-    let plugin = args[0].plugin || {};
-    let pluginSpec = plugin.pluginSpec || {};
-    let pluginName = pluginSpec.name || '';
-    if (!pluginName || ignoredPlugins.has(pluginName)) return null;
-    return getPlugin(pluginName);
   }
 
   /**
