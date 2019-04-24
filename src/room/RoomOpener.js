@@ -19,6 +19,9 @@ module.exports = class RoomOpener extends EventEmitter {
    *    headless browser context when a haxball roomObject event happens
    * @param {object} [opt.timeout] - time to wait for the room link before
    *    failing
+   * @param {object} opt.sessionId - The sessions id
+   * @param {object} [opt.encryptionKey] - Encryption key to use for 
+   *    LocalStorge.
    */
   constructor(opt) {
     super();
@@ -32,9 +35,14 @@ module.exports = class RoomOpener extends EventEmitter {
     if (typeof opt.onEventFromBrowser !== 'function') {
       throw new Error('opt.onEventFromBrowser has to be typeof function');
     }
+    if (!opt.sessionId) {
+      throw new Error('Missing required argument: opt.sessionId');
+    }
     this.page = opt.page;
     this.onEventFromBrowser = opt.onEventFromBrowser;
     this.timeout = opt.timeout || 8;
+    this.sessionId = opt.sessionId;
+    this.encryptionKey = opt.encryptionKey || opt.sessionId;
 
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
@@ -65,6 +73,9 @@ module.exports = class RoomOpener extends EventEmitter {
       throw new Error(this.url + ' is unreachable!');
     }
 
+    logger.debug('OPEN_ROOM: Injecting shared-storage module.');
+    await this.injectSharedStorage();
+
     logger.debug('OPEN_ROOM: Waiting for HBInit to become available');
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
@@ -79,16 +90,10 @@ module.exports = class RoomOpener extends EventEmitter {
       if (config.hhmConfig) {
         hhmConfig = new Function('haxroomie', config.hhmConfig.content);
       } else {
-        hhmConfig = new Function(
-          'haxroomie',
-          fs.readFileSync(
-            path.join(__dirname, '..', 'hhm', 'config.js'),
-            { encoding: 'utf-8'}
-          )
-        );
+        hhmConfig = new Function('haxroomie', this.readHHMFile('config.js'));
       }
     } catch (err) {
-      logger.error(err);
+      logger.error(err.stack);
       throw new Error('Invalid HHM config!');
     }
 
@@ -184,19 +189,20 @@ module.exports = class RoomOpener extends EventEmitter {
         .then(() => {
           window.hroomie.registerEventHandlers();
         });
-    }, this.readHRPlugin());
+    }, this.readHHMFile('haxroomie-plugin.js'));
   }
 
   /**
    * @private
-   * Reads the haxroomie plugin for haxball headless manager from the file
-   * system to a string.
+   * Injects the encryption module to the headless browser. The module
+   * overrides default localStorage getItem and setItem functions so that
+   * the data will be encrypted.
    */
-  readHRPlugin() {
-    return fs.readFileSync(
-      path.join(__dirname, "..", "hhm", "haxroomie-plugin.js"), "utf8"
-    );
+  async injectSharedStorage() {
+    let ss = require('./shared-storage');
+    await this.page.evaluate(ss, this.sessionId);
   }
+
 
   /**
    * @private
@@ -209,6 +215,18 @@ module.exports = class RoomOpener extends EventEmitter {
       window.HHM.manager.addPluginByCode(plugin);
     }, plugin);
   }
+   
+  /**
+   * @private
+   * Helper function to read files from the projects hhm directory.
+   * @param {string} fileName 
+   */
+  readHHMFile(fileName) {
+    return fs.readFileSync(
+      path.join(__dirname, "..", "hhm", fileName), {encoding: "utf-8"}
+    );
+  }
+
   /**
    * @private
    * Creates a loop that polls for the roomLink to appear on the webpage.

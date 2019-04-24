@@ -1,5 +1,3 @@
-// Do not edit this block unless you know what you are doing
-
 HHM = typeof HHM === `undefined` ? {} : HHM;
 HHM.baseUrl = HHM.baseUrl || `https://haxplugins.tk/`;
 HHM.config = HHM.config || {};

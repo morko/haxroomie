@@ -46,6 +46,11 @@ module.exports = class RoomController {
     this.timeout = 8;
 
     /**
+     * Encryption key for the browsers LocalStorage.
+     */
+    this.encryptionKey = opt.encryptionKey;
+
+    /**
      * Handles the opening and closing processes room.
      */
     this.roomOpener = this.createRoomOpener();
@@ -117,9 +122,10 @@ module.exports = class RoomController {
   createRoomOpener() {
     let roomOpener = new RoomOpener({
       page: this.page,
-      sessionID: this.session.id,
       onEventFromBrowser: (message) => this.onEventFromBrowser(message),
-      timeout: this.timeout
+      timeout: this.timeout,
+      sessionId: this.id,
+      encryptionKey: this.encryptionKey
     });
     return roomOpener;
   }
