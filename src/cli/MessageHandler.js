@@ -5,7 +5,7 @@ const { messageTypes } = require('../session');
  * @fires MessageHandler#open-room-start
  * @fires MessageHandler#open-room-stop
  * @fires MessageHandler#open-room-error
- * @fires MessageHandler#browser-error
+ * @fires MessageHandler#page-error
  * @fires MessageHandler#player-chat
  * @fires MessageHandler#player-join
  * @fires MessageHandler#player-leave
