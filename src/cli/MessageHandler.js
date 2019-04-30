@@ -48,19 +48,19 @@ module.exports = class MessageHandler extends EventEmitter{
 	}
 
 	handleSessionErrorEvent(message) {
-		this.emit('session-error', message.payload.stack);
+		this.emit('session-error', message.payload);
 	}
 
 	handleOpenRoomStartEvent(message) {
 		if (message.error) {
-			this.emit('open-room-error', message.payload.message);
+			this.emit('open-room-error', message.payload);
 		}
 		this.emit('open-room-start');
 	}
 
 	handleOpenRoomStopEvent(message) {
 		if (message.error) {
-			this.emit('open-room-error', message.payload.message);
+			this.emit('open-room-error', message.payload);
 		}
 		let roomInfo = message.payload.roomInfo;
 		this.emit('open-room-stop', roomInfo.roomLink);
