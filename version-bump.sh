@@ -16,7 +16,6 @@ if [ -z "$1" ] || [ "$1" = "help" ]; then
 	exit
 fi
 
-git checkout -b release-$1 develop &&
 bump $1 &&
 npm install &&
 git commit -a -m "Bumped version number to $1"
