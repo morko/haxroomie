@@ -21,8 +21,9 @@ room.pluginSpec = {
   incompatible_with: [],
 };
 
+window.hroomie = window.hroomie || {};
 
-window.hroomie = (function(){
+Object.assign(window.hroomie, (function(){
 
   /**
    * List of default roomObject event handlers that the plugin will send 
@@ -238,4 +239,4 @@ window.hroomie = (function(){
     return HHM.manager.getDependentPluginsById(pluginId)
       .map(id => getPluginById(id));
   }
-})();
+})());
