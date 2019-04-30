@@ -67,8 +67,8 @@ module.exports = class CommandPrompt {
       this.roomLink = roomLink;
       print(roomLink, `OPEN_ROOM_STOP`);
     });
-    messageHandler.on(`open-room-error`, e => print(e, `OPEN_ROOM_START`));
-    messageHandler.on(`page-error`, e => print(e, `PAGE_ERROR`));
+    messageHandler.on(`open-room-error`, e => print(e.stack, `OPEN_ROOM_ERROR`));
+    messageHandler.on(`page-error`, e => print(e.stack, `PAGE_ERROR`));
     messageHandler.on(`player-chat`, m => print(m, `PLAYER_CHAT`));
     messageHandler.on(`player-join`, m => print(m, `PLAYER_JOIN`));
     messageHandler.on(`player-leave`, m => print(m, `PLAYER_LEAVE`));
@@ -76,7 +76,7 @@ module.exports = class CommandPrompt {
     messageHandler.on(`player-banned`, m => print(m, `PLAYER_BANNED`));
     messageHandler.on(`admin-changed`, m => print(m, `ADMIN_CHANGED`));
     messageHandler.on(`session-closed`, () => print(``, `SESSION_CLOSED`));
-    messageHandler.on(`session-error`, e => print(e, `SESSION_ERROR`));  
+    messageHandler.on(`session-error`, e => print(e.stack, `SESSION_ERROR`));  
   }
 
   print(msg, type) {
