@@ -14,14 +14,12 @@ const COLORS = {
   PLAYER_BANNED: colors.red,
   PLAYERS: colors.green,
   ERROR: colors.red,
-  PAGE_ERROR: colors.red,
   INVALID_COMMAND: colors.red,
   PLUGIN_ENABLED: colors.green,
   PLUGIN_NOT_ENABLED: colors.red,
   PLUGIN_DISABLED: colors.cyan,
   PLUGIN_NOT_DISABLED: colors.red,
-  SESSION_CLOSED: colors.green,
-  SESSION_ERROR: colors.red
+  SESSION_CLOSED: colors.green
 }
 
 /**
@@ -67,8 +65,7 @@ module.exports = class CommandPrompt {
       this.roomLink = roomLink;
       print(roomLink, `OPEN_ROOM_STOP`);
     });
-    messageHandler.on(`open-room-error`, e => print(e.stack, `OPEN_ROOM_ERROR`));
-    messageHandler.on(`page-error`, e => print(e.stack, `PAGE_ERROR`));
+    messageHandler.on(`open-room-error`, e => print(e, `OPEN_ROOM_ERROR`));
     messageHandler.on(`player-chat`, m => print(m, `PLAYER_CHAT`));
     messageHandler.on(`player-join`, m => print(m, `PLAYER_JOIN`));
     messageHandler.on(`player-leave`, m => print(m, `PLAYER_LEAVE`));
@@ -76,7 +73,7 @@ module.exports = class CommandPrompt {
     messageHandler.on(`player-banned`, m => print(m, `PLAYER_BANNED`));
     messageHandler.on(`admin-changed`, m => print(m, `ADMIN_CHANGED`));
     messageHandler.on(`session-closed`, () => print(``, `SESSION_CLOSED`));
-    messageHandler.on(`session-error`, e => print(e.stack, `SESSION_ERROR`));  
+    messageHandler.on(`session-error`, e => onSessionError(e));  
   }
 
   print(msg, type) {
@@ -106,6 +103,10 @@ module.exports = class CommandPrompt {
 
   createPrompt() {
     this.rl.prompt(true);
+  }
+
+  onSessionError(error) {
+    process.exit(1);
   }
 
   /**
