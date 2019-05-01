@@ -75,6 +75,7 @@ module.exports = class RoomController {
         error: true,
         payload: error
       });
+      logger.error(error);
     });
 
     page.on('error', (error) => {
@@ -85,6 +86,7 @@ module.exports = class RoomController {
         payload: error
       });
       this.session.active = false;
+      logger.error(error);
     });
 
     page.on('console', (msg) => {
