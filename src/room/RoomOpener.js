@@ -93,7 +93,7 @@ module.exports = class RoomOpener extends EventEmitter {
         hhmConfig = new Function('haxroomie', this.readHHMFile('config.js'));
       }
     } catch (err) {
-      logger.error(err.stack);
+      logger.error(err);
       throw new Error('Invalid HHM config!');
     }
 
@@ -101,16 +101,44 @@ module.exports = class RoomOpener extends EventEmitter {
       await this.page.evaluate(hhmConfig, config);
     } catch (err) {
       logger.error(err);
-      throw new Error(
-        `Unable to start Headless Host Manager!`
-      );
+      throw new Error(`Unable to start Headless Host Manager!`);
     }
 
-    logger.debug('OPEN_ROOM: Waiting for the room link.');
-    let roomLink = await this.waitForRoomLink(this.timeout * 1000);
+    logger.debug('OPEN_ROOM: Waiting for HHM to start.');
+    let roomLink = await this.waitForHHMToStart(this.timeout * 1000);
    
     if (!roomLink) {
-      throw new Error('Timeout when waiting for the room link!');
+      throw new Error('Timeout when waiting for HHM to start!');
+    }
+
+    // add the roomLink to the config
+    config.roomLink = roomLink;
+
+    return this.onRoomStarted(config);
+  }
+
+  /**
+   * Closes the room by navigating the tab to about:blank.
+   */
+  async close() {
+    return this.page.goto('about:blank');
+  }
+
+  /**
+   * Event handler that gets executed when the haxball headless room has been
+   * started and Haxball Headless Manager is running.
+   * 
+   * @param {object} config 
+   */
+  async onRoomStarted(config) {
+
+    // expose function in the browser context to be able to recieve messages
+    let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
+    if (!hasSend) {
+      await this.page.exposeFunction(
+        'sendToHaxroomie',
+        this.onEventFromBrowser
+      );
     }
 
     logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
@@ -120,15 +148,6 @@ module.exports = class RoomOpener extends EventEmitter {
       logger.error(err);
       throw new Error(
         `Unable to inject haxroomie HHM plugin!`
-      );
-    }
-
-    // expose function in the browser context to be able to recieve messages
-    let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
-    if (!hasSend) {
-      await this.page.exposeFunction(
-        'sendToHaxroomie',
-        this.onEventFromBrowser
       );
     }
 
@@ -150,21 +169,10 @@ module.exports = class RoomOpener extends EventEmitter {
       logger.error(err);
       throw new Error(`Unable to get the room info from HHM.`)
     }
-    
 
     // merge the roomInfo to the config so all properties get returned
     let roomInfo = Object.assign({}, config, hhmRoomInfo);
-    // add the roomLink to the roomInfo
-    roomInfo.roomLink = roomLink;
-
     return roomInfo;
-  }
-
-  /**
-   * Closes the room by navigating the tab to about:blank.
-   */
-  async close() {
-    return this.page.goto('about:blank');
   }
 
   /**
@@ -185,10 +193,7 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async injectHaxroomiePlugin() {
     await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin, 'hr/core')
-        .then(() => {
-          window.hroomie.registerEventHandlers();
-        });
+      window.HHM.manager.addPluginByCode(plugin, 'hr/core');
     }, this.readHHMFile('haxroomie-plugin.js'));
   }
 
@@ -229,28 +234,31 @@ module.exports = class RoomOpener extends EventEmitter {
 
   /**
    * @private
-   * Creates a loop that polls for the roomLink to appear on the webpage.
-   * Stops if roomLink is found or the time runs out.
+   * Waits for the Haxball Headless Manager to start.
+   * Creates a loop that polls for the window.hroomie.hhmStarted to
+   * be true. 
+   * 
+   * The window.hroomie.hhmStarted gets set in the HHM config postInit
+   * plugin.
    * 
    * @param {int} timeout Time to wait in ms before failing.
    * 
-   * @returns {string|null} the roomLink
+   * @returns {string|null} the roomLink or null if time ran out
    */
-  async waitForRoomLink(timeout) {
+  async waitForHHMToStart(timeout) {
     let haxframe = await this.getHaxframe();
-
 
     let startTime = new Date().getTime();
     let currentTime = new Date().getTime();
-    let roomLink = null;
+    let hhmStarted = false;
 
-    while (!roomLink && (timeout > currentTime - startTime)) {
+    while (!hhmStarted && (timeout > currentTime - startTime)) {
       // if the recaptcha appears the token must be invalid
       let recaptcha = await haxframe.$eval('#recaptcha', e => e.innerHTML);
       if (recaptcha) {
         throw new Error(`Invalid token!`)
       }
-      roomLink = await haxframe.$eval('#roomlink', e => e.innerHTML);
+      hhmStarted = await this.page.evaluate(`window.hroomie.hhmStarted`);
       await sleep(1000);
       currentTime = new Date().getTime();
     }

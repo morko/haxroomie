@@ -59,9 +59,10 @@ Object.assign(window.hroomie, (function(){
     'hhm/core',
     'hhm/persistence'
   ]);
+
+  registerEventHandlers();
   
   return {
-    registerEventHandlers,
     callRoom,
     getPluginById,
     getPlugin,

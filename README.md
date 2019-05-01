@@ -125,26 +125,42 @@ See <https://github.com/morko/haxroomie/tree/master/examples/plugin-config.json>
 
 ## Using own HHM config
 
-Haxroomie supports loading the options from a [Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
+Haxroomie supports loading the options from a [Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). However there should rarely be a reason to do this. The files have couple requirements to work with Haxroomie (see [https://github.com/morko/haxroomie#hhm-config-requirements](HHM config requirements)).
 
 To pass the HHM configuration file from command line:
 ```sh
 haxroomie <token> --config ./path/to/myconfig.json
 ```
 
-See <https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration> for information about the configuration file.
+### HHM config requirements
 
-**THE CUSTOM CONFIG FILES HHM.config.room PROPERTY MUST HAVE A `token` PROPERTY LIKE THIS:**
+`HHM.config.room` property must have a `token` property like this:
 
-```
+```js
 HHM.config.room = {
   token: haxroomie.token
 }
 ```
 
-Haxroomie injects a **haxroomie** object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with `--options` argument.
+The `postInit` plugin should set the `window.hroomie.hhmStarted` property to `true` on the `onRoomLink` event like this:
+
+```js
+HHM.config.postInit = HBInit => {
+  let room = HBInit();
+
+  room.onRoomLink = () => {
+    window.hroomie.hhmStarted = true;
+  }
+}
+```
+
+### Differences to vanilla HHM config
+
+Haxroomie injects a `haxroomie` object to the HHM config. The object contains all the properties sent to the function that is used to start the room. See the [https://morko.github.io/haxroomie/Session.html#openRoom](API documentation for openRoom) for list of the available `haxroomie` properties.
 
 See the default configuration file in <https://www.github.com/morko/haxroomie/tree/master/src/hhm/config.js> for a complete example.
+
+See <https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration> for more information about the configuration file.
 
 # API
 

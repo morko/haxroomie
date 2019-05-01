@@ -2,6 +2,41 @@ HHM = typeof HHM === `undefined` ? {} : HHM;
 HHM.baseUrl = HHM.baseUrl || `https://haxplugins.tk/`;
 HHM.config = HHM.config || {};
 haxroomie = typeof haxroomie === `undefined` ? {} : haxroomie;
+window.hroomie = window.hroomie || {};
+
+/**
+ * Source from <https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge>
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+window.hroomie.isObject = function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+ * Source from <https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge>
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+window.hroomie.mergeDeep = function mergeDeep(target, ...sources) {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
+}
 
 HHM.config.room = {
   roomName: haxroomie.roomName || `haxroomie`,
@@ -17,25 +52,37 @@ HHM.config.postInit = HBInit => {
   let room = HBInit();
 
   room.onRoomLink = () => {
+    // This tells haxroomie that HHM has fully loaded and it RoomOpener
+    // can continue its open method.
+    window.hroomie.hhmStarted = true;
+
     room.setDefaultStadium(`Big`);
     room.setScoreLimit(0);
     room.setTimeLimit(7);
   }
 };
 
-pluginConfig = haxroomie.pluginConfig || {};
-pluginConfig[`sav/roles`] = pluginConfig[`sav/roles`] || {};
-pluginConfig[`sav/roles`].roles = pluginConfig[`sav/roles`].roles || {};
-pluginConfig[`sav/players`] = pluginConfig[`sav/players`] || {};
-pluginConfig[`sav/commands`] = pluginConfig[`sav/commands`] || {};
+HHM.config.plugins = {
+  'sav/core': {},
+  'sav/roles': {
+    roles: {
+      'host': haxroomie.hostPassword,
+      'admin': haxroomie.adminPassword
+    },
+  },
+  'sav/players': {
+    addPlayerIdToNickname: true
+  },
+  'sav/commands': {
+    commandPrefix: '!'
+  },
+  'sav/chat': {}
 
-pluginConfig[`sav/roles`].roles.admin = pluginConfig[`sav/roles`].roles.admin ||  haxroomie.adminPassword;
-pluginConfig[`sav/roles`].roles.host = pluginConfig[`sav/roles`].roles.host || haxroomie.hostPassword;
-pluginConfig[`sav/players`].addPlayerIdToNickname = pluginConfig[`sav/players`].hasOwnProperty(`addPlayerIdToNickname`)
-  ? pluginConfig[`sav/players`].addPlayerIdToNickname
-  : true;
-pluginConfig[`sav/commands`].commandPrefix = pluginConfig[`sav/commands`].commandPrefix || `!`;
-HHM.config.plugins = pluginConfig;
+};
+
+if (haxroomie.pluginConfig) {
+  window.hroomie.mergeDeep(HHM.config.plugins, haxroomie.pluginConfig);
+}
 
 HHM.config.repositories = [
   {
@@ -80,12 +127,6 @@ if (haxroomie.repositories) {
 if (haxroomie.roomScript) {
   HHM.config.plugins = {};
 }
-
-HHM.config.dryRun = false;
-
-HHM.config.trueHeadless = true;
-
-HHM.config.sendChatMaxLength = 2686;
 
 // Load HHM if it has not already been loaded
 if (HHM.manager === undefined) {
