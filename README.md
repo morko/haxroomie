@@ -125,7 +125,7 @@ See <https://github.com/morko/haxroomie/tree/master/examples/plugin-config.json>
 
 ## Using own HHM config
 
-Haxroomie supports loading the options from a [Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). However there should rarely be a reason to do this. The files have couple requirements to work with Haxroomie (see [https://github.com/morko/haxroomie#hhm-config-requirements](HHM config requirements)).
+Haxroomie supports loading the options from a [Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration). However there should rarely be a reason to do this. The files have couple requirements to work with Haxroomie (see [HHM config requirements](https://github.com/morko/haxroomie#hhm-config-requirements)).
 
 To pass the HHM configuration file from command line:
 ```sh
@@ -156,7 +156,7 @@ HHM.config.postInit = HBInit => {
 
 ### Differences to vanilla HHM config
 
-Haxroomie injects a `haxroomie` object to the HHM config. The object contains all the properties sent to the function that is used to start the room. See the [https://morko.github.io/haxroomie/Session.html#openRoom](API documentation for openRoom) for list of the available `haxroomie` properties.
+Haxroomie injects a `haxroomie` object to the HHM config. The object contains all the properties sent to the function that is used to start the room. See the [API documentation for openRoom](https://morko.github.io/haxroomie/Session.html#openRoom) for list of the available `haxroomie` properties.
 
 See the default configuration file in <https://www.github.com/morko/haxroomie/tree/master/src/hhm/config.js> for a complete example.
 
