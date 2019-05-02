@@ -85,10 +85,7 @@ Object.assign(window.hroomie, (function(){
     // send roomObject events to the main context
     for (let handlerName of roomEventHandlers) {
       room[handlerName] = function(...args) {
-        window.sendToHaxroomie({
-          type: 'ROOM_EVENT',
-          payload: { handlerName: handlerName, args: args }
-        });
+        window.haxroomieOnRoomEvent({ handlerName, args });
       };
     }
   
@@ -100,14 +97,10 @@ Object.assign(window.hroomie, (function(){
         let pluginSpec = plugin.pluginSpec || {};
         let pluginName = pluginSpec.name || '';
         if (!pluginName || ignoredPlugins.has(pluginName)) return;
-        args[0] = getPlugin(pluginName);
+        let pluginData = getPlugin(pluginName);
 
-        if (!args[0]) return;
-
-        window.sendToHaxroomie({
-          type: 'HHM_EVENT',
-          payload: { eventType: eventType, args: args }
-        });
+        if (!pluginData) return;
+        window.haxroomieOnHHMEvent({ eventType, pluginData });
       };
     }
   }

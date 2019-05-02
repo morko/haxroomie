@@ -22,6 +22,7 @@ window.hroomie.isObject = function isObject(item) {
  */
 window.hroomie.mergeDeep = function mergeDeep(target, ...sources) {
   if (!sources.length) return target;
+  const isObject = window.hroomie.isObject;
   const source = sources.shift();
 
   if (isObject(target) && isObject(source)) {
@@ -63,7 +64,6 @@ HHM.config.postInit = HBInit => {
 };
 
 HHM.config.plugins = {
-  'sav/core': {},
   'sav/roles': {
     roles: {
       'host': haxroomie.hostPassword,
@@ -71,13 +71,11 @@ HHM.config.plugins = {
     },
   },
   'sav/players': {
-    addPlayerIdToNickname: true
+    addPlayerIdToNickname: false
   },
   'sav/commands': {
     commandPrefix: '!'
-  },
-  'sav/chat': {}
-
+  }
 };
 
 if (haxroomie.pluginConfig) {
@@ -98,26 +96,6 @@ HHM.config.repositories = [
 ];
 
 if (haxroomie.repositories) {
-  for (let i = 0; i < haxroomie.repositories.length; i++) {
-    let urlParts = haxroomie.repositories[i].split(`/`);
-
-    if (urlParts.length > 2 && urlParts[2] === `github.com`) {
-      if (urlParts.length < 5) {
-        throw new Error(`Invalid GitHub repository format.`);
-      }
-      haxroomie.repositories[i] = {
-        type: `github`,
-        repository: `${urlParts[3]}/${urlParts[4]}`
-      }
-      if (urlParts.length > 6) {
-        haxroomie.repositories[i].branch = urlParts[6];
-      }
-      if (urlParts.length > 7) {
-        haxroomie.repositories[i].path = urlParts[7];
-      }
-    }
-  }
-
   HHM.config.repositories = [
     ...HHM.config.repositories, 
     ...haxroomie.repositories

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/cli",
     "test": "mocha",
-    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/session ./README.md -d ./docs -c ./jsdoc-config.js"
+    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./README.md -d ./docs -c ./jsdoc-config.js"
   },
   "keywords": [
     "haxball"
@@ -25,12 +25,16 @@
   },
   "dependencies": {
     "colors": "^1.3.3",
+    "deep-equal": "^1.0.1",
+    "lockfile": "^1.0.4",
     "puppeteer": "^1.14.0",
     "winston": "^3.2.1",
     "yargs": "^12.0.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "foodoc": "0.0.9",
     "mocha": "^5.2.0",
     "sinon": "^6.3.5"
   }

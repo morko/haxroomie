@@ -1,25 +1,26 @@
 const colors = require(`colors/safe`);
 const readline = require(`readline`);
+const CommandHandler = require(`./CommandHandler`);
+const logger = require(`../logger`);
 
 const COLORS = {
-  LOAD_ROOM_SCRIPT: colors.yellow,
-  LOAD_PLUGIN_CONFIG: colors.yellow,
-  OPEN_ROOM_START: colors.green,
-  OPEN_ROOM_STOP: colors.green.bold,
-  OPEN_ROOM_ERROR: colors.red.bold,
-  PLAYER_CHAT: colors.white.bold,
-  PLAYER_JOIN: colors.green,
-  PLAYER_LEAVE: colors.cyan,
-  PLAYER_KICKED: colors.yellow,
-  PLAYER_BANNED: colors.red,
-  PLAYERS: colors.green,
-  ERROR: colors.red,
-  INVALID_COMMAND: colors.red,
-  PLUGIN_ENABLED: colors.green,
-  PLUGIN_NOT_ENABLED: colors.red,
-  PLUGIN_DISABLED: colors.cyan,
-  PLUGIN_NOT_DISABLED: colors.red,
-  SESSION_CLOSED: colors.green
+  'LOADED FILE': colors.yellow,
+  'STARTING ROOM': colors.green,
+  'ROOM STARTED': colors.green.bold,
+  'CHAT': colors.white.bold,
+  'PLAYER JOINED': colors.green,
+  'PLAYER LEFT': colors.cyan,
+  'PLAYER KICKED': colors.yellow,
+  'PLAYER BANNED': colors.red,
+  'ADMIN CHANGED': colors.purple,
+  'PLAYERS': colors.green,
+  'TAB CLOSED': colors.purple,
+  'ERROR': colors.red,
+  'INVALID COMMAND': colors.red,
+  'PLUGIN LOADED': colors.green,
+  'PLUGIN REMOVED': colors.cyan,
+  'PLUGIN ENABLED': colors.green,
+  'PLUGIN DISABLED': colors.cyan
 }
 
 /**
@@ -30,50 +31,199 @@ module.exports = class CommandPrompt {
     if (!opt) {
       throw new Error(`Missing required argument: opt`);
     }
-    if (!opt.commands) {
-      throw new Error(`Missing required argument: opt.commands`);
+    if (!opt.haxroomie) {
+      throw new Error(`Missing required argument: opt.haxroomie`);
     }
-    if (!opt.messageHandler) {
-      throw new Error(`Missing required argument: opt.messageHandler`);
+    if (!opt.openRoom) {
+      throw new Error(`Missing required argument: opt.openRoom`);
     }
-    this.cmd = opt.commands;
-    this.messageHandler = opt.messageHandler;
+    if (!opt.closeRoom) {
+      throw new Error(`Missing required argument: opt.closeRoom`);
+    }
+    if (!opt.reloadConfig) {
+      throw new Error(`Missing required argument: opt.reloadConfig`);
+    }
+
+    this.haxroomie = opt.haxroomie;
+    this.openRoom = opt.openRoom;
+    this.closeRoom = opt.closeRoom;
+    this.reloadConfig = opt.reloadConfig;
+
+    this.currentRoom = null;
+    this.cmd = null;
     
     this.maxTypeLength = 20;
-
-    this.promptString = `> `;
 
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
-    this.rl.on(`line`, (result) => this.onNewLine(result));
-
-    this.registerEventListeners(
-      this.messageHandler,
-      (msg, type) => this.print(msg, type)
-    );
-
-    this.roomLink = null;
-
+    this.onNewLine = this.onNewLine.bind(this);
+    this.onPluginLoaded = this.onPluginLoaded.bind(this);
+    this.onPluginRemoved = this.onPluginRemoved.bind(this);
+    this.onPluginEnabled = this.onPluginEnabled.bind(this);
+    this.onPluginDisabled = this.onPluginDisabled.bind(this);
+    this.onRoomEvent = this.onRoomEvent.bind(this);
+    this.addPersistentListeners();
   }
 
-  registerEventListeners(messageHandler, print) {
-    messageHandler.on(`open-room-start`, () => print(`Starting the room`, `OPEN_ROOM_START`));
-    messageHandler.on(`open-room-stop`, roomLink => {
-      this.roomLink = roomLink;
-      print(roomLink, `OPEN_ROOM_STOP`);
+
+  setRoom(room) {
+    if (this.currentRoom) this.removeListeners(this.currentRoom);
+    this.addListeners(room);
+    this.cmd = this.createCommandHandler(room);
+    this.rl.setPrompt(`${room.id}> `)
+    this.currentRoom = room;
+    this.createPrompt();
+  }
+
+  /**
+   * @private
+   */
+  createCommandHandler(room) {
+    return new CommandHandler({
+      haxroomie: this.haxroomie,
+      room: room,
+      print: (msg, type) => this.print(msg, type),
+      question: (question) => this.question(question),
+      setRoom: (room) => this.setRoom(room),
+      openRoom: this.openRoom,
+      closeRoom: this.closeRoom,
+      reloadConfig: this.reloadConfig
     });
-    messageHandler.on(`open-room-error`, e => print(e, `OPEN_ROOM_ERROR`));
-    messageHandler.on(`player-chat`, m => print(m, `PLAYER_CHAT`));
-    messageHandler.on(`player-join`, m => print(m, `PLAYER_JOIN`));
-    messageHandler.on(`player-leave`, m => print(m, `PLAYER_LEAVE`));
-    messageHandler.on(`player-kicked`, m => print(m, `PLAYER_KICKED`));
-    messageHandler.on(`player-banned`, m => print(m, `PLAYER_BANNED`));
-    messageHandler.on(`admin-changed`, m => print(m, `ADMIN_CHANGED`));
-    messageHandler.on(`session-closed`, () => print(``, `SESSION_CLOSED`));
-    messageHandler.on(`session-error`, e => onSessionError(e));  
+  }
+
+  /**
+   * Listeners for events that will be displayed whatever the current room is
+   * set to.
+   * @private
+   */
+  addPersistentListeners() {
+    this.rl.on(`line`, this.onNewLine);
+    for (let [id, room] of this.haxroomie.rooms) {
+      room.on(`open-room-start`, (e) => this.onOpenRoomStart(id, room, e));
+      room.on(`open-room-stop`, (e) => this.onOpenRoomStop(id, room, e));
+      room.on(`open-room-error`, (e) => this.onOpenRoomError(id, room, e));
+      room.on(`page-closed`, (e) => this.onPageClosed(id, room, e));
+      room.on(`page-crash`, (e) => this.onPageCrashed(id, room, e));
+      room.on(`page-error`, (e) => this.onPageError(id, room, e));
+    }
+  }
+
+  removePersistentListeners() {
+    this.rl.removeListener(`line`, this.onNewLine);
+    for (let room of this.haxroomie.rooms.values()) {
+      room.removeAllListeners(`open-room-start`);
+      room.removeAllListeners(`open-room-stop`);
+      room.removeAllListeners(`open-room-error`);
+      room.removeAllListeners(`page-closed`);
+      room.removeAllListeners(`page-crash`);
+      room.removeAllListeners(`page-error`);
+    }
+  }
+
+  addListeners(room) {
+    room.on(`plugin-loaded`, this.onPluginLoaded);
+    room.on(`plugin-removed`, this.onPluginRemoved);
+    room.on(`plugin-enabled`, this.onPluginEnabled);
+    room.on(`plugin-disabled`, this.onPluginDisabled);
+    room.on('room-event', this.onRoomEvent);
+  }
+
+  removeListeners(room) {
+    room.removeListener(`plugin-loaded`, this.onPluginLoaded);
+    room.removeListener(`plugin-removed`, this.onPluginRemoved);
+    room.removeListener(`plugin-enabled`, this.onPluginEnabled);
+    room.removeListener(`plugin-disabled`, this.onPluginDisabled);
+    room.removeListener('room-event', this.onRoomEvent);
+  }
+
+  onOpenRoomStart(id, room, eventArgs) {
+    this.print(id, `STARTING ROOM`);
+  }
+
+  onOpenRoomStop(id, room, eventArgs) {
+    this.print(`${id} - ${room.roomInfo.roomLink}`, `ROOM STARTED`);
+  }
+
+  onOpenRoomError(id, room, eventArgs) {
+    this.print(`Could not start room: ${id}`, `ERROR`);
+    this.print(eventArgs);
+  }
+
+  onPageClosed(id, room, eventArgs) {
+    this.print(`${id}`, `TAB CLOSED`);
+  }
+
+  onPageCrashed(id, room, eventArgs) {
+    this.print(`Page crashed: ${id}`, `ERROR`);
+  }
+
+  onPageError(id, room, eventArgs) {
+    this.print(`Page error: ${id}`, `ERROR`);
+  }
+
+  onPluginLoaded(pluginData) {
+    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN LOADED`);
+  }
+
+  onPluginRemoved(pluginData) {
+    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN REMOVED`);
+  }
+
+  onPluginEnabled(pluginData) {
+    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN ENABLED`);
+  }
+
+  onPluginDisabled(pluginData) {
+    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN DISABLED`);
+  }
+
+  onRoomEvent(roomEventArgs) {
+    let handlerName = roomEventArgs.handlerName;
+    let args = roomEventArgs.args || [];
+    if (typeof this[handlerName] === 'function') {
+      this[handlerName](...args);
+    }
+  }
+
+  onPlayerChat(player, message) {
+    this.print(`${player.name}> ${message}`, `CHAT`);
+  }
+
+  onPlayerJoin(player) {
+    this.print(`${player.name}`, `PLAYER JOINED`);
+  }
+
+  onPlayerLeave(player) {
+    this.print(`${player.name}`, `PLAYER LEFT`);
+  }
+
+  onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
+    if (ban) {
+      this.print(
+        `${kickedPlayer.name} banned by ${byPlayer.name} | reason: ${reason}`,
+        `PLAYER BANNED`
+      );    
+    } else {
+      this.print(
+        `${kickedPlayer.name} kicked by ${byPlayer.name} | reason: ${reason}`,
+        `PLAYER KICKED`
+      );    
+    }
+  }
+
+  onPlayerAdminChange(changedPlayer, byPlayer) {
+    this.print(
+      `${changedPlayer.name} by ${byPlayer.name} `
+      + `| admin: ${changedPlayer.admin}`,
+      `ADMIN CHANGED`
+    );
+  }
+
+  question(question, cb) {
+    this.rl.question(question, cb);
   }
 
   print(msg, type) {
@@ -105,193 +255,17 @@ module.exports = class CommandPrompt {
     this.rl.prompt(true);
   }
 
-  onSessionError(error) {
-    process.exit(1);
-  }
-
   /**
    * Receives the lines from process.stdout.
    * @param {string} input 
    */
   async onNewLine(line) {
-
     try {
-      await this.handleCommand(line);
+      let result = await this.cmd.onNewLine(line);
     } catch (err) {
       this.print(err.message, `ERROR`);
     }
+    this.createPrompt();
   }
 
-  async handleCommand(cmd) {
-    if (cmd.startsWith(`help`)) {
-      this.showHelp();
-
-    } else if (cmd.startsWith(`link`)) {
-      this.print(`${this.roomLink}`);
-
-    } else if (cmd.startsWith(`chat `)) {
-      await this.cmd.sendChat(cmd.slice(5));
-      this.createPrompt();
-
-    } else if (cmd.startsWith(`players`)) {
-      await this.onPlayers();
-
-    } else if (cmd.startsWith(`kick `)) {
-      await this.cmd.kickPlayer(cmd.slice(5));
-
-    } else if (cmd.startsWith(`ban `)) {
-      await this.cmd.banPlayer(cmd.slice(4));
-
-    } else if (cmd.startsWith(`clearbans`)) {
-      await this.cmd.clearBans();
-
-    } else if (cmd.startsWith(`admin `)) {
-      await this.cmd.giveAdmin(cmd.slice(6));
-      
-    } else if (cmd.startsWith(`unadmin `)) {
-      await this.cmd.removeAdmin(cmd.slice(8));
-
-    } else if (cmd.startsWith(`plugins`)) {
-      await this.onPlugins();
-
-    } else if (cmd.startsWith(`plugin `)) {
-      let plugin = await this.cmd.getPlugin(cmd.slice(7));
-      this.print(this.pluginDataToString(plugin));
-
-    } else if (cmd.startsWith(`dependsof `)) {
-      await this.onGetDependentPlugins(cmd.slice(10));
-
-    } else if (cmd.startsWith(`enable `)) {
-      await this.onEnablePlugin(cmd.slice(7));
-
-    } else if (cmd.startsWith(`disable `)) {
-      await this.onDisablePlugin(cmd.slice(8));
-
-    } else if (cmd.startsWith(`eval `)) {
-      await this.onEval(cmd.slice(5));
-
-    } else if (cmd === `q`) {
-      process.exit(0);
-
-    } else {
-      this.print(`Type "help" for available commands`, `INVALID_COMMAND`);
-    }
-  }
-
-  showHelp() {
-
-    let help = `Commands:\n`
-      + `link:       get the room link\n`
-      + `chat:       sends a chat message to the room\n`
-      + `players:    get a list of players in the room\n`
-      + `kick:       kicks a player with given id from the room\n`
-      + `ban:        bans a player with given id from the room\n`
-      + `admin:      gives admin to a player with given id\n`
-      + `unadmin:    removes admin from a player with given id\n`
-      + `clearbans:  clears all the bans\n`
-      + `plugins:    gets a list of plugins\n`
-      + `plugin:     get detailed information about given plugin name\n`
-      + `dependsof:  gets plugins that depend on given plugin name\n`
-      + `enable:     enables the plugin with given name\n`
-      + `disable:    disables the plugin with given name\n`
-      + `eval:       evaluate given JavaScript in browser\n`
-      + `q:          exits the program`;
-
-    this.print(help);
-  }
-
-
-  async onPlayers() {
-    let playerList = await this.cmd.getPlayerList();
-    let players = [`Amount of players: ${playerList.length - 1}`];
-  
-    for(let player of playerList) {
-      if (!player) continue;
-      players.push(`${player.name} | id: ${player.id} | admin: ${player.admin}`);
-    }
-    this.print(players.join(`\n`), `PLAYERS`);
-  }
-
-  async onPlugins() {
-    let plugins = await this.cmd.getPlugins();
-    this.printPlugins(plugins);
-  }
-
-  printPlugins(plugins) {
-
-    let ps = [];
-    for (let p of plugins) {
-      const isEnabled = p.isEnabled ? `enabled` : `disabled`;
-      ps.push(`${p.pluginSpec.name} (${isEnabled})`);
-    }
-    this.print(ps.join(`\n`));
-  }
-
-  pluginDataToString(pluginData) {
-    const p = pluginData;
-    const isEnabled = p.isEnabled ? `enabled` : `disabled`;
-
-    let string = 
-      `${p.pluginSpec.name} (${isEnabled}):\n`
-      + `  id: ${p.id}\n`
-      + `  name: ${p.pluginSpec.name}\n`
-      + `  author: ${p.pluginSpec.author}\n`
-      + `  version: ${p.pluginSpec.version}\n`
-      + `  dependencies: ${p.pluginSpec.dependencies}\n`
-      + `  order: ${JSON.stringify(p.pluginSpec.order)}\n`
-      + `  config: ${JSON.stringify(p.pluginSpec.config)}`;
-
-    return string;
-  }
-
-  async onEnablePlugin(name) {
-    let pluginData = await this.cmd.getPlugin(name);
-    if (!pluginData) this.print( `No plugin with id ${name}!`, `ERROR`);
-    let success = await this.cmd.enablePlugin(name);
-    
-    pluginData = await this.cmd.getPlugin(name);
-    let pluginString = this.pluginDataToString(pluginData);
-    
-    if (success) {
-      this.print(pluginString, `PLUGIN_ENABLED`);
-    } else {
-      this.print(pluginString, `PLUGIN_NOT_ENABLED`);
-    }
-  }
-
-  async onDisablePlugin(name) {
-    let pluginData = await this.cmd.getPlugin(name);
-    if (!pluginData) this.print(`No plugin with id ${name}!`, `ERROR`);
-    let success = await this.cmd.disablePlugin(name);
-    
-    pluginData = await this.cmd.getPlugin(name);
-    let pluginString = this.pluginDataToString(pluginData);
-    
-    if (success) {
-      this.print(pluginString, `PLUGIN_DISABLED`);
-    } else {
-      this.print(
-        `Disable the plugins that depend on ${name} first.`,
-        `PLUGIN_NOT_DISABLED`
-      );
-    }
-  }
-
-  async onGetDependentPlugins(name) {
-    let plugins = await this.cmd.getDependentPlugins(name);
-    if (!plugins || plugins.length < 1) {
-      this.print(`Plugin ${name} has no dependent plugins.`);
-      return;
-    }
-    let result = [`Plugins that depend on ${name}:`];
-    for (let p of plugins) {
-      result.push(`${p.pluginSpec.name}`);
-    }
-    this.print(result.join(`\n`));
-  }
-
-  async onEval(js) {
-    let result = await this.cmd.eval(js);
-    this.print(result);
-  }
 }

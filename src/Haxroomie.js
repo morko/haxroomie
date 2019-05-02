@@ -2,17 +2,19 @@ const { RoomController } = require('./room');
 const puppeteer = require('puppeteer');
 const path = require('path');
 
+// allow only launching one browser
+let browserLock = undefined;
+
 /**
- * Class for spawning the headless chrome browser and getting 
- * [sessions]{@link Session} for the browser instance.
+ * Class for spawning the headless chrome browser and managing
+ * [RoomControllers]{@link RoomController}.
  * 
- * Each [session]{@link Session} controls a tab in the headless chrome.
+ * Each [RoomController]{@link RoomController} controls one room
+ * running in a browsers tab.
  * 
  * After creating the Haxroomie instance it is required to launch the browser
- * with the [createBrowser method]{@link Haxroomie#createBrowser} before 
- * requesting sessions with the 
- * [getSession method]{@link Haxroomie#getSession}.
- * @memberof module:haxroomie
+ * with the [launchBrowser method]{@link Haxroomie#launchBrowser} before 
+ * anything else.
  */
 class Haxroomie {
 
@@ -36,7 +38,7 @@ class Haxroomie {
    */
   constructor(opt) {
     this.browser = null;
-    this.roomSessions = {};
+    this.rooms = new Map();
 
     opt = opt || {};
 
@@ -58,28 +60,22 @@ class Haxroomie {
    * given in Haxroomie classes constructor. It is only possible to launch one
    * browser.
    */
-  async createBrowser() {
+  async launchBrowser() {
     // make sure there isnt a browser running already
     let browser = await this.getRunningBrowser();
     // if there is a browser running throw an error
-    if (browser) {
-      throw new Error(
-        `BROWSER_RUNNING: http://localhost:${this.port}.
-        Use another port or close the browser.`
-      )
-    }
+    if (browser || browserLock) throw new Error('You can launch only 1 browser!')
 
-    if (!this.browser) {
-      this.browser = await puppeteer.launch({
-        headless: this.headless,
-        devtools: !this.headless,
-        userDataDir: this.userDataDir,
-        args: [
-          `--remote-debugging-port=${this.port}`,
-          `--no-sandbox=${this.noSandbox}`
-        ]
-      });
-    }
+    this.browser = await puppeteer.launch({
+      headless: this.headless,
+      devtools: !this.headless,
+      userDataDir: this.userDataDir,
+      args: [
+        `--remote-debugging-port=${this.port}`,
+        `--no-sandbox=${this.noSandbox}`
+      ]
+    });
+    browserLock = true;
     return this.browser;
   }
 
@@ -97,50 +93,124 @@ class Haxroomie {
     return this.browser;
   }
 
+
   /**
    * Closes the puppeteer controlled browser.
    */
   async closeBrowser() {
     if (this.browser) await this.browser.close();
+    this.rooms = new Map();
+    browserLock = false;
+    this.browser = null;
   }
 
   /**
-   * Returns an existing session or creates a new one with the given session
-   * id. Each session controls a tab in the browser instance.
-   * 
-   * @param {object|string|number} sessionID - id of the session to receive
-   * @returns {Session} - session object with the given id
+   * Checks that the instance has a connection to the browser.
+   * @private
    */
-  async getSession(sessionID) {
+  ensureInstanceIsUsable() {
     if (!this.browser) {
       throw new Error(`Browser is not running!`)
     }
-    if (!sessionID && sessionID !== 0) {
-      throw new Error('Missing required argument: sessionID');
-    }
-    // if there are no sessions get the default page
-    if (Object.keys(this.roomSessions).length === 0) {
-      let pages = await this.browser.pages();
-      let page = pages[0];
-      let session = await this.initSession(page, sessionID);
-      return session;
-    }
-
-    // if the session does not exist, create a new page
-    if (!this.roomSessions[sessionID]) {
-      let page = await this.browser.newPage();
-      let session = this.initSession(page, sessionID);
-      return session;
-    }
-
-    // if the session exists then return it
-    return this.roomSessions[sessionID].session;
   }
 
   /**
+   * Validates the given id.
+   * @param {string|number} id - ID to validate.
    * @private
    */
-  async initSession(page, sessionID) {
+  validateRoomID(id) {
+    if (!id && id !== 0 || typeof id !== 'number' && typeof id !== 'string') {
+      throw new Error('invalid id');
+    }
+  }
+
+  /**
+   * Checks if there is a room running with the given id.
+   * 
+   * @param {string|number} id - An id of the room.
+   * @returns {boolean} - Is there a room with given id?
+   */
+  hasRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    return this.rooms.has(id);
+  }
+  /**
+   * Returns a RoomController with the given id.
+   * 
+   * @param {string|number} id - An id of the room.
+   * @returns {RoomController} - RoomController with the given id or
+   *    undefined if there is no such room.
+   */
+  getRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    return this.rooms.get(id);
+  }
+
+  /**
+   * Returns the RoomController that was first added.
+   * @returns {RoomController} - First RoomController or
+   *    undefined if there is no such room.
+   */
+  getFirstRoom() {
+    for(let r of this.rooms.values()) {
+      return r;
+    }
+  }
+
+  /**
+   * Removes a RoomController with the given id.
+   * 
+   * Removing deletes the RoomController and closes the browser tab
+   * it is controlling.
+   * 
+   * @param {string|number} id 
+   */
+  async removeRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    let roomController = this.rooms.get(id);
+    if (roomController) {
+      await roomController.page.close();
+      this.rooms.delete(id);
+    }
+  }
+
+  /**
+   * Creates and adds a new RoomController with the given id.
+   * 
+   * @param {string|number} id 
+   * @return {RoomController} - The created RoomController.
+   */
+  async addRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    if (this.rooms.has(id)) throw new Error('id must be unique');
+    let page = await this.getNewPage();
+    let room = await this.createRoomController(page, id);
+    this.rooms.set(id, room);
+    return room;
+  }
+
+  /**
+   * Returns a new Puppeteer.Page object.
+   * @private
+   */
+  async getNewPage() {
+    if (this.rooms.size === 0) {
+      let pages = await this.browser.pages();
+      return pages[0];
+    }
+    return this.browser.newPage();
+  }
+
+  /**
+   * Factory method for creating RoomController instances.
+   * @private
+   */
+  async createRoomController(page, id) {
 
     const device = {
       'name': 'Galaxy S5',
@@ -159,12 +229,10 @@ class Haxroomie {
 
     let room = new RoomController({
       page: page,
-      id: sessionID,
+      id: id,
     });
 
-    this.roomSessions[sessionID] = room;
-
-    return room.session;
+    return room;
   }
 }
 

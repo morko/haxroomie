@@ -6,7 +6,6 @@ const EventEmitter = require('events');
 
 /**
  * Handles the opening and closing processes of the haxball room using puppeteer.
- * 
  */
 module.exports = class RoomOpener extends EventEmitter {
 
@@ -14,46 +13,57 @@ module.exports = class RoomOpener extends EventEmitter {
    * Constructs a new RoomOpener
    * 
    * @param {object} opt - options
-   * @param {object} opt.page - puppeteer.Page object
-   * @param {function} opt.onEventFromBrowser - function that gets called from the
-   *    headless browser context when a haxball roomObject event happens
-   * @param {object} [opt.timeout] - time to wait for the room link before
-   *    failing
-   * @param {object} opt.sessionId - The sessions id
-   * @param {object} [opt.encryptionKey] - Encryption key to use for 
-   *    LocalStorge.
+   * @param {object} opt.id - The RoomController id that this object belongs
+   *    to.
+   * @param {object} opt.page - Puppeteer.Page object.
+   * @param {function} opt.onRoomEvent - Function that gets called from the
+   *    browser context when a haxball roomObject event happens.
+   * @param {function} opt.onHHMEvent - Function that gets called from the
+   *    browser context when a Haxball Headless Manager (HHM) event happens.
+   * @param {object} [opt.timeout] - Time to wait for the room link before
+   *    giving up.
    */
   constructor(opt) {
     super();
     if (!opt) throw new Error('Missing required argument: opt');
+    if (!opt.id && opt.id !== 0) {
+      throw new Error('Missing required argument: opt.id');
+    }
     if (!opt.page) {
       throw new Error('Missing required argument: opt.page');
     }
-    if (!opt.onEventFromBrowser) {
-      throw new Error('Missing required argument: opt.onEventFromBrowser');
+    if (!opt.onRoomEvent) {
+      throw new Error('Missing required argument: opt.onRoomEvent');
     }
-    if (typeof opt.onEventFromBrowser !== 'function') {
-      throw new Error('opt.onEventFromBrowser has to be typeof function');
-    }
-    if (!opt.sessionId) {
-      throw new Error('Missing required argument: opt.sessionId');
+    if (!opt.onHHMEvent) {
+      throw new Error('Missing required argument: opt.onHHMEvent');
     }
     this.page = opt.page;
-    this.onEventFromBrowser = opt.onEventFromBrowser;
-    this.timeout = opt.timeout || 8;
-    this.sessionId = opt.sessionId;
-    this.encryptionKey = opt.encryptionKey || opt.sessionId;
+    this.onRoomEvent = opt.onRoomEvent;
+    this.onHHMEvent = opt.onHHMEvent;
+    this.timeout = opt.timeout || 12;
+    this.id = opt.id;
 
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
   }
 
+  /**
+   * Removes the quotes surrounding the token string if user includes them in
+   * the token.
+   * @param {string} token - Token for HaxBall headless room.
+   * @returns {string} - Trimmed token.
+   * @private
+   */
+  trimToken(token) {
+    return token.trim().replace(/^"(.+(?="$))"$/, '$1');
+  }
+
   /** 
-   * Opens the room.
-   * See Session for documentation.
+   * Opens the HaxBall room.
+   * See RoomController#openRoom for documentation.
    *
-   * @returns {object} - config object merged with HHM config and 
-   *    roomLink property attached to it
+   * @returns {RoomInfo} - Information about the opened room.
    */
   async open(config) {
 
@@ -64,6 +74,8 @@ module.exports = class RoomOpener extends EventEmitter {
     if (!config.token) {
       throw new Error('config is missing token');
     }
+
+    config.token = this.trimToken(config.token)
 
     logger.debug('OPEN_ROOM: Navigating to ' + this.url);
     try {
@@ -132,14 +144,7 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async onRoomStarted(config) {
 
-    // expose function in the browser context to be able to recieve messages
-    let hasSend = await this.page.evaluate(() => {return window.sendToHaxroomie});
-    if (!hasSend) {
-      await this.page.exposeFunction(
-        'sendToHaxroomie',
-        this.onEventFromBrowser
-      );
-    }
+    await this.exposeListenersToBrowser();
 
     logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
     try {
@@ -177,6 +182,31 @@ module.exports = class RoomOpener extends EventEmitter {
 
   /**
    * @private
+   * Creates window.haxroomieOnRoomEvent and window.haxroomieOnHHMEvent
+   * functions in the browser. These will get called from the browsers
+   * context whenever a HaxBall roomObject event or HHM event happens.
+   * 
+   * Whenever the functions in the browser context are called puppeteer calls
+   * their counterparts (this.onRoomEvent and this.onHHMEvent) with the same
+   * arguments.
+   */
+  async exposeListenersToBrowser() {
+    let hasOnRoomEvent = await this.page.evaluate(() => {
+      return window.haxroomieOnRoomEvent
+    });
+    if (!hasOnRoomEvent) {
+      await this.page.exposeFunction('haxroomieOnRoomEvent', this.onRoomEvent);
+    }
+    let hasOnHHMEvent = await this.page.evaluate(() => {
+      return window.haxroomieOnHHMEvent
+    });
+    if (!hasOnHHMEvent) {
+      await this.page.exposeFunction('haxroomieOnHHMEvent', this.onHHMEvent);
+    }
+  }
+
+  /**
+   * @private
    * Gets the frame where all the DOM elements of HaxBall headless host
    * webpage are.
    */
@@ -205,7 +235,7 @@ module.exports = class RoomOpener extends EventEmitter {
    */
   async injectSharedStorage() {
     let ss = require('./shared-storage');
-    await this.page.evaluate(ss, this.sessionId);
+    await this.page.evaluate(ss, this.id);
   }
 
 
