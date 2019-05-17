@@ -310,8 +310,6 @@ class CommandHandler {
     let success = await this.room.disablePlugin(name);
     pluginData = await this.room.getPlugin(name);
     
-    let pluginString = this.pluginDataToString(pluginData);
-    
     if (!success) {
       this.print(`Could not disable ${name}`, `ERROR`);
     }
