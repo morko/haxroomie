@@ -112,7 +112,7 @@ Config file is a Node.js module that exports the config object. You dont really 
 You can find examples of configs in
 [projects example directory](https://github.com/morko/haxroomie/tree/master/examples/configs).
 
-Here is an example of a config that starts one room with explanations in the comments for what all the settings do. The comments are the text between /** and */.
+Here is an example of a config with all options present. **Note that this example does not work as it is.**
 
 ```js
 let config = {
@@ -122,102 +122,68 @@ let config = {
    */
   'room1': {
 
-    /**
-     * Set to false if you don't want the room to start when you start haxroomie.
-     */
     autoStart: true,
-
-    /**
-     * The name for the room.
-     */
     roomName: 'haxroomie',
-
-    /**
-     * The name for the host player.
-     */
     playerName: 'host',
-
-    /**
-     * Max number of players the room accepts.
-     */
     maxPlayers: 12,
-
-    /**
-     * If true the room will appear in the room list.
-     */
     public: false,
-
-    /**  
-     * Geolocation override for the room.
-     * `geo : {"code": string, "lat" : float, "lon" : float}`
-     * 
-     * You can use https://www.latlong.net/ to find the coordinates easily.
-     * The code is a country code in two letter ISO format listed in
-     * https://countrycode.org/.
-     */
     geo: { code: 'eu', lat: '52.5192', lon: '13.4061'},
-
-    /**
-     * Repository configuration array for the Haxball Headless Manager (HHM).
-     * Here you can tell which repositories to load in addition to the default
-     * one.
-     * 
-     * By default haxroomie loads the core plugin repository by saviola. You
-     * can find these files in
-     * https://github.com/saviola777/hhm-plugins/tree/master/src/sav.
-     * The files contain information about what kind of options they support
-     * and what they do. 
-     * 
-     * See https://github.com/saviola777/haxball-headless-manager#configuration-file
-     * for more detailed explanation.
-     */
     repositories: [
       {
         type: 'github',
         repository: 'morko/hhm-plugins'
       },
     ],
-
-    /**
-     * Plugin configuration object for the Haxball Headless Manager (HHM).
-     * Here you can tell which plugins to load from the repositories that are
-     * available and give them optional configurations.
-     * 
-     * By default haxroomie loads the core plugin repository by saviola. You
-     * can find these files in
-     * https://github.com/saviola777/hhm-plugins/tree/master/src/sav.
-     * The files contain information about what kind of options they support
-     * and what they do. 
-     * 
-     * See https://github.com/saviola777/haxball-headless-manager#configuration-file
-     * for more detailed explanation about this configuration.
-     * 
-     * See https://haxplugins.tk/docs/tutorial-writing-plugins.html for deeper
-     * information about the plugins and how to write your own.
-     */
     pluginConfig: {
       'sav/roles': {
-        admin: 'adminpass',
-        host: 'hostpass',
+        roles: {
+          admin: 'adminpass',
+          host: 'hostpass'
+        }
       }
     },
-
-    /**
-     * Haxball Headless room script to load when starting haxroomie.
-     * IF GIVEN, DISABLES ALL OTHER PLUGINS!
-     */
     roomScript: '/path/to/room-script.js'
-
-    /**
-     * Path to custom Haxball Headless Manager (HHM) configuration file.
-     * You rarely need this.
-     */
     hhmConfig: '/path/to/hhm-config.js',
   }
 };
 module.exports = config;
 ```
+### Config properties explained
 
+- `autoStart` Set to true if you want the room to start on startup.
+- `roomName` The name for the room.
+- `playerName` The name for the host player.
+- `maxPlayers` Max number of players the room accepts.
+- `public` If true the room will appear in the room list.
+- `geo` Geolocation override for the room. `geo : {"code": string, "lat" : float, "lon" : float}`.
+  You can use https://www.latlong.net/ to find the coordinates easily.
+  The code is a country code in two letter ISO format listed in
+  https://countrycode.org/.
+- `repositories` Repository configuration array for the Haxball Headless Manager (HHM).
+  With this you can tell which repositories to load in addition to the default one.
+  By default haxroomie loads the 
+  [plugin repository by saviola](https://github.com/saviola777/hhm-plugins).
+  [Here](https://github.com/saviola777/haxball-headless-manager#using-a-webserver)
+  you can see how to add repository from an URL and
+  [here](https://github.com/saviola777/haxball-headless-manager#using-a-github-repository)
+  how to add one from GitHub.
+- `pluginConfig` Plugin configuration object for the Haxball Headless Manager (HHM).
+  With this you can tell which plugins to load from the repositories that are
+  available and give them optional configurations. 
+  By default haxroomie loads the core plugin repository by saviola. You
+  can find these files in
+  [saviolas GitHub page](https://github.com/saviola777/hhm-plugins/tree/master/src/sav).
+  The files contain information about what kind of options they support
+  and what they do. 
+  See [saviolas GitHub page](https://github.com/saviola777/haxball-headless-manager#configuration-file)
+  for more detailed explanation about this configuration.
+  See https://haxplugins.tk/docs/tutorial-writing-plugins.html for deeper
+  information about the plugins and how to write your own.
+- `roomScript` Haxball Headless room script to load when starting haxroomie.
+  **Disables all other plugins!**. See [Using own room scripts](#using-own-room-scripts).
+- `hhmConfig` Path to custom Haxball Headless Manager (HHM) configuration file.
+  You rarely need this. See [Using own HHM config](#using-own-hhm-config)
+    
 To configure more than one room just add a new property for the config object.
 
 e.g.
@@ -253,7 +219,7 @@ The scripts have few restrictions compared to vanilla room scripts mentioned in
 To run **multiple** plugins you should create your own
 [HHM plugin repository](https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository).
 Read the guide for writing own HHM plugins at
-<https://haxplugins.tk/docs/tutorial-writing-plugins.html>.
+[HHM docs](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
 
 Use the configs `repositories` property to enable the repository and
 `pluginConfig` property to set which plugins to enable and pass them
