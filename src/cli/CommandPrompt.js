@@ -189,26 +189,28 @@ module.exports = class CommandPrompt {
   }
 
   onPlayerChat(player, message) {
-    this.print(`${player.name}> ${message}`, `CHAT`);
+    this.print(`${player.name} (id:${player.id})> ${message}`, `CHAT`);
   }
 
   onPlayerJoin(player) {
-    this.print(`${player.name}`, `PLAYER JOINED`);
+    this.print(`${player.name} (id:${player.id})`, `PLAYER JOINED`);
   }
 
   onPlayerLeave(player) {
-    this.print(`${player.name}`, `PLAYER LEFT`);
+    this.print(`${player.name} (id:${player.id})`, `PLAYER LEFT`);
   }
 
   onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
     if (ban) {
       this.print(
-        `${kickedPlayer.name} banned by ${byPlayer.name} | reason: ${reason}`,
+        `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
+        + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
         `PLAYER BANNED`
       );    
     } else {
       this.print(
-        `${kickedPlayer.name} kicked by ${byPlayer.name} | reason: ${reason}`,
+        `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
+        + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
         `PLAYER KICKED`
       );    
     }
@@ -216,7 +218,8 @@ module.exports = class CommandPrompt {
 
   onPlayerAdminChange(changedPlayer, byPlayer) {
     this.print(
-      `${changedPlayer.name} by ${byPlayer.name} `
+      `${changedPlayer.name} (id:${changedPlayer.id}) `
+      + `by ${byPlayer.name} (id:${byPlayer.id})`
       + `| admin: ${changedPlayer.admin}`,
       `ADMIN CHANGED`
     );
