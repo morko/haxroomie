@@ -1,13 +1,10 @@
 /**
- * This is a haxball headless manager plugin for haxroomie to be able to send
+ * This is a Haxball Headless Manager plugin for haxroomie to be able to send
  * the room events from browser to the haxroomie, call functions in the
  * roomObject and act as an adaptor between haxroomie and HHM.
  * 
  * Haxroomie exposes a function as window.sendToHaxroomie that the browser 
  * scripts can use to send messages to haxroomie.
- * 
- * window.hroomie.registerEventHandlers is called from haxroomie to register the
- * handlers for roomObject and HHM events.
  */
 let room = HBInit();
 
