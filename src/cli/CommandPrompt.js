@@ -202,17 +202,33 @@ module.exports = class CommandPrompt {
 
   onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
     if (ban) {
-      this.print(
-        `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
-        + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
-        `PLAYER BANNED`
-      );    
+      if (byPlayer) {
+        this.print(
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
+          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
+          `PLAYER BANNED`
+        );    
+      } else {
+        this.print(
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned `
+          + `| reason: ${reason}`,
+          `PLAYER BANNED`
+        );    
+      }
     } else {
-      this.print(
-        `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
-        + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
-        `PLAYER KICKED`
-      );    
+      if (byPlayer) {
+        this.print(
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
+          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
+          `PLAYER KICKED`
+        );    
+      } else {
+        this.print(
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked `
+          + `| reason: ${reason}`,
+          `PLAYER KICKED`
+        );    
+      }
     }
   }
 
