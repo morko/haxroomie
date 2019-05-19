@@ -75,7 +75,8 @@ HHM.config.plugins = {
   },
   'sav/commands': {
     commandPrefix: '!'
-  }
+  },
+  'sav/chat': {}
 };
 
 if (haxroomie.pluginConfig) {
