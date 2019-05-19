@@ -355,7 +355,7 @@ class RoomController extends EventEmitter {
    * Kicks a player from the room.
    * @param {number} id - Id of player to ban.
    */
-  async ban(id) {
+  async kick(id) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
     if (!id && id !== 0) throw new Error('Missing required argument: id');
