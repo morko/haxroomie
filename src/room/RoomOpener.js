@@ -146,13 +146,13 @@ module.exports = class RoomOpener extends EventEmitter {
 
     await this.exposeListenersToBrowser();
 
-    logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugin.');
+    logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugins.');
     try {
-      await this.injectHaxroomiePlugin();
+      await this.injectHaxroomiePlugins();
     } catch (err) {
       logger.error(err);
       throw new Error(
-        `Unable to inject haxroomie HHM plugin!`
+        `Unable to inject haxroomie HHM plugins!`
       );
     }
 
@@ -221,10 +221,13 @@ module.exports = class RoomOpener extends EventEmitter {
    * Injects the haxroomies headless host manager plugin to the headless
    * browser context.
    */
-  async injectHaxroomiePlugin() {
-    await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin, 'hr/core');
-    }, this.readHHMFile('haxroomie-plugin.js'));
+  async injectHaxroomiePlugins() {
+    let corePlugin = this.readHHMFile('haxroomie-plugin.js');
+    let kickbanPlugin = this.readHHMFile('kickban-plugin.js');
+    await this.page.evaluate((corePlugin, kickbanPlugin) => {
+      window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
+      window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
+    }, corePlugin, kickbanPlugin);
   }
 
   /**

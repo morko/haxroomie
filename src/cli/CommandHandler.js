@@ -105,11 +105,13 @@ class CommandHandler {
       + `${colors.cyan(`reload`)}:     reloads the config\n`
       + `${colors.cyan(`chat`)}:       sends a chat message to the room\n`
       + `${colors.cyan(`players`)}:    get a list of players in the room\n`
-      + `${colors.cyan(`kick`)}:       kicks a player with given id from the room\n`
-      + `${colors.cyan(`ban`)}:        bans a player with given id from the room\n`
+      + `${colors.cyan(`kick`)}:       kicks a player with given id\n`
+      + `${colors.cyan(`ban`)}:        bans a player with given id\n`
+      + `${colors.cyan(`unban`)}:      removes a ban of player with given id\n`
+      + `${colors.cyan(`banlist`)}:    get a list of banned players\n`
+      + `${colors.cyan(`clearbans`)}:  clears all the bans\n`
       + `${colors.cyan(`admin`)}:      gives admin to a player with given id\n`
       + `${colors.cyan(`unadmin`)}:    removes admin from a player with given id\n`
-      + `${colors.cyan(`clearbans`)}:  clears all the bans\n`
       + `${colors.cyan(`plugins`)}:    gets a list of plugins\n`
       + `${colors.cyan(`plugin`)}:     get detailed information about given plugin name\n`
       + `${colors.cyan(`enable`)}:     enables the plugin with given name\n`
@@ -225,8 +227,25 @@ class CommandHandler {
       this.print(`no player with id: ${id}`, `ERROR`);
       return;
     }
-    await this.room.callRoom('kickPlayer', id, 'Bye!', true);
-  
+    await this.room.ban(id);
+  }
+
+  async unban(id) {
+    if (!id && id !== 0) {
+      this.print(`Usage: unban [player_id]`, `ERROR`);
+      return;
+    }
+    await this.room.unban(id);
+  }
+
+  async banlist() {
+    let bannedPlayers = await this.room.bannedPlayers();
+    if (bannedPlayers.length === 0) {
+      this.print('No banned players.');
+      return;
+    }
+    bannedPlayers = bannedPlayers.map((p) =>`id:${p.id} - ${p.name}`);
+    this.print(bannedPlayers.join('\n'));
   }
   
   async admin(id) {
