@@ -5,7 +5,7 @@
  * Copy this to the haxroomie directory and edit to your liking to
  * easily get haxroomie running.
  * 
- * CHANGE THE admin AND host PASSWORDS!!!
+ * CHANGE THE admin PASSWORD!!!
  */
 
 let config = {
@@ -16,10 +16,10 @@ let config = {
     maxPlayers: 20,
     public: true,
     pluginConfig: {
+      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
           admin: 'adminpass',
-          host: 'hostpass',
         }
       }
     }
@@ -31,10 +31,10 @@ let config = {
     maxPlayers: 20,
     public: false,
     pluginConfig: {
+      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
           admin: 'adminpass',
-          host: 'hostpass',
         }
       }
     }

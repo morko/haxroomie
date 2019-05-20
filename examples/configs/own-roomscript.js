@@ -5,8 +5,6 @@
  * 
  * Copy this to the haxroomie directory and edit to your liking to
  * easily get haxroomie running.
- * 
- * CHANGE THE admin AND host PASSWORDS!!!
  */
 
 const path = require('path');

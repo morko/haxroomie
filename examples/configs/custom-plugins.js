@@ -8,8 +8,6 @@
  * 
  * Copy this to the haxroomie directory and edit to your liking to
  * easily get haxroomie running.
- * 
- * CHANGE THE admin AND host PASSWORDS!!!
  */
 
 const path = require('path');
@@ -22,7 +20,7 @@ let config = {
     maxPlayers: 10,
     public: false,
     plugins: {
-      'hr/autoadmin': path.join(__dirname, '..', 'room-script.js')
+      'hr/always-one-admin': path.join(__dirname, '..', 'room-script.js')
     }
   },
 };

@@ -5,7 +5,7 @@
  * Copy this to the haxroomie directory and edit to your liking to
  * easily get haxroomie running.
  * 
- * CHANGE THE admin AND host PASSWORDS!!!
+ * CHANGE THE admin PASSWORD!!!
  */
 
 let config = {
@@ -15,14 +15,23 @@ let config = {
     playerName: 'host',
     maxPlayers: 10,
     public: true,
-    geo: { code: 'eu', lat: '52.5192', lon: '13.4061'},
+    repositories: [
+      {
+        type: `github`,
+        repository: `morko/hhm-sala-plugins`
+      }
+    ],
     pluginConfig: {
+      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
           admin: 'adminpass',
-          host: 'hostpass',
         }
-      }
+      },
+      // spam protection
+      'hr/spam': {},
+      // ensures room always has an admin
+      'hr/always-one-admin': {}
     }
   },
   'pub2': {
@@ -31,13 +40,23 @@ let config = {
     playerName: 'host',
     maxPlayers: 10,
     public: true,
+    repositories: [
+      {
+        type: `github`,
+        repository: `morko/hhm-sala-plugins`
+      }
+    ],
     pluginConfig: {
+      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
           admin: 'adminpass',
-          host: 'hostpass',
         }
-      }
+      },
+      // spam protection
+      'hr/spam': {},
+      // ensures room always has an admin
+      'hr/always-one-admin': {}
     }
   }
 };

@@ -10,7 +10,7 @@
 
 let room = HBInit();
 room.pluginSpec = {
-  name: `hr/autoadmin`,
+  name: `hr/always-one-admin`,
   author: `salamini`,
   version: `1.0.0`
 };
