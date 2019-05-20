@@ -154,14 +154,6 @@ module.exports = class RoomOpener extends EventEmitter {
 
     await this.exposeListenersToBrowser();
 
-    logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugins.');
-    try {
-      await this.injectHaxroomiePlugins();
-    } catch (err) {
-      logger.error(err);
-      throw new Error(`Failed to inject haxroomie HHM plugins!`);
-    }
-
     if (config.plugins) {
       logger.debug('OPEN_ROOM: Injecting custom HHM plugins.');
       try {
@@ -170,6 +162,14 @@ module.exports = class RoomOpener extends EventEmitter {
         logger.error(err);
         throw new Error(`Failed to inject custom plugins!`);
       }
+    }
+
+    logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugins.');
+    try {
+      await this.injectHaxroomiePlugins();
+    } catch (err) {
+      logger.error(err);
+      throw new Error(`Failed to inject haxroomie HHM plugins!`);
     }
 
     if (config.roomScript) {
