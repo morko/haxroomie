@@ -14,7 +14,7 @@ let config = {
     roomName: 'fs arena',
     playerName: 'host',
     maxPlayers: 20,
-    public: true,
+    public: false,
     pluginConfig: {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
