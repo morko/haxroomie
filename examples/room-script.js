@@ -1,7 +1,19 @@
-var room = HBInit();
-room.setDefaultStadium("Big");
-room.setScoreLimit(5);
-room.setTimeLimit(0);
+/**
+ * This is an example of a plugin for HHM that can be also used as a single
+ * room script.
+ * 
+ * The plugin just gives admins to first player that join and passes the
+ * admin to someone else if the only admin leaves.
+ * 
+ * Code has been ripped off from the Haxball Headless Wiki.
+ */
+
+let room = HBInit();
+room.pluginSpec = {
+  name: `hr/autoadmin`,
+  author: `salamini`,
+  version: `1.0.0`
+};
 
 // If there are no admins left in the room give admin to one of the remaining players.
 function updateAdmins() { 

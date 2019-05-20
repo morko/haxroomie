@@ -97,6 +97,14 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
+    if (config.hhm) {
+      try {
+        config.hhm = fs.readFileSync(config.hhm, { encoding: 'utf-8' });
+      } catch(err) {
+        logger.error(`Could not load HHM from ${config.hhm}.`);
+        config.hhm = undefined;
+      }
+    }
     let hhmConfig;
     try {
       if (config.hhmConfig) {
@@ -151,9 +159,17 @@ module.exports = class RoomOpener extends EventEmitter {
       await this.injectHaxroomiePlugins();
     } catch (err) {
       logger.error(err);
-      throw new Error(
-        `Unable to inject haxroomie HHM plugins!`
-      );
+      throw new Error(`Failed to inject haxroomie HHM plugins!`);
+    }
+
+    if (config.plugins) {
+      logger.debug('OPEN_ROOM: Injecting custom HHM plugins.');
+      try {
+        await this.injectCustomPlugins(config.plugins);
+      } catch (err) {
+        logger.error(err);
+        throw new Error(`Failed to inject custom plugins!`);
+      }
     }
 
     if (config.roomScript) {
@@ -228,6 +244,23 @@ module.exports = class RoomOpener extends EventEmitter {
       window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
       window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
     }, corePlugin, kickbanPlugin);
+  }
+
+  /**
+   * Injects the given Haxroomie Headless Host manager plugins from an object.
+   * The object should contain the plugins name as a property and the file path
+   * string as its value.
+   * @param {object} plugins - 
+   */
+  async injectCustomPlugins(plugins) {
+    for (let key of Object.keys(plugins)) {
+      plugins[key] = fs.readFileSync(plugins[key], { encoding: 'utf-8' });
+    }
+    await this.page.evaluate((plugins) => {
+      for (let key of Object.keys(plugins)) {
+        window.HHM.manager.addPluginByCode(plugins[key], key);
+      }
+    }, plugins);
   }
 
   /**

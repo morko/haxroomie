@@ -284,16 +284,19 @@ class RoomController extends EventEmitter {
    * @param {FileDef} [config.roomScript] - Regular haxball
    *    headless script to load when starting the room.
    * 
-   *    **Note that** if loading a
-   *    room script this way haxroomie will disable the default HHM plugins
-   *    rendering `config.hostPassword`, `config.adminPassword` and 
-   *    `config.pluginConfig` unused.
-   * 
-   *    To load multiple plugins set up a HHM repository.
+   *    **Note that** this will disable the default HHM plugins
+   *    so that `config.hostPassword`, `config.adminPassword` and 
+   *    `config.pluginConfig` are ignored.
    * @param {object} [config.pluginConfig] - Haxball Headless Manager
    *    plugin config object.
    * @param {Array.<string>} [config.repositories] - Array of additional
    *    HHM plugin repositories.
+   * @param {object} [config.plugins] - The object should contain the 
+   *    plugins name as a property and the file path string as its value.
+   *    Useful for testing plugins before uploading them to a server or
+   *    GitHub.
+   * @param {object} [config.hhm] - Path to built source of HHM. Useful
+   *    for testing changes to the source.
    * @returns {object} - Config that the room was started with including
    *    a `roomLink` property added to it containing the haxball rooms
    *    link.
