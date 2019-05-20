@@ -103,7 +103,7 @@ if (haxroomie.repositories) {
   ];
 }
 
-if (haxroomie.roomScript) {
+if (haxroomie.roomScript || haxroomie.disableDefaultPlugins) {
   HHM.config.plugins = {};
 }
 

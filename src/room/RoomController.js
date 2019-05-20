@@ -297,6 +297,10 @@ class RoomController extends EventEmitter {
    *    GitHub.
    * @param {object} [config.hhm] - Path to built source of HHM. Useful
    *    for testing changes to the source.
+   * @param {boolean} [disableDefaultPlugins=false] - Set to true if you
+   *    want to disable the default HHM plugins that Haxroomie loads.
+   *    This can be useful e.f. if you want to test some plugins without others
+   *    interfering with it.
    * @returns {object} - Config that the room was started with including
    *    a `roomLink` property added to it containing the haxball rooms
    *    link.
