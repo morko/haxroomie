@@ -345,11 +345,6 @@ class RoomController extends EventEmitter {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
     if (!fn) throw new Error('Missing required argument: fn');
-    if (fn === 'clearBan') {
-      throw new Error(
-        'clearBan is not supported. Use the unban method instead.'
-      );
-    }
     logger.debug(`RoomController#callRoom: ${JSON.stringify(fn)} ARGS: ${JSON.stringify(args)}`);
     let result = await this.page.evaluate((fn, args) => {
       return window.hroomie.callRoom(fn, ...args);

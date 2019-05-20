@@ -2,12 +2,12 @@
  * This is a Haxball Headless Manager plugin that keeps track of banned
  * players.
  * 
- * Provides `window.hroomie.bannedPlayers`, `window.hroomie.ban`
- * and `window.hroomie.unban` functions.
+ * Provides `window.hroomie.bannedPlayers`, `window.hroomie.ban`,
+ * `window.hroomie.unban` and `window.hroomie.kick` functions.
  * 
  * If `sav/commands` and `sav/roles` plugins are available, then this plugin
- * also provides commands `ban`, `unban` and `banlist` to be used with
- * `admin` and `host` roles.
+ * also provides commands `kick`, `ban`, `unban` and `banlist` to be used with
+ * `admin` role.
  */
 let room = HBInit();
 
@@ -26,11 +26,23 @@ Object.assign(window.hroomie, (function() {
 
   let bannedPlayerMap = new Map();
 
+  /**
+   *  Keep track of banned players. 
+   */
   room.onPlayerKicked = function(kickedPlayer, reason, ban, byPlayer) {
     if (ban) {
       bannedPlayerMap.set(kickedPlayer.id, kickedPlayer);
     }
   }
+
+  /**
+   * Extend the native room.clearBan function so that the player will
+   * get removed from the banned players.
+   */
+  room.extend('clearBan', ({ previousFunction }, playerId) => {
+    previousFunction(playerId);
+    bannedPlayerMap.delete(playerId);
+  });
 
   /**
    * Gets the player object with given player name.
@@ -43,9 +55,10 @@ Object.assign(window.hroomie, (function() {
     return player;
   }
 
+  // Add commands to control kicking and banning if `sav/commands`
+  // and `sav/roles` plugins are loaded.
   let commands = room.getPlugin(`sav/commands`);
   let roles = room.getPlugin(`sav/roles`);
-
   if (commands && roles) {
 
     room.onCommand1_kick = (byPlayer, [pName]) => {
@@ -112,6 +125,7 @@ Object.assign(window.hroomie, (function() {
 
   }
 
+  // This object will be merged to `window.hroomie`.
   return {
     kick,
     ban,
@@ -151,12 +165,13 @@ Object.assign(window.hroomie, (function() {
    * Removes a ban of player with given id.
    * 
    * @param {string|number} id - Id of the player.
-   * @returns {boolean} - Was the ban of player with given id removed.
+   * @returns {boolean} - Was there a banned player with given id.
    */
   function unban(id) {
     id = parseInt(id);
+    let hadPlayer = bannedPlayerMap.has(id);
     room.clearBan(id);
-    return bannedPlayerMap.delete(id);
+    return hadPlayer;
   }
 
   /**
