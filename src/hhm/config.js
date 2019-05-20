@@ -79,8 +79,10 @@ HHM.config.plugins = {
   'sav/chat': {}
 };
 
-if (haxroomie.pluginConfig) {
+if (haxroomie.pluginConfig && !haxroomie.disableDefaultPlugins) {
   window.hroomie.mergeDeep(HHM.config.plugins, haxroomie.pluginConfig);
+} else if (haxroomie.disableDefaultPlugins) {
+  HHM.config.plugins = haxroomie.pluginConfig || {};
 }
 
 HHM.config.repositories = [
@@ -103,7 +105,7 @@ if (haxroomie.repositories) {
   ];
 }
 
-if (haxroomie.roomScript || haxroomie.disableDefaultPlugins) {
+if (haxroomie.roomScript) {
   HHM.config.plugins = {};
 }
 
