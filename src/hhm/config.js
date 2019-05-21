@@ -90,9 +90,6 @@ HHM.config.repositories = [
     url: `${HHM.baseUrl}plugins/hhm-plugins/`,
   },
   {
-    url: `${HHM.baseUrl}plugins/fm/`,
-  },
-  {
     type: `github`,
     repository: `saviola777/hhm-plugins`
   },
