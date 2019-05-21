@@ -1,6 +1,7 @@
 const logger = require('../logger');
 const EventEmitter = require('events');
 const RoomOpener = require('./RoomOpener');
+const stringify = require('../stringify');
 
 /**
  * Emitted when the browser tab gets closed.
@@ -308,7 +309,7 @@ class RoomController extends EventEmitter {
   async openRoom(config) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (this.openRoomLock) throw new Error('Room is already being opened!');
-    logger.debug(`RoomController#openRoom: ${JSON.stringify(config)}`);
+    logger.debug(`RoomController#openRoom: ${stringify(config)}`);
     this.emit(`open-room-start`, config);
     this.openRoomLock = true;
 
@@ -345,7 +346,7 @@ class RoomController extends EventEmitter {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
     if (!fn) throw new Error('Missing required argument: fn');
-    logger.debug(`RoomController#callRoom: ${JSON.stringify(fn)} ARGS: ${JSON.stringify(args)}`);
+    logger.debug(`RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`);
     let result = await this.page.evaluate((fn, args) => {
       return window.hroomie.callRoom(fn, ...args);
     }, fn, args);
