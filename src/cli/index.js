@@ -42,8 +42,10 @@ const lockFilePath = path.join(__dirname, 'haxroomie.lock');
     lockFile.lockSync(lockFilePath);
   } catch (err) {
     logger.error(
-      `Could not acquire lock. `
-      + `Running multiple Haxroomie instances is not supported`
+      `Could not acquire lock.\n`
+      + `Running multiple Haxroomie instances is not supported.\n\n`
+      + `If you are sure you are not running multiple instances `
+      + `you can delete the file in\n${lockFilePath}`
     );
     return;
   }
