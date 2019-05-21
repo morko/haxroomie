@@ -291,11 +291,11 @@ class RoomController extends EventEmitter {
    *    plugin config object.
    * @param {Array.<string>} [config.repositories] - Array of additional
    *    HHM plugin repositories.
-   * @param {object} [config.plugins] - The object should contain the 
-   *    plugins name as a property and the file path string as its value.
+   * @param {Object.<string, FileDef>} [config.plugins] - The object should 
+   *    plugins name as a property and {@link FileDef} as its value.
    *    Useful for testing plugins before uploading them to a server or
    *    GitHub.
-   * @param {object} [config.hhm] - Path to built source of HHM. Useful
+   * @param {FileDef} [config.hhm] - Path to built source of HHM. Useful
    *    for testing changes to the source.
    * @param {boolean} [disableDefaultPlugins=false] - Set to true if you
    *    want to disable the default HHM plugins that Haxroomie loads.

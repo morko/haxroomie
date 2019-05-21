@@ -97,20 +97,13 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     logger.debug('OPEN_ROOM: Starting Headless Host Manager');
-    let hhm;
-    if (config.hhm) {
-      try {
-        hhm = fs.readFileSync(config.hhm, { encoding: 'utf-8' });
-      } catch(err) {
-        logger.error(`Could not load HHM from ${config.hhm}.`);
-      }
-    }
+
     let hhmConfig;
     try {
       if (config.hhmConfig) {
-        hhmConfig = new Function('haxroomie', 'hhm', config.hhmConfig.content);
+        hhmConfig = new Function('haxroomie', config.hhmConfig.content);
       } else {
-        hhmConfig = new Function('haxroomie', 'hhm', this.readHHMFile('config.js'));
+        hhmConfig = new Function('haxroomie', this.readHHMFile('config.js'));
       }
     } catch (err) {
       logger.error(err);
@@ -118,7 +111,7 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     try {
-      await this.page.evaluate(hhmConfig, config, hhm);
+      await this.page.evaluate(hhmConfig, config);
     } catch (err) {
       logger.error(err);
       throw new Error(`Unable to start Headless Host Manager!`);
@@ -253,15 +246,12 @@ module.exports = class RoomOpener extends EventEmitter {
    * @param {object} plugins - 
    */
   async injectCustomPlugins(plugins) {
-    let loadedPlugins = {};
     for (let key of Object.keys(plugins)) {
-      loadedPlugins[key] = fs.readFileSync(plugins[key], { encoding: 'utf-8' });
+      await this.page.evaluate((plugin, pluginName) => {
+        window.HHM.manager.addPluginByCode(plugin.content, pluginName);
+      }, plugins[key], key);
     }
-    await this.page.evaluate((plugins) => {
-      for (let key of Object.keys(plugins)) {
-        window.HHM.manager.addPluginByCode(plugins[key], key);
-      }
-    }, loadedPlugins);
+
   }
 
   /**

@@ -132,10 +132,18 @@ class HRConsoleApp {
   loadFilesInRoomConfig(cfg) {
     let result = Object.assign({}, cfg);
     if (cfg.roomScript) {
-      result.roomScript = this.loadRoomScript(cfg.roomScript);
+      result.roomScript = this.loadFile(cfg.roomScript);
     }
     if (cfg.hhmConfig) {
-      result.hhmConfig = this.loadRoomScript(cfg.hhmConfig);
+      result.hhmConfig = this.loadFile(cfg.hhmConfig);
+    }
+    if (cfg.hhm) {
+      result.hhm = this.loadFile(cfg.hhm);
+    }
+    if (cfg.plugins) {
+      for (let key of Object.keys(cfg.plugins)) {
+        result.plugins[key] = this.loadFile(cfg.plugins[key]);
+      }
     }
     return result;
   }
@@ -185,10 +193,12 @@ class HRConsoleApp {
       
     for (let key of Object.keys(newConfig)) {
       if (key === 'token') break;
-      if (key === 'roomScript' || key === 'hhmConfig') {
-        if (!oldConfig[key]) {
+      if (key === 'roomScript' || key === 'hhmConfig' || key === 'hhm') {
+        if (this.hasFileInConfigBeenModified(newConfig[key], oldConfig[key])) {
           return true;
-        } else if (newConfig[key].modifiedTime !== oldConfig[key].modifiedTime) {
+        }
+      } else if (key === 'plugins') {
+        if (this.hasPluginsInConfigBeenModified(newConfig[key], oldConfig[key])) {
           return true;
         }
       } else {
@@ -206,6 +216,30 @@ class HRConsoleApp {
     return false;
   }
 
+  hasFileInConfigBeenModified(newFile, oldFile) {
+    if ((!oldFile && newFile) || (oldFile && !newFile)) {
+      return true;
+    } else if (newFile.modifiedTime !== oldFile.modifiedTime) {
+      return true;
+    }
+  }
+
+  hasPluginsInConfigBeenModified(newPlugins, oldPlugins) {
+    if ((!oldPlugins && newPlugins) || (oldPlugins && !newPlugins)) {
+      return true;
+    }
+    for (let key of Object.keys(newPlugins)) {
+      if (this.hasFileInConfigBeenModified(newPlugins[key], oldPlugins[key])) {
+        return true;
+      }
+    }
+    for (let key of Object.keys(oldPlugins)) {
+      if (!newPlugins[key]) {
+        return true;
+      }
+    }
+  }
+
   loadFile(file) {
     if (!fs.existsSync(file)) {
       logger.error(`No such file: ${file}`);
@@ -216,19 +250,6 @@ class HRConsoleApp {
 
     return {name: file, content: content, modifiedTime: modifiedTime};
   }
-
-  loadHHMConfig(file, client) {
-    let hhmConfig = this.loadFile(file, client);
-    if (!hhmConfig) return null;
-    return hhmConfig;
-  }
-
-  loadRoomScript(file, client) {
-    let script = this.loadFile(file, client);
-    if (!script) return;
-    return script;
-  }
-
 }
 
 module.exports = HRConsoleApp;

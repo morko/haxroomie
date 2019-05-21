@@ -112,7 +112,10 @@ if (haxroomie.roomScript) {
 // Load HHM if it has not already been loaded
 if (HHM.manager === undefined) {
   let s = document.createElement(`script`);
-  if (haxroomie.hhm) s.innerHTML = haxroomie.hhm;
-  else s.src = `${HHM.baseUrl}hhm.js`;
+  if (haxroomie.hhm && haxroomie.hhm.content) {
+    s.innerHTML = haxroomie.hhm.content;
+  } else {
+    s.src = `${HHM.baseUrl}hhm.js`;
+  }
   document.head.appendChild(s);
 }
