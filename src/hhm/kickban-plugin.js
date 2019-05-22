@@ -25,14 +25,20 @@ window.hroomie = window.hroomie || {};
 Object.assign(window.hroomie, (function() {
 
   let bannedPlayerMap = new Map();
+  let pendingUnbans = new Set();
 
   /**
    *  Keep track of banned players. 
    */
   room.onPlayerKicked = function(kickedPlayer, reason, ban, byPlayer) {
     if (ban) {
-      bannedPlayerMap.set(kickedPlayer.id, kickedPlayer);
-    }
+      // Make sure there is no unban pending for the player.
+      if (!pendingUnbans.has(kickedPlayer.id)) {
+        bannedPlayerMap.set(kickedPlayer.id, kickedPlayer);
+      } else {
+        pendingUnbans.delete(kickedPlayer.id);
+      }
+    } 
   }
 
   /**
@@ -41,7 +47,14 @@ Object.assign(window.hroomie, (function() {
    */
   room.extend('clearBan', ({ previousFunction }, playerId) => {
     previousFunction(playerId);
-    bannedPlayerMap.delete(playerId);
+    // If the player ban was cleared in the onPlayerKicked handler of other
+    // plugin then the player is probably not yet added to the bannedPlayerMap
+    // and Map.delete will return false. To be able to delete the ban from
+    // the list we add it to pendingUnbans that will be checked in this
+    // plugins onPlayerKicked 
+    if (!bannedPlayerMap.delete(playerId)) {
+      pendingUnbans.add(playerId);
+    }
   });
 
   /**
