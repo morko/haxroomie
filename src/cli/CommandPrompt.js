@@ -10,11 +10,15 @@ const COLORS = {
   'CHAT': colors.white.bold,
   'PLAYER JOINED': colors.green,
   'PLAYER LEFT': colors.cyan,
-  'PLAYER KICKED': colors.yellow,
+  'PLAYER KICKED': colors.yellow.bold,
+  'GAME PAUSED': colors.yellow,
+  'GAME UNPAUSED': colors.yellow,
+  'GAME STOPPED': colors.yellow,
+  'GAME STARTED': colors.yellow,
   'PLAYER BANNED': colors.red,
-  'ADMIN CHANGED': colors.purple,
+  'ADMIN CHANGED': colors.yellow,
   'PLAYERS': colors.green,
-  'TAB CLOSED': colors.purple,
+  'TAB CLOSED': colors.red,
   'ERROR': colors.red,
   'INVALID COMMAND': colors.red,
   'PLUGIN LOADED': colors.green,
@@ -198,6 +202,38 @@ module.exports = class CommandPrompt {
 
   onPlayerLeave(player) {
     this.print(`${player.name} (id:${player.id})`, `PLAYER LEFT`);
+  }
+  
+  onGamePause(player) {
+    if (!player) {
+      this.print(`by host`, `GAME PAUSED`);
+      return;
+    }
+    this.print(`by ${player.name} (id:${player.id})`, `GAME PAUSED`);
+  }
+
+  onGameUnpause(player) {
+    if (!player) {
+      this.print(`by host`, `GAME STOPPED`);
+      return;
+    }
+    this.print(`by ${player.name} (id:${player.id})`, `GAME UNPAUSED`);
+  }
+
+  onGameStop(player) {
+    if (!player) {
+      this.print(``, `GAME STOPPED`);
+      return;
+    }
+    this.print(`by ${player.name} (id:${player.id})`, `GAME STOPPED`);
+  }
+
+  onGameStart(player) {
+    if (!player) {
+      this.print(`by host`, `GAME STARTED`);
+      return;
+    }
+    this.print(`by ${player.name} (id:${player.id})`, `GAME STARTED`);
   }
 
   onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
