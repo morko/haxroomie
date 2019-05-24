@@ -364,7 +364,7 @@ class RoomController extends EventEmitter {
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     logger.debug(`RoomController#kick(${id})`);
     await this.page.evaluate((id) => {
-      return window.hroomie.kick(id);
+      return HHM.manager.getPluginByName('hr/kickban').kick(id);
     }, id);
   }
 
@@ -378,7 +378,7 @@ class RoomController extends EventEmitter {
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     logger.debug(`RoomController#ban(${id})`);
     await this.page.evaluate((id) => {
-      return window.hroomie.ban(id);
+      return HHM.manager.getPluginByName('hr/kickban').ban(id);
     }, id);
   }
 
@@ -392,7 +392,7 @@ class RoomController extends EventEmitter {
     if (!id && id !== 0) throw new Error('Missing required argument: id');
     logger.debug(`RoomController#unban(${id})`);
     await this.page.evaluate((id) => {
-      return window.hroomie.unban(id);
+      return HHM.manager.getPluginByName('hr/kickban').unban(id);
     }, id);
   }
  
@@ -405,7 +405,7 @@ class RoomController extends EventEmitter {
     if (!this.running) throw new Error('Room is not running.');
     logger.debug(`RoomController#bannedPlayers`);
     let result = await this.page.evaluate(() => {
-      return window.hroomie.bannedPlayers();
+      return HHM.manager.getPluginByName('hr/kickban').bannedPlayers();
     });
     return result;
   }

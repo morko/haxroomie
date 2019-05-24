@@ -2,8 +2,7 @@
  * This is a Haxball Headless Manager plugin that keeps track of banned
  * players.
  * 
- * Provides `window.hroomie.bannedPlayers`, `window.hroomie.ban`,
- * `window.hroomie.unban` and `window.hroomie.kick` functions.
+ * Exports `bannedPlayers`, `ban`, `unban` and `kick` functions.
  * 
  * If `sav/commands` and `sav/roles` plugins are available, then this plugin
  * also provides commands `kick`, `ban`, `unban` and `banlist` to be used with
@@ -21,183 +20,176 @@ room.pluginSpec = {
   incompatible_with: [],
 };
 
-window.hroomie = window.hroomie || {};
-Object.assign(window.hroomie, (function() {
+let bannedPlayerMap = new Map();
+let pendingUnbans = new Set();
 
-  let bannedPlayerMap = new Map();
-  let pendingUnbans = new Set();
-
-  /**
-   *  Keep track of banned players. 
-   */
-  room.onPlayerKicked = function(kickedPlayer, reason, ban, byPlayer) {
-    if (ban) {
-      // Make sure there is no unban pending for the player.
-      if (!pendingUnbans.has(kickedPlayer.id)) {
-        bannedPlayerMap.set(kickedPlayer.id, kickedPlayer);
-      } else {
-        pendingUnbans.delete(kickedPlayer.id);
-      }
-    } 
-  }
-
-  /**
-   * Extend the native room.clearBan function so that the player will
-   * get removed from the banned players.
-   */
-  room.extend('clearBan', ({ previousFunction }, playerId) => {
-    previousFunction(playerId);
-    // If the player ban was cleared in the onPlayerKicked handler of other
-    // plugin then the player is probably not yet added to the bannedPlayerMap
-    // and Map.delete will return false. To be able to delete the ban from
-    // the list we add it to pendingUnbans that will be checked in this
-    // plugins onPlayerKicked 
-    if (!bannedPlayerMap.delete(playerId)) {
-      pendingUnbans.add(playerId);
+/**
+ *  Keep track of banned players. 
+ */
+room.onPlayerKicked = function(kickedPlayer, reason, ban, byPlayer) {
+  if (ban) {
+    // Make sure there is no unban pending for the player.
+    if (!pendingUnbans.has(kickedPlayer.id)) {
+      bannedPlayerMap.set(kickedPlayer.id, kickedPlayer);
+    } else {
+      pendingUnbans.delete(kickedPlayer.id);
     }
-  });
+  } 
+}
 
-  /**
-   * Gets the player object with given player name.
-   * @param {string} pName - Player name prefixed with @ or without.
-   * @returns {object|undefined} - Player object or undefined if no such player.
-   */
-  function getPlayerWithName(pName) {
-    pName = pName.startsWith('@') ? pName.slice(1) : pName;
-    let player = room.getPlayerList().filter((p) => p.name === pName)[0];
-    return player;
+/**
+ * Extend the native room.clearBan function so that the player will
+ * get removed from the banned players.
+ */
+room.extend('clearBan', ({ previousFunction }, playerId) => {
+  previousFunction(playerId);
+  // If the player ban was cleared in the onPlayerKicked handler of other
+  // plugin then the player is probably not yet added to the bannedPlayerMap
+  // and Map.delete will return false. To be able to delete the ban from
+  // the list we add it to pendingUnbans that will be checked in this
+  // plugins onPlayerKicked 
+  if (!bannedPlayerMap.delete(playerId)) {
+    pendingUnbans.add(playerId);
   }
+});
 
-  // Add commands to control kicking and banning if `sav/commands`
-  // and `sav/roles` plugins are loaded.
-  let commands = room.getPlugin(`sav/commands`);
+/**
+ * Gets the player object with given player name.
+ * @param {string} pName - Player name prefixed with @ or without.
+ * @returns {object|undefined} - Player object or undefined if no such player.
+ */
+function getPlayerWithName(pName) {
+  pName = pName.startsWith('@') ? pName.slice(1) : pName;
+  let player = room.getPlayerList().filter((p) => p.name === pName)[0];
+  return player;
+}
+
+room.onCommand1_kick = (byPlayer, [pName]) => {
   let roles = room.getPlugin(`sav/roles`);
-  if (commands && roles) {
-
-    room.onCommand1_kick = (byPlayer, [pName]) => {
-      if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!kick`)) {
-        return;
-      }
-      let player = getPlayerWithName(pName);
-      if (!player) {
-        room.sendChat(`No player with name ${pName}.`, byPlayer.id);
-        return;
-      }
-      if (!kick(player.id)) {
-        room.sendChat(`Could not kick player ${pName}.`, byPlayer.id);
-        return;
-      }
-    }
-
-    room.onCommand1_ban = (byPlayer, [pName]) => {
-      if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!ban`)) {
-        return;
-      }
-      let player = getPlayerWithName(pName);
-      if (!player) {
-        room.sendChat(`No player with name ${pName}.`, byPlayer.id);
-        return;
-      }
-      if (!ban(player.id)) {
-        room.sendChat(`Could not ban player ${pName}.`, byPlayer.id);
-        return;
-      }
-    }
-
-    room.onCommand1_unban = (byPlayer, [playerId]) => {
-      if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!unban`)) {
-        return;
-      }
-      if (!unban(playerId)) {
-        room.sendChat(
-          `Could not remove ban of player with id ${playerId}. `
-          + `Make sure that the id matches one in the banlist.`
-        );
-      }
-    }
-
-    room.onCommand0_banlist = (byPlayer) => {
-      if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!banlist`)) {
-        return;
-      }
-      let bPlayers = bannedPlayers();
-      if (bPlayers.length === 0) {
-        room.sendChat('No banned players.', byPlayer.id);
-        return;
-      }
-      let bpList = bPlayers.map((p) =>`id:${p.id} - ${p.name}`)
-      room.sendChat(bpList.join('\n'), byPlayer.id);
-    }
-
-    let help = room.getPlugin(`sav/help`);
-    if (help) {
-      help.registerHelp(`kick`, ` PLAYER_NAME`);
-      help.registerHelp(`ban`, ` PLAYER_NAME`);
-      help.registerHelp(`unban`, ` PLAYER_ID`);
-    }
-
+  if (!roles) return;
+  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!kick`)) {
+    return;
   }
-
-  // This object will be merged to `window.hroomie`.
-  return {
-    kick,
-    ban,
-    unban,
-    bannedPlayers
-  };
-
-  /**
-   * Kicks a player with given id.
-   * 
-   * @param {string|number} id - Id of the player.
-   * @returns {boolean} - Was there a player with given id.
-   */
-  function kick(id) {
-    id = parseInt(id);
-    let player = room.getPlayer(id);
-    if (!player) return false;
-    room.kickPlayer(id, 'Bye!', false);
-    return true;
+  let player = getPlayerWithName(pName);
+  if (!player) {
+    room.sendChat(`No player with name ${pName}.`, byPlayer.id);
+    return;
   }
-
-  /**
-   * Bans a player with given id.
-   * 
-   * @param {string|number} id - Id of the player.
-   * @returns {boolean} - Was there a player with given id.
-   */
-  function ban(id) {
-    id = parseInt(id);
-    let player = room.getPlayer(id);
-    if (!player) return false;
-    room.kickPlayer(id, 'Bye!', true);
-    return true;
+  if (!kick(player.id)) {
+    room.sendChat(`Could not kick player ${pName}.`, byPlayer.id);
+    return;
   }
+}
 
-  /**
-   * Removes a ban of player with given id.
-   * 
-   * @param {string|number} id - Id of the player.
-   * @returns {boolean} - Was there a banned player with given id.
-   */
-  function unban(id) {
-    id = parseInt(id);
-    let hadPlayer = bannedPlayerMap.has(id);
-    room.clearBan(id);
-    return hadPlayer;
+room.onCommand1_ban = (byPlayer, [pName]) => {
+  let roles = room.getPlugin(`sav/roles`);
+  if (!roles) return;
+  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!ban`)) {
+    return;
   }
-
-  /**
-   * Returns an array of banned players.
-   * @returns {Array.<object>} - An array of banned Player objects.
-   */
-  function bannedPlayers() {
-    let list = [];
-    for (let p of bannedPlayerMap.values()) {
-      list.push(p);
-    }
-    return list;
+  let player = getPlayerWithName(pName);
+  if (!player) {
+    room.sendChat(`No player with name ${pName}.`, byPlayer.id);
+    return;
   }
+  if (!ban(player.id)) {
+    room.sendChat(`Could not ban player ${pName}.`, byPlayer.id);
+    return;
+  }
+}
 
+room.onCommand1_unban = (byPlayer, [playerId]) => {
+  let roles = room.getPlugin(`sav/roles`);
+  if (!roles) return;
+  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!unban`)) {
+    return;
+  }
+  if (!unban(playerId)) {
+    room.sendChat(
+      `Could not remove ban of player with id ${playerId}. `
+      + `Make sure that the id matches one in the banlist.`
+    );
+  }
+}
 
-})());
+room.onCommand0_banlist = (byPlayer) => {
+  let roles = room.getPlugin(`sav/roles`);
+  if (!roles) return;
+  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!banlist`)) {
+    return;
+  }
+  let bPlayers = bannedPlayers();
+  if (bPlayers.length === 0) {
+    room.sendChat('No banned players.', byPlayer.id);
+    return;
+  }
+  let bpList = bPlayers.map((p) =>`id:${p.id} - ${p.name}`)
+  room.sendChat(bpList.join('\n'), byPlayer.id);
+}
+
+let help = room.getPlugin(`sav/help`);
+if (help) {
+  help.registerHelp(`kick`, ` PLAYER_NAME`);
+  help.registerHelp(`ban`, ` PLAYER_NAME`);
+  help.registerHelp(`unban`, ` PLAYER_ID`);
+}
+
+/**
+ * Kicks a player with given id.
+ * 
+ * @param {string|number} id - Id of the player.
+ * @returns {boolean} - Was there a player with given id.
+ */
+function kick(id) {
+  id = parseInt(id);
+  let player = room.getPlayer(id);
+  if (!player) return false;
+  room.kickPlayer(id, 'Bye!', false);
+  return true;
+}
+
+/**
+ * Bans a player with given id.
+ * 
+ * @param {string|number} id - Id of the player.
+ * @returns {boolean} - Was there a player with given id.
+ */
+function ban(id) {
+  id = parseInt(id);
+  let player = room.getPlayer(id);
+  if (!player) return false;
+  room.kickPlayer(id, 'Bye!', true);
+  return true;
+}
+
+/**
+ * Removes a ban of player with given id.
+ * 
+ * @param {string|number} id - Id of the player.
+ * @returns {boolean} - Was there a banned player with given id.
+ */
+function unban(id) {
+  id = parseInt(id);
+  let hadPlayer = bannedPlayerMap.has(id);
+  room.clearBan(id);
+  return hadPlayer;
+}
+
+/**
+ * Returns an array of banned players.
+ * @returns {Array.<object>} - An array of banned Player objects.
+ */
+function bannedPlayers() {
+  let list = [];
+  for (let p of bannedPlayerMap.values()) {
+    list.push(p);
+  }
+  return list;
+}
+
+room.onRoomLink = function onRoomLink() {
+  room.kick = kick;
+  room.ban = ban;
+  room.unban = unban;
+  room.bannedPlayers = bannedPlayers;
+}
