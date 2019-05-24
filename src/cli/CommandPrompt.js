@@ -1,7 +1,7 @@
 const colors = require(`colors/safe`);
 const readline = require(`readline`);
 const CommandHandler = require(`./CommandHandler`);
-const logger = require(`../logger`);
+const RoomEventHandler = require(`./RoomEventHandler`);
 
 const COLORS = {
   'LOADED FILE': colors.yellow,
@@ -54,6 +54,7 @@ module.exports = class CommandPrompt {
     this.reloadConfig = opt.reloadConfig;
 
     this.currentRoom = null;
+    this.roomEventHandler = null;
     this.cmd = null;
     
     this.maxTypeLength = 20;
@@ -64,18 +65,17 @@ module.exports = class CommandPrompt {
     });
 
     this.onNewLine = this.onNewLine.bind(this);
-    this.onPluginLoaded = this.onPluginLoaded.bind(this);
-    this.onPluginRemoved = this.onPluginRemoved.bind(this);
-    this.onPluginEnabled = this.onPluginEnabled.bind(this);
-    this.onPluginDisabled = this.onPluginDisabled.bind(this);
-    this.onRoomEvent = this.onRoomEvent.bind(this);
-    this.addPersistentListeners();
+    this.print = this.print.bind(this);
+
+    this.addListeners();
   }
 
 
   setRoom(room) {
     if (this.currentRoom) this.removeListeners(this.currentRoom);
-    this.addListeners(room);
+    if (this.roomEventHandler) this.roomEventHandler.removeAllListeners('print');
+    this.roomEventHandler = new RoomEventHandler({room});
+    this.roomEventHandler.on('print', this.print);
     this.cmd = this.createCommandHandler(room);
     this.rl.setPrompt(`${room.id}> `)
     this.currentRoom = room;
@@ -103,7 +103,7 @@ module.exports = class CommandPrompt {
    * set to.
    * @private
    */
-  addPersistentListeners() {
+  addListeners() {
     this.rl.on(`line`, this.onNewLine);
     for (let [id, room] of this.haxroomie.rooms) {
       room.on(`open-room-start`, (e) => this.onOpenRoomStart(id, room, e));
@@ -115,7 +115,7 @@ module.exports = class CommandPrompt {
     }
   }
 
-  removePersistentListeners() {
+  removeListeners() {
     this.rl.removeListener(`line`, this.onNewLine);
     for (let room of this.haxroomie.rooms.values()) {
       room.removeAllListeners(`open-room-start`);
@@ -125,22 +125,6 @@ module.exports = class CommandPrompt {
       room.removeAllListeners(`page-crash`);
       room.removeAllListeners(`page-error`);
     }
-  }
-
-  addListeners(room) {
-    room.on(`plugin-loaded`, this.onPluginLoaded);
-    room.on(`plugin-removed`, this.onPluginRemoved);
-    room.on(`plugin-enabled`, this.onPluginEnabled);
-    room.on(`plugin-disabled`, this.onPluginDisabled);
-    room.on('room-event', this.onRoomEvent);
-  }
-
-  removeListeners(room) {
-    room.removeListener(`plugin-loaded`, this.onPluginLoaded);
-    room.removeListener(`plugin-removed`, this.onPluginRemoved);
-    room.removeListener(`plugin-enabled`, this.onPluginEnabled);
-    room.removeListener(`plugin-disabled`, this.onPluginDisabled);
-    room.removeListener('room-event', this.onRoomEvent);
   }
 
   onOpenRoomStart(id, room, eventArgs) {
@@ -168,114 +152,6 @@ module.exports = class CommandPrompt {
     this.print(`Page error: ${id}`, `ERROR`);
   }
 
-  onPluginLoaded(pluginData) {
-    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN LOADED`);
-  }
-
-  onPluginRemoved(pluginData) {
-    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN REMOVED`);
-  }
-
-  onPluginEnabled(pluginData) {
-    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN ENABLED`);
-  }
-
-  onPluginDisabled(pluginData) {
-    this.print(`${pluginData.pluginSpec.name}`, `PLUGIN DISABLED`);
-  }
-
-  onRoomEvent(roomEventArgs) {
-    let handlerName = roomEventArgs.handlerName;
-    let args = roomEventArgs.args || [];
-    if (typeof this[handlerName] === 'function') {
-      this[handlerName](...args);
-    }
-  }
-
-  onPlayerChat(player, message) {
-    this.print(`${player.name} (id:${player.id})> ${message}`, `CHAT`);
-  }
-
-  onPlayerJoin(player) {
-    this.print(`${player.name} (id:${player.id})`, `PLAYER JOINED`);
-  }
-
-  onPlayerLeave(player) {
-    this.print(`${player.name} (id:${player.id})`, `PLAYER LEFT`);
-  }
-  
-  onGamePause(player) {
-    if (!player) {
-      this.print(`by host`, `GAME PAUSED`);
-      return;
-    }
-    this.print(`by ${player.name} (id:${player.id})`, `GAME PAUSED`);
-  }
-
-  onGameUnpause(player) {
-    if (!player) {
-      this.print(`by host`, `GAME STOPPED`);
-      return;
-    }
-    this.print(`by ${player.name} (id:${player.id})`, `GAME UNPAUSED`);
-  }
-
-  onGameStop(player) {
-    if (!player) {
-      this.print(``, `GAME STOPPED`);
-      return;
-    }
-    this.print(`by ${player.name} (id:${player.id})`, `GAME STOPPED`);
-  }
-
-  onGameStart(player) {
-    if (!player) {
-      this.print(`by host`, `GAME STARTED`);
-      return;
-    }
-    this.print(`by ${player.name} (id:${player.id})`, `GAME STARTED`);
-  }
-
-  onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
-    if (ban) {
-      if (byPlayer) {
-        this.print(
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
-          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
-          `PLAYER BANNED`
-        );    
-      } else {
-        this.print(
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned `
-          + `| reason: ${reason}`,
-          `PLAYER BANNED`
-        );    
-      }
-    } else {
-      if (byPlayer) {
-        this.print(
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
-          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
-          `PLAYER KICKED`
-        );    
-      } else {
-        this.print(
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked `
-          + `| reason: ${reason}`,
-          `PLAYER KICKED`
-        );    
-      }
-    }
-  }
-
-  onPlayerAdminChange(changedPlayer, byPlayer) {
-    this.print(
-      `${changedPlayer.name} (id:${changedPlayer.id}) `
-      + `by ${byPlayer.name} (id:${byPlayer.id})`
-      + `| admin: ${changedPlayer.admin}`,
-      `ADMIN CHANGED`
-    );
-  }
 
   question(question, cb) {
     this.rl.question(question, cb);

@@ -183,8 +183,8 @@ class HRConsoleApp {
       }
     }
 
-    this.commandPrompt.removePersistentListeners();
-    this.commandPrompt.addPersistentListeners();
+    this.commandPrompt.removeListeners();
+    this.commandPrompt.addListeners();
     this.commandPrompt.setRoom(this.haxroomie.getFirstRoom());
     this.config = newConfig;
   }
