@@ -193,7 +193,7 @@ module.exports = class CommandPrompt {
    */
   async onNewLine(line) {
     try {
-      let result = await this.cmd.onNewLine(line);
+      await this.cmd.execute(line);
     } catch (err) {
       this.print(err.message, `ERROR`);
     }
