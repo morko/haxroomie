@@ -110,13 +110,13 @@ class RoomEventHandler extends EventEmitter {
       if (byPlayer) {
         this.emit(`print`, 
           `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
-          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
+          + `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
           `PLAYER BANNED`
         );    
       } else {
         this.emit(`print`, 
           `${kickedPlayer.name} (id:${kickedPlayer.id}) banned `
-          + `| reason: ${reason}`,
+          + `reason: ${reason}`,
           `PLAYER BANNED`
         );    
       }
@@ -124,7 +124,7 @@ class RoomEventHandler extends EventEmitter {
       if (byPlayer) {
         this.emit(`print`, 
           `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
-          + `${byPlayer.name} (id:${byPlayer.id}) | reason: ${reason}`,
+          + `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
           `PLAYER KICKED`
         );    
       } else {
@@ -138,11 +138,14 @@ class RoomEventHandler extends EventEmitter {
   }
 
   onPlayerAdminChange(changedPlayer, byPlayer) {
+    let type = 'UNADMIN';
+    if (changedPlayer.admin) {
+      type = 'ADMIN';
+    }
     this.emit(`print`, 
       `${changedPlayer.name} (id:${changedPlayer.id}) `
-      + `by ${byPlayer.name} (id:${byPlayer.id})`
-      + `| admin: ${changedPlayer.admin}`,
-      `ADMIN CHANGED`
+      + `by ${byPlayer.name} (id:${byPlayer.id})`,
+      type
     );
   }
 }
