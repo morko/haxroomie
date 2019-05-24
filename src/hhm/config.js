@@ -56,10 +56,6 @@ HHM.config.postInit = HBInit => {
     // This tells haxroomie that HHM has fully loaded and it RoomOpener
     // can continue its open method.
     window.hroomie.hhmStarted = true;
-
-    room.setDefaultStadium(`Big`);
-    room.setScoreLimit(0);
-    room.setTimeLimit(7);
   }
 };
 
