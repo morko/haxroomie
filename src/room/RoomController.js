@@ -21,6 +21,12 @@ const stringify = require('../stringify');
  */
 
 /**
+ * Emitted when Haxball Headless Manager (HHM) logs an error.
+ * @event RoomController#hhm-error
+ * @param {string} message - The logged error message.
+ */
+
+/**
  * Emitted when {@link RoomController#openRoom} has been called.
  * @event RoomController#open-room-start
  * @param {object} config - Config object given as argument to
@@ -205,7 +211,11 @@ class RoomController extends EventEmitter {
     });
 
     page.on('console', (msg) => {
-      logger.debug(`ROOM_LOG (${this.id}): ${msg.text()}`);
+      logger.debug(`[BROWSER] ${this.id}: ${msg.text()}`);
+      if (msg.startsWith(`[HHM error]`)) {
+        this.emit(`hhm-error`, msg);
+        logger.error(msg);
+      }
     });
 
     page.on('close', () => {
