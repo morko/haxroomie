@@ -21,9 +21,15 @@ const stringify = require('../stringify');
  */
 
 /**
- * Emitted when Haxball Headless Manager (HHM) logs an error.
- * @event RoomController#hhm-error
+ * Emitted when a browser tab logs an error to the console
+ * @event RoomController#error-logged
  * @param {string} message - The logged error message.
+ */
+
+/**
+ * Emitted when a browser tab logs a warning to the console
+ * @event RoomController#warning-logged
+ * @param {string} message - The logged warning message.
  */
 
 /**
@@ -212,9 +218,18 @@ class RoomController extends EventEmitter {
 
     page.on('console', (msg) => {
       logger.debug(`[BROWSER] ${this.id}: ${msg.text()}`);
-      if (msg.startsWith(`[HHM error]`)) {
-        this.emit(`hhm-error`, msg);
-        logger.error(msg);
+      if (msg.type() === 'error') {
+        if (msg.text().startsWith(
+          'Failed to load resource: the server responded with a '
+          + 'status of 404 (Not Found)'
+        )) {
+          return;
+        }
+        this.emit(`error-logged`, msg.text());
+        logger.error(msg.text());
+      } else if (msg.type() === 'warning') {
+        this.emit(`warning-logged`, msg.text());
+        logger.warn(msg.text());
       }
     });
 
