@@ -218,15 +218,27 @@ class RoomController extends EventEmitter {
 
     page.on('console', (msg) => {
       logger.debug(`[BROWSER] ${this.id}: ${msg.text()}`);
+
       if (msg.type() === 'error') {
+        // do not display the errors that happen during loading a plugin
         if (msg.text().startsWith(
           'Failed to load resource: the server responded with a '
           + 'status of 404 (Not Found)'
         )) {
           return;
         }
-        this.emit(`error-logged`, msg.text());
-        logger.error(msg.text());
+
+        // display the jsHandle objects
+        let logMsg = msg.text();
+        for (let jsHandle of msg.args()) {
+          if (jsHandle._remoteObject.type === 'object') {
+            logMsg += '\n' + jsHandle._remoteObject.description;
+          }
+        }
+
+        this.emit(`error-logged`, logMsg);
+        logger.error(logMsg);
+
       } else if (msg.type() === 'warning') {
         this.emit(`warning-logged`, msg.text());
         logger.warn(msg.text());
