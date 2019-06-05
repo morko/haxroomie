@@ -9,20 +9,18 @@ class CommandHandler {
     if (!opt.room) new TypeError('invalid arguments');
     if (!opt.haxroomie) new TypeError('invalid arguments');
     if (!opt.print) new TypeError('invalid arguments');
-    if (!opt.question) new TypeError('invalid arguments');
     if (!opt.setRoom) new TypeError('invalid arguments');
     if (!opt.openRoom) new TypeError('invalid arguments');
     if (!opt.closeRoom) new TypeError('invalid arguments');
-    if (!opt.reloadConfig) new TypeError('invalid arguments');
+    if (!opt.config) new TypeError('invalid arguments');
 
     this.room = opt.room;
     this.haxroomie = opt.haxroomie;
     this.print = opt.print;
-    this.question = opt.question;
     this.setRoom = opt.setRoom;
     this.openRoom = opt.openRoom;
     this.closeRoom = opt.closeRoom;
-    this.reloadConfig = opt.reloadConfig;
+    this.config = opt.config;
 
     this.cmdPrefix = 'onCommand_';
   }
@@ -70,17 +68,6 @@ class CommandHandler {
   async execute(line) {
     let cmd = this.parseLine(line)
     return cmd.command.run(...cmd.args);
-  }
-
-  /**
-   * Gets an array of available rooms.
-   */
-  getRooms() {
-    let rooms = [];
-    for (let [id, room] of this.haxroomie.rooms) {
-      rooms.push(room);
-    }
-    return rooms;
   }
 
   /**
@@ -153,7 +140,7 @@ class CommandHandler {
       description: 'Get the room link.',
       run: () => {
         if (!this.room.running) {
-          this.print(`Currently selected room is not running!`);
+          this.print(`Room is not running!`);
           return;
         }
         this.print(this.room.roomInfo.roomLink);
@@ -185,9 +172,30 @@ class CommandHandler {
 
   onCommand_reload() {
     return {
-      description: 'Reloads the config.',
+      description: 'Reloads the config and restarts the rooms that were modified.',
       run: () => {
-        return this.reloadConfig();
+        let modifiedRooms = this.config.reload();
+
+        for (let [roomId, modifiedProperties] of modifiedRooms) {
+          if (modifiedProperties === null) {
+            this.haxroomie.removeRoom(roomId);
+            continue;
+          }
+
+          if (!this.haxroomie.hasRoom(roomId)) {
+            this.haxroomie.addRoom(roomId);
+            let roomConfig = this.config.getRoom(roomId);
+            if (roomConfig.autoStart) {
+              this.openRoom(roomId)
+            }
+            continue;
+          }
+
+          let room = this.haxroomie.getRoom(roomId);
+          if (room.running) {
+            this.openRoom(roomId);
+          }
+        }
       }
     }
   }
@@ -196,13 +204,13 @@ class CommandHandler {
     return {
       description: 'Prints available rooms.',
       run: async () => {
-        let rooms = this.getRooms();
+        let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(rooms.map(async (r) => {
           let isRunning = r.running
             ? colors.green('running')
             : colors.yellow('stopped');
           let id = colors.cyan(r.id);
-          if (!isRunning) return `${id} - ${isRunning}`;
+          if (!r.running) return `${id} - ${isRunning}`;
     
           let roomLink = r.roomInfo.roomLink;
           let maxPlayers = r.roomInfo.maxPlayers;
@@ -423,6 +431,7 @@ class CommandHandler {
       description: 'Prints the plugins that depend of given plugin.',
       args: ['name'],
       run: async (name) => {
+        let plugins = await this.room.getPluginsThatDependOn(name);
         if (!plugins || plugins.length < 1) {
           this.print(`Plugin ${name} has no plugins that depend on it.`);
           return;

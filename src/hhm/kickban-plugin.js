@@ -23,6 +23,9 @@ room.pluginSpec = {
 let bannedPlayerMap = new Map();
 let pendingUnbans = new Set();
 
+// Roles that can use the in room commands.
+let allowedRoles = ['admin', 'host'];
+
 /**
  *  Keep track of banned players. 
  */
@@ -67,7 +70,7 @@ function getPlayerWithName(pName) {
 room.onCommand1_kick = (byPlayer, [pName]) => {
   let roles = room.getPlugin(`sav/roles`);
   if (!roles) return;
-  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!kick`)) {
+  if (!roles.ensurePlayerRoles(byPlayer.id, allowedRoles, room)) {
     return;
   }
   let player = getPlayerWithName(pName);
@@ -84,7 +87,7 @@ room.onCommand1_kick = (byPlayer, [pName]) => {
 room.onCommand1_ban = (byPlayer, [pName]) => {
   let roles = room.getPlugin(`sav/roles`);
   if (!roles) return;
-  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!ban`)) {
+  if (!roles.ensurePlayerRoles(byPlayer.id, allowedRoles, room)) {
     return;
   }
   let player = getPlayerWithName(pName);
@@ -101,7 +104,7 @@ room.onCommand1_ban = (byPlayer, [pName]) => {
 room.onCommand1_unban = (byPlayer, [playerId]) => {
   let roles = room.getPlugin(`sav/roles`);
   if (!roles) return;
-  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!unban`)) {
+  if (!roles.ensurePlayerRoles(byPlayer.id, allowedRoles, room)) {
     return;
   }
   if (!unban(playerId)) {
@@ -115,7 +118,7 @@ room.onCommand1_unban = (byPlayer, [playerId]) => {
 room.onCommand0_banlist = (byPlayer) => {
   let roles = room.getPlugin(`sav/roles`);
   if (!roles) return;
-  if (!roles.ensurePlayerRole(byPlayer.id, `admin`, `hr/kickban`, `!banlist`)) {
+  if (!roles.ensurePlayerRoles(byPlayer.id, allowedRoles, room)) {
     return;
   }
   let bPlayers = bannedPlayers();

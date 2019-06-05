@@ -99,23 +99,22 @@ class RoomController extends EventEmitter {
   /**
    * Event argument object that gets sent from the browser when a room event happens.
    * 
-   * Supported handlers are:
-   * ```
-   * 'onPlayerJoin'
-   * 'onPlayerLeave'
-   * 'onTeamVictory'
-   * 'onPlayerChat'
-   * 'onTeamGoal'
-   * 'onGameStart'
-   * 'onGameStop'
-   * 'onPlayerAdminChange'
-   * 'onPlayerTeamChange'
-   * 'onPlayerKicked'
-   * 'onGamePause'
-   * 'onGameUnpause'
-   * 'onPositionsReset'
-   * 'onStadiumChange'
-   * ```
+   * The `handlerName` can be one of the following:
+   * `onPlayerJoin`
+   * `onPlayerLeave` 
+   * `onTeamVictory` 
+   * `onPlayerChat` 
+   * `onTeamGoal` 
+   * `onGameStart` 
+   * `onGameStop` 
+   * `onPlayerAdminChange` 
+   * `onPlayerTeamChange` 
+   * `onPlayerKicked` 
+   * `onGamePause` 
+   * `onGameUnpause` 
+   * `onPositionsReset` 
+   * or
+   * `onStadiumChange` 
    * 
    * See the 
    * [roomObject documentation](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject)
@@ -302,10 +301,9 @@ class RoomController extends EventEmitter {
    * 
    * On top of the documentated properties here, the config object can contain
    * any properties you want to use in your own HHM config file. The config object is
-   * usable globally from within the HHM config as the **haxroomie** object.
+   * usable globally from within the HHM config as the `hrConfig` object.
    * 
-   * @param {object} config - config object that gets injected to HHM config
-   *    as **haxroomie**
+   * @param {object} config - Config object that contains the room information.
    * @param {string} config.token - Token to start the room with.
    *    Obtain one from <https://www.haxball.com/headlesstoken>.
    * @param {string} [config.roomName] - Room name.
@@ -327,21 +325,25 @@ class RoomController extends EventEmitter {
    *    `config.pluginConfig` are ignored.
    * @param {object} [config.pluginConfig] - Haxball Headless Manager
    *    plugin config object.
-   * @param {Array.<string>} [config.repositories] - Array of additional
+   * @param {Array.<object>} [config.repositories] - Array of additional
    *    HHM plugin repositories.
-   * @param {Object.<string, FileDef>} [config.plugins] - The object should 
-   *    plugins name as a property and {@link FileDef} as its value.
-   *    Useful for testing plugins before uploading them to a server or
-   *    GitHub.
+   * 
+   *    [Here](https://github.com/saviola777/haxball-headless-manager#using-a-webserver)
+   *    you can see how to add repository from an URL and
+   * 
+   *    [here](https://github.com/saviola777/haxball-headless-manager#using-a-github-repository)
+   *    how to add one from GitHub.
+   * @param {Array.<FileDef>} [config.plugins] - Useful for testing plugins
+   *    before uploading them to a server or GitHub.
    * @param {FileDef} [config.hhm] - Path to built source of HHM. Useful
    *    for testing changes to the source.
-   * @param {boolean} [disableDefaultPlugins=false] - Set to true if you
+   * @param {boolean} [config.disableDefaultPlugins=false] - Set to true if you
    *    want to disable the default HHM plugins that Haxroomie loads.
-   *    This can be useful e.f. if you want to test some plugins without others
-   *    interfering with it.
-   * @returns {object} - Config that the room was started with including
-   *    a `roomLink` property added to it containing the haxball rooms
-   *    link.
+   *    This can be useful if for example you want to test some plugins without
+   *    others interfering with it.
+   * @returns {object} - Config that the room was started with. 
+   *    The `roomLink` property is added to the config (contains URL to the
+   *    room).
    */
   async openRoom(config) {
     if (!this.usable) throw new Error('Room is no longer usable.');

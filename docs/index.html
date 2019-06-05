@@ -95,13 +95,8 @@
 <pre class="prettyprint source lang-sh"><code>cd haxroomie
 npm install
 </code></pre>
-<p>You can run the CLI from <code>haxroomie</code> directory using node.</p>
-<pre class="prettyprint source lang-sh"><code>node src/cli --help
-</code></pre>
-<p><strong>or</strong></p>
-<pre class="prettyprint source lang-sh"><code>npm start -- --help
-</code></pre>
-<p>Note the extra &quot;--&quot; that is required to pass npm scripts arguments.</p>
+<p>Now you are ready to start using Haxroomie. See <a href="#cli-usage">CLI usage section</a>
+for help on how to use the command line interface.</p>
 <h2>Alternative installation</h2>
 <p>You can also install haxroomie to a global npm installation directory.
 This will give you a <code>haxroomie</code> command that you can run from
@@ -150,22 +145,32 @@ to check which dependencies are missing.</p>
 <pre class="prettyprint source lang-sh"><code>sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 </code></pre>
 <h1>CLI usage</h1>
-<p>To start the CLI it needs a config file. To get an easy start copy the config.js from the
-<a href="https://github.com/morko/haxroomie/tree/master/examples/configs">projects example directory</a>
-to the project directory. By default haxroomie searches for config.js in
-the current working directory.</p>
+<p>To start the CLI it needs a config file. To get an easy start copy one of the
+example configs from
+<a href="https://github.com/morko/haxroomie/tree/master/examples/configs">haxroomie/examples/configs</a>
+to the projects directory as <code>config.js</code> and modify it to your liking.
+By default Haxroomie searches for <code>config.js</code> in the current working directory.</p>
 <p>To start run:</p>
-<pre class="prettyprint source lang-sh"><code>npm start -- -c [path to config.js]
+<pre class="prettyprint source lang-sh"><code>npm start
 </code></pre>
-<p>or if you installed with the alternative method:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie -c [path to config.js]
+<p>If you wish to load the config from elsewhere than <code>config.js</code> in the current
+working directory you can give it the <code>-c</code> argument.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-sh"><code>npm start -- -c [path/to/config.js]
+</code></pre>
+<p>*<em>Note the extra <code>--</code> when using the npm start command</em></p>
+<p>if you installed with the alternative method:</p>
+<pre class="prettyprint source lang-sh"><code>haxroomie -c [path/to/config.js]
 </code></pre>
 <p>Once Haxroomie CLI is running you can type <code>help</code> for available commands.</p>
+<p>See <a href="#config">config section</a> for more information about the config file.</p>
 <h2>Config</h2>
 <p>Config file is a Node.js module that exports the config object. You dont really need to worry too much about what this means. Just edit the fields of the example config to your liking.</p>
 <p>You can find examples of configs in
 <a href="https://github.com/morko/haxroomie/tree/master/examples/configs">projects example directory</a>.</p>
-<p>Here is an example of a config that starts one room with explanations in the comments for what all the settings do. The comments are the text between /** and */.</p>
+<p>See the <a href="#config-properties-explained">config properties explained</a> for
+information about each option.</p>
+<p>Here is an example of a config that starts one private room.</p>
 <pre class="prettyprint source lang-js"><code>let config = {
   /**
    * ID for the room. Haxroomie uses this internally to recognize the rooms.
@@ -173,101 +178,110 @@ the current working directory.</p>
    */
   'room1': {
 
-    /**
-     * Set to false if you don't want the room to start when you start haxroomie.
-     */
     autoStart: true,
-
-    /**
-     * The name for the room.
-     */
     roomName: 'haxroomie',
-
-    /**
-     * The name for the host player.
-     */
     playerName: 'host',
-
-    /**
-     * Max number of players the room accepts.
-     */
     maxPlayers: 12,
-
-    /**
-     * If true the room will appear in the room list.
-     */
     public: false,
-
-    /**  
-     * Geolocation override for the room.
-     * `geo : {&quot;code&quot;: string, &quot;lat&quot; : float, &quot;lon&quot; : float}`
-     * 
-     * You can use https://www.latlong.net/ to find the coordinates easily.
-     * The code is a country code in two letter ISO format listed in
-     * https://countrycode.org/.
-     */
     geo: { code: 'eu', lat: '52.5192', lon: '13.4061'},
-
-    /**
-     * Repository configuration array for the Haxball Headless Manager (HHM).
-     * Here you can tell which repositories to load in addition to the default
-     * one.
-     * 
-     * By default haxroomie loads the core plugin repository by saviola. You
-     * can find these files in
-     * https://github.com/saviola777/hhm-plugins/tree/master/src/sav.
-     * The files contain information about what kind of options they support
-     * and what they do. 
-     * 
-     * See https://github.com/saviola777/haxball-headless-manager#configuration-file
-     * for more detailed explanation.
-     */
     repositories: [
       {
         type: 'github',
         repository: 'morko/hhm-plugins'
       },
     ],
-
-    /**
-     * Plugin configuration object for the Haxball Headless Manager (HHM).
-     * Here you can tell which plugins to load from the repositories that are
-     * available and give them optional configurations.
-     * 
-     * By default haxroomie loads the core plugin repository by saviola. You
-     * can find these files in
-     * https://github.com/saviola777/hhm-plugins/tree/master/src/sav.
-     * The files contain information about what kind of options they support
-     * and what they do. 
-     * 
-     * See https://github.com/saviola777/haxball-headless-manager#configuration-file
-     * for more detailed explanation about this configuration.
-     * 
-     * See https://haxplugins.tk/docs/tutorial-writing-plugins.html for deeper
-     * information about the plugins and how to write your own.
-     */
     pluginConfig: {
       'sav/roles': {
-        admin: 'adminpass',
-        host: 'hostpass',
+        roles: {
+          admin: 'adminpass',
+          host: 'hostpass'
+        }
       }
-    },
-
-    /**
-     * Haxball Headless room script to load when starting haxroomie.
-     * IF GIVEN, DISABLES ALL OTHER PLUGINS!
-     */
-    roomScript: '/path/to/room-script.js'
-
-    /**
-     * Path to custom Haxball Headless Manager (HHM) configuration file.
-     * You rarely need this.
-     */
-    hhmConfig: '/path/to/hhm-config.js',
+    }
   }
 };
 module.exports = config;
 </code></pre>
+<h3>Config properties explained</h3>
+<ul>
+<li>
+<p><code>autoStart</code> Set to <code>true</code> if you want the room to start on startup. Default is <code>false</code>.</p>
+</li>
+<li>
+<p><code>roomName</code> The name for the room. Default is <code>haxroomie</code></p>
+</li>
+<li>
+<p><code>playerName</code> The name for the host player. Default is <code>host</code>.</p>
+</li>
+<li>
+<p><code>maxPlayers</code> Max number of players the room accepts. Default is <code>10</code>.</p>
+</li>
+<li>
+<p><code>public</code> If <code>true</code> the room will appear in the room list. Default is <code>false</code>.</p>
+</li>
+<li>
+<p><code>geo</code> Geolocation override for the room. <code>geo : {&quot;code&quot;: string, &quot;lat&quot; : float, &quot;lon&quot; : float}</code>.
+You can use <a href="https:%5C/%5C/www.latlong.net/">https://www.latlong.net/</a> to find the coordinates easily.
+The code is a country code in two letter ISO format listed in
+<a href="https:%5C/%5C/countrycode.org/">https://countrycode.org/</a>. Default is where your server is located.</p>
+</li>
+<li>
+<p><code>repositories</code> Repository configuration array for the Haxball Headless Manager (HHM).
+With this you can tell which repositories to load in addition to the default one.
+By default haxroomie loads the
+<a href="https://github.com/saviola777/hhm-plugins">plugin repository by saviola</a>.
+<a href="https://github.com/saviola777/haxball-headless-manager#using-a-webserver">Here</a>
+you can see how to add repository from an URL and
+<a href="https://github.com/saviola777/haxball-headless-manager#using-a-github-repository">here</a>
+how to add one from GitHub.</p>
+</li>
+<li>
+<p><code>pluginConfig</code> Plugin configuration object for the Haxball Headless Manager (HHM).
+With this you can tell which plugins to load from the repositories that are
+available and give them optional configurations.
+By default haxroomie loads the core plugin repository by saviola. You
+can find these files in
+<a href="https://github.com/saviola777/hhm-plugins/tree/master/src/sav">saviolas GitHub page</a>.
+The files contain information about what kind of options they support
+and what they do.
+See <a href="https://github.com/saviola777/haxball-headless-manager#configuration-file">saviolas GitHub page</a>
+for more detailed explanation about this configuration.
+See
+<a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">writing plugins tutorial</a>
+for information about saviolas default plugins and how to write your own.</p>
+</li>
+<li>
+<p><code>roomScript</code> HaxBall room script to load when starting Haxroomie.
+<strong>Disables all other plugins!</strong>. See <a href="#using-own-room-scripts">running own room scripts section</a>.</p>
+</li>
+<li>
+<p><code>hhmConfig</code> Path to custom Haxball Headless Manager (HHM) configuration file.
+You rarely need this. See <a href="#using-own-hhm-config">Using own HHM config</a></p>
+</li>
+<li>
+<p><code>plugins</code> Plugins that you want to load from the filesystem. This should
+be an array of objects that contain the plugin name and file path.
+<strong>The <code>pluginConfig</code> option does not affect these plugins!</strong></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>  plugins: [
+    {
+      name: 'myplugin',
+      path: '/path/to/myplugin.js'
+    }
+  ]
+</code></pre>
+<p>Useful for testing plugins before uploading them to a server or GitHub.</p>
+</li>
+<li>
+<p><code>hhm</code> Path to built source of Headless Haxball Manager (HHM).
+Useful for testing changes to the source.</p>
+</li>
+<li>
+<p><code>disableDefaultPlugins</code> Set to <code>true</code> if you want to disable the default
+HHM plugins that Haxroomie loads. This can be useful if for example you
+want to test some plugins without others interfering with it.</p>
+</li>
+</ul>
 <p>To configure more than one room just add a new property for the config object.</p>
 <p>e.g.</p>
 <pre class="prettyprint source lang-js"><code>let config = {
@@ -291,26 +305,37 @@ module.exports = config;
 module.exports = config;
 </code></pre>
 <h2>Running own room scripts</h2>
-<p>You can run <strong>one</strong> room script by setting the configs <code>roomScript</code> property.
-Running a script this way will disable the default HHM plugins that haxroomie runs.
-The scripts have few restrictions compared to vanilla room scripts mentioned in
+<p>You can run <strong>one</strong> room script by setting <a href="#config">the configs</a> <code>roomScript</code> property.
+Running a script this way will disable the default Headless Haxball Manager
+(HHM) plugins that Haxroomie loads
+(except the ones that Haxroomie requires to work internally).</p>
+<p>The scripts have few restrictions compared to vanilla room scripts mentioned in
 <a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">HHM docs</a>.</p>
-<p>To run <strong>multiple</strong> plugins you should create your own
-<a href="https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository">HHM plugin repository</a>.
-Read the guide for writing own HHM plugins at
-<a href="https:%5C/%5C/haxplugins.tk/docs/tutorial-writing-plugins.html">https://haxplugins.tk/docs/tutorial-writing-plugins.html</a>.</p>
-<p>Use the configs <code>repositories</code> property to enable the repository and
+<p>HHM allows you to modularize your room script. Instead of one massive
+JavaScript file you can implement the functionality in smaller modules called
+plugins. Read the guide for writing own HHM plugins at
+<a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">HHM docs</a>.
+You can test them by loading them with <a href="#config">the configs</a> <code>plugins</code>
+property.</p>
+<p>To publish the plugins you should create your own
+<a href="https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository">HHM plugin repository</a>.</p>
+<p>Use <a href="#config">the configs</a> <code>repositories</code> property to enable the repository and
 <code>pluginConfig</code> property to set which plugins to enable and pass them
 options.</p>
 <h2>Using own HHM config</h2>
-<p>Haxroomie supports providing a <a href="https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration">Haxball Headless Manager configuration file</a>. However there should rarely be a reason to do this. The files have couple requirements to work with Haxroomie (see <a href="https://github.com/morko/haxroomie#hhm-config-requirements">HHM config requirements</a>).</p>
+<p>Haxroomie supports providing a
+<a href="https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration">Haxball Headless Manager configuration file</a>.
+However there should rarely be a reason to do this. The files have couple
+requirements to work with Haxroomie
+(see <a href="https://github.com/morko/haxroomie#hhm-config-requirements">HHM config requirements</a>).</p>
 <h3>HHM config requirements</h3>
 <p><code>HHM.config.room</code> property must have a <code>token</code> property like this:</p>
 <pre class="prettyprint source lang-js"><code>HHM.config.room = {
-  token: haxroomie.token
+  token: hrConfig.token
 }
 </code></pre>
-<p>The <code>postInit</code> plugin should set the <code>window.hroomie.hhmStarted</code> property to <code>true</code> on the <code>onRoomLink</code> event like this:</p>
+<p>The <code>postInit</code> plugin should set the <code>window.hroomie.hhmStarted</code> property to
+<code>true</code> on the <code>onRoomLink</code> event like this:</p>
 <pre class="prettyprint source lang-js"><code>HHM.config.postInit = HBInit => {
   let room = HBInit();
 
@@ -320,7 +345,7 @@ options.</p>
 }
 </code></pre>
 <h3>Differences to vanilla HHM config</h3>
-<p>Haxroomie injects a <code>haxroomie</code> object to the HHM config.
+<p>Haxroomie injects a <code>hrConfig</code> object to the HHM config.
 The object contains all the properties sent to the function
 that is used to start the room.
 See the
@@ -379,7 +404,7 @@ the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomControll
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 17th May 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 5th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

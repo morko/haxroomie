@@ -1,6 +1,19 @@
 const { RoomController } = require('./room');
 const puppeteer = require('puppeteer');
 const path = require('path');
+const EventEmitter = require('events');
+
+/**
+ * Emitted when new RoomController is added.
+ * @event Haxroomie#room-added
+ * @param {RoomController} room - The added RoomController.
+ */
+
+/**
+ * Emitted when RoomController is removed.
+ * @event Haxroomie#room-removed
+ * @param {RoomController} room - The removed RoomController.
+ */
 
 // allow only launching one browser
 let browserLock = undefined;
@@ -16,7 +29,7 @@ let browserLock = undefined;
  * with the [launchBrowser method]{@link Haxroomie#launchBrowser} before 
  * anything else.
  */
-class Haxroomie {
+class Haxroomie extends EventEmitter {
 
   /**
    * Constructor for Haxroomie.
@@ -37,6 +50,7 @@ class Haxroomie {
    *    root directory]/user-data-dir.
    */
   constructor(opt) {
+    super();
     this.browser = null;
     this.rooms = new Map();
 
@@ -150,6 +164,18 @@ class Haxroomie {
   }
 
   /**
+   * Returns an array of available RoomControllers.
+   * @returns {Array.<RoomController>} - Available RoomControllers.
+   */
+  getRooms() {
+    let rooms = [];
+    for(let r of this.rooms.values()) {
+      rooms.push(r);
+    }
+    return rooms;
+  }
+
+  /**
    * Returns the RoomController that was first added.
    * @returns {RoomController} - First RoomController or
    *    undefined if there is no such room.
@@ -175,6 +201,7 @@ class Haxroomie {
     if (roomController) {
       await roomController.page.close();
       this.rooms.delete(id);
+      this.emit('room-removed', roomController);
     }
   }
 
@@ -189,9 +216,10 @@ class Haxroomie {
     this.ensureInstanceIsUsable();
     if (this.rooms.has(id)) throw new Error('id must be unique');
     let page = await this.getNewPage();
-    let room = await this.createRoomController(page, id);
-    this.rooms.set(id, room);
-    return room;
+    let roomController = await this.createRoomController(page, id);
+    this.rooms.set(id, roomController);
+    this.emit('room-added', roomController);
+    return roomController;
   }
 
   /**

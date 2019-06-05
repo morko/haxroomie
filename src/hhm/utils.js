@@ -1,106 +1,57 @@
 /**
- * This is a Haxball Headless Manager plugin for haxroomie to be able to send
- * the room events from browser to the haxroomie, call functions in the
- * roomObject and act as an adaptor between haxroomie and HHM.
- * 
- * Haxroomie exposes a function as window.sendToHaxroomie that the browser 
- * scripts can use to send messages to haxroomie.
+ * This module contains utility/helper functions that should be loaded to the
+ * browser context before loading the HHM config.
  */
-let room = HBInit();
-
-room.pluginSpec = {
-  name: `hr/core`,
-  author: `salamini`,
-  version: `1.0.0`,
-  config: {},
-  dependencies: [],
-  order: {},
-  incompatible_with: [],
-};
-
 window.hroomie = window.hroomie || {};
 
 Object.assign(window.hroomie, (function(){
 
-  /**
-   * List of default roomObject event handlers that the plugin will send 
-   * to the main process.
-  */
-  var defaultRoomEventHandlers = [
-    'onPlayerJoin',
-    'onPlayerLeave',
-    'onTeamVictory',
-    'onPlayerChat',
-    'onTeamGoal',
-    'onGameStart',
-    'onGameStop',
-    'onPlayerAdminChange',
-    'onPlayerTeamChange',
-    'onPlayerKicked',
-    'onGamePause',
-    'onGameUnpause',
-    'onPositionsReset',
-    'onStadiumChange'
-  ];
-
-  var defaultHHMEvents = [
-    window.HHM.events.PLUGIN_DISABLED,
-    window.HHM.events.PLUGIN_ENABLED,
-    window.HHM.events.PLUGIN_LOADED,
-    window.HHM.events.PLUGIN_REMOVED,
-  ];
-
-  var ignoredPlugins = new Set([
-    '_user/postInit',
-    'hr/core',
-    'hr/kickban',
-    'hhm/core',
-    'hhm/persistence'
-  ]);
-
-  registerEventHandlers();
-  
   return {
+    isObject,
+    mergeDeep,
     callRoom,
     getPluginById,
     getPlugin,
     getPlugins,
     enablePlugin,
     disablePlugin,
-    getDependentPlugins
+    getDependentPlugins,
+    setPluginConfig
   };
-  
+
   /**
-   * Registers handlers for the HaxBall roomObject and for the HHM manager
-   * events. Send all events to the main context of haxroomie.
-   *
-   * @param {Array.<string>} roomEventHandlers - handler names to attach 
-   *    listeners for
-   */  
-  function registerEventHandlers(roomEventHandlers) {
-    roomEventHandlers = roomEventHandlers || defaultRoomEventHandlers;
+   * Source from <https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge>
+   * Simple object check.
+   * @param item
+   * @returns {boolean}
+   */
+  function isObject(item) {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+  }
 
-    // send roomObject events to the main context
-    for (let handlerName of roomEventHandlers) {
-      room[handlerName] = function(...args) {
-        window.haxroomieOnRoomEvent({ handlerName, args });
-      };
-    }
-  
-    // send HHM events to the main context
-    for (let eventType of defaultHHMEvents) {
-      room[`onHhm_${eventType}`] = function(...args) {
-        // get the plugin data
-        let plugin = args[0].plugin || {};
-        let pluginSpec = plugin.pluginSpec || {};
-        let pluginName = pluginSpec.name || '';
-        if (!pluginName || ignoredPlugins.has(pluginName)) return;
-        let pluginData = getPlugin(pluginName);
+  /**
+   * Source from <https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge>
+   * Deep merge two objects.
+   * @param target
+   * @param ...sources
+   */
+  function mergeDeep(target, ...sources) {
+    if (!sources.length) return target;
+    const isObject = window.hroomie.isObject;
+    const source = sources.shift();
 
-        if (!pluginData) return;
-        window.haxroomieOnHHMEvent({ eventType, pluginData });
-      };
+    if (isObject(target) && isObject(source)) {
+      for (const key in source) {
+        if (isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          mergeDeep(target[key], source[key]);
+        } else {
+          Object.assign(target, { [key]: source[key] });
+        }
+      }
     }
+
+    return mergeDeep(target, ...sources);
   }
 
   /**
@@ -113,7 +64,7 @@ Object.assign(window.hroomie, (function(){
    * @returns {object} - haxroomie message object without the sender id
    */
   function callRoom(fn, ...args) {
-    if (typeof room[fn] !== 'function') {
+    if (typeof HHM.manager.room[fn] !== 'function') {
       return {
         type: 'CALL_ROOM_RESULT',
         payload: `room.${fn} is not a function`,
@@ -121,7 +72,7 @@ Object.assign(window.hroomie, (function(){
       };
     }
     
-    let result = room[fn](...args);
+    let result = HHM.manager.room[fn](...args);
     return {
       type: 'CALL_ROOM_RESULT',
       payload: {
@@ -138,9 +89,8 @@ Object.assign(window.hroomie, (function(){
    * @returns {PluginData|null} - data of plugin or null
    */
   function getPluginById(id) {
-    let name = HHM.manager.getPluginName(id);
-    if (!name) return null;
-    const plugin = room.getPlugin(name);
+    const plugin = HHM.manager.getPluginById(id);
+    if (!plugin) return null;
     let pluginData = {
       id: id,
       isEnabled: plugin.isEnabled(),
@@ -156,7 +106,7 @@ Object.assign(window.hroomie, (function(){
    * @returns {PluginData|null} - data of plugin or null
    */
   function getPlugin(name) {
-    const plugin = room.getPlugin(name);
+    const plugin = HHM.manager.getPluginByName(name);
     if (!plugin) return null;
     let pluginData = {
       id: plugin._id,
@@ -174,13 +124,14 @@ Object.assign(window.hroomie, (function(){
    */
   function getPlugins() {
     let plugins = HHM.manager.getLoadedPluginIds()
-    .map(id => this.getPluginById(id))
-    .filter(pluginData => {
-      const name = pluginData.pluginSpec.name;
-      // ignore these plugins
-      return !ignoredPlugins.has(name);
-    });
-  return plugins;
+      .map(id => this.getPluginById(id))
+      .filter(pluginData => {
+        const name = pluginData.pluginSpec.name;
+        // ignore these plugins
+        if (!window.hroomie.ignoredPlugins) return true;
+        return !window.hroomie.ignoredPlugins.has(name);
+      });
+    return plugins;
   }
 
   /**
@@ -189,7 +140,7 @@ Object.assign(window.hroomie, (function(){
    * @param {string} - name of the plugin
    */
   function enablePlugin(name) {
-    const plugin = room.getPlugin(name);
+    const plugin = HHM.manager.getPluginByName(name);
     return HHM.manager.enablePluginById(plugin._id);
   }
 
@@ -205,11 +156,11 @@ Object.assign(window.hroomie, (function(){
   function disablePlugin(name) {
     if (Array.isArray(name)) {
       for (let i = 0; i < name.length; i++) {
-        const plugin = room.getPlugin(name[i]);
+        const plugin = HHM.manager.getPluginByName(name[i]);
         const success = HHM.manager.disablePluginById(plugin._id);
         if (!success) {
           for (let j = 0; j <= i; j++) {
-            const plugin = room.getPlugin(name[i - j]);
+            const plugin = HHM.manager.getPluginByName(name[i - j]);
             HHM.manager.enablePluginById(plugin._id);
           }
           return false;
@@ -217,7 +168,7 @@ Object.assign(window.hroomie, (function(){
       }
       return true;
     }
-    const plugin = room.getPlugin(name);
+    const plugin = HHM.manager.getPluginByName(name);
     return HHM.manager.disablePluginById(plugin._id);
   }
 
@@ -231,4 +182,17 @@ Object.assign(window.hroomie, (function(){
     return HHM.manager.getDependentPluginsById(pluginId)
       .map(id => getPluginById(id));
   }
+
+  /**
+   * Sets the config of the given plugin name to be the given config object.
+   * @param {string} name - Name of the plugin.
+   * @param {object} config - Config object for the plugin.
+   */
+  function setPluginConfig(name, config) {
+    const plugin = getPlugin(name);
+    if (!plugin) return false;
+    HHM.manager.setPluginConfig(plugin.id, config);
+    return true;
+  }
+
 })());

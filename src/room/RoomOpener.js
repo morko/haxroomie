@@ -77,53 +77,20 @@ module.exports = class RoomOpener extends EventEmitter {
 
     config.token = this.trimToken(config.token)
 
-    logger.debug('OPEN_ROOM: Navigating to ' + this.url);
-    try {
-      await this.page.goto(this.url);
-    } catch (err) {
-      logger.error(err);
-      throw new Error(this.url + ' is unreachable!');
-    }
+    await this.navigateToHaxballHeadlessPage();
 
-    logger.debug('OPEN_ROOM: Injecting shared-storage module.');
+    await this.waitForHaxballToLoad();
+
     await this.injectSharedStorage();
 
-    logger.debug('OPEN_ROOM: Waiting for HBInit to become available');
-    try {
-      await this.page.waitForFunction('typeof HBInit === "function"');
-    } catch (err) {
-      logger.error(err);
-      throw new Error('Could not find the HBInit function!');
-    }
+    await this.injectUtils();
 
-    logger.debug('OPEN_ROOM: Starting Headless Host Manager');
+    await this.startHHM(config);
 
-    let hhmConfig;
-    try {
-      if (config.hhmConfig) {
-        hhmConfig = new Function('haxroomie', config.hhmConfig.content);
-      } else {
-        hhmConfig = new Function('haxroomie', this.readHHMFile('config.js'));
-      }
-    } catch (err) {
-      logger.error(err);
-      throw new Error('Invalid HHM config!');
-    }
-
-    try {
-      await this.page.evaluate(hhmConfig, config);
-    } catch (err) {
-      logger.error(err);
-      throw new Error(`Unable to start Headless Host Manager!`);
-    }
-
-    logger.debug('OPEN_ROOM: Waiting for HHM to start.');
     let roomLink = await this.waitForHHMToStart(this.timeout * 1000);
-   
     if (!roomLink) {
-      throw new Error('Timeout when waiting for HHM to start!');
+      throw new Error('Timeout while waiting for HHM to start.')
     }
-
     // add the roomLink to the config
     config.roomLink = roomLink;
 
@@ -136,61 +103,87 @@ module.exports = class RoomOpener extends EventEmitter {
   async close() {
     return this.page.goto('about:blank');
   }
+  
+  /**
+   * Navigates the browser to the HaxBall headless page.
+   * @private
+   */
+  async navigateToHaxballHeadlessPage() {
+    logger.debug('Navigating to ' + this.url);
+    try {
+      await this.page.goto(this.url);
+    } catch (err) {
+      logger.error(err);
+      throw new Error(this.url + ' is unreachable!');
+    }
+  }
 
   /**
-   * Event handler that gets executed when the haxball headless room has been
+   * Handler that gets executed when the haxball headless room has been
    * started and Haxball Headless Manager is running.
    * 
    * @param {object} config 
+   * @private
    */
   async onRoomStarted(config) {
 
     await this.exposeListenersToBrowser();
+    await this.injectCorePlugins();
 
-    if (config.plugins) {
-      logger.debug('OPEN_ROOM: Injecting custom HHM plugins.');
-      try {
-        await this.injectCustomPlugins(config.plugins);
-      } catch (err) {
-        logger.error(err);
-        throw new Error(`Failed to inject custom plugins!`);
-      }
-    }
-
-    logger.debug('OPEN_ROOM: Injecting the haxroomie HHM plugins.');
-    try {
-      await this.injectHaxroomiePlugins();
-    } catch (err) {
-      logger.error(err);
-      throw new Error(`Failed to inject haxroomie HHM plugins!`);
-    }
-
-    if (config.roomScript) {
-      logger.debug('OPEN_ROOM: Injecting custom plugin/script.');
-      try {
-        await this.injectPlugin(config.roomScript.content);
-      } catch (err) {
-        logger.error(err);
-        throw new Error(`Unable to inject plugin ${config.roomScript.name}: \n${err.stack}`);
-      }
-    }
-
-    logger.debug('OPEN_ROOM: Get the room info from HHM.');
-    let hhmRoomInfo;
-    try {
-      hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
-    } catch (err) {
-      logger.error(err);
-      throw new Error(`Unable to get the room info from HHM.`)
-    }
-
+    let hhmRoomInfo = await this.getRoomInfoFromHHM();
     // merge the roomInfo to the config so all properties get returned
     let roomInfo = Object.assign({}, config, hhmRoomInfo);
     return roomInfo;
   }
 
   /**
+   * Starts Haxball Headless Manager (HHM). If config does not contain
+   * hhmConfig the default config is used.
+   * 
+   * @param {object} config - The config object from the open function.
    * @private
+   */
+  async startHHM(config) {
+    logger.debug('Starting Headless Haxball Manager');
+
+    let configFn;
+    try {
+      if (config.hhmConfig) {
+        configFn = new Function('hrConfig', config.hhmConfig.content);
+      } else {
+        configFn = new Function(
+          'hrConfig',
+          this.readFile(path.join(__dirname, '..', 'hhm', 'config.js'))
+        );
+      }
+    } catch (err) {
+      logger.error(err);
+      throw new Error('Invalid HHM config!');
+    }
+
+    try {
+      await this.page.evaluate(configFn, config);
+    } catch (err) {
+      logger.error(err);
+      throw new Error(`Unable to start Headless Haxball Manager!`);
+    }
+  }
+
+  /**
+   * Waits for the headless haxball page to load.
+   * @private
+   */
+  async waitForHaxballToLoad() {
+    logger.debug('Waiting for HaxBall to load');
+    try {
+      await this.page.waitForFunction('typeof HBInit === "function"');
+    } catch (err) {
+      logger.error(err);
+      throw new Error('Could not load the HaxBall headless page!');
+    }
+  }
+
+  /**
    * Creates window.haxroomieOnRoomEvent and window.haxroomieOnHHMEvent
    * functions in the browser. These will get called from the browsers
    * context whenever a HaxBall roomObject event or HHM event happens.
@@ -198,6 +191,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * Whenever the functions in the browser context are called puppeteer calls
    * their counterparts (this.onRoomEvent and this.onHHMEvent) with the same
    * arguments.
+   * @private
    */
   async exposeListenersToBrowser() {
     let hasOnRoomEvent = await this.page.evaluate(() => {
@@ -215,9 +209,9 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
-   * @private
    * Gets the frame where all the DOM elements of HaxBall headless host
    * webpage are.
+   * @private
    */
   async getHaxframe() {
     let elementHandle = await this.page.$("iframe");
@@ -226,71 +220,83 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
+   * Fetches the room info from the HaxBall Headless Manager (HHM).
    * @private
+   */
+  async getRoomInfoFromHHM() {
+    logger.debug('Fetching the room info from HHM.');
+    let hhmRoomInfo;
+    try {
+      hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
+    } catch (err) {
+      logger.error(err);
+      throw new Error(`Unable to fetch the room info from HHM.`)
+    }
+    return hhmRoomInfo;
+  }
+
+  /**
    * Injects the haxroomies headless host manager plugin to the headless
    * browser context.
-   */
-  async injectHaxroomiePlugins() {
-    let corePlugin = this.readHHMFile('haxroomie-plugin.js');
-    let kickbanPlugin = this.readHHMFile('kickban-plugin.js');
-    await this.page.evaluate((corePlugin, kickbanPlugin) => {
-      window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
-      window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
-    }, corePlugin, kickbanPlugin);
-  }
-
-  /**
-   * Injects the given Haxroomie Headless Host manager plugins from an object.
-   * The object should contain the plugins name as a property and the file path
-   * string as its value.
-   * @param {object} plugins - 
-   */
-  async injectCustomPlugins(plugins) {
-    for (let key of Object.keys(plugins)) {
-      await this.page.evaluate((plugin, pluginName) => {
-        window.HHM.manager.addPluginByCode(plugin.content, pluginName);
-      }, plugins[key], key);
-    }
-
-  }
-
-  /**
    * @private
-   * Injects the encryption module to the headless browser. The module
-   * overrides default localStorage getItem and setItem functions so that
-   * the data will be encrypted.
+   */
+  async injectCorePlugins() {
+    logger.debug('Injecting haxroomie core HHM plugins.');
+    try {
+      let corePlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'core-plugin.js'));
+      let kickbanPlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'kickban-plugin.js'));
+      await this.page.evaluate((corePlugin, kickbanPlugin) => {
+        window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
+        window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
+      }, corePlugin, kickbanPlugin);
+    } catch (err) {
+      logger.error(err);
+      throw new Error(`Failed to inject haxroomie core HHM plugins!`);
+    }
+  }
+
+  /**
+   * Injects the shared storage module to the headless browser. The module
+   * overrides default localStorage getItem, setItem and IndexedDB open
+   * functions so that each will be prefixed by id of the tabs ROomController.
+   * @private
    */
   async injectSharedStorage() {
+    logger.debug('Injecting shared-storage module.');
     let ss = require('./shared-storage');
     await this.page.evaluate(ss, this.id);
   }
 
-
   /**
-   * @private
-   * Injects the given headless host manager plugin to the headless
-   * browser context.
-   * @param {string} plugin - the plugin to inject
+   * Injects the utils to the headless browser context.
    */
-  async injectPlugin(plugin) {
-    await this.page.evaluate((plugin) => {
-      window.HHM.manager.addPluginByCode(plugin);
-    }, plugin);
-  }
-   
-  /**
-   * @private
-   * Helper function to read files from the projects hhm directory.
-   * @param {string} fileName 
-   */
-  readHHMFile(fileName) {
-    return fs.readFileSync(
-      path.join(__dirname, "..", "hhm", fileName), {encoding: "utf-8"}
-    );
+  async injectUtils() {
+    logger.debug('Injecting utils module.');
+    let utils = this.readFile(path.join(__dirname, '..', 'hhm', 'utils.js'));
+    await this.page.evaluate(utils);
   }
 
   /**
+   * Injects the encryption module to the headless browser. The module
+   * overrides default localStorage getItem and setItem functions so that
+   * the data will be encrypted.
    * @private
+   */
+  async injectSharedStorage() {
+    logger.debug('Injecting shared-storage module.');
+    let ss = require('./shared-storage');
+    await this.page.evaluate(ss, this.id);
+  }
+  /**
+   * Helper function to read files.
+   * @param {...filePath} path - Path to the file. 
+   * @private
+   */
+  readFile(path) {
+    return fs.readFileSync(path, {encoding: "utf-8"});
+  }
+
+  /**
    * Waits for the Haxball Headless Manager to start.
    * Creates a loop that polls for the window.hroomie.hhmStarted to
    * be true. 
@@ -299,10 +305,11 @@ module.exports = class RoomOpener extends EventEmitter {
    * plugin.
    * 
    * @param {int} timeout Time to wait in ms before failing.
-   * 
    * @returns {string|null} the roomLink or null if time ran out
+   * @private
    */
   async waitForHHMToStart(timeout) {
+    logger.debug('Waiting for HHM to start.');
     let haxframe = await this.getHaxframe();
 
     let startTime = new Date().getTime();

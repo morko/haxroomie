@@ -1,10 +1,7 @@
 const { createHaxroomie } = require(`../../`);
 const CommandPrompt = require(`./CommandPrompt`);
 const colors = require(`colors/safe`);
-const fs = require('fs');
-const path = require('path');
-const logger = require('../logger');
-const deepEqual = require('deep-equal');
+const Config = require('./Config');
 
 /**
  * Class for managing RoomController instances.
@@ -21,22 +18,29 @@ class HRConsoleApp {
     this.headless = opt.headless;
     this.port = opt.port;
 
-    this.config = this.loadConfig();
+    this.config = null;
     this.commandPrompt = null;
   }
 
   async start() {
+
     this.haxroomie = await createHaxroomie({
       noSandbox: this.noSandbox,
       headless: this.headless,
       port: this.port
     });
+
+    this.config = new Config({
+      configPath: this.configPath,
+      haxroomie: this.haxroomie
+    });
+
     await this.createRooms();
     this.commandPrompt = new CommandPrompt({
       haxroomie: this.haxroomie,
+      config: this.config,
       openRoom: (id) => this.openRoom(id),
-      closeRoom: (id) => this.closeRoom(id),
-      reloadConfig: () => this.reloadConfig()
+      closeRoom: (id) => this.closeRoom(id)
      });
     await this.openRooms();
     this.commandPrompt.setRoom(this.haxroomie.getFirstRoom());
@@ -50,8 +54,8 @@ class HRConsoleApp {
    * Creates the rooms.
    */
   async createRooms() {
-    for (let key of Object.keys(this.config)) {
-      await this.haxroomie.addRoom(key);
+    for (let roomId of this.config.getRoomIds()) {
+      await this.haxroomie.addRoom(roomId);
     }
   }
 
@@ -60,7 +64,7 @@ class HRConsoleApp {
    */
   async openRooms() {
     for (let id of this.haxroomie.rooms.keys()) {
-      if (this.config[id].autoStart) {
+      if (this.config.getRoom(id).autoStart) {
         await this.openRoom(id);
       }
     }
@@ -87,11 +91,11 @@ class HRConsoleApp {
             return;
           }
 
-          this.config[id].token = token;
+          let roomConfig = this.config.getRoom(id);
+          roomConfig.token = token;
           let room = this.haxroomie.getRoom(id);
-          room.openRoom(this.config[id]);
+          room.openRoom(roomConfig);
           resolve();
-
         }
       );
     });
@@ -108,147 +112,6 @@ class HRConsoleApp {
     }
     let room = this.haxroomie.getRoom(id);
     await room.closeRoom();
-  }
-
-  /**
-   * Parses the Haxroomie config.
-   */
-  loadConfig() {
-    this.configPath = path.resolve(process.cwd(), this.configPath);
-    let config;
-    try {
-      config = require(this.configPath);
-    } catch (err) {
-      throw new Error(`Could not load the config: ${this.configPath}`);
-    }
-    
-    for (let key of Object.keys(config)) {
-      config[key] = this.loadFilesInRoomConfig(config[key]);
-    }
-
-    return config;
-  }
-
-  loadFilesInRoomConfig(cfg) {
-    let result = Object.assign({}, cfg);
-    if (cfg.roomScript) {
-      result.roomScript = this.loadFile(cfg.roomScript);
-    }
-    if (cfg.hhmConfig) {
-      result.hhmConfig = this.loadFile(cfg.hhmConfig);
-    }
-    if (cfg.hhm) {
-      result.hhm = this.loadFile(cfg.hhm);
-    }
-    if (cfg.plugins) {
-      for (let key of Object.keys(cfg.plugins)) {
-        result.plugins[key] = this.loadFile(cfg.plugins[key]);
-      }
-    }
-    return result;
-  }
-
-  async reloadConfig() {
-    delete require.cache[require.resolve(this.configPath)];  
-    let newConfig = this.loadConfig();
-    let oldConfig = this.config;
-    this.config = newConfig;
-
-    for (let key of Object.keys(newConfig)) {
-      let configModified = true;
-      if (oldConfig[key]) {
-        configModified = this.hasRoomConfigBeenModified(newConfig[key], oldConfig[key]);
-      }
-      if (configModified) {
-        // restart rooms that are running
-        if (this.haxroomie.hasRoom(key)) {
-          let room = this.haxroomie.getRoom(key);
-          if (room.running) {
-            await this.closeRoom(key);
-            await this.openRoom(key);
-          }
-        // add rooms with new ids
-        } else {
-          await this.haxroomie.addRoom(key);
-        }
-      }
-    }
-
-    // check for removed rooms
-    for (let key of Object.keys(oldConfig)) {
-      if (!newConfig[key]) {
-        if (this.haxroomie.hasRoom(key)) {
-          await this.haxroomie.removeRoom(key);
-        }
-      }
-    }
-
-    this.commandPrompt.removeListeners();
-    this.commandPrompt.addListeners();
-    this.commandPrompt.setRoom(this.haxroomie.getFirstRoom());
-    this.config = newConfig;
-  }
-
-  hasRoomConfigBeenModified(newConfig, oldConfig) {
-      
-    for (let key of Object.keys(newConfig)) {
-      if (key === 'token') break;
-      if (key === 'roomScript' || key === 'hhmConfig' || key === 'hhm') {
-        if (this.hasFileInConfigBeenModified(newConfig[key], oldConfig[key])) {
-          return true;
-        }
-      } else if (key === 'plugins') {
-        if (this.hasPluginsInConfigBeenModified(newConfig[key], oldConfig[key])) {
-          return true;
-        }
-      } else {
-        if (!deepEqual(newConfig[key], oldConfig[key])) {
-          return true;
-        }
-      }
-    }
-    for (let key of Object.keys(oldConfig)) {
-      if (key === 'token') break;
-      if (!deepEqual(newConfig[key], oldConfig[key])) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  hasFileInConfigBeenModified(newFile, oldFile) {
-    if ((!oldFile && newFile) || (oldFile && !newFile)) {
-      return true;
-    } else if (newFile.modifiedTime !== oldFile.modifiedTime) {
-      return true;
-    }
-  }
-
-  hasPluginsInConfigBeenModified(newPlugins, oldPlugins) {
-    if ((!oldPlugins && newPlugins) || (oldPlugins && !newPlugins)) {
-      return true;
-    }
-    for (let key of Object.keys(newPlugins)) {
-      if (this.hasFileInConfigBeenModified(newPlugins[key], oldPlugins[key])) {
-        return true;
-      }
-    }
-    for (let key of Object.keys(oldPlugins)) {
-      if (!newPlugins[key]) {
-        return true;
-      }
-    }
-  }
-
-  loadFile(file) {
-    if (!fs.existsSync(file)) {
-      logger.error(`No such file: ${file}`);
-      return;
-    }
-    let modifiedTime = fs.statSync(file).mtimeMs;
-    let content = fs.readFileSync(file, {encoding: `utf-8`});
-
-    return {name: file, content: content, modifiedTime: modifiedTime};
   }
 }
 

@@ -45,14 +45,14 @@ module.exports = class CommandPrompt {
     if (!opt.closeRoom) {
       throw new Error(`Missing required argument: opt.closeRoom`);
     }
-    if (!opt.reloadConfig) {
-      throw new Error(`Missing required argument: opt.reloadConfig`);
+    if (!opt.config) {
+      throw new Error(`Missing required argument: opt.config`);
     }
 
     this.haxroomie = opt.haxroomie;
     this.openRoom = opt.openRoom;
     this.closeRoom = opt.closeRoom;
-    this.reloadConfig = opt.reloadConfig;
+    this.config = opt.config;
 
     this.currentRoom = null;
     this.roomEventHandler = null;
@@ -64,19 +64,20 @@ module.exports = class CommandPrompt {
       input: process.stdin,
       output: process.stdout,
     });
+    this.rl.on(`line`, this.onNewLine.bind(this));
 
-    this.onNewLine = this.onNewLine.bind(this);
-    this.print = this.print.bind(this);
-
-    this.addListeners();
+    for (let room of this.haxroomie.rooms.values()) {
+      this.addRoomListeners(room);
+    }
+    this.haxroomie.on('room-added', (room) => this.addRoomListeners(room));
+    this.haxroomie.on('room-removed', (room) => this.removeRoomListeners(room));
   }
 
 
   setRoom(room) {
-    if (this.currentRoom) this.removeListeners(this.currentRoom);
     if (this.roomEventHandler) this.roomEventHandler.removeAllListeners('print');
     this.roomEventHandler = new RoomEventHandler({room});
-    this.roomEventHandler.on('print', this.print);
+    this.roomEventHandler.on('print', (msg, type) => this.print(msg, type));
     this.cmd = this.createCommandHandler(room);
     this.rl.setPrompt(`${room.id}> `)
     this.currentRoom = room;
@@ -90,12 +91,11 @@ module.exports = class CommandPrompt {
     return new CommandHandler({
       haxroomie: this.haxroomie,
       room: room,
+      config: this.config,
       print: (msg, type) => this.print(msg, type),
-      question: (question) => this.question(question),
       setRoom: (room) => this.setRoom(room),
       openRoom: this.openRoom,
-      closeRoom: this.closeRoom,
-      reloadConfig: this.reloadConfig
+      closeRoom: this.closeRoom
     });
   }
 
@@ -104,53 +104,51 @@ module.exports = class CommandPrompt {
    * set to.
    * @private
    */
-  addListeners() {
-    this.rl.on(`line`, this.onNewLine);
-    for (let [id, room] of this.haxroomie.rooms) {
-      room.on(`open-room-start`, (e) => this.onOpenRoomStart(id, room, e));
-      room.on(`open-room-stop`, (e) => this.onOpenRoomStop(id, room, e));
-      room.on(`open-room-error`, (e) => this.onOpenRoomError(id, room, e));
-      room.on(`page-closed`, (e) => this.onPageClosed(id, room, e));
-      room.on(`page-crash`, (e) => this.onPageCrashed(id, room, e));
-      room.on(`page-error`, (e) => this.onPageError(id, room, e));
-    }
+  addRoomListeners(room) {
+    room.on(`open-room-start`, (e) => this.onOpenRoomStart(room, e));
+    room.on(`open-room-stop`, (e) => this.onOpenRoomStop(room, e));
+    room.on(`open-room-error`, (e) => this.onOpenRoomError(room, e));
+    room.on(`page-closed`, (e) => this.onPageClosed(room, e));
+    room.on(`page-crash`, (e) => this.onPageCrashed(room, e));
+    room.on(`page-error`, (e) => this.onPageError(room, e));
   }
 
-  removeListeners() {
-    this.rl.removeListener(`line`, this.onNewLine);
-    for (let room of this.haxroomie.rooms.values()) {
-      room.removeAllListeners(`open-room-start`);
-      room.removeAllListeners(`open-room-stop`);
-      room.removeAllListeners(`open-room-error`);
-      room.removeAllListeners(`page-closed`);
-      room.removeAllListeners(`page-crash`);
-      room.removeAllListeners(`page-error`);
-    }
+  /**
+   * Removes the listeners that the `addRoomListeners` function has set.
+   * @private
+   */
+  removeRoomListeners(room) {
+    room.removeAllListeners(`open-room-start`);
+    room.removeAllListeners(`open-room-stop`);
+    room.removeAllListeners(`open-room-error`);
+    room.removeAllListeners(`page-closed`);
+    room.removeAllListeners(`page-crash`);
+    room.removeAllListeners(`page-error`);
   }
 
-  onOpenRoomStart(id, room, eventArgs) {
-    this.print(id, `STARTING ROOM`);
+  onOpenRoomStart(room, eventArgs) {
+    this.print(room.id, `STARTING ROOM`);
   }
 
-  onOpenRoomStop(id, room, eventArgs) {
-    this.print(`${id} - ${room.roomInfo.roomLink}`, `ROOM STARTED`);
+  onOpenRoomStop(room, eventArgs) {
+    this.print(`${room.id} - ${room.roomInfo.roomLink}`, `ROOM STARTED`);
   }
 
-  onOpenRoomError(id, room, eventArgs) {
-    this.print(`Could not start room: ${id}`, `ERROR`);
+  onOpenRoomError(room, eventArgs) {
+    this.print(`Could not start room: ${room.id}`, `ERROR`);
     this.print(eventArgs);
   }
 
-  onPageClosed(id, room, eventArgs) {
-    this.print(`${id}`, `TAB CLOSED`);
+  onPageClosed(room, eventArgs) {
+    this.print(`${room.id}`, `TAB CLOSED`);
   }
 
-  onPageCrashed(id, room, eventArgs) {
-    this.print(`Page crashed: ${id}`, `ERROR`);
+  onPageCrashed(room, eventArgs) {
+    this.print(`Page crashed: ${room.id}`, `ERROR`);
   }
 
-  onPageError(id, room, eventArgs) {
-    this.print(`Page error: ${id}`, `ERROR`);
+  onPageError(room, eventArgs) {
+    this.print(`Page error: ${room.id}`, `ERROR`);
   }
 
 
