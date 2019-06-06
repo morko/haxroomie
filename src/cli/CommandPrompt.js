@@ -1,6 +1,6 @@
 const colors = require(`colors/safe`);
 const readline = require(`readline`);
-const CommandHandler = require(`./CommandHandler`);
+const Commands = require(`./Commands`);
 const RoomEventHandler = require(`./RoomEventHandler`);
 
 const COLORS = {
@@ -87,7 +87,7 @@ module.exports = class CommandPrompt {
    * @private
    */
   createCommandHandler(room) {
-    return new CommandHandler({
+    return new Commands({
       haxroomie: this.haxroomie,
       room: room,
       config: this.config,
