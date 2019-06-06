@@ -13,15 +13,18 @@ HHM.config.room = {
   token: hrConfig.token
 };
 
+// Work after HHM has been initialized.
 HHM.config.postInit = HBInit => {
   let room = HBInit();
 
+  // Load the `plugins`.
   if (!hrConfig.roomScript && hrConfig.plugins) {
     for (let plugin of hrConfig.plugins) {
       window.HHM.manager.addPluginByCode(plugin.content, plugin.name);
     }
   }
 
+  // Load the `roomScript`.
   if (hrConfig.roomScript) {
     let name = hrConfig.roomScript.name;
     let content = hrConfig.roomScript.content
@@ -34,6 +37,7 @@ HHM.config.postInit = HBInit => {
   }
 };
 
+// The default plugin configuration.
 HHM.config.plugins = {
   'sav/roles': {
     roles: {
@@ -50,14 +54,17 @@ HHM.config.plugins = {
   'sav/chat': {}
 };
 
-// merge user plugin configuration with the default
-if (hrConfig.pluginConfig && !hrConfig.disableDefaultPlugins) {
-  window.hroomie.mergeDeep(HHM.config.plugins, hrConfig.pluginConfig);
-// disable all plugins if user has set `disableDefaultPlugins` true
-} else if (hrConfig.disableDefaultPlugins) {
-  HHM.config.plugins = hrConfig.pluginConfig || {};
+// Clear the default plugin config if `disableDefaultPlugins` is true.
+if (hrConfig.disableDefaultPlugins) {
+  HHM.config.plugins = {};
 }
 
+// Merge user plugin configuration with the default.
+if (hrConfig.pluginConfig) {
+  window.hroomie.mergeDeep(HHM.config.plugins, hrConfig.pluginConfig);
+} 
+
+// Default plugin repositories.
 HHM.config.repositories = [
   {
     url: `${HHM.baseUrl}plugins/hhm-plugins/`,
@@ -68,7 +75,7 @@ HHM.config.repositories = [
   },
 ];
 
-// merge user repositories with default ones
+// Merge user repositories with default ones.
 if (hrConfig.repositories) {
   HHM.config.repositories = [
     ...HHM.config.repositories, 
@@ -76,14 +83,15 @@ if (hrConfig.repositories) {
   ];
 }
 
-// if rooms script is provided, do not load any other plugins
+// If `roomScript` is provided, do not load any other plugins.
 if (hrConfig.roomScript) {
   HHM.config.plugins = {};
 }
 
-// Load HHM if it has not already been loaded
+// Start HHM.
 if (HHM.manager === undefined) {
   let s = document.createElement(`script`);
+  // Load the HHM from ´hhm´ property if given. Otherwise from the default URL.
   if (hrConfig.hhm && hrConfig.hhm.content) {
     s.innerHTML = hrConfig.hhm.content;
   } else {
