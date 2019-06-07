@@ -131,6 +131,9 @@ module.exports = class CommandPrompt {
 
   onOpenRoomStop(room, eventArgs) {
     this.print(`${room.id} - ${room.roomInfo.roomLink}`, `ROOM STARTED`);
+    this.print(`Loaded plugins for ${colors.cyan(room.id)}:`);
+    let cmd = this.createCommands(room);
+    cmd.execute('plugins');
   }
 
   onOpenRoomError(room, eventArgs) {
