@@ -57,8 +57,6 @@ module.exports = class CommandPrompt {
     this.roomEventHandler = null;
     this.cmd = null;
     
-    this.maxTypeLength = 20;
-
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -167,18 +165,13 @@ module.exports = class CommandPrompt {
   }
 
   createMessage(type, msg) {
-    if (type.length > this.maxTypeLength) {
-      throw new Error(`Type length too long.`);
-    }
-    let coloredType = type;
+    let coloredType = `[${type}]`;
     if(COLORS[type]) coloredType = COLORS[type](type);
     let fullMsg = `${coloredType}`;
     if (!msg) return fullMsg;
     if (typeof msg !== `string`) {
       throw new Error(`Msg has to be typeof string`);
     }
-    // indentation
-    for (let i = 0; i < this.maxTypeLength - type.length; i++) fullMsg += ` `;
     fullMsg += ` ${msg}`;
     return fullMsg;
   }
