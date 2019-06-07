@@ -131,11 +131,13 @@ class Commands extends CommandHandler {
         let modifiedRooms = this.config.reload();
 
         for (let [roomId, modifiedProperties] of modifiedRooms) {
+          // Remove removed rooms.
           if (modifiedProperties === null) {
             this.haxroomie.removeRoom(roomId);
             continue;
           }
 
+          // Add new rooms.
           if (!this.haxroomie.hasRoom(roomId)) {
             this.haxroomie.addRoom(roomId);
             let roomConfig = this.config.getRoom(roomId);
@@ -145,6 +147,7 @@ class Commands extends CommandHandler {
             continue;
           }
 
+          // Restart running rooms that were modified.
           let room = this.haxroomie.getRoom(roomId);
           if (room.running) {
             this.openRoom(roomId);
