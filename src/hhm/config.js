@@ -39,19 +39,20 @@ HHM.config.postInit = HBInit => {
 
 // The default plugin configuration.
 HHM.config.plugins = {
+  'sav/players': {
+    addPlayerIdToNickname: false
+  },
   'sav/roles': {
     roles: {
       'host': hrConfig.hostPassword,
       'admin': hrConfig.adminPassword
     },
   },
-  'sav/players': {
-    addPlayerIdToNickname: false
-  },
   'sav/commands': {
     commandPrefix: '!'
   },
-  'sav/chat': {}
+  'sav/chat': {},
+  'sav/help': {}
 };
 
 // Clear the default plugin config if `disableDefaultPlugins` is true.
