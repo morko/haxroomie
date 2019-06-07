@@ -77,7 +77,7 @@ module.exports = class CommandPrompt {
     if (this.roomEventHandler) this.roomEventHandler.removeAllListeners('print');
     this.roomEventHandler = new RoomEventHandler({room});
     this.roomEventHandler.on('print', (msg, type) => this.print(msg, type));
-    this.cmd = this.createCommandHandler(room);
+    this.cmd = this.createCommands(room);
     this.rl.setPrompt(`${room.id}> `)
     this.currentRoom = room;
     this.createPrompt();
@@ -86,7 +86,7 @@ module.exports = class CommandPrompt {
   /**
    * @private
    */
-  createCommandHandler(room) {
+  createCommands(room) {
     return new Commands({
       haxroomie: this.haxroomie,
       room: room,
