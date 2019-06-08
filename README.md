@@ -37,36 +37,6 @@ somewhere where you dont need `sudo` to install npm packages.
 To do so you can follow the guide in
 [https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3):
 
-1. Create the .npm directory
-
-    ```sh
-    mkdir ~/.npm
-    ```
-    
-2. Set npm to use the .npm directory as the default global installation directory
-
-    ```sh
-    npm config set prefix ~/.npm
-    ```
-    
-3. Edit the .bashrc file
-
-    ```sh
-    nano ~/.bashrc
-    ```
-    
-4. Add this line to the .bashrc file so the shell can find the haxroomie "executable"
-
-    ```sh
-    export PATH="$PATH:$HOME/.npm/bin"
-    ```
-    
-5. Reload the .bashrc file
-
-    ```sh
-    source ~/.bashrc
-    ```
-
 ## Troubleshooting
 
 From [puppeteer troubleshooting](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md):
@@ -102,18 +72,13 @@ npm start -- -c [path/to/config.js]
 ```
 **Note the extra `--` when using the npm start command*
 
-if you installed with the alternative method:
-```sh
-haxroomie -c [path/to/config.js]
-```
-
 Once Haxroomie CLI is running you can type `help` for available commands.
 
 See [config section](#config) for more information about the config file.
 
 ## Config
 
-Config file is a Node.js module that exports the config object.
+Haxroomies config file is a Node.js module that exports the config object.
 It is used to tell Haxroomie how many rooms you are planning to run
 and with what kind of options.
 
@@ -378,8 +343,8 @@ Use the configs [repositories](#repositories) option to enable the repository an
 
 ## Using own HHM config
 
-Haxroomie supports providing a
-[Haxball Headless Manager configuration file](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
+Haxroomie supports custom
+[Haxball Headless Manager configuration files](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
 However there should rarely be a reason to do this. The files have couple
 requirements to work with Haxroomie
 (see [HHM config requirements](https://github.com/morko/haxroomie#hhm-config-requirements)).
