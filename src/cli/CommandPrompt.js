@@ -21,6 +21,7 @@ const COLORS = {
   'TAB CLOSED': colors.red,
   'ERROR': colors.red.bold,
   'INVALID COMMAND': colors.red,
+  'PLUGINS LOADED': colors.green,
   'PLUGIN LOADED': colors.green,
   'PLUGIN REMOVED': colors.cyan,
   'PLUGIN ENABLED': colors.green,
@@ -124,12 +125,15 @@ module.exports = class CommandPrompt {
   }
 
   onOpenRoomStart(room, eventArgs) {
-    this.print(room.id, `STARTING ROOM`);
+    this.print(`${colors.cyan(room.id)}`, `STARTING ROOM`);
   }
 
   onOpenRoomStop(room, eventArgs) {
-    this.print(`${room.id} - ${room.roomInfo.roomLink}`, `ROOM STARTED`);
-    this.print(`Loaded plugins for ${colors.cyan(room.id)}:`);
+    this.print(
+      `${colors.cyan(room.id)} - ${room.roomInfo.roomLink}`,
+      `ROOM STARTED`
+    );
+    this.print(`for ${colors.cyan(room.id)}`, 'PLUGINS LOADED');
     let cmd = this.createCommands(room);
     cmd.execute('plugins');
   }
