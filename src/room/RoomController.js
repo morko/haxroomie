@@ -379,7 +379,7 @@ class RoomController extends EventEmitter {
     logger.debug(`RoomController#closeRoom`);
     await this.roomOpener.close();
     this.roomInfo = null;
-    this.emit(`room-closed`);
+    this.emit(`close-room`);
   }
 
   /**
