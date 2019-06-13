@@ -68,9 +68,6 @@ if (hrConfig.pluginConfig) {
 // Default plugin repositories.
 HHM.config.repositories = [
   {
-    url: `${HHM.baseUrl}plugins/hhm-plugins/`,
-  },
-  {
     type: `github`,
     repository: `saviola777/hhm-plugins`
   },
