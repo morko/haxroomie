@@ -3,59 +3,106 @@ const expect = require('chai').expect;
 
 const Haxroomie = require('../src/Haxroomie')
 
+describe('Haxroomie basic test', function() {
+
+  let haxroomie = new Haxroomie();
+
+  function expectBrowserToBeUsable(browser) {
+    expect(browser).to.have.property('pages');
+  }
+
+  describe('#launchBrowser()', function() {
+    it('should launch the browser', async function() {
+      let browser = await haxroomie.launchBrowser();
+      expectBrowserToBeUsable(browser);
+    });
+  });
+  
+  describe('#closeBrowser()', function() {
+    it('should close the browser', async function() {
+      return haxroomie.closeBrowser();
+    });
+  })
+});
+
 describe('Haxroomie', function() {
-  describe('#new Haxroomie()', function() {
-    it('should create Haxroomie without errors', function() {
-      return new Haxroomie();
+
+  let haxroomie = new Haxroomie();
+  let haxroomie2 = new Haxroomie({port: 3099});
+
+  beforeEach(async function() {
+    haxroomie = new Haxroomie();
+    await haxroomie.launchBrowser();
+  });
+
+  afterEach(async function() {
+    await haxroomie.closeBrowser();
+    await haxroomie2.closeBrowser();
+  });
+
+  describe('#launchBrowser()', function() {
+
+    it('should not allow to launch multiple browsers', async function() {
+      return expect(haxroomie.launchBrowser()).to.eventually.be.rejected;
+    });
+
+    it(
+      'should not allow to launch multiple browsers from different instances',
+      async function() {
+        return expect(haxroomie2.launchBrowser()).to.eventually.be.rejected;
     });
   });
 
-  describe('#createBrowser()', function() {
-    it('should launch puppeteer browser without errors', async function() {
-      let haxroomie = new Haxroomie();
-      // test that the puppeteer api has some property defined in API
-      let browser = await haxroomie.createBrowser();
-      expect(browser).to.have.property('pages');
-      await haxroomie.closeBrowser();
-    })
-  });
+  describe('#addRoom()', function() {
 
-
-  describe('#getSession()', function() {
-
-    it('should return a Session object', async function() {
-      let haxroomie = new Haxroomie();
-      let session = await haxroomie.getSession('1');
-      expect(session).to.be.an('Session');
-      await haxroomie.closeBrowser();
+    it('should add a new room', async function() {
+      let room = await haxroomie.addRoom(1);
+      expect(room).to.be.an('RoomController');
+      return expect(haxroomie.hasRoom(1)).to.equal(true);
     });
 
-    it('should add the session to roomSessions', async function() {
-      let haxroomie = new Haxroomie();
-      await haxroomie.getSession(0);
-      expect(haxroomie.roomSessions).to.have.own.property(0);
-      await haxroomie.closeBrowser();
+    it('should throw if adding room with same id', async function() {
+      await haxroomie.addRoom(1);
+      return expect(haxroomie.addRoom(1)).to.eventually.be.rejected;
     });
 
-    it('should create new page for every new session request', async function() {
-      let haxroomie = new Haxroomie();
-
-      for (let i = 0; i < 5; i++) {
-        await haxroomie.getSession(i);
+    it('should add browser tab for each room', async function() {
+      let numberOfRoomsToAdd = 4;
+      for (let i = 0; i < numberOfRoomsToAdd; i++) {
+        await haxroomie.addRoom(i);
       }
       let pages = await haxroomie.browser.pages()
-      expect(pages).to.be.an('array').that.has.lengthOf(5);
-      await haxroomie.closeBrowser();
-
+      return expect(pages).to.be.an('array').that.has.lengthOf(numberOfRoomsToAdd);
     });
 
-    it('should return the same session when using existing id', async function() {
-      let haxroomie = new Haxroomie();
-      await haxroomie.createBrowser();
-      let sessionOne = await haxroomie.getSession(1);
-      let sessionTwo = await haxroomie.getSession(1);
-      expect(sessionOne).to.equal(sessionTwo);
-      await haxroomie.closeBrowser();
+    it('should only allow number or string as id', async function() {
+      await expect(haxroomie.addRoom(523)).to.eventually.be.fulfilled;
+      await expect(haxroomie.addRoom('fsdafewjkj')).to.eventually.be.fulfilled;
+      await expect(haxroomie.addRoom(() => {})).to.eventually.be.rejected;
+      return expect(haxroomie.addRoom({})).to.eventually.be.rejected;
+    });
+
+  });
+
+  describe('#removeRoom()', function() {
+
+    let numberOfRoomsToAdd = 4;
+
+    beforeEach(async function() {
+      for (let i = 0; i < numberOfRoomsToAdd; i++) {
+        await haxroomie.addRoom(i);
+      }
+    });
+
+    it('should remove a room', async function() {
+      await haxroomie.removeRoom(1);
+      expect(haxroomie.hasRoom(1)).to.equal(false);
+    });
+
+    it('should remove the rooms browser tab', async function() {
+      await haxroomie.removeRoom(1);
+      let pages = await haxroomie.browser.pages()
+      expect(pages).to.be.an('array').that.has.lengthOf(numberOfRoomsToAdd - 1);
     });
   });
 });

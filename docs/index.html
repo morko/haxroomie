@@ -1,128 +1,378 @@
+<!-- start:readme.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Home</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Haxroomie</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Host HaxBall rooms without GUI.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
 </head>
-
 <body>
-
-<div id="main">
-
-    <h1 class="page-title">Home</h1>
-
-    
-
-
-
-    
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-    <section>
-        <article><h1>Installation</h1><p>To be able to install and run haxroomie </p>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Haxroomie
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#FileDef">FileDef</a></li>
+											<li><a href="global.html#PluginData">PluginData</a></li>
+											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="Haxroomie.html">Haxroomie</a></li>
+											<li><a href="RoomController.html">RoomController</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-haxroomie.html">haxroomie</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">readme</span>
+				<h1><span class="name">Haxroomie</span></h1>
+				<div class="summary"><p>Host HaxBall rooms without GUI.</p></div>			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+		<section class="readme-section">
+			<article><h1>Installation</h1>
+<p>To be able to install and run haxroomie</p>
 <ul>
 <li><a href="https://nodejs.org">Node.js</a> version 10.15.1 or newer and</li>
 <li><a href="https://git-scm.com/">Git</a></li>
 </ul>
-<p>are required. </p>
+<p>are required.</p>
 <p>To install haxroomie, clone the repository with git:</p>
-<pre class="prettyprint source lang-sh"><code>git clone https://www.github.com/morko/haxroomie</code></pre><p>Then go to the directory you cloned it and install dependencies with npm:</p>
+<pre class="prettyprint source lang-sh"><code>git clone https://www.github.com/morko/haxroomie
+</code></pre>
+<p>Then go to the directory you cloned it and install dependencies with npm:</p>
 <pre class="prettyprint source lang-sh"><code>cd haxroomie
-npm install</code></pre><p>You can run the CLI from <code>haxroomie</code> directory using node.</p>
-<pre class="prettyprint source lang-sh"><code>node src/cli --help</code></pre><p><strong>or</strong></p>
-<pre class="prettyprint source lang-sh"><code>npm start -- --help</code></pre><p>Note the extra &quot;--&quot; that is required to pass npm scripts arguments. The documentation uses <code>haxroomie</code> instead <code>npm start --</code> for the examples.</p>
-<h2>Alternative installation</h2><p>You can also install haxroomie to a global npm installation directory. This will give you a <code>haxroomie</code> command that you can run from anywhere if your npm configuration is correct.</p>
+npm install
+</code></pre>
+<p>Now you are ready to start using Haxroomie. See <a href="#cli-usage">CLI usage section</a>
+for help on how to use the command line interface.</p>
+<h2>Alternative installation</h2>
+<p>You can also install haxroomie to a global npm installation directory.
+This will give you a <code>haxroomie</code> command that you can run from
+anywhere if your npm configuration is correct.</p>
 <p>To install with npm run:</p>
-<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie -g</code></pre><p>This will probably fail if you havent set your global npm directory. In linux machines it is recommended to set the directory to somewhere where you dont need <code>sudo</code> to install npm packages. To do so you can follow the guide in <a href="https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3">https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3</a>:</p>
-<ol>
-<li><p>Create the .npm directory</p>
-<pre class="prettyprint source lang-sh"><code> mkdir ~/.npm</code></pre></li>
-<li><p>Set npm to use the .npm directory as the default global installation directory</p>
-<pre class="prettyprint source lang-sh"><code> npm config set prefix ~/.npm</code></pre></li>
-<li><p>Edit the .bashrc file</p>
-<pre class="prettyprint source lang-sh"><code> nano ~/.bashrc</code></pre></li>
-<li><p>Add this line to the .bashrc file so the shell can find the haxroomie &quot;executable&quot;</p>
-<pre class="prettyprint source lang-sh"><code> export PATH=&quot;$PATH:$HOME/.npm/bin&quot;</code></pre></li>
-<li><p>Reload the .bashrc file</p>
-<pre class="prettyprint source lang-sh"><code> source ~/.bashrc</code></pre></li>
-</ol>
-<h2>Troubleshooting</h2><p>From <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md">puppeteer troubleshooting</a>:</p>
-<p>Make sure all the necessary dependencies are installed. You can run <code>ldd chrome | grep not</code> on a Linux machine to check which dependencies are missing. The common ones are provided below.</p>
-<pre class="prettyprint source lang-sh"><code>sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget</code></pre><h1>CLI usage</h1><p>Haxroomie provides a command-line interface which is a client for the 
-Haxroomie API and can be used to start and control haxball rooms.</p>
-<p>To be able to start a room you must obtain a token from <a href="https://www.haxball.com/headlesstoken">https://www.haxball.com/headlesstoken</a>
-and give it to the CLI script as an argument:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token></code></pre><p>Haxroomie has also simple interactive command-line interface. Once Haxroomie CLI is running and the haxball room has opened you can type <code>help</code> for available commands.</p>
-<h2>Running own room scripts</h2><p>The awesome project by <a href="https://github.com/saviola777">saviola777</a> allows users to run multiple scripts/plugins on the same haxball room instance. The plugins/scripts can be either in a HHM plugin format or regular vanilla scripts with few restrictions mentioned in <a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">HHM docs</a>.</p>
-<p>You can run <strong>one</strong> room script by passing the haxroomie command line argument:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token> --room-script ./path/to/myscript.js</code></pre><p><strong>Note that</strong> running a script this way will disable the default HHM plugins that haxroomie runs.</p>
-<p><strong>Also note that</strong> if your script uses localStorage to save some data and you want to run multiple instances of haxroomie the <code>user-data-dir</code> should be changed to different paths for these instances for the script to not overwrite other instances data. Use <code>--help</code> for more info about how to change this from the command line.</p>
-<p>To run <strong>multiple</strong> plugins you should create your own <a href="https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository">HHM plugin repository</a>. Read the guide for writing own HHM plugins at <a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">https://haxplugins.tk/docs/tutorial-writing-plugins.html</a>.</p>
-<p>To pass the repository url from command line:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token> --repositories https://github.com/[user]/[repository]</code></pre><p>You can also pass multiple repositories by separating them with a comma.</p>
-<h2>Passing configuration options to plugins</h2><p>You can pass the plugins options when starting haxroomie. The configuration file should be in <a href="https://en.wikipedia.org/wiki/JSON">JSON format</a>.</p>
-<p>To pass the plugin configuration file from command line:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token> --pluginConfig ./path/to/myconfig.json</code></pre><p>See <a href="https://github.com/morko/haxroomie/tree/master/examples/plugin-config.json">https://github.com/morko/haxroomie/tree/master/examples/plugin-config.json</a> for example on how to change the command plugins prefix from &quot;!&quot; to &quot;.&quot;.</p>
-<h2>Using own HHM config</h2><p>Haxroomie supports loading the options from a <a href="https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration">Haxball Headless Manager configuration file</a>.</p>
-<p>To pass the HHM configuration file from command line:</p>
-<pre class="prettyprint source lang-sh"><code>haxroomie &lt;token> --config ./path/to/myconfig.json</code></pre><p>See <a href="https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration">https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration</a> for information about the configuration file.</p>
-<p><strong>THE CUSTOM CONFIG FILES HHM.config.room PROPERTY MUST HAVE A <code>token</code> PROPERTY LIKE THIS:</strong></p>
-<pre class="prettyprint source"><code>HHM.config.room = {
-  token: haxroomie.token
-}</code></pre><p>Haxroomie injects a <strong>haxroomie</strong> object to the haxball headless manager configuration that can be used to e.g. get options from the command line. Multiple custom options can be injected to the HHM config with <code>--options</code> argument.</p>
-<p>See the default configuration file in <a href="https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js">https://www.github.com/morko/haxroomie/src/master/src/hhm/config.js</a> for a complete example.</p>
-<h1>API</h1><p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie</code></pre><p>See <a href="https://morko.github.io/haxroomie/">https://morko.github.io/haxroomie/</a> for complete API documentation.</p>
-<p>Easiest way to create <a href="https://morko.github.io/haxroomie/module-haxroomie.Haxroomie.html">Haxroomie instances</a> is to use the asynchronous factory function <code>createHaxroomie</code> in the <a href="https://morko.github.io/haxroomie/module-haxroomie.html">haxroomie module</a>.</p>
-<p>Each instance of Haxroomie controls one headless chrome browser with help of the puppeteer library. Each browser can run multiple haxball rooms in tabs. These browser tabs are controlled through the <a href="https://morko.github.io/haxroomie/Session.html">Session</a> object requested with <code>getSession</code>. Each <a href="https://morko.github.io/haxroomie/Session.html">Session</a> controls one room / browser tab.</p>
-<h2>Example API usage</h2><p>Example that requires the token to be set as an environment variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-let haxroomie = await createHaxroomie();
-let session = await haxroomie.getSession(`example`);
+<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie -g
+</code></pre>
+<p>This will probably fail if you havent set your global npm directory.
+In linux machines it is recommended to set the directory to
+somewhere where you dont need <code>sudo</code> to install npm packages.
+To do so you can follow the guide in
+<a href="https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3">https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3</a>:</p>
+<h2>Troubleshooting</h2>
+<p>From <a href="https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md">puppeteer troubleshooting</a>:</p>
+<p>Make sure all the necessary dependencies are installed.
+You can run <code>ldd chrome | grep not</code> on a Linux machine
+to check which dependencies are missing.</p>
+<p>To install dependencies in Ubuntu based linux you can use the following command:</p>
+<pre class="prettyprint source lang-sh"><code>sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+</code></pre>
+<h1>CLI usage</h1>
+<p>To start the CLI it needs a config file. To get an easy start copy one of the
+example configs from
+<a href="https://github.com/morko/haxroomie/tree/master/examples/configs">haxroomie/examples/configs</a>
+to the projects directory as <code>config.js</code> and modify it to your liking.
+By default Haxroomie searches for <code>config.js</code> in the current working directory.</p>
+<p>To start run:</p>
+<pre class="prettyprint source lang-sh"><code>npm start
+</code></pre>
+<p>If you wish to load the config from elsewhere than <code>config.js</code> in the current
+working directory you can give it the <code>-c</code> argument.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-sh"><code>npm start -- -c [path/to/config.js]
+</code></pre>
+<p>*<em>Note the extra <code>--</code> when using the npm start command</em></p>
+<p>Once Haxroomie CLI is running you can type <code>help</code> for available commands.</p>
+<p>See <a href="#config">config section</a> for more information about the config file.</p>
+<h2>Config</h2>
+<p>Haxroomies config file is a Node.js module that exports the config object.
+It is used to tell Haxroomie how many rooms you are planning to run
+and with what kind of options.</p>
+<p>You can find examples of configs in
+<a href="https://github.com/morko/haxroomie/tree/master/examples/configs">examples directory</a>.</p>
+<p>See the <a href="#room-options-explained">room options explained</a> for
+information about each option.</p>
+<p>Here is an example of a config that starts one private room.</p>
+<pre class="prettyprint source lang-js"><code>let config = {
+  // ID for the room (has to be unique):
+  'room1': {
 
-function createHRClient(id) {
-  let id = id;
-  function onReceivedMessage(message) {
-    console.log(message);
+    // Options for room1:
+    autoStart: true,
+    roomName: 'haxroomie',
+    playerName: 'host',
+    maxPlayers: 12,
+    public: false,
+    pluginConfig: {
+      'sav/roles': {
+        roles: {
+          admin: 'adminpass',
+        }
+      }
+    }
   }
-  return {
-    id,
-    onReceivedMessage
-  };
 };
+module.exports = config;
+</code></pre>
+<p>To run more than one room just add a new property for the config object.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>let config = {
+  'room1': {
+    // Options for room1 here
+  },
+  'room2': {
+    // Options for room2 here
+  }
+};
+module.exports = config;
+</code></pre>
+<h3>Room options explained</h3>
+<p>Each room in the config can be given options.</p>
+<p>This section explains each option.</p>
+<h4><code>autoStart</code></h4>
+<p>Set to <code>true</code> if you want the room to start on startup. Default is <code>false</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>autoStart: true
+</code></pre>
+<h4><code>roomName</code></h4>
+<p>The name for the room. Default is <code>haxroomie</code></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>roomName: 'my room'
+</code></pre>
+<h4><code>playerName</code></h4>
+<p>The name for the host player. Default is <code>host</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>playerName: 'my host player name'
+</code></pre>
+<h4><code>maxPlayers</code></h4>
+<p>Max number of players the room accepts. Default is <code>10</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>maxPlayers: 12
+</code></pre>
+<h4><code>public</code></h4>
+<p>If <code>true</code> the room will appear in the room list. Default is <code>false</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>public: true
+</code></pre>
+<h4><code>geo</code></h4>
+<p>Geolocation override for the room.</p>
+<p>You can use <a href="https:%5C/%5C/www.latlong.net/">https://www.latlong.net/</a> to find the coordinates easily.
+The code is a country code in two letter ISO format listed in
+<a href="https:%5C/%5C/countrycode.org/">https://countrycode.org/</a>. Default is where your server is located.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
+</code></pre>
+<h4><code>repositories</code></h4>
+<p>Array of plugin repositories to load.</p>
+<p>With this you can tell which repositories to load in addition to the default one
+(<a href="https://github.com/saviola777/hhm-plugins">plugin repository by saviola</a>).</p>
+<p><a href="https://github.com/saviola777/haxball-headless-manager#using-a-webserver">Here</a>
+you can see how to add repository from an URL and
+<a href="https://github.com/saviola777/haxball-headless-manager#using-a-github-repository">here</a>
+how to add one from GitHub.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>repositories: [
+  {
+    type: `github`,
+    repository: `morko/hhm-sala-plugins`
+  }
+],
+</code></pre>
+<h4><code>pluginConfig</code></h4>
+<p>Object containing the plugins to load and their configurations.</p>
+<p>With this you can tell which plugins to load from the repositories that are
+available and give them optional configurations.</p>
+<p>By default the plugins from
+<a href="https://github.com/saviola777/hhm-plugins">saviolas repository</a> are available.</p>
+<p>Haxroomie loads <code>sav/roles</code>, <code>sav/commands</code>, <code>sav/help</code>, <code>sav/players</code> and
+<code>sav/chat</code> plugins even if you dont define them here. To disable these
+plugins you can use the <a href="#disabledefaultplugins">disableDefaultPlugins</a> option.</p>
+<p>The <code>pluginConfig</code> object follows the format of
+<a href="https://github.com/saviola777/haxball-headless-manager#configuration-file">HHM configuration file's</a>
+<code>HHM.config.plugin</code> object.</p>
+<p>See
+<a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">writing plugins tutorial</a>
+for information about saviolas default plugins and how to write your own.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>pluginConfig: {
+  'sav/roles': {
+    roles: {
+      admin: 'superSecretAdminPass',
+      host: 'superSecretHostPass',
+    }
+  },
+  'my/cool-plugin': {}
+}
+</code></pre>
+<h4><code>roomScript</code></h4>
+<p>Use this if you do not wish to use the plugin system and just run a traditional
+HaxBall headless script.</p>
+<p><strong>Disables all other non essential plugins!</strong></p>
+<p>See <a href="#using-own-room-scripts-or-plugins">using own room scripts or plugins</a>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>roomScript: '/path/to/myScript.js'
+</code></pre>
+<h4><code>disableDefaultPlugins</code></h4>
+<p>Set to <code>true</code> if you want to disable the default
+HHM plugins that Haxroomie loads.</p>
+<p>This can be useful if for example you
+want to test some plugins without others interfering with it.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>disableDefaultPlugins: true
+</code></pre>
+<h4><code>hhmConfig</code></h4>
+<p>Path to custom Haxball Headless Manager (HHM) configuration file.
+You rarely need this.</p>
+<p>See <a href="#using-own-hhm-config">Using own HHM config</a></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhmConfig: '/path/to/hhmConfig.js'
+</code></pre>
+<h4><code>plugins</code></h4>
+<p>Plugins that you want to load from the filesystem. This should
+be an array of objects that contain the plugin name and file path.</p>
+<p><strong>The <a href="#pluginconfig">pluginConfig</a> option does not affect these plugins!</strong></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>plugins: [
+  {
+    name: 'myplugin',
+    path: '/path/to/myplugin.js'
+  }
+]
+</code></pre>
+<p>Useful for testing plugins before uploading them to a server or GitHub.</p>
+<h4><code>hhm</code></h4>
+<p>Path to built source of Headless Haxball Manager (HHM).</p>
+<p>Useful for testing changes to the source.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhm: '/path/to/hhm.js'
+</code></pre>
+<h2>Using own room scripts or plugins</h2>
+<p>You can run <strong>one</strong> room script with the configs <a href="#roomscript">roomScript</a> option.</p>
+<p>Running a script this way will disable the default plugins that Haxroomie loads
+(except the ones that Haxroomie requires to work internally).</p>
+<p>The scripts have few restrictions compared to vanilla room scripts mentioned in
+<a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">HHM docs</a>.</p>
+<p>HHM allows you to modularize your room script. Instead of one massive
+JavaScript file you can implement the functionality in smaller modules called
+plugins.</p>
+<p>Read the guide for writing own HHM plugins at
+<a href="https://haxplugins.tk/docs/tutorial-writing-plugins.html">HHM docs</a>.
+You can test them by loading them with the configs <a href="#plugins">plugins</a>
+option.</p>
+<p>To publish the plugins you can create your own
+<a href="https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository">HHM plugin repository</a>.</p>
+<p>Use the configs <a href="#repositories">repositories</a> option to enable the repository and
+<a href="#pluginConfig">pluginConfig</a> option to load plugins from the repository.</p>
+<h2>Using own HHM config</h2>
+<p>Haxroomie supports custom
+<a href="https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration">Haxball Headless Manager configuration files</a>.
+However there should rarely be a reason to do this. The files have couple
+requirements to work with Haxroomie
+(see <a href="https://github.com/morko/haxroomie#hhm-config-requirements">HHM config requirements</a>).</p>
+<h3>HHM config requirements</h3>
+<p><code>HHM.config.room</code> object must have a <code>token</code> property like this:</p>
+<pre class="prettyprint source lang-js"><code>HHM.config.room = {
+  token: hrConfig.token
+}
+</code></pre>
+<p>The <code>postInit</code> plugin should set the <code>window.hroomie.hhmStarted</code> property to
+<code>true</code> on the <code>onRoomLink</code> event like this:</p>
+<pre class="prettyprint source lang-js"><code>HHM.config.postInit = HBInit => {
+  let room = HBInit();
+
+  room.onRoomLink = () => {
+    window.hroomie.hhmStarted = true;
+  }
+}
+</code></pre>
+<h3>Differences to vanilla HHM config</h3>
+<p>Haxroomie injects a <code>hrConfig</code> object to the HHM config.
+The object contains all the properties sent to the function
+that is used to start the room.
+See the
+<a href="https://morko.github.io/haxroomie/RoomController.html#openRoom">API documentation for openRoom</a>
+for a list of these properties.</p>
+<p>See the
+<a href="https://www.github.com/morko/haxroomie/tree/master/src/hhm/config.js">default configuration file</a>
+for a complete example.</p>
+<p>See
+<a href="https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration">HHM docs</a>
+for more information about the configuration file.</p>
+<h1>API</h1>
+<p>To install haxroomie for your project its preferred to install it locally with</p>
+<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie
+</code></pre>
+<p>To work with the API see <a href="https://morko.github.io/haxroomie/">the official documentation</a>.</p>
+<p>Easiest way to create
+<a href="https://morko.github.io/haxroomie/module-haxroomie.Haxroomie.html">Haxroomie instances</a>
+is to use the asynchronous factory function <code>createHaxroomie</code> in the
+<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
+<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
+Each browser tab can run one HaxBall room. These browser tabs are controlled with
+the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
+<h2>Example API usage</h2>
+<p>Example that requires the token to be set as an environment variable named <code>HAXBALL_TOKEN</code>.</p>
+<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
 
 (async function bootstrap() {
   try {
     let haxroomie = await createHaxroomie();
-    let session = await haxroomie.getSession(`exampleSessionId`);
-    let client = createHRClient(1);
-
-    session.subscribe(client.id, client.onReceivedMessage.bind(client));
-    session.openRoom({
+    let room = await haxroomie.addRoom(`example`);
+		
+    room.on('open-room-start' (roomInfo) => {
+      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
+    });
+    room.openRoom({
       roomName: `haxroomie`,
       playerName: `host`,
       maxPlayers: 10,
@@ -134,27 +384,42 @@ function createHRClient(id) {
     process.exit(1);
   }
 })();
+
 </code></pre></article>
-    </section>
-
-
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-haxroomie.html">haxroomie</a></li></ul><h3>Classes</h3><ul><li><a href="module-haxroomie.Haxroomie.html">Haxroomie</a></li><li><a href="Session.html">Session</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-haxroomie.messageTypes.html">messageTypes</a></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 16 2019 17:59:01 GMT+0300 (Eastern European Summer Time)
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+		</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">© Oskari Pöntinen 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 13th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
 </body>
 </html>
+<!-- end:readme.hbs -->
