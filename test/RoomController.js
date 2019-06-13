@@ -51,7 +51,7 @@ describe('RoomController', function() {
       rooms[0].on('open-room-stop', () => {
         rooms[0].closeRoom();
       });
-      rooms[0].on('room-closed', () => done());
+      rooms[0].on('close-room', () => done());
       rooms[0].openRoom(configs[0]);
     });
   });
