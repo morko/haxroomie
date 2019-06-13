@@ -13,11 +13,13 @@ const stringify = require('../stringify');
  * Emitted when the browser tab crashes.
  * Renders this RoomController unusable.
  * @event RoomController#page-crash
+ * @param {Error} error - The error that was throwed.
  */
 
 /**
  * Emitted when some script throws an error in the browsers tab.
  * @event RoomController#page-error
+ * @param {Error} error - The error that was throwed.
  */
 
 /**
@@ -50,6 +52,11 @@ const stringify = require('../stringify');
  * Emitted when {@link RoomController#openRoom} fails.
  * @event RoomController#open-room-error
  * @param {Error} error - Error that happened when opening the room.
+ */
+
+/**
+ * Emitted when {@link RoomController#closeRoom} has been called.
+ * @event RoomController#close-room
  */
 
 /**
