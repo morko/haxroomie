@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/cli",
     "test": "mocha",
-    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./README.md -d ./docs -c ./jsdoc-config.js"
+    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./API.md -d ./docs -c ./jsdoc-config.js"
   },
   "keywords": [
     "haxball"
