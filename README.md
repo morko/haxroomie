@@ -1,6 +1,6 @@
 # haxroomie
 
-![Discord Shield](https://discordapp.com/api/guilds/580671475707674626/widget.png?style=shield)
+<a href=https://discord.gg/TeJAEWu><img src="https://discordapp.com/api/guilds/580671475707674626/widget.png?style=shield" alt="Discord"/></a>
 
 Haxroomie is an API and CLI to run headless HaxBall rooms without GUI.
 
