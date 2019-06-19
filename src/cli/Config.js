@@ -42,7 +42,8 @@ class Config {
     try {
       config = require(configPath);
     } catch (err) {
-      throw new Error(`Could not load the config: ${configPath}`);
+      logger.error(`Could not load the config: ${configPath}`);
+      throw err;
     }
     
     // Load the files of each room in the config.

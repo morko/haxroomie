@@ -2,6 +2,7 @@ const colors = require(`colors/safe`);
 const readline = require(`readline`);
 const Commands = require(`./Commands`);
 const RoomEventHandler = require(`./RoomEventHandler`);
+const logger = require('../logger');
 
 const COLORS = {
   'STARTING ROOM': colors.green,
@@ -192,7 +193,8 @@ module.exports = class CommandPrompt {
     try {
       await this.cmd.execute(line);
     } catch (err) {
-      this.print(err.message, `ERROR`);
+      logger.error(`Could not execute: ${line}`);
+      logger.error(err.stack);
     }
     this.createPrompt();
   }
