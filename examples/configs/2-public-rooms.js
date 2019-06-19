@@ -11,8 +11,8 @@
 let config = {
   'pub1': {
     autoStart: true,
-    roomName: 'PRO 3v3 1',
-    playerName: 'host',
+    roomName: `PRO 3v3 1`,
+    playerName: `host`,
     maxPlayers: 10,
     public: true,
     repositories: [
@@ -25,7 +25,7 @@ let config = {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
-          admin: 'adminpass',
+          admin: `adminpass`,
         }
       },
       // spam protection
@@ -36,8 +36,8 @@ let config = {
   },
   'pub2': {
     autoStart: true,
-    roomName: 'PRO 3v3 2',
-    playerName: 'host',
+    roomName: `PRO 3v3 2`,
+    playerName: `host`,
     maxPlayers: 10,
     public: true,
     repositories: [
@@ -50,7 +50,7 @@ let config = {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
-          admin: 'adminpass',
+          admin: `adminpass`,
         }
       },
       // spam protection

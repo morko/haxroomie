@@ -12,8 +12,8 @@ const path = require('path');
 let config = {
   'room': {
     autoStart: true,
-    roomName: 'PRO 3v3',
-    playerName: 'host',
+    roomName: `PRO 3v3`,
+    playerName: `host`,
     maxPlayers: 10,
     public: true,
     roomScript: path.join(__dirname, '..', 'room-script.js')
