@@ -81,6 +81,7 @@ class HRConsoleApp {
     }
     return new Promise((resolve, reject) => {
 
+      this.commandPrompt.print('Get tokens from https://www.haxball.com/headlesstoken')
       this.commandPrompt.question(
         `Enter token for ${colors.green(id)}: `,
         async (token) => {
