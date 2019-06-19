@@ -11,15 +11,15 @@
 let config = {
   'priv': {
     autoStart: true,
-    roomName: 'fs arena',
-    playerName: 'host',
+    roomName: `fs arena`,
+    playerName: `host`,
     maxPlayers: 20,
     public: false,
     pluginConfig: {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
-          admin: 'adminpass',
+          admin: `adminpass`,
         }
       }
     }

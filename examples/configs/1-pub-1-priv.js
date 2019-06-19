@@ -11,8 +11,8 @@
 let config = {
   'pub': {
     autoStart: true,
-    roomName: 'PRO 3v3 1',
-    playerName: 'host',
+    roomName: `PRO 3v3 1`,
+    playerName: `host`,
     maxPlayers: 10,
     public: true,
     repositories: [
@@ -25,7 +25,7 @@ let config = {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
-          admin: 'adminpass',
+          admin: `adminpass`,
         }
       },
       // spam protection
@@ -36,15 +36,15 @@ let config = {
   },
   'priv': {
     autoStart: true,
-    roomName: 'fs arena',
-    playerName: 'host',
+    roomName: `fs arena`,
+    playerName: `host`,
     maxPlayers: 20,
     public: false,
     pluginConfig: {
       // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
-          admin: 'adminpass',
+          admin: `adminpass`,
         }
       }
     }
