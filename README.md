@@ -13,17 +13,17 @@ With haxroomie you can
 ## Links
 
 - [Installation](#installation)
+- [Step-by-step installation tutorial](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
 - [Using the Command Line Interface](#cli-usage)
 - [API](https://morko.github.io/haxroomie) 
 
 # Installation
 
-To be able to install and run haxroomie 
+**Prerequisites:**
 
-- [Node.js](https://nodejs.org) version 10.15.1 or newer and
+- [Node.js](https://nodejs.org) version 10.15.1 or newer 
+- `npm` (usually comes with [Node.js](https://nodejs.org))
 - [Git](https://git-scm.com/)
-
-are required. 
 
 To install haxroomie, clone the repository with git:
 ```sh
@@ -34,6 +34,8 @@ Then go to the directory you cloned it and install dependencies with npm:
 cd haxroomie
 npm install
 ```
+
+If you do not have Chrome installed in your system, then install the dependencies for it listed in the [troubleshooting](#troubleshooting) section.
 
 Now you are ready to start using Haxroomie. See [CLI usage section](#cli-usage)
 for help on how to use the command line interface.
@@ -49,32 +51,39 @@ To install with npm run:
 npm install morko/haxroomie -g
 ```
 
-This will probably fail if you havent set your global npm directory.
-In linux machines it is recommended to set the directory to
+This will probably fail if you have not set your global npm directory.
+
+In Linux it is recommended to set the directory to
 somewhere where you dont need `sudo` to install npm packages.
-To do so you can follow the guide in
-[https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3):
+To do so you can follow 
+[this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3).
 
 ## Troubleshooting
 
-From [puppeteer troubleshooting](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md):
+If you get an error like *"Failed to launch Chrome"*, it is possible that you are missing some libraries that Chrome depend on.
 
-Make sure all the necessary dependencies are installed.
-You can run `ldd chrome | grep not` on a Linux machine
-to check which dependencies are missing.
-
-To install dependencies in Ubuntu based linux you can use the following command:
+To install dependencies in **Ubuntu** based Linux you can use the following command:
 ```sh
 sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 ```
 
+For dependencies in other systems see puppeteers
+[troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix).
+
 # CLI usage
 
-To start the CLI it needs a config file. To get an easy start copy one of the
+To start the CLI it needs a [config](#config) file. 
+
+For a quick start copy one of the
 example configs from 
 [haxroomie/examples/configs](https://github.com/morko/haxroomie/tree/master/examples/configs)
-to the projects directory as `config.js` and modify it to your liking.
+to the directory you cloned/downloaded haxroomie to as `config.js` and modify
+it to your liking.
+
 By default Haxroomie searches for `config.js` in the current working directory.
+
+Every room requires a token from <https://www.haxball.com/headlesstoken>.
+You will be prompted for the tokens when opening a room.
 
 To start run:
 ```sh
@@ -90,14 +99,14 @@ npm start -- -c [path/to/config.js]
 ```
 **Note the extra `--` when using the npm start command*
 
-Once Haxroomie CLI is running you can type `help` for available commands.
+Once haxroomie CLI is running you can type `help` for available commands.
 
 See [config section](#config) for more information about the config file.
 
 ## Config
 
 Haxroomies config file is a Node.js module that exports the config object.
-It is used to tell Haxroomie how many rooms you are planning to run
+It is used to tell haxroomie how many rooms you are planning to run
 and with what kind of options.
 
 You can find examples of configs in
@@ -209,6 +218,7 @@ e.g.
 ```js
 geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
 ```
+
 #### `repositories`
 
 Array of plugin repositories to load.
@@ -283,7 +293,7 @@ roomScript: '/path/to/myScript.js'
 #### `disableDefaultPlugins`
 
 Set to `true` if you want to disable the default
-HHM plugins that Haxroomie loads.
+HHM plugins that haxroomie loads.
 
 This can be useful if for example you
 want to test some plugins without others interfering with it.
@@ -338,13 +348,13 @@ hhm: '/path/to/hhm.js'
 
 You can run **one** room script with the configs [roomScript](#roomscript) option.
 
-Running a script this way will disable the default plugins that Haxroomie loads
-(except the ones that Haxroomie requires to work internally).
+Running a script this way will disable the default plugins that haxroomie loads
+(except the ones that haxroomie requires to work internally).
 
-The scripts have few restrictions compared to vanilla room scripts mentioned in
-[HHM docs](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
+### Running plugins instead of a room script
 
-HHM allows you to modularize your room script. Instead of one massive
+[HHM](https://github.com/saviola777/haxball-headless-manager)
+allows you to modularize your room script. Instead of one massive
 JavaScript file you can implement the functionality in smaller modules called
 plugins.
 
@@ -364,7 +374,7 @@ Use the configs [repositories](#repositories) option to enable the repository an
 Haxroomie supports custom
 [Haxball Headless Manager configuration files](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
 However there should rarely be a reason to do this. The files have couple
-requirements to work with Haxroomie
+requirements to work with haxroomie
 (see [HHM config requirements](https://github.com/morko/haxroomie#hhm-config-requirements)).
 
 ### HHM config requirements
