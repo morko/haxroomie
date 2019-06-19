@@ -210,12 +210,17 @@ class Commands extends CommandHandler {
     return {
       description: 'Prints players in the room.',
       run: async () => {
-        let playerList = await this.room.callRoom('getPlayerList');
-        let players = [`Amount of players: ${playerList.length - 1}`];
+        let playerList = await this.room.callRoom('getPlayerList')
+        playerList = playerList.filter(p => p.id !== 0);
+        let players = [`Amount of players: ${playerList.length}`];
       
         for(let player of playerList) {
           if (!player) continue;
-          players.push(`${player.name} | id: ${player.id} | admin: ${player.admin}`);
+          let playerString = `${player.name} | id: ${player.id}`
+          if (player.admin) {
+            playerString += ' | ' + colors.green('admin');
+          }
+          players.push(playerString);
         }
         this.print(players.join(`\n`), `PLAYERS`);
       }
