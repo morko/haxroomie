@@ -132,9 +132,10 @@ room.onCommand0_banlist = (byPlayer) => {
 
 let help = room.getPlugin(`sav/help`);
 if (help) {
-  help.registerHelp(`kick`, ` PLAYER_NAME`);
-  help.registerHelp(`ban`, ` PLAYER_NAME`);
-  help.registerHelp(`unban`, ` PLAYER_ID`);
+  help.registerHelp(`banlist`, ``, {numArgs: 0, roles: allowedRoles});
+  help.registerHelp(`kick`, ` PLAYER_NAME`, {numArgs: 1, roles: allowedRoles});
+  help.registerHelp(`ban`, ` PLAYER_NAME`, {numArgs: 1, roles: allowedRoles});
+  help.registerHelp(`unban`, ` PLAYER_ID`, {numArgs: 1, roles: allowedRoles});
 }
 
 /**
