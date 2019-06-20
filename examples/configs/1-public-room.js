@@ -22,10 +22,12 @@ let config = {
       }
     ],
     pluginConfig: {
-      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
+          // get admin priviledges with !auth admin adminpass
           admin: `adminpass`,
+          // get host priviledges with !auth host hostpass
+          host: `hostpass`
         }
       },
       // spam protection

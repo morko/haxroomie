@@ -16,12 +16,14 @@ let config = {
     maxPlayers: 20,
     public: false,
     pluginConfig: {
-      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
+          // get admin priviledges with !auth admin adminpass
           admin: `adminpass`,
+          // get host priviledges with !auth host hostpass
+          host: `hostpass`
         }
-      }
+      },
     }
   },
   'priv2': {
@@ -31,12 +33,14 @@ let config = {
     maxPlayers: 20,
     public: false,
     pluginConfig: {
-      // get admin priviledges with !auth admin adminpass
       'sav/roles': {
         roles: {
+          // get admin priviledges with !auth admin adminpass
           admin: `adminpass`,
+          // get host priviledges with !auth host hostpass
+          host: `hostpass`
         }
-      }
+      },
     }
   }
 };
