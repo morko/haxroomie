@@ -281,7 +281,7 @@ pluginConfig: {
 Use this if you do not wish to use the plugin system and just run a traditional
 HaxBall headless script.
 
-**Disables all other non essential plugins!**
+**Disables the default plugins!**
 
 See [using own room scripts or plugins](#using-own-room-scripts-or-plugins).
 
@@ -346,10 +346,10 @@ hhm: '/path/to/hhm.js'
 
 ## Using own room scripts or plugins
 
-You can run **one** room script with the configs [roomScript](#roomscript) option.
+You can run your script with the configs [roomScript](#roomscript) option.
 
 Running a script this way will disable the default plugins that haxroomie loads
-(except the ones that haxroomie requires to work internally).
+(except few essential ones).
 
 ### Running plugins instead of a room script
 

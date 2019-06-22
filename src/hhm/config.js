@@ -55,8 +55,9 @@ HHM.config.plugins = {
   'sav/help': {}
 };
 
-// Clear the default plugin config if `disableDefaultPlugins` is true.
-if (hrConfig.disableDefaultPlugins) {
+// Clear the default plugin config if `disableDefaultPlugins` is true
+// or if user provided a room script.
+if (hrConfig.disableDefaultPlugins || hrConfig.roomScript) {
   HHM.config.plugins = {};
 }
 
@@ -79,11 +80,6 @@ if (hrConfig.repositories) {
     ...HHM.config.repositories, 
     ...hrConfig.repositories
   ];
-}
-
-// If `roomScript` is provided, do not load any other plugins.
-if (hrConfig.roomScript) {
-  HHM.config.plugins = {};
 }
 
 // Start HHM.
