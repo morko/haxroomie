@@ -104,7 +104,7 @@ class Commands extends CommandHandler {
 
   onCommand_open() {
     return {
-      description: 'Opens room with given id.',
+      description: `Opens room with given id (see ${colors.cyan('rooms')} for the ids).`,
       alias: ['start'],
       args: ['id'],
       run: (id) => {
@@ -115,7 +115,7 @@ class Commands extends CommandHandler {
 
   onCommand_close() {
     return {
-      description: 'Closes room with given id.',
+      description: `Closes room with given id (see ${colors.cyan('rooms')} for the ids).`,
       args: ['id'],
       alias: ['stop'],
       run: (id) => {
@@ -159,7 +159,7 @@ class Commands extends CommandHandler {
   
   onCommand_rooms() {
     return {
-      description: 'Prints available rooms.',
+      description: 'Prints available rooms and their id.',
       run: async () => {
         let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(rooms.map(async (r) => {
@@ -167,13 +167,13 @@ class Commands extends CommandHandler {
             ? colors.green('running')
             : colors.yellow('stopped');
           let id = colors.cyan(r.id);
-          if (!r.running) return `${id} - ${isRunning}`;
+          if (!r.running) return `id: ${id} - ${isRunning}`;
     
           let roomLink = r.roomInfo.roomLink;
           let maxPlayers = r.roomInfo.maxPlayers;
           let playerList = await this.room.callRoom('getPlayerList');
           let amountOfPlayers = `players ${playerList.length - 1}/${maxPlayers}`;
-          return `${id} - ${isRunning} - ${amountOfPlayers} - ${roomLink}`;
+          return `id: ${id} - ${isRunning} - ${amountOfPlayers} - ${roomLink}`;
         }));
         this.print(rooms.join(`\n`));
       }
@@ -182,7 +182,7 @@ class Commands extends CommandHandler {
 
   onCommand_setroom() {
     return {
-      description: 'Selects which room to control.',
+      description: `Selects which room to control using its id (see ${colors.cyan('rooms')}).`,
       args: ['id'],
       run: (id) => {
         let room = this.haxroomie.getRoom(id);
