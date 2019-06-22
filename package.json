@@ -1,6 +1,6 @@
 {
   "name": "haxroomie",
-  "version": "hotfix-1.0.3",
+  "version": "1.0.4",
   "description": "Host haxball rooms without GUI.",
   "main": "index.js",
   "scripts": {
