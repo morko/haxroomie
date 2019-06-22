@@ -127,7 +127,7 @@ class Commands extends CommandHandler {
   onCommand_reload() {
     return {
       description: 'Reloads the config and restarts the rooms that were modified.',
-      run: () => {
+      run: async () => {
         let modifiedRooms = this.config.reload();
 
         for (let [roomId, modifiedProperties] of modifiedRooms) {
@@ -142,7 +142,7 @@ class Commands extends CommandHandler {
             this.haxroomie.addRoom(roomId);
             let roomConfig = this.config.getRoom(roomId);
             if (roomConfig.autoStart) {
-              this.openRoom(roomId)
+              await this.openRoom(roomId)
             }
             continue;
           }
@@ -150,7 +150,7 @@ class Commands extends CommandHandler {
           // Restart running rooms that were modified.
           let room = this.haxroomie.getRoom(roomId);
           if (room.running) {
-            this.openRoom(roomId);
+            await this.openRoom(roomId);
           }
         }
       }
