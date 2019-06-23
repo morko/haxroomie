@@ -12,6 +12,7 @@ class Config {
     this.haxroomie = opt.haxroomie;
     this.configPath = opt.configPath;
     this.config = this.load(this.configPath);
+    this.tokens = {};
   }
 
   /**
@@ -19,9 +20,30 @@ class Config {
    * @param {string|number} id - Room id.
    * @returns {object|undefined} - Room config.
    */
-  getRoom(id) {
+  getRoomConfig(id) {
     if (!this.config[id]) return undefined;
-    return this.config[id];
+    return this.cloneConfig(this.config[id]);
+  }
+
+  /**
+   * Sets the config of the room.
+   * @param {string|number} id - Room id.
+   * @param {object} config - Room config.
+   */
+  setRoomConfig(id, config) {
+    this.config[id] = config;
+  }
+
+  getToken(id) {
+    if (this.tokens[id]) {
+      return this.tokens[id];
+    } else {
+      return this.config[id].token;
+    }
+  }
+
+  setToken(id, token) {
+    this.tokens[id] = token;
   }
 
   /**
@@ -29,6 +51,16 @@ class Config {
    */
   getRoomIds() {
     return Object.keys(this.config);
+  }
+
+  /**
+   * Creates a new copy of a config object.
+   * @param {object} - Config object
+   * @returns {object} - Copy of the config.
+   * @private
+   */
+  cloneConfig(config) {
+    return JSON.parse(JSON.stringify(config));
   }
 
   /**
@@ -139,12 +171,17 @@ class Config {
       if (modifiedProperties.length !== 0) {
         modifiedRooms.set(roomId, modifiedProperties);
       }
+
+      if (modifiedProperties.find(p => p === 'token')) {
+        this.setToken(roomId, newConfig[roomId].token);
+      }
     }
 
     // check for removed rooms
     for (let roomId of Object.keys(oldConfig)) {
       if (!newConfig[roomId]) {
         modifiedRooms.set(roomId, null);
+        delete this.config[roomId];
       }
     }
 
@@ -166,12 +203,13 @@ class Config {
     let modifiedProperties = [];
 
     for (let property of Object.keys(newConfig)) {
-      if (property === 'token') continue;
+
       if (property === 'roomScript' || property === 'hhmConfig' || property === 'hhm') {
         if (this.hasFileBeenModified(newConfig[property], oldConfig[property])) {
           modifiedProperties.push(property);
           continue;
         }
+
       } else if (property === 'plugins') {
         if (newConfig[property].length !== oldConfig[property].length) {
           modifiedProperties.push(property);
@@ -189,6 +227,7 @@ class Config {
           modifiedProperties.push(property);
           continue;
         }
+
       } else {
         if (!deepEqual(newConfig[property], oldConfig[property])) {
           modifiedProperties.push(property);
@@ -197,7 +236,6 @@ class Config {
       }
     }
     for (let property of Object.keys(oldConfig)) {
-      if (property === 'token' || property === 'roomLink') continue;
       if (typeof newConfig[property] === 'undefined') {
         modifiedProperties.push(property);
       }
