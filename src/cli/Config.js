@@ -85,6 +85,9 @@ class Config {
           throw new Error('Plugin config is missing name property!')
         }
         let fileDef = this.loadFile(plugin.path);
+        if (!fileDef) {
+          continue;
+        }
         fileDef.name = plugin.name;
         loadedPlugins.push(fileDef);
       }
@@ -173,7 +176,7 @@ class Config {
           continue;
         }
       } else if (property === 'plugins') {
-        if (newConfig[property].length !== oldConfig[property].length) {
+        if (!oldConfig[property] || newConfig[property].length !== oldConfig[property].length) {
           modifiedProperties.push(property);
           continue;
         }
