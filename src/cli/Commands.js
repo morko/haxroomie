@@ -139,7 +139,7 @@ class Commands extends CommandHandler {
 
           // Add new rooms.
           if (!this.haxroomie.hasRoom(roomId)) {
-            this.haxroomie.addRoom(roomId);
+            await this.haxroomie.addRoom(roomId);
             let roomConfig = this.config.getRoom(roomId);
             if (roomConfig.autoStart) {
               await this.openRoom(roomId)
@@ -168,10 +168,10 @@ class Commands extends CommandHandler {
             : colors.yellow('stopped');
           let id = colors.cyan(r.id);
           if (!r.running) return `${id} - ${isRunning}`;
-    
+
           let roomLink = r.roomInfo.roomLink;
           let maxPlayers = r.roomInfo.maxPlayers;
-          let playerList = await this.room.callRoom('getPlayerList');
+          let playerList = await r.callRoom('getPlayerList');
           let amountOfPlayers = `players ${playerList.length - 1}/${maxPlayers}`;
           return `${id} - ${isRunning} - ${amountOfPlayers} - ${roomLink}`;
         }));
