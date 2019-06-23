@@ -1,6 +1,7 @@
 const colors = require('colors/safe');
 const CommandHandler = require('./CommandHandler');
 const cprompt = require('./cprompt');
+const logger = require('../logger');
 
 class Commands extends CommandHandler {
 
@@ -43,19 +44,19 @@ class Commands extends CommandHandler {
    */
   pluginDataToString(pluginData) {
     const p = pluginData;
-    const isEnabled = p.isEnabled
-      ? `${colors.green(`enabled`)}`
-      : `${colors.yellow(`disabled`)}`;
+    const isEnabled = p.isEnabled ?
+      `${colors.green(`enabled`)}` :
+      `${colors.yellow(`disabled`)}`;
 
-    let string = 
-      `${p.pluginSpec.name} (${isEnabled}):\n`
-      + `  id: ${p.id}\n`
-      + `  name: ${p.pluginSpec.name}\n`
-      + `  author: ${p.pluginSpec.author}\n`
-      + `  version: ${p.pluginSpec.version}\n`
-      + `  dependencies: ${p.pluginSpec.dependencies}\n`
-      + `  order: ${JSON.stringify(p.pluginSpec.order)}\n`
-      + `  config: ${JSON.stringify(p.pluginSpec.config)}`;
+    let string =
+      `${p.pluginSpec.name} (${isEnabled}):\n` +
+      `  id: ${p.id}\n` +
+      `  name: ${p.pluginSpec.name}\n` +
+      `  author: ${p.pluginSpec.author}\n` +
+      `  version: ${p.pluginSpec.version}\n` +
+      `  dependencies: ${p.pluginSpec.dependencies}\n` +
+      `  order: ${JSON.stringify(p.pluginSpec.order)}\n` +
+      `  config: ${JSON.stringify(p.pluginSpec.config)}`;
 
     return string;
   }
@@ -143,6 +144,7 @@ class Commands extends CommandHandler {
           );
         } else {
           cprompt.print(`No rooms were modified.`, 'RELOAD CONFIG');
+          return;
         }
 
         for (let [roomId, modifiedProperties] of modifiedRooms) {
@@ -162,28 +164,86 @@ class Commands extends CommandHandler {
             continue;
           }
 
-          // Restart running rooms that were modified.
+          // Restart/modify running rooms.
           let room = this.haxroomie.getRoom(roomId);
           if (room.running) {
-            await this.openRoom(roomId);
+            let cannotHotLoad = modifiedProperties.find(p => {
+              return p !== 'pluginConfig' && p !== 'repositories' && p !== 'plugins';
+            });
+
+            // Restart rooms that cannot be hotloaded.
+            if (cannotHotLoad) {
+              await this.openRoom(roomId);
+              return;
+            }
+
+            // If we can hotload the properties.
+            let roomConfig = this.config.getRoomConfig(roomId);
+
+            let repositories;
+            let pluginConfig;
+            let plugins;
+
+            for (let p of modifiedProperties) {
+              if (p === 'repositories') repositories = roomConfig.repositories;
+              if (p === 'pluginConfig') pluginConfig = roomConfig.pluginConfig;
+              if (p === 'plugins') plugins = roomConfig.plugins;
+            }
+
+            if (repositories) {
+              cprompt.print(`Setting repositories for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
+              await room.clearRepositories();
+              try {
+                for (let repo of repositories) {
+                  let success = await room.addRepository(repo);
+                  if (!success) cprompt.print(`Could not add repository ${repo}.`, 'ERROR');
+                }
+              } catch (err) {
+                cprompt.print(err.message);
+                logger.debug(err.stack);
+              }
+            }
+
+            if (pluginConfig) {
+              cprompt.print(`Setting plugin config for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
+              try {
+                await room.setPluginConfig(roomConfig.pluginConfig);
+              } catch (err) {
+                cprompt.print(err.message);
+                logger.debug(err.stack);
+              }
+            }
+
+            if (plugins) {
+              cprompt.print(`Setting plugins for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
+              for (let pluginDef of plugins.values()) {
+                let hasPlugin = await room.hasPlugin(pluginDef.name);
+                if (!hasPlugin) {
+                  let id = await room.addPlugin(pluginDef);
+                  if (id < 0) {
+                    cprompt.print(`Could not add plugin ${pluginDef.name}.`, 'ERROR');
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
   }
-  
+
   onCommand_rooms() {
     return {
       description: 'Prints available rooms and their id.',
       run: async () => {
         let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(rooms.map(async (r) => {
-          let isRunning = r.running
-            ? colors.green('running')
-            : colors.yellow('stopped');
+          let isRunning = r.running ?
+            colors.green('running') :
+            colors.yellow('stopped');
           let id = colors.cyan(r.id);
           if (!r.running) return `id: ${id} - ${isRunning}`;
-    
+
           let roomLink = r.roomInfo.roomLink;
           let maxPlayers = r.roomInfo.maxPlayers;
           let playerList = await r.callRoom('getPlayerList');
@@ -209,7 +269,7 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_chat() {
     return {
       description: 'Sends a chat message to the room.',
@@ -220,7 +280,7 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_players() {
     return {
       description: 'Prints players in the room.',
@@ -228,8 +288,8 @@ class Commands extends CommandHandler {
         let playerList = await this.room.callRoom('getPlayerList')
         playerList = playerList.filter(p => p.id !== 0);
         let players = [`Amount of players: ${playerList.length}`];
-      
-        for(let player of playerList) {
+
+        for (let player of playerList) {
           if (!player) continue;
           let playerString = `${player.name} | id: ${player.id}`
           if (player.admin) {
@@ -241,7 +301,7 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_kick() {
     return {
       description: 'Kicks a player with given id.',
@@ -256,7 +316,7 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_ban() {
     return {
       description: 'Bans a player with given id.',
@@ -291,12 +351,12 @@ class Commands extends CommandHandler {
           cprompt.print('No banned players.');
           return;
         }
-        bannedPlayers = bannedPlayers.map((p) =>`id:${p.id} - ${p.name}`);
+        bannedPlayers = bannedPlayers.map((p) => `id:${p.id} - ${p.name}`);
         cprompt.print(bannedPlayers.join('\n'));
       }
     }
   }
-  
+
   onCommand_admin() {
     return {
       description: 'Gives admin to a player with given id.',
@@ -311,7 +371,7 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_unadmin(id) {
     return {
       description: 'Removes admin from a player with given id.',
@@ -330,7 +390,7 @@ class Commands extends CommandHandler {
   onCommand_clearbans() {
     return {
       description: 'Clears all the bans.',
-      run: async() => {
+      run: async () => {
         await this.room.callRoom('clearBans');
       }
     }
@@ -343,9 +403,9 @@ class Commands extends CommandHandler {
         let plugins = await this.room.getPlugins();
         let pluginList = [];
         for (let p of plugins) {
-          const isEnabled = p.isEnabled
-            ? `${colors.green(`enabled`)}`
-            : `${colors.yellow(`disabled`)}`;
+          const isEnabled = p.isEnabled ?
+            `${colors.green(`enabled`)}` :
+            `${colors.yellow(`disabled`)}`;
           pluginList.push(`${p.pluginSpec.name} (${isEnabled})`);
         }
         cprompt.print(pluginList.join(`\n`));
@@ -395,14 +455,14 @@ class Commands extends CommandHandler {
         }
         let success = await this.room.disablePlugin(name);
         pluginData = await this.room.getPlugin(name);
-        
+
         if (!success) {
           cprompt.print(`Could not disable ${name}`, `ERROR`);
         }
       }
     }
   }
-  
+
   onCommand_dependsof() {
     return {
       description: 'Prints the plugins that depend of given plugin.',

@@ -16,7 +16,6 @@ Object.assign(window.hroomie, (function(){
     enablePlugin,
     disablePlugin,
     getDependentPlugins,
-    setPluginConfig
   };
 
   /**
@@ -93,6 +92,7 @@ Object.assign(window.hroomie, (function(){
     if (!plugin) return null;
     let pluginData = {
       id: id,
+      name: plugin.pluginSpec ? plugin.pluginSpec.name : undefined,
       isEnabled: plugin.isEnabled(),
       pluginSpec: plugin.pluginSpec
     }
@@ -110,6 +110,7 @@ Object.assign(window.hroomie, (function(){
     if (!plugin) return null;
     let pluginData = {
       id: plugin._id,
+      name: plugin.pluginSpec ? plugin.pluginSpec.name : undefined,
       isEnabled: plugin.isEnabled(),
       pluginSpec: plugin.pluginSpec
     }
@@ -138,6 +139,7 @@ Object.assign(window.hroomie, (function(){
    * Enables a plugin with given name.
    * 
    * @param {string} - name of the plugin
+   * @returns {boolean} - `true` if plugin was enabled, `false` otherwise.
    */
   function enablePlugin(name) {
     const plugin = HHM.manager.getPluginByName(name);
@@ -181,18 +183,6 @@ Object.assign(window.hroomie, (function(){
     const pluginId = HHM.manager.getPluginId(name);
     return HHM.manager.getDependentPluginsById(pluginId)
       .map(id => getPluginById(id));
-  }
-
-  /**
-   * Sets the config of the given plugin name to be the given config object.
-   * @param {string} name - Name of the plugin.
-   * @param {object} config - Config object for the plugin.
-   */
-  function setPluginConfig(name, config) {
-    const plugin = getPlugin(name);
-    if (!plugin) return false;
-    HHM.manager.setPluginConfig(plugin.id, config);
-    return true;
   }
 
 })());

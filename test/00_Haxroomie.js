@@ -1,7 +1,7 @@
 require('./setup');
 const expect = require('chai').expect;
 
-const Haxroomie = require('../src/Haxroomie')
+const { Haxroomie } = require('../');
 
 describe('Haxroomie basic test', function() {
 

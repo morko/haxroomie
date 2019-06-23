@@ -143,10 +143,20 @@ class RoomController extends EventEmitter {
    */
 
   /**
+   * Object containing HHM plugin name and content.
+   * 
+   * @typedef {Object} PluginDef
+   * @property {string} [name] - Plugins name. Can be overriden by the plugin
+   *    itself if it defines the `pluginSpec.name` property.
+   * @property {string} content - UTF-8 encoded content of the plugin.
+   */
+
+  /**
    * Object containing information about a plugin.
    * 
    * @typedef {Object} PluginData
-   * @property {number} id - The plugin id
+   * @property {number} id - The plugin id.
+   * @property {string|number} name - The plugin name.
    * @property {boolean} isEnabled - Indicates whether the plugin is enabled or disabled.
    * @property {object} [pluginSpec] - HHM pluginSpec property.
    */
@@ -479,21 +489,21 @@ class RoomController extends EventEmitter {
   async getPlugin(name) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
-    let result = await this.page.evaluate((name) => {
+    return this.page.evaluate((name) => {
       return window.hroomie.getPlugin(name);
     }, name);
-    return result;
   }
 
   /**
    * Enables a HHM plugin with the given id.
    * 
    * @param {string} name - name of the plugin
+   * @returns {Promise.<boolean>} - `true` if plugin was enabled, `false` otherwise.
    */
   async enablePlugin(name) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
-    let result = await this.page.evaluate((name) => {
+    return this.page.evaluate((name) => {
       return window.hroomie.enablePlugin(name);
     }, name);
   }
@@ -503,15 +513,14 @@ class RoomController extends EventEmitter {
    * it disables all the plugins in the given order.
    * 
    * @param {(string|Array.<string>)} name - name or array of names of the plugin(s)
-   * @returns {Promise<boolean>} - was the plugin disabled or not?
+   * @returns {Promise.<boolean>} - was the plugin disabled or not?
    */
   async disablePlugin(name) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
-    let result = await this.page.evaluate((name) => {
+    return this.page.evaluate((name) => {
       return window.hroomie.disablePlugin(name);
     }, name);
-    return result;
   }
 
   /**
@@ -523,10 +532,9 @@ class RoomController extends EventEmitter {
   async getPluginsThatDependOn(name) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
-    let result = await this.page.evaluate((name) => {
+    return this.page.evaluate((name) => {
       return window.hroomie.getDependentPlugins(name);
     }, name);
-    return result;
   }
 
   /**
@@ -542,8 +550,192 @@ class RoomController extends EventEmitter {
   async eval(js) {
     if (!this.usable) throw new Error('Room is no longer usable.');
     if (!this.running) throw new Error('Room is not running.');
-    let result = await this.page.evaluate(js);
-    return result;
+    return this.page.evaluate(js);
+  }
+
+  /**
+   * Checks if the room has a plugin with given name loaded.
+   * @param {string} plugin - Name of the plugin.
+   * @returns {boolean} - `true` if it had the plugin, `false` if not.
+   */
+  async hasPlugin(plugin) {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+
+    return this.page.evaluate(async (plugin) => {
+      return HHM.manager.hasPluginByName(plugin);
+    }, plugin);
+  }
+
+  /**
+   * Adds a new plugin.
+   * @param {PluginDef} plugin - File definiton of the plugin.
+   * @returns {number} - Plugin ID if the plugin and all of its dependencies
+   *    have been loaded, -1 otherwise.
+   */
+  async addPlugin(plugin) {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+
+    return this.page.evaluate(async (plugin) => {
+      return HHM.manager.addPluginByCode(plugin.content, plugin.name);
+    }, plugin);
+  }
+
+  /**
+   * Adds a repository.
+   *
+   * The repository can be specified as a string, then it is interpreted as the 
+   * URL of a plain type repository, or as an Object.
+   *
+   * If append is set to true, the new repository will be added with the 
+   * lowest priority, i.e. plugins will only be loaded from it they can't 
+   * be found in any other repository. Otherwise the repository will be 
+   * added with the highest priority.
+   *
+   * @param {object|string} repository - The repository to be added.
+   * @param {boolean} [append] - Whether to append or prepend the repository 
+   *    to the Array of repositories.
+   * @returns {boolean} - Whether the repository was successfully added.
+   */
+  async addRepository(repository, append) {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+
+    if (!repository) {
+      throw new TypeError('Missing required argument: repository')
+    }
+
+    return this.page.evaluate(async (repository, append) => {
+      return HHM.manager.addRepository(repository, append)
+    }, repository, append);
+  }
+
+  /**
+   * Returns available repositories.
+   * @returns {Array.<object|string>} - An array of available repositories.
+   */
+  async getRepositories() {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+    
+    return this.page.evaluate(() => {
+      return HHM.manager.getPluginLoader().repositories;
+    });
+  }
+
+  /**
+   * This will clear the available repositories.
+   * 
+   * Will not unload the plugins that are already loaded from the repositories.
+   */
+  async clearRepositories() {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+    
+    return this.page.evaluate(() => {
+      HHM.manager.getPluginLoader().repositories = [];
+    });
+  }
+
+  /**
+   * Sets the rooms plugin config.
+   * 
+   * Tries to load plugins that are not loaded from the available
+   * repositories.
+   * 
+   * **Plugins will not get unloaded using this method.**
+   * 
+   * If `pluginName` is given then only config for the given plugin
+   * is set.
+   * @param {object} pluginConfig - Room wide config or plugins config.
+   * @param {string} [pluginName] - Name of the plugin if wanting to change
+   *    config of only one plugin.
+   * 
+   */
+  async setPluginConfig(pluginConfig, pluginName) {
+    if (!this.usable) throw new Error('Room is no longer usable.');
+    if (!this.running) throw new Error('Room is not running.');
+
+    if (!pluginConfig) {
+      throw new Error('Missing required argument: pluginConfig');
+    }
+    if (typeof pluginConfig !== 'object') {
+      throw new TypeError('typeof pluginConfig should be object');
+    }
+    
+    if (typeof pluginName === 'string') {
+      await this.page.evaluate(async (pluginName, pluginConfig) => {
+
+        let pluginId = HHM.manager.getPluginId(pluginName);
+        
+        if (pluginId < 0) {
+          pluginId = await HHM.manager.addPluginByName(pluginName);
+          if (pluginId < 0) {
+            throw new Error(
+              `Cannot load plugin "${pluginName}" from available repositories.`
+            );
+          }
+        } 
+        HHM.manager.setPluginConfig(pluginId, pluginConfig);
+
+      }, pluginName, pluginConfig);
+      return;
+    }
+
+    // change the whole plugin config for the room
+    for (let [name, config] of Object.entries(pluginConfig)) {
+      await this.page.evaluate(async (name, config) => {
+
+        const manager = window.HHM.manager;
+
+        let pluginId = manager.getPluginId(name);
+        
+        if (pluginId < 0) {
+          pluginId = await manager.addPluginByName(name);
+          if (pluginId < 0) {
+            throw new Error(
+              `Cannot load plugin "${name}" from available repositories.`
+            );
+          }
+        }
+        manager.setPluginConfig(pluginId, config);
+
+      }, name, config);
+    }    
+  }
+
+  /**
+   * Returns the plugin config for all loaded plugins in the room or
+   * if `pluginName` is given, then return the config for that plugin.
+   * 
+   * @param {string} [pluginName] - Config for the plugin.
+   */
+  async getPluginConfig(pluginName) {
+    if (typeof pluginName === 'string') {
+      let config = await this.page.evaluate((pluginName) => {
+
+        let plugin = HHM.manager.getPluginByName(pluginName);
+        if (!plugin) {
+          throw new Error(`Invalid plugin "${pluginName}".`);
+        }
+
+        return plugin.getConfig();
+      }, pluginName);
+      return config;
+    }
+
+    let config = await this.page.evaluate(() => {
+      let plugins = HHM.manager.getLoadedPluginIds().map(id => {
+        return HHM.manager.getPluginById(id);
+      });
+      let cfg = {};
+      for (let plugin of plugins) {
+        cfg[plugin] = plugin.getConfig();
+      }
+      return cfg;
+    });
+    return config;
   }
 }
 

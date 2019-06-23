@@ -1,10 +1,10 @@
 require('./setup');
 const expect = require('chai').expect;
 
-const Haxroomie = require('../src/Haxroomie');
+const { Haxroomie } = require('../');
 const createConfigs = require('./utils/mock-config');
 
-describe('RoomController', function() {
+describe('RoomController basic tests', function() {
   let amountOfRooms = 1;
   let configs = createConfigs(amountOfRooms);
   if (!configs) return;
@@ -53,15 +53,6 @@ describe('RoomController', function() {
       });
       rooms[0].on('close-room', () => done());
       rooms[0].openRoom(configs[0]);
-    });
-  });
-
-  describe('#callRoom()', function() {
-    it('call a function in roomObject and return the result', async function() {
-      this.timeout(20000);
-      await rooms[0].openRoom(configs[0]);
-      let players = await rooms[0].callRoom('getPlayerList');
-      expect(players).to.be.an('array');
     });
   });
 });
