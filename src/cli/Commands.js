@@ -64,7 +64,7 @@ class Commands extends CommandHandler {
   onCommand_help() {
     return {
       description: 'Prints help.',
-      run: () => {
+      run: async () => {
 
         let help = [];
         let indentation = 18;
@@ -73,7 +73,10 @@ class Commands extends CommandHandler {
             continue;
           }
           let cmdName = prop.slice(this.cmdPrefix.length);
-          let description = this.getCommand(cmdName).description;
+          let command = await this.getCommand(cmdName);
+          if (command.disabled) continue;
+
+          let description = command.description;
           // indentation
           let cmdNameLength = cmdName.length;
           for (let i = 0; i < indentation - cmdNameLength; i++) {
@@ -312,8 +315,7 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${id}`, `ERROR`);
           return;
         }
-        await this.room.kick(id);
-      }
+        await this.room.callRoom.kickPlayer(id, 'Bye!', false);      }
     }
   }
 
@@ -327,7 +329,7 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${id}`, `ERROR`);
           return;
         }
-        await this.room.ban(id);
+        await this.room.callRoom.kickPlayer(id, 'Bye!', true);
       }
     }
   }
@@ -337,16 +339,28 @@ class Commands extends CommandHandler {
       description: 'Removes a ban of player with given id.',
       args: ['id'],
       run: async (id) => {
-        await this.room.unban(id);
+        await this.room.callRoom.clearBan(id);
       }
     }
   }
 
-  onCommand_banlist() {
+  async onCommand_banlist() {
+
+    let isDisabled;
+    if (!this.room.running) {
+      isDisabled = true;
+    } else {
+      isDisabled = await this.room.hasPlugin(('hr/kickban'));
+      isDisabled = !isDisabled;
+    }
+
     return {
       description: 'Prints banned players.',
+      disabled: isDisabled,
       run: async () => {
-        let bannedPlayers = await this.room.bannedPlayers();
+        let bannedPlayers = await this.room.eval(() => {
+          return HHM.manager.getPluginByName('hr/kickban').bannedPlayers();
+        });
         if (bannedPlayers.length === 0) {
           cprompt.print('No banned players.');
           return;
@@ -478,17 +492,6 @@ class Commands extends CommandHandler {
           result.push(`${p.pluginSpec.name}`);
         }
         cprompt.print(result.join(`\n`));
-      }
-    }
-  }
-
-  onCommand_eval() {
-    return {
-      description: 'Evaluates given JavaScript in browser and prints result.',
-      args: ['js'],
-      run: async (js) => {
-        let result = await this.room.eval(js);
-        cprompt.print(result);
       }
     }
   }

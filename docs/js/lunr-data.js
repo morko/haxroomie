@@ -211,6 +211,32 @@ window.lunrData = {
           "roomobject",
           "tab"
         ],
+        "RoomController.html#openRoom": [
+          "browser",
+          "config",
+          "contain",
+          "document",
+          "file",
+          "function",
+          "global",
+          "haxbal",
+          "here",
+          "hhm",
+          "hrconfig",
+          "lt;async&gt",
+          "object",
+          "open",
+          "openroom",
+          "properti",
+          "room",
+          "roomcontroller#openroom",
+          "tab",
+          "top",
+          "us",
+          "usabl",
+          "want",
+          "within"
+        ],
         "RoomController.html#closeRoom": [
           "close",
           "closeroom",
@@ -232,46 +258,6 @@ window.lunrData = {
           "lt;async&gt",
           "roomcontroller#callroom",
           "roomobject"
-        ],
-        "RoomController.html#kick": [
-          "function",
-          "id",
-          "kick",
-          "lt;async&gt",
-          "player",
-          "room",
-          "roomcontroller#kick"
-        ],
-        "RoomController.html#ban": [
-          "ban",
-          "function",
-          "id",
-          "lt;async&gt",
-          "player",
-          "room",
-          "roomcontroller#ban"
-        ],
-        "RoomController.html#unban": [
-          "ban",
-          "function",
-          "given",
-          "id",
-          "lt;async&gt",
-          "player",
-          "remov",
-          "roomcontroller#unban",
-          "unban"
-        ],
-        "RoomController.html#bannedPlayers": [
-          "ban",
-          "bannedplay",
-          "function",
-          "iter",
-          "iterable.&lt;object&gt",
-          "lt;async&gt",
-          "player",
-          "return",
-          "roomcontroller#bannedplay"
         ],
         "RoomController.html#getPlugins": [
           "function",
@@ -340,6 +326,7 @@ window.lunrData = {
         ],
         "RoomController.html#eval": [
           "access",
+          "arg",
           "browser",
           "code",
           "e.g",
@@ -349,14 +336,18 @@ window.lunrData = {
           "given",
           "haxbal",
           "hhm.manager.room",
-          "js",
           "lt;async&gt",
+          "page.evalu",
+          "pagefunct",
+          "promise.&lt;serializable&gt",
+          "puppet",
           "room",
           "room.eval('hhm.manager.room.getplayerlist",
           "roomcontroller#ev",
           "roomobject",
           "run",
-          "tab"
+          "tab",
+          "wrapper"
         ],
         "RoomController.html#hasPlugin": [
           "boolean",
@@ -467,32 +458,6 @@ window.lunrData = {
           "room",
           "roomcontroller#getpluginconfig"
         ],
-        "RoomController.html#openRoom": [
-          "browser",
-          "config",
-          "contain",
-          "document",
-          "file",
-          "function",
-          "global",
-          "haxbal",
-          "here",
-          "hhm",
-          "hrconfig",
-          "lt;async&gt",
-          "object",
-          "open",
-          "openroom",
-          "properti",
-          "room",
-          "roomcontroller#openroom",
-          "tab",
-          "top",
-          "us",
-          "usabl",
-          "want",
-          "within"
-        ],
         "module-haxroomie.html": [
           "const",
           "haxroomi",
@@ -503,7 +468,7 @@ window.lunrData = {
           "require('haxroomi"
         ]
       },
-      "length": 35
+      "length": 31
     },
     "tokenStore": {
       "root": {
@@ -573,10 +538,6 @@ window.lunrData = {
                       "ref": "Haxroomie.html#addRoom",
                       "tf": 8.333333333333332
                     },
-                    "RoomController.html#unban": {
-                      "ref": "RoomController.html#unban",
-                      "tf": 10
-                    },
                     "RoomController.html#getPlugin": {
                       "ref": "RoomController.html#getPlugin",
                       "tf": 10
@@ -595,7 +556,7 @@ window.lunrData = {
                     },
                     "RoomController.html#eval": {
                       "ref": "RoomController.html#eval",
-                      "tf": 3.8461538461538463
+                      "tf": 3.125
                     },
                     "RoomController.html#hasPlugin": {
                       "ref": "RoomController.html#hasPlugin",
@@ -825,6 +786,10 @@ window.lunrData = {
                         "ref": "RoomController.html",
                         "tf": 3.7037037037037033
                       },
+                      "RoomController.html#openRoom": {
+                        "ref": "RoomController.html#openRoom",
+                        "tf": 1.8518518518518516
+                      },
                       "RoomController.html#closeRoom": {
                         "ref": "RoomController.html#closeRoom",
                         "tf": 12.5
@@ -835,11 +800,7 @@ window.lunrData = {
                       },
                       "RoomController.html#eval": {
                         "ref": "RoomController.html#eval",
-                        "tf": 3.8461538461538463
-                      },
-                      "RoomController.html#openRoom": {
-                        "ref": "RoomController.html#openRoom",
-                        "tf": 1.8518518518518516
+                        "tf": 3.125
                       }
                     }
                   }
@@ -1221,6 +1182,10 @@ window.lunrData = {
                   "ref": "RoomController.html",
                   "tf": 1.8518518518518516
                 },
+                "RoomController.html#openRoom": {
+                  "ref": "RoomController.html#openRoom",
+                  "tf": 3.7037037037037033
+                },
                 "RoomController.html#enablePlugin": {
                   "ref": "RoomController.html#enablePlugin",
                   "tf": 10
@@ -1228,10 +1193,6 @@ window.lunrData = {
                 "RoomController.html#disablePlugin": {
                   "ref": "RoomController.html#disablePlugin",
                   "tf": 4.545454545454546
-                },
-                "RoomController.html#openRoom": {
-                  "ref": "RoomController.html#openRoom",
-                  "tf": 3.7037037037037033
                 }
               },
               ".": {
@@ -1262,7 +1223,7 @@ window.lunrData = {
                                         "docs": {
                                           "RoomController.html#eval": {
                                             "ref": "RoomController.html#eval",
-                                            "tf": 3.8461538461538463
+                                            "tf": 3.125
                                           }
                                         }
                                       }
@@ -1272,29 +1233,6 @@ window.lunrData = {
                               }
                             }
                           }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "g": {
-              "docs": {},
-              "h": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "s": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "RoomController.html#addRepository": {
-                          "ref": "RoomController.html#addRepository",
-                          "tf": 1.6666666666666667
                         }
                       }
                     }
@@ -1321,6 +1259,29 @@ window.lunrData = {
                             "ref": "RoomController.html#openRoom",
                             "tf": 1.8518518518518516
                           }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "i": {
+            "docs": {},
+            "g": {
+              "docs": {},
+              "h": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "s": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "RoomController.html#addRepository": {
+                          "ref": "RoomController.html#addRepository",
+                          "tf": 1.6666666666666667
                         }
                       }
                     }
@@ -1431,18 +1392,6 @@ window.lunrData = {
                 "ref": "Haxroomie.html#addRoom",
                 "tf": 33.33333333333333
               },
-              "RoomController.html#kick": {
-                "ref": "RoomController.html#kick",
-                "tf": 33.33333333333333
-              },
-              "RoomController.html#ban": {
-                "ref": "RoomController.html#ban",
-                "tf": 33.33333333333333
-              },
-              "RoomController.html#unban": {
-                "ref": "RoomController.html#unban",
-                "tf": 43.33333333333333
-              },
               "RoomController.html#getPlugin": {
                 "ref": "RoomController.html#getPlugin",
                 "tf": 10
@@ -1454,79 +1403,6 @@ window.lunrData = {
               "RoomController.html#disablePlugin": {
                 "ref": "RoomController.html#disablePlugin",
                 "tf": 4.545454545454546
-              }
-            }
-          },
-          "t": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "r": {
-                "docs": {
-                  "RoomController.html#bannedPlayers": {
-                    "ref": "RoomController.html#bannedPlayers",
-                    "tf": 12.5
-                  }
-                },
-                "a": {
-                  "docs": {},
-                  "b": {
-                    "docs": {},
-                    "l": {
-                      "docs": {},
-                      "e": {
-                        "docs": {},
-                        ".": {
-                          "docs": {},
-                          "&": {
-                            "docs": {},
-                            "l": {
-                              "docs": {},
-                              "t": {
-                                "docs": {},
-                                ";": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "b": {
-                                      "docs": {},
-                                      "j": {
-                                        "docs": {},
-                                        "e": {
-                                          "docs": {},
-                                          "c": {
-                                            "docs": {},
-                                            "t": {
-                                              "docs": {},
-                                              "&": {
-                                                "docs": {},
-                                                "g": {
-                                                  "docs": {},
-                                                  "t": {
-                                                    "docs": {
-                                                      "RoomController.html#bannedPlayers": {
-                                                        "ref": "RoomController.html#bannedPlayers",
-                                                        "tf": 33.33333333333333
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
               }
             }
           },
@@ -1629,10 +1505,6 @@ window.lunrData = {
                     "Haxroomie.html#removeRoom": {
                       "ref": "Haxroomie.html#removeRoom",
                       "tf": 9.090909090909092
-                    },
-                    "RoomController.html#unban": {
-                      "ref": "RoomController.html#unban",
-                      "tf": 10
                     }
                   },
                   "e": {
@@ -1676,10 +1548,6 @@ window.lunrData = {
                       },
                       "Haxroomie.html#getFirstRoom": {
                         "ref": "Haxroomie.html#getFirstRoom",
-                        "tf": 12.5
-                      },
-                      "RoomController.html#bannedPlayers": {
-                        "ref": "RoomController.html#bannedPlayers",
                         "tf": 12.5
                       },
                       "RoomController.html#getPlugins": {
@@ -1763,21 +1631,17 @@ window.lunrData = {
                     "ref": "Haxroomie.html#hasRoom",
                     "tf": 10
                   },
+                  "RoomController.html#openRoom": {
+                    "ref": "RoomController.html#openRoom",
+                    "tf": 1.8518518518518516
+                  },
                   "RoomController.html#closeRoom": {
                     "ref": "RoomController.html#closeRoom",
                     "tf": 12.5
                   },
-                  "RoomController.html#kick": {
-                    "ref": "RoomController.html#kick",
-                    "tf": 16.666666666666664
-                  },
-                  "RoomController.html#ban": {
-                    "ref": "RoomController.html#ban",
-                    "tf": 16.666666666666664
-                  },
                   "RoomController.html#eval": {
                     "ref": "RoomController.html#eval",
-                    "tf": 3.8461538461538463
+                    "tf": 3.125
                   },
                   "RoomController.html#hasPlugin": {
                     "ref": "RoomController.html#hasPlugin",
@@ -1790,10 +1654,6 @@ window.lunrData = {
                   "RoomController.html#getPluginConfig": {
                     "ref": "RoomController.html#getPluginConfig",
                     "tf": 4.545454545454546
-                  },
-                  "RoomController.html#openRoom": {
-                    "ref": "RoomController.html#openRoom",
-                    "tf": 1.8518518518518516
                   }
                 },
                 "c": {
@@ -1847,6 +1707,35 @@ window.lunrData = {
                                     "docs": {},
                                     "#": {
                                       "docs": {},
+                                      "o": {
+                                        "docs": {},
+                                        "p": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "n": {
+                                              "docs": {},
+                                              "r": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "o": {
+                                                    "docs": {},
+                                                    "m": {
+                                                      "docs": {
+                                                        "RoomController.html#openRoom": {
+                                                          "ref": "RoomController.html#openRoom",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      },
                                       "c": {
                                         "docs": {},
                                         "l": {
@@ -1942,83 +1831,6 @@ window.lunrData = {
                                                         }
                                                       }
                                                     }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "k": {
-                                        "docs": {},
-                                        "i": {
-                                          "docs": {},
-                                          "c": {
-                                            "docs": {},
-                                            "k": {
-                                              "docs": {
-                                                "RoomController.html#kick": {
-                                                  "ref": "RoomController.html#kick",
-                                                  "tf": 1150
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "b": {
-                                        "docs": {},
-                                        "a": {
-                                          "docs": {},
-                                          "n": {
-                                            "docs": {
-                                              "RoomController.html#ban": {
-                                                "ref": "RoomController.html#ban",
-                                                "tf": 1150
-                                              }
-                                            },
-                                            "n": {
-                                              "docs": {},
-                                              "e": {
-                                                "docs": {},
-                                                "d": {
-                                                  "docs": {},
-                                                  "p": {
-                                                    "docs": {},
-                                                    "l": {
-                                                      "docs": {},
-                                                      "a": {
-                                                        "docs": {},
-                                                        "y": {
-                                                          "docs": {
-                                                            "RoomController.html#bannedPlayers": {
-                                                              "ref": "RoomController.html#bannedPlayers",
-                                                              "tf": 1150
-                                                            }
-                                                          }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      },
-                                      "u": {
-                                        "docs": {},
-                                        "n": {
-                                          "docs": {},
-                                          "b": {
-                                            "docs": {},
-                                            "a": {
-                                              "docs": {},
-                                              "n": {
-                                                "docs": {
-                                                  "RoomController.html#unban": {
-                                                    "ref": "RoomController.html#unban",
-                                                    "tf": 1150
                                                   }
                                                 }
                                               }
@@ -2405,35 +2217,6 @@ window.lunrData = {
                                             }
                                           }
                                         }
-                                      },
-                                      "o": {
-                                        "docs": {},
-                                        "p": {
-                                          "docs": {},
-                                          "e": {
-                                            "docs": {},
-                                            "n": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "o": {
-                                                  "docs": {},
-                                                  "o": {
-                                                    "docs": {},
-                                                    "m": {
-                                                      "docs": {
-                                                        "RoomController.html#openRoom": {
-                                                          "ref": "RoomController.html#openRoom",
-                                                          "tf": 1150
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
                                       }
                                     }
                                   }
@@ -2468,7 +2251,7 @@ window.lunrData = {
                               },
                               "RoomController.html#eval": {
                                 "ref": "RoomController.html#eval",
-                                "tf": 3.8461538461538463
+                                "tf": 3.125
                               }
                             }
                           }
@@ -2553,7 +2336,7 @@ window.lunrData = {
                                                                                           "docs": {
                                                                                             "RoomController.html#eval": {
                                                                                               "ref": "RoomController.html#eval",
-                                                                                              "tf": 3.8461538461538463
+                                                                                              "tf": 3.125
                                                                                             }
                                                                                           }
                                                                                         }
@@ -2610,7 +2393,7 @@ window.lunrData = {
                 },
                 "RoomController.html#eval": {
                   "ref": "RoomController.html#eval",
-                  "tf": 3.8461538461538463
+                  "tf": 3.125
                 }
               }
             }
@@ -2661,6 +2444,29 @@ window.lunrData = {
                   "RoomController.html#openRoom": {
                     "ref": "RoomController.html#openRoom",
                     "tf": 1.8518518518518516
+                  }
+                }
+              }
+            }
+          },
+          "r": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "p": {
+                "docs": {},
+                "p": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "RoomController.html#eval": {
+                          "ref": "RoomController.html#eval",
+                          "tf": 3.125
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -3038,20 +2844,6 @@ window.lunrData = {
                     }
                   }
                 },
-                "e": {
-                  "docs": {},
-                  "x": {
-                    "docs": {},
-                    "t": {
-                      "docs": {
-                        "RoomController.html#callRoom": {
-                          "ref": "RoomController.html#callRoom",
-                          "tf": 8.333333333333332
-                        }
-                      }
-                    }
-                  }
-                },
                 "a": {
                   "docs": {},
                   "i": {
@@ -3061,6 +2853,20 @@ window.lunrData = {
                         "RoomController.html#openRoom": {
                           "ref": "RoomController.html#openRoom",
                           "tf": 1.8518518518518516
+                        }
+                      }
+                    }
+                  }
+                },
+                "e": {
+                  "docs": {},
+                  "x": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "RoomController.html#callRoom": {
+                          "ref": "RoomController.html#callRoom",
+                          "tf": 8.333333333333332
                         }
                       }
                     }
@@ -3111,6 +2917,10 @@ window.lunrData = {
                   "docs": {},
                   "g": {
                     "docs": {
+                      "RoomController.html#openRoom": {
+                        "ref": "RoomController.html#openRoom",
+                        "tf": 32.407407407407405
+                      },
                       "RoomController.html#setPluginConfig": {
                         "ref": "RoomController.html#setPluginConfig",
                         "tf": 5
@@ -3118,10 +2928,6 @@ window.lunrData = {
                       "RoomController.html#getPluginConfig": {
                         "ref": "RoomController.html#getPluginConfig",
                         "tf": 9.090909090909092
-                      },
-                      "RoomController.html#openRoom": {
-                        "ref": "RoomController.html#openRoom",
-                        "tf": 32.407407407407405
                       }
                     }
                   }
@@ -3151,7 +2957,7 @@ window.lunrData = {
                 "docs": {
                   "RoomController.html#eval": {
                     "ref": "RoomController.html#eval",
-                    "tf": 3.8461538461538463
+                    "tf": 3.125
                   }
                 }
               }
@@ -3387,28 +3193,16 @@ window.lunrData = {
                                   "ref": "Haxroomie.html#addRoom",
                                   "tf": 25
                                 },
+                                "RoomController.html#openRoom": {
+                                  "ref": "RoomController.html#openRoom",
+                                  "tf": 25
+                                },
                                 "RoomController.html#closeRoom": {
                                   "ref": "RoomController.html#closeRoom",
                                   "tf": 50
                                 },
                                 "RoomController.html#callRoom": {
                                   "ref": "RoomController.html#callRoom",
-                                  "tf": 33.33333333333333
-                                },
-                                "RoomController.html#kick": {
-                                  "ref": "RoomController.html#kick",
-                                  "tf": 33.33333333333333
-                                },
-                                "RoomController.html#ban": {
-                                  "ref": "RoomController.html#ban",
-                                  "tf": 33.33333333333333
-                                },
-                                "RoomController.html#unban": {
-                                  "ref": "RoomController.html#unban",
-                                  "tf": 33.33333333333333
-                                },
-                                "RoomController.html#bannedPlayers": {
-                                  "ref": "RoomController.html#bannedPlayers",
                                   "tf": 33.33333333333333
                                 },
                                 "RoomController.html#getPlugins": {
@@ -3433,7 +3227,7 @@ window.lunrData = {
                                 },
                                 "RoomController.html#eval": {
                                   "ref": "RoomController.html#eval",
-                                  "tf": 33.33333333333333
+                                  "tf": 20
                                 },
                                 "RoomController.html#hasPlugin": {
                                   "ref": "RoomController.html#hasPlugin",
@@ -3462,10 +3256,6 @@ window.lunrData = {
                                 "RoomController.html#getPluginConfig": {
                                   "ref": "RoomController.html#getPluginConfig",
                                   "tf": 33.33333333333333
-                                },
-                                "RoomController.html#openRoom": {
-                                  "ref": "RoomController.html#openRoom",
-                                  "tf": 25
                                 }
                               }
                             }
@@ -3824,6 +3614,14 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "g": {
+              "docs": {
+                "RoomController.html#eval": {
+                  "ref": "RoomController.html#eval",
+                  "tf": 20
+                }
+              }
             }
           },
           "v": {
@@ -3967,7 +3765,7 @@ window.lunrData = {
                     "docs": {
                       "RoomController.html#eval": {
                         "ref": "RoomController.html#eval",
-                        "tf": 3.8461538461538463
+                        "tf": 3.125
                       }
                     }
                   }
@@ -4070,17 +3868,17 @@ window.lunrData = {
                           "ref": "RoomController.html",
                           "tf": 1.8518518518518516
                         },
+                        "RoomController.html#openRoom": {
+                          "ref": "RoomController.html#openRoom",
+                          "tf": 1.8518518518518516
+                        },
                         "RoomController.html#callRoom": {
                           "ref": "RoomController.html#callRoom",
                           "tf": 8.333333333333332
                         },
                         "RoomController.html#eval": {
                           "ref": "RoomController.html#eval",
-                          "tf": 3.8461538461538463
-                        },
-                        "RoomController.html#openRoom": {
-                          "ref": "RoomController.html#openRoom",
-                          "tf": 1.8518518518518516
+                          "tf": 3.125
                         }
                       }
                     }
@@ -4112,51 +3910,6 @@ window.lunrData = {
                         "RoomController.html#addRepository": {
                           "ref": "RoomController.html#addRepository",
                           "tf": 20
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {},
-            "n": {
-              "docs": {
-                "RoomController.html#ban": {
-                  "ref": "RoomController.html#ban",
-                  "tf": 700
-                },
-                "RoomController.html#unban": {
-                  "ref": "RoomController.html#unban",
-                  "tf": 10
-                },
-                "RoomController.html#bannedPlayers": {
-                  "ref": "RoomController.html#bannedPlayers",
-                  "tf": 12.5
-                }
-              },
-              "n": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "d": {
-                    "docs": {},
-                    "p": {
-                      "docs": {},
-                      "l": {
-                        "docs": {},
-                        "a": {
-                          "docs": {},
-                          "y": {
-                            "docs": {
-                              "RoomController.html#bannedPlayers": {
-                                "ref": "RoomController.html#bannedPlayers",
-                                "tf": 683.3333333333334
-                              }
-                            }
-                          }
                         }
                       }
                     }
@@ -4235,7 +3988,7 @@ window.lunrData = {
               "docs": {
                 "RoomController.html#eval": {
                   "ref": "RoomController.html#eval",
-                  "tf": 3.8461538461538463
+                  "tf": 3.125
                 }
               }
             }
@@ -4248,14 +4001,14 @@ window.lunrData = {
                 "docs": {
                   "RoomController.html#eval": {
                     "ref": "RoomController.html#eval",
-                    "tf": 683.3333333333334
+                    "tf": 670
                   }
                 },
                 "u": {
                   "docs": {
                     "RoomController.html#eval": {
                       "ref": "RoomController.html#eval",
-                      "tf": 3.8461538461538463
+                      "tf": 3.125
                     }
                   }
                 }
@@ -4291,6 +4044,10 @@ window.lunrData = {
                   "docs": {},
                   "t": {
                     "docs": {
+                      "RoomController.html#openRoom": {
+                        "ref": "RoomController.html#openRoom",
+                        "tf": 30.555555555555557
+                      },
                       "RoomController.html#getPlugins": {
                         "ref": "RoomController.html#getPlugins",
                         "tf": 12.5
@@ -4298,10 +4055,6 @@ window.lunrData = {
                       "RoomController.html#addRepository": {
                         "ref": "RoomController.html#addRepository",
                         "tf": 1.6666666666666667
-                      },
-                      "RoomController.html#openRoom": {
-                        "ref": "RoomController.html#openRoom",
-                        "tf": 30.555555555555557
                       }
                     }
                   }
@@ -4319,6 +4072,37 @@ window.lunrData = {
                       "module-haxroomie.html": {
                         "ref": "module-haxroomie.html",
                         "tf": 7.142857142857142
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "p": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "n": {
+                "docs": {
+                  "RoomController.html#openRoom": {
+                    "ref": "RoomController.html#openRoom",
+                    "tf": 1.8518518518518516
+                  }
+                },
+                "r": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "m": {
+                        "docs": {
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
+                            "tf": 675
+                          }
+                        }
                       }
                     }
                   }
@@ -4360,37 +4144,6 @@ window.lunrData = {
                           "RoomController.html#addRepository": {
                             "ref": "RoomController.html#addRepository",
                             "tf": 1.6666666666666667
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "p": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "n": {
-                "docs": {
-                  "RoomController.html#openRoom": {
-                    "ref": "RoomController.html#openRoom",
-                    "tf": 1.8518518518518516
-                  }
-                },
-                "r": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "m": {
-                        "docs": {
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
-                            "tf": 675
                           }
                         }
                       }
@@ -4535,10 +4288,21 @@ window.lunrData = {
                   "ref": "RoomController.html",
                   "tf": 1.8518518518518516
                 },
+                "RoomController.html#openRoom": {
+                  "ref": "RoomController.html#openRoom",
+                  "tf": 1.8518518518518516
+                },
                 "RoomController.html#eval": {
                   "ref": "RoomController.html#eval",
-                  "tf": 3.8461538461538463
-                },
+                  "tf": 3.125
+                }
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "p": {
+              "docs": {
                 "RoomController.html#openRoom": {
                   "ref": "RoomController.html#openRoom",
                   "tf": 1.8518518518518516
@@ -4578,17 +4342,6 @@ window.lunrData = {
                     "ref": "RoomController.html#addRepository",
                     "tf": 1.6666666666666667
                   }
-                }
-              }
-            }
-          },
-          "o": {
-            "docs": {},
-            "p": {
-              "docs": {
-                "RoomController.html#openRoom": {
-                  "ref": "RoomController.html#openRoom",
-                  "tf": 1.8518518518518516
                 }
               }
             }
@@ -4642,6 +4395,10 @@ window.lunrData = {
                             "ref": "Haxroomie.html#addRoom",
                             "tf": 110
                           },
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
+                            "tf": 110
+                          },
                           "RoomController.html#closeRoom": {
                             "ref": "RoomController.html#closeRoom",
                             "tf": 110
@@ -4649,22 +4406,6 @@ window.lunrData = {
                           "RoomController.html#callRoom": {
                             "ref": "RoomController.html#callRoom",
                             "tf": 118.33333333333333
-                          },
-                          "RoomController.html#kick": {
-                            "ref": "RoomController.html#kick",
-                            "tf": 110
-                          },
-                          "RoomController.html#ban": {
-                            "ref": "RoomController.html#ban",
-                            "tf": 110
-                          },
-                          "RoomController.html#unban": {
-                            "ref": "RoomController.html#unban",
-                            "tf": 110
-                          },
-                          "RoomController.html#bannedPlayers": {
-                            "ref": "RoomController.html#bannedPlayers",
-                            "tf": 110
                           },
                           "RoomController.html#getPlugins": {
                             "ref": "RoomController.html#getPlugins",
@@ -4716,10 +4457,6 @@ window.lunrData = {
                           },
                           "RoomController.html#getPluginConfig": {
                             "ref": "RoomController.html#getPluginConfig",
-                            "tf": 110
-                          },
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
                             "tf": 110
                           }
                         }
@@ -4837,6 +4574,10 @@ window.lunrData = {
                       "Haxroomie.html#closeBrowser": {
                         "ref": "Haxroomie.html#closeBrowser",
                         "tf": 12.5
+                      },
+                      "RoomController.html#eval": {
+                        "ref": "RoomController.html#eval",
+                        "tf": 3.125
                       }
                     }
                   }
@@ -4857,6 +4598,26 @@ window.lunrData = {
                       "RoomController.html": {
                         "ref": "RoomController.html",
                         "tf": 1.8518518518518516
+                      }
+                    }
+                  }
+                }
+              },
+              "p": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "t": {
+                      "docs": {},
+                      "i": {
+                        "docs": {
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
+                            "tf": 3.7037037037037033
+                          }
+                        }
                       }
                     }
                   }
@@ -5052,29 +4813,59 @@ window.lunrData = {
                                       }
                                     }
                                   }
+                                },
+                                "s": {
+                                  "docs": {},
+                                  "e": {
+                                    "docs": {},
+                                    "r": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "i": {
+                                              "docs": {},
+                                              "z": {
+                                                "docs": {},
+                                                "a": {
+                                                  "docs": {},
+                                                  "b": {
+                                                    "docs": {},
+                                                    "l": {
+                                                      "docs": {},
+                                                      "e": {
+                                                        "docs": {},
+                                                        "&": {
+                                                          "docs": {},
+                                                          "g": {
+                                                            "docs": {},
+                                                            "t": {
+                                                              "docs": {
+                                                                "RoomController.html#eval": {
+                                                                  "ref": "RoomController.html#eval",
+                                                                  "tf": 20
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
                                 }
                               }
                             }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "p": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "t": {
-                      "docs": {},
-                      "i": {
-                        "docs": {
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
-                            "tf": 3.7037037037037033
                           }
                         }
                       }
@@ -5109,46 +4900,6 @@ window.lunrData = {
           },
           "l": {
             "docs": {},
-            "a": {
-              "docs": {},
-              "y": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "RoomController.html#kick": {
-                        "ref": "RoomController.html#kick",
-                        "tf": 16.666666666666664
-                      },
-                      "RoomController.html#ban": {
-                        "ref": "RoomController.html#ban",
-                        "tf": 16.666666666666664
-                      },
-                      "RoomController.html#unban": {
-                        "ref": "RoomController.html#unban",
-                        "tf": 10
-                      },
-                      "RoomController.html#bannedPlayers": {
-                        "ref": "RoomController.html#bannedPlayers",
-                        "tf": 12.5
-                      }
-                    }
-                  }
-                }
-              },
-              "i": {
-                "docs": {},
-                "n": {
-                  "docs": {
-                    "RoomController.html#addRepository": {
-                      "ref": "RoomController.html#addRepository",
-                      "tf": 1.6666666666666667
-                    }
-                  }
-                }
-              }
-            },
             "u": {
               "docs": {},
               "g": {
@@ -5263,6 +5014,72 @@ window.lunrData = {
                   }
                 }
               }
+            },
+            "a": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {
+                    "RoomController.html#addRepository": {
+                      "ref": "RoomController.html#addRepository",
+                      "tf": 1.6666666666666667
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "g": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                ".": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "v": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "l": {
+                          "docs": {},
+                          "u": {
+                            "docs": {
+                              "RoomController.html#eval": {
+                                "ref": "RoomController.html#eval",
+                                "tf": 3.125
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "f": {
+                  "docs": {},
+                  "u": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "c": {
+                        "docs": {},
+                        "t": {
+                          "docs": {
+                            "RoomController.html#eval": {
+                              "ref": "RoomController.html#eval",
+                              "tf": 20
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -5274,13 +5091,13 @@ window.lunrData = {
                 "ref": "Haxroomie.html#launchBrowser",
                 "tf": 3.125
               },
-              "RoomController.html#setPluginConfig": {
-                "ref": "RoomController.html#setPluginConfig",
-                "tf": 2.5
-              },
               "RoomController.html#openRoom": {
                 "ref": "RoomController.html#openRoom",
                 "tf": 1.8518518518518516
+              },
+              "RoomController.html#setPluginConfig": {
+                "ref": "RoomController.html#setPluginConfig",
+                "tf": 2.5
               }
             },
             "a": {
@@ -5298,22 +5115,19 @@ window.lunrData = {
               }
             }
           },
-          "n": {
+          "r": {
             "docs": {},
-            "b": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "n": {
-                  "docs": {
-                    "RoomController.html#unban": {
-                      "ref": "RoomController.html#unban",
-                      "tf": 683.3333333333334
-                    }
-                  }
+            "l": {
+              "docs": {
+                "RoomController.html#addRepository": {
+                  "ref": "RoomController.html#addRepository",
+                  "tf": 1.6666666666666667
                 }
               }
-            },
+            }
+          },
+          "n": {
+            "docs": {},
             "l": {
               "docs": {},
               "o": {
@@ -5332,17 +5146,6 @@ window.lunrData = {
                       }
                     }
                   }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "l": {
-              "docs": {
-                "RoomController.html#addRepository": {
-                  "ref": "RoomController.html#addRepository",
-                  "tf": 1.6666666666666667
                 }
               }
             }
@@ -5423,37 +5226,9 @@ window.lunrData = {
               }
             }
           }
-        },
-        "k": {
-          "docs": {},
-          "i": {
-            "docs": {},
-            "c": {
-              "docs": {},
-              "k": {
-                "docs": {
-                  "RoomController.html#kick": {
-                    "ref": "RoomController.html#kick",
-                    "tf": 700
-                  }
-                }
-              }
-            }
-          }
-        },
-        "j": {
-          "docs": {},
-          "s": {
-            "docs": {
-              "RoomController.html#eval": {
-                "ref": "RoomController.html#eval",
-                "tf": 33.33333333333333
-              }
-            }
-          }
         }
       },
-      "length": 393
+      "length": 366
     },
     "corpusTokens": [
       "access",
@@ -5465,12 +5240,11 @@ window.lunrData = {
       "alreadi",
       "anyth",
       "append",
+      "arg",
       "array",
       "array.&lt;(object|string)&gt",
       "array.&lt;roomcontroller&gt",
       "avail",
-      "ban",
-      "bannedplay",
       "befor",
       "boolean",
       "browser",
@@ -5546,10 +5320,6 @@ window.lunrData = {
       "instanc",
       "interfac",
       "interpret",
-      "iter",
-      "iterable.&lt;object&gt",
-      "js",
-      "kick",
       "launch",
       "launchbrows",
       "list",
@@ -5574,8 +5344,9 @@ window.lunrData = {
       "openroom",
       "order",
       "otherwis",
+      "page.evalu",
+      "pagefunct",
       "plain",
-      "player",
       "plugin",
       "pluginconfig",
       "plugindata",
@@ -5586,6 +5357,7 @@ window.lunrData = {
       "promise.&lt;array.&lt;plugindata&gt;&gt",
       "promise.&lt;boolean&gt",
       "promise.&lt;plugindata&gt",
+      "promise.&lt;serializable&gt",
       "properti",
       "provid",
       "puppet",
@@ -5602,8 +5374,6 @@ window.lunrData = {
       "roomcontrol",
       "roomcontroller#addplugin",
       "roomcontroller#addrepositori",
-      "roomcontroller#ban",
-      "roomcontroller#bannedplay",
       "roomcontroller#callroom",
       "roomcontroller#clearrepositori",
       "roomcontroller#closeroom",
@@ -5615,10 +5385,8 @@ window.lunrData = {
       "roomcontroller#getpluginsthatdependon",
       "roomcontroller#getrepositori",
       "roomcontroller#hasplugin",
-      "roomcontroller#kick",
       "roomcontroller#openroom",
       "roomcontroller#setpluginconfig",
-      "roomcontroller#unban",
       "roomobject",
       "run",
       "set",
@@ -5631,14 +5399,14 @@ window.lunrData = {
       "tri",
       "true",
       "type",
-      "unban",
       "unload",
       "url",
       "us",
       "usabl",
       "want",
       "within",
-      "without"
+      "without",
+      "wrapper"
     ],
     "pipeline": [
       "trimmer",
@@ -5793,6 +5561,16 @@ window.lunrData = {
       "description": "RoomController provides an interface to communicate with HaxBall roomObject and Haxball Headless Manager (HHM). Each RoomController controls one tab in the headless browser. The constructor is not ment to be called directly! Create new RoomController instances with the Haxroomie#addRoom method.",
       "body": ""
     },
+    "RoomController.html#openRoom": {
+      "id": "RoomController.html#openRoom",
+      "kind": "function",
+      "title": "&lt;async&gt; openRoom( config ) → {object}",
+      "longname": "RoomController#openRoom",
+      "name": "openRoom",
+      "tags": "RoomController#openRoom openRoom",
+      "summary": "",
+      "description": "Opens a HaxBall room in a browser tab. On top of the documentated properties here, the config object can contain any properties you want to use in your own HHM config file. The config object is usable globally from within the HHM config as the hrConfig object."
+    },
     "RoomController.html#closeRoom": {
       "id": "RoomController.html#closeRoom",
       "kind": "function",
@@ -5812,46 +5590,6 @@ window.lunrData = {
       "tags": "RoomController#callRoom callRoom",
       "summary": "",
       "description": "Calls a function of the HaxBall roomObject in the browsers context."
-    },
-    "RoomController.html#kick": {
-      "id": "RoomController.html#kick",
-      "kind": "function",
-      "title": "&lt;async&gt; kick( id )",
-      "longname": "RoomController#kick",
-      "name": "kick",
-      "tags": "RoomController#kick kick",
-      "summary": "",
-      "description": "Kicks a player from the room."
-    },
-    "RoomController.html#ban": {
-      "id": "RoomController.html#ban",
-      "kind": "function",
-      "title": "&lt;async&gt; ban( id )",
-      "longname": "RoomController#ban",
-      "name": "ban",
-      "tags": "RoomController#ban ban",
-      "summary": "",
-      "description": "Bans a player from the room."
-    },
-    "RoomController.html#unban": {
-      "id": "RoomController.html#unban",
-      "kind": "function",
-      "title": "&lt;async&gt; unban( id )",
-      "longname": "RoomController#unban",
-      "name": "unban",
-      "tags": "RoomController#unban unban",
-      "summary": "",
-      "description": "Removes a the ban of a given player id."
-    },
-    "RoomController.html#bannedPlayers": {
-      "id": "RoomController.html#bannedPlayers",
-      "kind": "function",
-      "title": "&lt;async&gt; bannedPlayers() → {Iterable.&lt;object&gt;}",
-      "longname": "RoomController#bannedPlayers",
-      "name": "bannedPlayers",
-      "tags": "RoomController#bannedPlayers bannedPlayers",
-      "summary": "",
-      "description": "Returns an Iterator of banned players."
     },
     "RoomController.html#getPlugins": {
       "id": "RoomController.html#getPlugins",
@@ -5906,12 +5644,12 @@ window.lunrData = {
     "RoomController.html#eval": {
       "id": "RoomController.html#eval",
       "kind": "function",
-      "title": "&lt;async&gt; eval( js )",
+      "title": "&lt;async&gt; eval( pageFunction [, ...args ] ) → {Promise.&lt;Serializable&gt;}",
       "longname": "RoomController#eval",
       "name": "eval",
       "tags": "RoomController#eval eval",
       "summary": "",
-      "description": "Evaluates the given code in the browser tab room is running. You can access the HaxBall roomObject with HHM.manager.room. E.g. room.eval('HHM.manager.room.getPlayerList()');"
+      "description": "Wrapper for Puppeteers page.evaluate. Evaluates the given code in the browser tab room is running. You can access the HaxBall roomObject with HHM.manager.room. e.g. room.eval('HHM.manager.room.getPlayerList()');"
     },
     "RoomController.html#hasPlugin": {
       "id": "RoomController.html#hasPlugin",
@@ -5982,16 +5720,6 @@ window.lunrData = {
       "tags": "RoomController#getPluginConfig getPluginConfig",
       "summary": "",
       "description": "Returns the plugin config for all loaded plugins in the room or if pluginName is given, then return the config for that plugin."
-    },
-    "RoomController.html#openRoom": {
-      "id": "RoomController.html#openRoom",
-      "kind": "function",
-      "title": "&lt;async&gt; openRoom( config ) → {object}",
-      "longname": "RoomController#openRoom",
-      "name": "openRoom",
-      "tags": "RoomController#openRoom openRoom",
-      "summary": "",
-      "description": "Opens a HaxBall room in a browser tab. On top of the documentated properties here, the config object can contain any properties you want to use in your own HHM config file. The config object is usable globally from within the HHM config as the hrConfig object."
     },
     "module-haxroomie.html": {
       "id": "module-haxroomie.html",

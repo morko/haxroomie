@@ -26,7 +26,7 @@ class CommandHandler {
     }
   }
 
-  getCommand(name) {
+  async getCommand(name) {
     if (!this[this.cmdPrefix + name] || typeof this[this.cmdPrefix + name] !== 'function') {
       return null;
     }
@@ -40,12 +40,22 @@ class CommandHandler {
    * 
    * @throws {InvalidCommandError}
    */
-  parseLine(line) {
-    let tokens = parse(line)['_'];
+  async parseLine(line) {
+    let tokens = parse(line, {
+      configuration: {
+        "boolean-negation": false,
+        "dot-notation": false,
+        "camel-case-expansion": false,
+        "short-option-groups": false,
+        "duplicate-arguments-array": false,
+        "flatten-duplicate-arrays": false,
+      }
+    })['_'];
+
     let cmdName = tokens[0];
     let args = tokens.slice(1);
 
-    let command = this.getCommand(cmdName);
+    let command = await this.getCommand(cmdName);
     if (!command) {
       throw new InvalidCommandError(`Invalid command.`);
     }
@@ -64,7 +74,8 @@ class CommandHandler {
   }
 
   async execute(line) {
-    let cmd = this.parseLine(line)
+    let cmd = await this.parseLine(line)
+    if (cmd.disabled) return false;
     return cmd.command.run(...cmd.args);
   }
 }

@@ -258,11 +258,9 @@ module.exports = class RoomOpener extends EventEmitter {
     logger.debug('Injecting haxroomie core HHM plugins.');
     try {
       let corePlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'core-plugin.js'));
-      let kickbanPlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'kickban-plugin.js'));
-      await this.page.evaluate((corePlugin, kickbanPlugin) => {
+      await this.page.evaluate((corePlugin) => {
         window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
-        window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
-      }, corePlugin, kickbanPlugin);
+      }, corePlugin);
     } catch (err) {
       logger.debug(err);
       throw new Error(`Failed to inject haxroomie core HHM plugins!`);

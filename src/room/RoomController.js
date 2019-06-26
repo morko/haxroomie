@@ -419,6 +419,7 @@ class RoomController extends EventEmitter {
       this.roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this.openRoomLock = false;
+      this.roomOpener.close();
       this.emit(`open-room-error`, err);
       throw err;
     }
@@ -464,86 +465,6 @@ class RoomController extends EventEmitter {
     }, fn, args);
     if (result.error) throw new Error(result.payload);
     return result.payload.result;
-  }
-
-  /**
-   * Kicks a player from the room.
-   * 
-   * @param {number} id - Id of player to ban.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async kick(id) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    if (!id && id !== 0) throw new TypeError('Missing required argument: id');
-    logger.debug(`RoomController#kick(${id})`);
-
-    await this.page.evaluate((id) => {
-      return HHM.manager.getPluginByName('hr/kickban').kick(id);
-    }, id);
-  }
-
-  /**
-   * Bans a player from the room.
-   * 
-   * @param {number} id - Id of player to ban.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async ban(id) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    if (!id && id !== 0) throw new TypeError('Missing required argument: id');
-    logger.debug(`RoomController#ban(${id})`);
-
-    await this.page.evaluate((id) => {
-      return HHM.manager.getPluginByName('hr/kickban').ban(id);
-    }, id);
-  }
-
-  /**
-   * Removes a the ban of a given player id.
-   * 
-   * @param {number} id - Id of player to ban.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async unban(id) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    if (!id && id !== 0) throw new TypeError('Missing required argument: id');
-    logger.debug(`RoomController#unban(${id})`);
-
-    await this.page.evaluate((id) => {
-      return HHM.manager.getPluginByName('hr/kickban').unban(id);
-    }, id);
-  }
- 
-  /**
-   * Returns an Iterator of banned players.
-   * 
-   * @returns {Iterable.<object>} - Iterator of Player objects.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async bannedPlayers() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    logger.debug(`RoomController#bannedPlayers`);
-
-    let result = await this.page.evaluate(() => {
-      return HHM.manager.getPluginByName('hr/kickban').bannedPlayers();
-    });
-    return result;
   }
 
   /**
@@ -644,24 +565,31 @@ class RoomController extends EventEmitter {
   }
 
   /**
+   * Wrapper for Puppeteers 
+   * [page.evaluate](https://github.com/GoogleChrome/puppeteer/blob/v1.18.0/docs/api.md#pageevaluatepagefunction-args).
+   * 
    * Evaluates the given code in the browser tab room is running.
    * You can access the HaxBall roomObject with `HHM.manager.room`.
-   * E.g.
+   * 
+   * e.g.
    * ```js
    * room.eval('HHM.manager.room.getPlayerList()');
    * ```
    * 
-   * @param {string} js - JavaScript to evaluate.
-   * 
+   * @param {string|function} pageFunction - JavaScript to evaluate.
+   * @param {...Serializable|...JSHandle} [args] - Arguments to pass to `js`.
+   * @returns {Promise.<Serializable>} -  Promise which resolves to the 
+   *    return value of pageFunction.
+
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser, or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
-  async eval(js) {
+  async eval(pageFunction, ...args) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
-    return this.page.evaluate(js);
+    return this.page.evaluate(pageFunction, ...args);
   }
 
   /**

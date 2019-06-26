@@ -21,6 +21,7 @@ const COLORS = {
   'PAGE CLOSED': colors.red,
   'ERROR': colors.red.bold,
   'INVALID COMMAND': colors.red,
+  'INVALID ARGUMENTS': colors.red,
   'PLUGINS LOADED': colors.green,
   'PLUGIN LOADED': colors.green,
   'PLUGIN REMOVED': colors.cyan,
@@ -101,7 +102,7 @@ function error(err) {
 function warn(msg) {
   readline.clearLine(process.stdout, 0);
   readline.cursorTo(process.stdout, 0);
-  if (type) msg = createMessage(type, msg);
+
   logger.warn(msg);
   createPrompt();
 }
@@ -144,7 +145,7 @@ async function onNewLine(line) {
         print(`${line} (type "help" for commands)`, 'INVALID COMMAND');
         break;
 
-      case 'InvalidArguments':
+      case 'InvalidCommandArgsError':
         print(err.message, 'INVALID ARGUMENTS');
         break;
 

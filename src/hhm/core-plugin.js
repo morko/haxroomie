@@ -51,7 +51,6 @@ Object.assign(window.hroomie, (function(){
   var ignoredPlugins = new Set([
     '_user/postInit',
     'hr/core',
-    'hr/kickban',
     'hhm/core',
     'hhm/persistence'
   ]);
