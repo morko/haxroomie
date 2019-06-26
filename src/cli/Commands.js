@@ -65,6 +65,7 @@ class Commands extends CommandHandler {
     return {
       description: 'Prints help.',
       run: () => {
+
         let help = [];
         let indentation = 18;
         for (let prop of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
@@ -128,7 +129,6 @@ class Commands extends CommandHandler {
     return {
       description: 'Reloads the config and restarts the rooms that were modified.',
       run: async () => {
-        cprompt.print(this.config.configPath, 'RELOAD CONFIG');
         let modifiedRooms = this.config.reload();
 
         if (modifiedRooms.size > 0) {
@@ -287,7 +287,7 @@ class Commands extends CommandHandler {
       run: async () => {
         let playerList = await this.room.callRoom('getPlayerList')
         playerList = playerList.filter(p => p.id !== 0);
-        let players = [`Amount of players: ${playerList.length}`];
+        let players = [`${playerList.length}/${this.room.roomInfo.maxPlayers}`];
 
         for (let player of playerList) {
           if (!player) continue;
@@ -312,7 +312,7 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${id}`, `ERROR`);
           return;
         }
-        await this.room.callRoom('kickPlayer', id, 'Bye!', false);
+        await this.room.kick(id);
       }
     }
   }

@@ -18,7 +18,7 @@ const COLORS = {
   'ADMIN': colors.yellow,
   'UNADMIN': colors.yellow,
   'PLAYERS': colors.green,
-  'TAB CLOSED': colors.red,
+  'PAGE CLOSED': colors.red,
   'ERROR': colors.red.bold,
   'INVALID COMMAND': colors.red,
   'PLUGINS LOADED': colors.green,
@@ -26,6 +26,7 @@ const COLORS = {
   'PLUGIN REMOVED': colors.cyan,
   'PLUGIN ENABLED': colors.green,
   'PLUGIN DISABLED': colors.cyan,
+  'LOADING CONFIG': colors.yellow,
   'RELOAD CONFIG': colors.yellow
 }
 
@@ -77,6 +78,35 @@ function print(msg, type) {
 }
 
 /**
+ * Prints error to console. If `err` is type of `Error` an error stack
+ * will be printed.
+ * @param {Error|string} err - The message.
+ */
+function error(err) {
+  readline.clearLine(process.stdout, 0);
+  readline.cursorTo(process.stdout, 0);
+
+  if (typeof err === 'Error') {
+    logger.error(err.stack);
+  } else {
+    logger.error(err);
+  }
+  createPrompt();
+}
+
+/**
+ * Prints warning message to console.
+ * @param {string} msg - The message.
+ */
+function warn(msg) {
+  readline.clearLine(process.stdout, 0);
+  readline.cursorTo(process.stdout, 0);
+  if (type) msg = createMessage(type, msg);
+  logger.warn(msg);
+  createPrompt();
+}
+
+/**
  * Formats the message based on its type.
  * @param {string} type - Type of message.
  * @param {string} msg - The message.
@@ -108,8 +138,22 @@ async function onNewLine(line) {
   try {
     await cmd.execute(line);
   } catch (err) {
-    logger.error(`Could not execute: ${line}`);
-    logger.error(err.stack);
+
+    switch (err.name) {
+      case 'InvalidCommandError':
+        print(`${line} (type "help" for commands)`, 'INVALID COMMAND');
+        break;
+
+      case 'InvalidArguments':
+        print(err.message, 'INVALID ARGUMENTS');
+        break;
+
+      default:
+        print(`Error executing: ${line}`, 'ERROR');
+        logger.error(err.stack);
+    }
+
+    logger.debug(err.stack);
   }
   createPrompt();
 }
@@ -118,5 +162,7 @@ module.exports = {
   setCommands,
   setPrompt,
   print,
+  error,
+  warn,
   question
 }

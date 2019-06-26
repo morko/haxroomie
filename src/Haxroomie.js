@@ -2,6 +2,7 @@ const { RoomController } = require('./room');
 const puppeteer = require('puppeteer');
 const path = require('path');
 const EventEmitter = require('events');
+const logger = require('./logger');
 
 /**
  * Emitted when new RoomController is added.
@@ -199,7 +200,11 @@ class Haxroomie extends EventEmitter {
     this.ensureInstanceIsUsable();
     let roomController = this.rooms.get(id);
     if (roomController) {
-      await roomController.page.close();
+      try {
+        await roomController.page.close();
+      } catch (err) {
+        logger.debug(err);
+      }
       this.rooms.delete(id);
       this.emit('room-removed', roomController);
     }

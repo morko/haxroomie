@@ -8,6 +8,6 @@ module.exports = {
     "copyright"             : "© Oskari Pöntinen 2019"
   },
   opts: {
-    template: './node_modules/foodoc/template'
+    template: './node_modules/foodoc/template',
   }
 };

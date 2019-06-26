@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const deepEqual = require('deep-equal');
 const logger = require('../logger');
+const cprompt = require('./cprompt');
 
 class Config {
   constructor(opt) {
@@ -69,12 +70,13 @@ class Config {
    *    current working directory.
    */
   load(configPath) {
+    cprompt.print(`from ${configPath}`, 'LOADING CONFIG');
     configPath = path.resolve(process.cwd(), configPath);
     let config;
     try {
       config = require(configPath);
     } catch (err) {
-      logger.error(`Could not load the config: ${configPath}`);
+      cprompt.print(`Could not load the config: ${configPath}`, 'ERROR');
       throw err;
     }
     
@@ -138,7 +140,7 @@ class Config {
    */
   loadFile(filePath) {
     if (!fs.existsSync(filePath)) {
-      logger.error(`No such file: ${filePath}`);
+      cprompt.print(`No such file: ${filePath}`, 'ERROR');
       return;
     }
     let modifiedTime = fs.statSync(filePath).mtimeMs;

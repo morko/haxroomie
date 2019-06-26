@@ -71,10 +71,10 @@ class HRConsoleApp {
         try {
           roomInfo = await this.openRoom(id);
           if (!roomInfo) {
-            cprompt.print(`Canceled opening room: ${color.cyan(id)}`);
+            cprompt.print(`Could not open room: ${colors.cyan(id)}`);
           }
         } catch (err) {
-          logger.error(err);
+          cprompt.error(err);
         }
       }
     }
@@ -88,7 +88,7 @@ class HRConsoleApp {
     if (this.roomEventHandler) this.roomEventHandler.removeAllListeners('print');
     this.roomEventHandler = new RoomEventHandler({room});
     this.roomEventHandler.on('print', (msg, type) => cprompt.print(msg, type));
-    cprompt.setPrompt(`${room.id}> `)
+    cprompt.setPrompt(`${colors.cyan(room.id)}> `)
     cprompt.setCommands(this.createCommands(room));
     this.currentRoom = room;
   }
@@ -115,9 +115,11 @@ class HRConsoleApp {
     room.on(`open-room-start`, (e) => this.onOpenRoomStart(room, e));
     room.on(`open-room-stop`, (e) => this.onOpenRoomStop(room, e));
     room.on(`open-room-error`, (e) => this.onOpenRoomError(room, e));
-    room.on(`page-closed`, (e) => this.onPageClosed(room, e));
-    room.on(`page-crash`, (e) => this.onPageCrashed(room, e));
-    room.on(`page-error`, (e) => this.onPageError(room, e));
+    room.on(`page-closed`, (e) => this.onPageClosed(e));
+    room.on(`page-crash`, (e) => cprompt.error(e));
+    room.on(`page-error`, (e) => cprompt.error(e));
+    room.on(`error-logged`, (e) => cprompt.error(e));
+    room.on(`warning-logged`, (e) => cprompt.warn(e));
   }
 
   /**
@@ -131,15 +133,17 @@ class HRConsoleApp {
     room.removeAllListeners(`page-closed`);
     room.removeAllListeners(`page-crash`);
     room.removeAllListeners(`page-error`);
+    room.removeAllListeners(`error-logged`);
+    room.removeAllListeners(`warning-logged`);
   }
 
-  onOpenRoomStart(room, eventArgs) {
+  onOpenRoomStart(room, config) {
     cprompt.print(`${colors.cyan(room.id)}`, `STARTING ROOM`);
   }
 
-  onOpenRoomStop(room, eventArgs) {
+  onOpenRoomStop(room, roomInfo) {
     cprompt.print(
-      `${colors.cyan(room.id)} - ${room.roomInfo.roomLink}`,
+      `${colors.cyan(room.id)} - ${roomInfo.roomLink}`,
       `ROOM STARTED`
     );
     cprompt.print(`for ${colors.cyan(room.id)}`, 'PLUGINS LOADED');
@@ -148,20 +152,24 @@ class HRConsoleApp {
   }
 
   onOpenRoomError(room, error) {
-    cprompt.print(`${colors.cyan(room.id)}: ${error.message}`, `ROOM NOT STARTED`);
     logger.debug(`[${room.id}] ${error.stack}`);
+
+    switch (error.name) {
+      case 'InvalidTokenError':
+        cprompt.print(`${colors.cyan(room.id)}: ${error.message}`, `ROOM NOT STARTED`);
+        break;
+
+      default: 
+        cprompt.print(`${error.name}: ${error.message}`, 'ERROR');
+        return;
+    }
   }
 
-  onPageClosed(room, eventArgs) {
-    cprompt.print(`${room.id}`, `TAB CLOSED`);
-  }
-
-  onPageCrashed(room, eventArgs) {
-    cprompt.print(`Page crashed: ${room.id}`, `ERROR`);
-  }
-
-  onPageError(room, eventArgs) {
-    cprompt.print(`Page error: ${room.id}`, `ERROR`);
+  async onPageClosed(room) {
+    await this.haxroomie.removeRoom(room.id);
+    cprompt.print(
+      `The page controlling ${colors.cyan(room.id)} was closed.`, `PAGE CLOSED`
+    );
   }
 
   /**
@@ -182,10 +190,18 @@ class HRConsoleApp {
     if (token && tryWithConfigToken) {
       let room = this.haxroomie.getRoom(id);
       roomConfig.token = token;
-      let roomInfo = await room.openRoom(roomConfig);
-      if (roomInfo) {
-        return roomInfo;
+      try {
+        let roomInfo = await room.openRoom(roomConfig);
+        if (roomInfo) {
+          return roomInfo;
+        }
+      } catch (err) {
+        logger.debug(err.stack);
+        if (err.name !== 'InvalidTokenError') {
+          return;
+        }
       }
+
     }
 
     return new Promise((resolve, reject) => {
@@ -199,6 +215,7 @@ class HRConsoleApp {
             if (roomInfo) resolve(roomInfo);
             return;
           } else if (newToken === 'c') {
+            cprompt.print(`${colors.cyan(id)}: User canceled opening.`, `ROOM NOT STARTED`);
             return;
           };
 

@@ -1,5 +1,5 @@
 const parse = require('yargs-parser');
-const colors = require(`colors/safe`);
+const { InvalidCommandError, InvalidCommandArgsError } = require('../errors');
 
 class CommandHandler {
 
@@ -8,12 +8,20 @@ class CommandHandler {
     this.cmdPrefix = opt.cmdPrefix || 'onCommand_';
   }
 
+  /**
+   * Validates the arguments given to a command.
+   * 
+   * @param {object} command - The command object.
+   * @param {Array} args - Arguments for the command.
+   * 
+   * @throws {InvalidCommandArgsError}
+   */
   validateArguments(command, args) {
     if (!command.argumentsOptional && command.args) {
       if (args.length > args.length) {
-        throw new Error('Too many arguments for the command!');
+        throw new InvalidCommandArgsError('Too many arguments!');
       } else if (args.length < command.args.length) {
-        throw new Error('Too few arguments for the command!');
+        throw new InvalidCommandArgsError('Too few arguments!');
       }
     }
   }
@@ -25,6 +33,13 @@ class CommandHandler {
     return this[this.cmdPrefix + name]();
   }
 
+  /**
+   * Parses the line into a command.
+   * 
+   * @param {string} line - Line to parse.
+   * 
+   * @throws {InvalidCommandError}
+   */
   parseLine(line) {
     let tokens = parse(line)['_'];
     let cmdName = tokens[0];
@@ -32,7 +47,7 @@ class CommandHandler {
 
     let command = this.getCommand(cmdName);
     if (!command) {
-      throw new Error(`Invalid command.`);
+      throw new InvalidCommandError(`Invalid command.`);
     }
     // Concatenate the arguments if command accepts only 1 argument.
     // In this case the quotes around arguments are not needed.

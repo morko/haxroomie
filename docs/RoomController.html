@@ -97,9 +97,10 @@
 			and
 			<a href="https://github.com/saviola777/haxball-headless-manager">Haxball Headless Manager (HHM)</a>.
 			Each RoomController controls one tab in the headless browser.</p>
+			<p><strong>The constructor is not ment to be called directly!</strong></p>
 			<p>Create new RoomController instances with the
 			<a href="Haxroomie.html#addRoom">Haxroomie#addRoom</a>
-			method. <strong>The constructor is not ment to be called directly!</strong></p></div>
+			method.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -166,7 +167,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-177">line 177</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-183">line 183</a></p>
 								</div>
 							</div>
 			
@@ -180,6 +181,1515 @@
 							<article class="secondary">
 									<h3>Methods</h3>
 									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="closeRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">closeRoom</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Closes the headless haxball room.</p></div>
+			</div>			<div class="callout callout-warning"><h5>Fires</h5>		<form class="form-horizontal fires">
+							<div class="form-group">
+								<label class="col-sm-3 control-label fires-event"><a href="RoomController.html#event:close-room">RoomController#close-room</a></label>
+								<div class="col-sm-9">
+									<div class="form-control-static fires-summary"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-438">line 438</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="callRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">callRoom</span><span class="signature-params">( <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Calls a function of the HaxBall roomObject in the browsers context.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>fn</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>name of the haxball roomObject function</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>..args</code></td>
+							<td><span class="param-type">any</span></td>
+							<td class="last">
+									<p>arguments for the function</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-456">line 456</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="kick" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">kick</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Kicks a player from the room.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>id</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>Id of player to ban.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-478">line 478</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="ban" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">ban</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Bans a player from the room.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>id</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>Id of player to ban.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-498">line 498</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="unban" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">unban</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Removes a the ban of a given player id.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>id</code></td>
+							<td><span class="param-type">number</span></td>
+							<td class="last">
+									<p>Id of player to ban.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-518">line 518</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="bannedPlayers" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">bannedPlayers</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Iterable.&lt;object>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns an Iterator of banned players.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Iterable.&lt;object></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Iterator of Player objects.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-538">line 538</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getPlugins" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugins</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns a list of PluginData objects.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>array of plugins</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-558">line 558</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;<a href="global.html#PluginData">PluginData</a>>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns PluginData of the given plugin id.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>name of the plugin</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;<a href="global.html#PluginData">PluginData</a>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>data of the plugin or null if
+			plugin was not found</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-579">line 579</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="enablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">enablePlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Enables a HHM plugin with the given id.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>name of the plugin</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li><code>true</code> if plugin was enabled, <code>false</code> otherwise.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-598">line 598</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="disablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">disablePlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Disables a HHM plugin with the given id. If the name is an Array then
+			it disables all the plugins in the given order.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span> | <span class="param-type">Array.&lt;string></span></td>
+							<td class="last">
+									<p>name or array of names of the plugin(s)</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>was the plugin disabled or not?</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-618">line 618</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getPluginsThatDependOn" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginsThatDependOn</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Gets a list of plugins that depend on the given plugin.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>name of the plugin</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>array of plugins</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-637">line 637</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="eval" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">eval</span><span class="signature-params">( <span class="signature-param">js</span>&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Evaluates the given code in the browser tab room is running.
+			You can access the HaxBall roomObject with <code>HHM.manager.room</code>.
+			E.g.</p>
+			<pre class="prettyprint source lang-js"><code>room.eval('HHM.manager.room.getPlayerList()');
+			</code></pre></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>js</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>JavaScript to evaluate.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-660">line 660</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="hasPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">hasPlugin</span><span class="signature-params">( <span class="signature-param">plugin</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Checks if the room has a plugin with given name loaded.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>plugin</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>Name of the plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li><code>true</code> if it had the plugin, <code>false</code> if not.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-676">line 676</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="addPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addPlugin</span><span class="signature-params">( <span class="signature-param">plugin</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{number}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a new plugin.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>plugin</code></td>
+							<td><span class="param-type"><a href="global.html#PluginDef">PluginDef</a></span></td>
+							<td class="last">
+									<p>File definiton of the plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">number</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Plugin ID if the plugin and all of its dependencies
+			have been loaded, -1 otherwise.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-695">line 695</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="addRepository" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addRepository</span><span class="signature-params">( <span class="signature-param">repository</span> [,&nbsp;<span class="signature-param">append</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a repository.</p>
+			<p>The repository can be specified as a string, then it is interpreted as the
+			URL of a plain type repository, or as an Object.</p>
+			<p>If append is set to true, the new repository will be added with the
+			lowest priority, i.e. plugins will only be loaded from it they can't
+			be found in any other repository. Otherwise the repository will be
+			added with the highest priority.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>repository</code></td>
+							<td><span class="param-type">object</span> | <span class="param-type">string</span></td>
+								<td class="attributes"></td>
+							<td class="last">
+									<p>The repository to be added.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>append</code></td>
+							<td><span class="param-type">boolean</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Whether to append or prepend the repository
+			to the Array of repositories.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Whether the repository was successfully added.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-724">line 724</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getRepositories" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getRepositories</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;(object|string)>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns available repositories.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;(object|string)></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>An array of available repositories.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-745">line 745</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="clearRepositories" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">clearRepositories</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>This will clear the available repositories.</p>
+			<p>Will not unload the plugins that are already loaded from the repositories.</p></div>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-763">line 763</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="setPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">setPluginConfig</span><span class="signature-params">( <span class="signature-param">pluginConfig</span> [,&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Sets the rooms plugin config.</p>
+			<p>Tries to load plugins that are not loaded from the available
+			repositories.</p>
+			<p><strong>Plugins will not get unloaded using this method.</strong></p>
+			<p>If <code>pluginName</code> is given then only config for the given plugin
+			is set.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>pluginConfig</code></td>
+							<td><span class="param-type">object</span></td>
+								<td class="attributes"></td>
+							<td class="last">
+									<p>Room wide config or plugins config.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>pluginName</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Name of the plugin if wanting to change
+			config of only one plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-791">line 791</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginConfig</span><span class="signature-params">( [&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns the plugin config for all loaded plugins in the room or
+			if <code>pluginName</code> is given, then return the config for that plugin.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>pluginName</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Config for the plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">NotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-853">line 853</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
 			<h4 id="openRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">openRoom</span><span class="signature-params">( <span class="signature-param">config</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{object}</span></h4>
@@ -390,325 +1900,66 @@
 								</div>
 							</div>
 					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
+			</div>			<div class="callout callout-warning"><h5>Fires</h5>		<form class="form-horizontal fires">
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label fires-event"><a href="RoomController.html#event:open-room-start">RoomController#open-room-start</a></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-365">line 365</a></p>
+									<div class="form-control-static fires-summary"></div>
 								</div>
 							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="closeRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">closeRoom</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Closes the headless haxball room.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label fires-event"><a href="RoomController.html#event:open-room-stop">RoomController#open-room-stop</a></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-387">line 387</a></p>
+									<div class="form-control-static fires-summary"></div>
 								</div>
 							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="callRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">callRoom</span><span class="signature-params">( <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Calls a function of the HaxBall roomObject in the browsers context.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>fn</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>name of the haxball roomObject function</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>..args</code></td>
-							<td><span class="param-type">any</span></td>
-							<td class="last">
-									<p>arguments for the function</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label fires-event"><a href="RoomController.html#event:open-room-error">RoomController#open-room-error</a></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-401">line 401</a></p>
+									<div class="form-control-static fires-summary"></div>
 								</div>
 							</div>
-			
-			
-			
-			
 					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="kick" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">kick</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Kicks a player from the room.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">number</span></td>
-							<td class="last">
-									<p>Id of player to ban.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-417">line 417</a></p>
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is no longer usable due to some
+			fatal error in browser, or if the tab has been closed.</li>
+			</ul></div>
 								</div>
 							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="ban" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">ban</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Bans a player from the room.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">number</span></td>
-							<td class="last">
-									<p>Id of player to ban.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">ConnectionError</span></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-431">line 431</a></p>
+									<div class="form-control-static exceptions-description"><ul>
+			<li>Could not connect to HaxBall headless page.</li>
+			</ul></div>
 								</div>
 							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="unban" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">unban</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Removes a the ban of a given player id.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">number</span></td>
-							<td class="last">
-									<p>Id of player to ban.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
 							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">TimeoutError</span></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-445">line 445</a></p>
+									<div class="form-control-static exceptions-description"><ul>
+			<li>Haxball Headless Manager took too much time to
+			start.</li>
+			</ul></div>
 								</div>
 							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="bannedPlayers" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">bannedPlayers</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Iterable.&lt;object>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns an Iterator of banned players.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Iterable.&lt;object></span></label>
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">InvalidTokenError</span></label>
 								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Iterator of Player objects.</li>
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The token is invalid or expired.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">RoomLockedError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is already being opened.</li>
 			</ul></div>
 								</div>
 							</div>
@@ -733,832 +1984,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-459">line 459</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getPlugins" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugins</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns a list of PluginData objects.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>array of plugins</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-473">line 473</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;<a href="global.html#PluginData">PluginData</a>>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns PluginData of the given plugin id.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>name</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>name of the plugin</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;<a href="global.html#PluginData">PluginData</a>></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>data of the plugin or null if
-			plugin was not found</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-489">line 489</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="enablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">enablePlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Enables a HHM plugin with the given id.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>name</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>name of the plugin</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li><code>true</code> if plugin was enabled, <code>false</code> otherwise.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-503">line 503</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="disablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">disablePlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Disables a HHM plugin with the given id. If the name is an Array then
-			it disables all the plugins in the given order.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>name</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">Array.&lt;string></span></td>
-							<td class="last">
-									<p>name or array of names of the plugin(s)</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>was the plugin disabled or not?</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-518">line 518</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getPluginsThatDependOn" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginsThatDependOn</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Gets a list of plugins that depend on the given plugin.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>name</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>name of the plugin</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>array of plugins</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-532">line 532</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="eval" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">eval</span><span class="signature-params">( <span class="signature-param">js</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Evaluates the given code in the browser tab room is running.
-			You can access the HaxBall roomObject with <code>HHM.manager.room</code>.
-			E.g.</p>
-			<pre class="prettyprint source lang-js"><code>room.eval('HHM.manager.room.getPlayerList()');
-			</code></pre></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>js</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>JavaScript to evaluate.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-550">line 550</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="hasPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">hasPlugin</span><span class="signature-params">( <span class="signature-param">plugin</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Checks if the room has a plugin with given name loaded.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>plugin</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>Name of the plugin.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li><code>true</code> if it had the plugin, <code>false</code> if not.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-561">line 561</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="addPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addPlugin</span><span class="signature-params">( <span class="signature-param">plugin</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{number}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a new plugin.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>plugin</code></td>
-							<td><span class="param-type"><a href="global.html#PluginDef">PluginDef</a></span></td>
-							<td class="last">
-									<p>File definiton of the plugin.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">number</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Plugin ID if the plugin and all of its dependencies
-			have been loaded, -1 otherwise.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-576">line 576</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="addRepository" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addRepository</span><span class="signature-params">( <span class="signature-param">repository</span> [,&nbsp;<span class="signature-param">append</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a repository.</p>
-			<p>The repository can be specified as a string, then it is interpreted as the
-			URL of a plain type repository, or as an Object.</p>
-			<p>If append is set to true, the new repository will be added with the
-			lowest priority, i.e. plugins will only be loaded from it they can't
-			be found in any other repository. Otherwise the repository will be
-			added with the highest priority.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-							<th>Attributes</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>repository</code></td>
-							<td><span class="param-type">object</span> | <span class="param-type">string</span></td>
-								<td class="attributes"></td>
-							<td class="last">
-									<p>The repository to be added.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>append</code></td>
-							<td><span class="param-type">boolean</span></td>
-								<td class="attributes">&lt;optional&gt;<br/></td>
-							<td class="last">
-									<p>Whether to append or prepend the repository
-			to the Array of repositories.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Whether the repository was successfully added.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-601">line 601</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getRepositories" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getRepositories</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;(object|string)>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns available repositories.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;(object|string)></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>An array of available repositories.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-618">line 618</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="clearRepositories" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">clearRepositories</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>This will clear the available repositories.</p>
-			<p>Will not unload the plugins that are already loaded from the repositories.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-632">line 632</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="setPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">setPluginConfig</span><span class="signature-params">( <span class="signature-param">pluginConfig</span> [,&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Sets the rooms plugin config.</p>
-			<p>Tries to load plugins that are not loaded from the available
-			repositories.</p>
-			<p><strong>Plugins will not get unloaded using this method.</strong></p>
-			<p>If <code>pluginName</code> is given then only config for the given plugin
-			is set.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-							<th>Attributes</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>pluginConfig</code></td>
-							<td><span class="param-type">object</span></td>
-								<td class="attributes"></td>
-							<td class="last">
-									<p>Room wide config or plugins config.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>pluginName</code></td>
-							<td><span class="param-type">string</span></td>
-								<td class="attributes">&lt;optional&gt;<br/></td>
-							<td class="last">
-									<p>Name of the plugin if wanting to change
-			config of only one plugin.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-656">line 656</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginConfig</span><span class="signature-params">( [&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns the plugin config for all loaded plugins in the room or
-			if <code>pluginName</code> is given, then return the config for that plugin.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-							<th>Attributes</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>pluginName</code></td>
-							<td><span class="param-type">string</span></td>
-								<td class="attributes">&lt;optional&gt;<br/></td>
-							<td class="last">
-									<p>Config for the plugin.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-714">line 714</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-409">line 409</a></p>
 								</div>
 							</div>
 			
@@ -1579,7 +2005,29 @@
 	<div class="symbol-details-inner">
 			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Emitted when the browser tab gets closed.
 			Renders this RoomController unusable.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>room</code></td>
+							<td><span class="param-type"><a href="RoomController.html">RoomController</a></span></td>
+							<td class="last">
+									<p>Instance of RoomController that was
+			controlling the page.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -1599,7 +2047,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-6">line 6</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-7">line 7</a></p>
 								</div>
 							</div>
 			
@@ -1658,7 +2106,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-12">line 12</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-15">line 15</a></p>
 								</div>
 							</div>
 			
@@ -1716,7 +2164,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-19">line 19</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-22">line 22</a></p>
 								</div>
 							</div>
 			
@@ -1774,7 +2222,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-25">line 25</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-28">line 28</a></p>
 								</div>
 							</div>
 			
@@ -1832,7 +2280,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-31">line 31</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-34">line 34</a></p>
 								</div>
 							</div>
 			
@@ -1891,7 +2339,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-37">line 37</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-40">line 40</a></p>
 								</div>
 							</div>
 			
@@ -1950,7 +2398,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-44">line 44</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-47">line 47</a></p>
 								</div>
 							</div>
 			
@@ -1980,9 +2428,11 @@
 					<tbody>
 						<tr>
 								<td><code>error</code></td>
-							<td><span class="param-type">Error</span></td>
+							<td><span class="param-type">Error</span> | <span class="param-type">TypeError</span> | <span class="param-type">ConnectionError</span> | <span class="param-type">TimeoutError</span></td>
 							<td class="last">
-									<p>Error that happened when opening the room.</p>
+									<ul>
+			<li>Error that happened when opening the room.</li>
+			</ul>
 							</td>
 						</tr>
 					</tbody>
@@ -2008,7 +2458,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-51">line 51</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-54">line 54</a></p>
 								</div>
 							</div>
 			
@@ -2045,7 +2495,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-57">line 57</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-61">line 61</a></p>
 								</div>
 							</div>
 			
@@ -2103,7 +2553,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-62">line 62</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-66">line 66</a></p>
 								</div>
 							</div>
 			
@@ -2161,7 +2611,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-68">line 68</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-72">line 72</a></p>
 								</div>
 							</div>
 			
@@ -2219,7 +2669,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-74">line 74</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-78">line 78</a></p>
 								</div>
 							</div>
 			
@@ -2277,7 +2727,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-80">line 80</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-84">line 84</a></p>
 								</div>
 							</div>
 			
@@ -2335,7 +2785,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-86">line 86</a></p>
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-90">line 90</a></p>
 								</div>
 							</div>
 			
