@@ -64,7 +64,7 @@ To do so you can follow
 
 If you get an error like *"Failed to launch Chrome"*, it is possible that you are missing some libraries that Chrome depend on.
 
-To install dependencies in **Ubuntu** based Linux you can use the following command:
+To install dependencies in **Debian** based Linux you can use the following command:
 ```sh
 sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 ```
@@ -109,9 +109,9 @@ npm install morko/haxroomie -g
 To update to a specific release
 (see [releases](https://github.com/morko/haxroomie/releases)):
 ```
-npm install morko/haxroomie#[release_number]
+npm install morko/haxroomie#[release_number] -g
 ```
-e.g. `npm install morko/haxroomie#1.0.5`
+e.g. `npm install morko/haxroomie#1.0.5 -g`
 
 # CLI usage
 
