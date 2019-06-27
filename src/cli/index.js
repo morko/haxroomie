@@ -2,23 +2,27 @@
 const path = require(`path`);
 const HRConsoleApp = require(`./HRConsoleApp`);
 const logger = require(`../logger`);
+const fs = require('fs');
 const lockFile = require(`lockfile`);
+const configDir = path.join(require('os').homedir(), '.haxroomie');
+const configSkeleton = path.join(
+  __dirname, '..', '..', 'examples', 'configs', '1-private-room.js'
+);
 
 const argv = require(`yargs`)
   .usage(`Usage: $0 [options]`)
   
   .alias(`r`, `port`)
-  .describe(`port`, `Communication port for the headless chrome browser.`)
+  .describe(`port`, `Communication port for the headless Chrome browser.`)
 
   .alias(`c`, `config`)
-  .describe(`config`, `Path to the Haxroomie config file. `
-    + `the default path is current working directory.`)
-  .default(`config`, path.join(process.cwd(), 'config.js'))
+  .describe(`config`, `Path to haxroomie config file.`)
+  .default(`config`, path.join(configDir, 'config.js'))
 
   .alias(`d`, `user-data-dir`)
   .describe(`user-data-dir`, `Path to where browser should store `
     + `the data like localStorage.`)
-  .default(`user-data-dir`, path.join(process.cwd(), 'user-data-dir'))
+  .default(`user-data-dir`, path.join(configDir, 'user-data-dir'))
   
   .boolean(`no-sandbox`)
   .describe(`no-sandbox`, `Makes chrome run without sandbox (useful only if `
@@ -37,7 +41,6 @@ argv.port = argv.port || process.env.HR_PORT
 const lockFilePath = path.join(__dirname, 'haxroomie.lock');
 
 (async function bootstrap() {
-
   try {
     lockFile.lockSync(lockFilePath);
   } catch (err) {
@@ -51,6 +54,7 @@ const lockFilePath = path.join(__dirname, 'haxroomie.lock');
   }
 
   try {
+    initConfigDir();
     let app = new HRConsoleApp(argv);
     await app.start();
     process.on('exit', () => {
@@ -63,3 +67,17 @@ const lockFilePath = path.join(__dirname, 'haxroomie.lock');
   }
 
 })();
+
+/**
+ * Creates the config directory and necessary files if missing.
+ */
+function initConfigDir() {
+  if (!fs.existsSync(configDir)) {
+    fs.mkdirSync(configDir, { mode: '0770', recursive: true});
+  }
+  if (argv.config === path.join(configDir, 'config.js')) {
+    if (!fs.existsSync(argv.config)) {
+      fs.copyFileSync(configSkeleton, argv.config);
+    }
+  }
+}

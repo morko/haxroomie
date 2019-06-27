@@ -18,6 +18,7 @@ class HRConsoleApp {
     if (!opt.config) throw new TypeError('invalid arguments');
 
     this.configPath = opt.config;
+    this.userDataDir = opt.userDataDir;
     this.noSandbox = opt.noSandbox;
     this.headless = opt.headless;
     this.port = opt.port;
@@ -30,6 +31,7 @@ class HRConsoleApp {
   async start() {
 
     this.haxroomie = await createHaxroomie({
+      userDataDir: this.userDataDir,
       noSandbox: this.noSandbox,
       headless: this.headless,
       port: this.port
@@ -153,16 +155,6 @@ class HRConsoleApp {
 
   onOpenRoomError(room, error) {
     logger.debug(`[${room.id}] ${error.stack}`);
-
-    switch (error.name) {
-      case 'InvalidTokenError':
-        cprompt.print(`${colors.cyan(room.id)}: ${error.message}`, `ROOM NOT STARTED`);
-        break;
-
-      default: 
-        cprompt.print(`${error.name}: ${error.message}`, 'ERROR');
-        return;
-    }
   }
 
   async onPageClosed(room) {
@@ -196,8 +188,9 @@ class HRConsoleApp {
           return roomInfo;
         }
       } catch (err) {
-        logger.debug(err.stack);
-        if (err.name !== 'InvalidTokenError') {
+        if (err.name === 'InvalidTokenError'){
+          cprompt.print(`${colors.cyan(room.id)}: ${err.message}`, `ROOM NOT STARTED`);
+        } else {
           return;
         }
       }
@@ -221,7 +214,15 @@ class HRConsoleApp {
 
           roomConfig.token = newToken;
           let room = this.haxroomie.getRoom(id);
-          let roomInfo = await room.openRoom(roomConfig);
+          let roomInfo;
+          try {
+            roomInfo = await room.openRoom(roomConfig);
+          } catch (err){
+            cprompt.print(`${err.name}: ${err.message}`, 'ERROR');
+            if (err.name !== 'InvalidTokenError') {
+              return;
+            }
+          }
           if (!roomInfo) {
             roomInfo = await this.openRoom(id, false);
             if (roomInfo) resolve(roomInfo);

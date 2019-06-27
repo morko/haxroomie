@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const deepEqual = require('deep-equal');
-const logger = require('../logger');
 const cprompt = require('./cprompt');
 
 class Config {
@@ -11,7 +10,8 @@ class Config {
     if (!opt.haxroomie) throw new TypeError('invalid arguments');
 
     this.haxroomie = opt.haxroomie;
-    this.configPath = opt.configPath;
+    this.configPath = path.resolve(process.cwd(), opt.configPath);
+
     this.config = this.load(this.configPath);
     this.tokens = {};
   }
@@ -71,7 +71,7 @@ class Config {
    */
   load(configPath) {
     cprompt.print(`from ${configPath}`, 'LOADING CONFIG');
-    configPath = path.resolve(process.cwd(), configPath);
+
     let config;
     try {
       config = require(configPath);

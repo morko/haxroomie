@@ -1,21 +1,30 @@
 /**
  * Example haxroomie configuration file.
  * Opens 1 private room.
- * 
- * Copy this to the haxroomie directory and edit to your liking to
- * easily get haxroomie running.
- * 
- * CHANGE THE admin PASSWORD!!!
  */
 
 let config = {
   'priv': {
     autoStart: true,
-    roomName: `fs arena`,
+    roomName: `haxroomie`,
     playerName: `host`,
     maxPlayers: 20,
     public: false,
+    repositories: [
+      // salamini's repository from https://github.com/morko/hhm-sala-plugins
+      {
+        type: 'github',
+        repository: 'morko/hhm-sala-plugins'
+      },
+      // Herna's repository from https://github.com/XHerna/hhm-plugins
+      {
+        type: 'github',
+        repository: 'XHerna/hhm-plugins'
+      },
+    ],
     pluginConfig: {
+      // uncomment the 'sav/roles' property if you want admin passwords
+      /*
       'sav/roles': {
         roles: {
           // get admin priviledges with !auth admin adminpass
@@ -23,7 +32,18 @@ let config = {
           // get host priviledges with !auth host hostpass
           host: `hostpass`
         }
-      }
+      },
+      */
+      // always have one admin in the room
+      'hr/always-one-admin': {},
+      // allows players to pause writing 'p'
+      'hr/pause': {
+        // tells this plugin that players can pause unlimited times per game
+        maxPauseTimes: 0
+      },
+      // keeps track of banned players and has some commands for players with
+      // admin or host priviledges
+      'hr/kickban': {},
     }
   }
 };

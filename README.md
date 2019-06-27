@@ -115,32 +115,27 @@ e.g. `npm install morko/haxroomie#1.0.5 -g`
 
 # CLI usage
 
-To start the CLI it needs a [config](#config) file. 
-
-For a quick start copy one of the
-example configs from 
-[haxroomie/examples/configs](https://github.com/morko/haxroomie/tree/master/examples/configs)
-to the directory you cloned/downloaded haxroomie to as `config.js` and modify
-it to your liking.
-
-By default Haxroomie searches for `config.js` in the current working directory.
-
-Every room requires a token from <https://www.haxball.com/headlesstoken>.
-You will be prompted for the tokens when opening a room.
+By default haxroomie uses the config from `[user_home_directory]/.haxroomie/config.js`.
+If it does not exist, then one will be created using [this](https://github.com/morko/haxroomie/blob/master/examples/configs/1-private-room.js)
+example configuration. [Here](https://github.com/morko/haxroomie/tree/master/examples/configs) you can find more examples.
 
 To start run:
 ```sh
 npm start
 ```
 
-If you wish to load the config from elsewhere than `config.js` in the current
-working directory you can give it the `-c` argument.
+If you wish to load the config from elsewhere you can give haxroomie the `-c` argument.
 
 e.g.
 ```sh
 npm start -- -c [path/to/config.js]
 ```
 **Note the extra `--` when using the npm start command*
+
+
+Every room requires a token from <https://www.haxball.com/headlesstoken>.
+You will be prompted for the tokens when opening a room. Or you can give
+it in the config ([token property](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#token)).
 
 Once haxroomie CLI is running you can type `help` for available commands.
 
@@ -159,7 +154,7 @@ See the
 [Options in the haxroomie config](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config) 
 for information about each option.
 
-Here is an example of a config that starts one private room.
+Here is a simple example of a config that starts one private room.
 
 ```js
 let config = {

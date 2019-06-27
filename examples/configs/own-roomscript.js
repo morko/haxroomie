@@ -1,10 +1,12 @@
 /**
  * Example haxroomie configuration file.
- * Opens 1 room with a simple custom roomscript. The script is located on
+ * 
+ * Opens one room with a simple custom roomscript. The script is located on
  * directory above this file and located using the node.js path module.
  * 
- * Copy this to the haxroomie directory and edit to your liking to
- * easily get haxroomie running.
+ * This is useful starter config for ppl that are porting their scripts
+ * to haxroomie. You can try adding other plugins incrementally to
+ * test if they work with your script.
  */
 
 const path = require('path');
@@ -12,7 +14,7 @@ const path = require('path');
 let config = {
   'room': {
     autoStart: true,
-    roomName: `PRO 3v3`,
+    roomName: `haxroomie`,
     playerName: `host`,
     maxPlayers: 10,
     public: true,
