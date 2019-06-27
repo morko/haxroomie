@@ -13,30 +13,6 @@ HHM.config.room = {
   token: hrConfig.token
 };
 
-// Work after HHM has been initialized.
-HHM.config.postInit = HBInit => {
-  let room = HBInit();
-
-  // Load the `plugins`.
-  if (!hrConfig.roomScript && hrConfig.plugins) {
-    for (let plugin of hrConfig.plugins) {
-      window.HHM.manager.addPluginByCode(plugin.content, plugin.name);
-    }
-  }
-
-  // Load the `roomScript`.
-  if (hrConfig.roomScript) {
-    let name = hrConfig.roomScript.name;
-    let content = hrConfig.roomScript.content
-    window.HHM.manager.addPluginByCode(content, name);
-  }
-
-  room.onRoomLink = () => {
-    // This tells Haxroomie that HHM has fully loaded.
-    window.hroomie.hhmStarted = true;
-  }
-};
-
 // The default plugin configuration.
 HHM.config.plugins = {
   'sav/players': {
@@ -64,7 +40,18 @@ if (hrConfig.disableDefaultPlugins || hrConfig.roomScript) {
 // Merge user plugin configuration with the default.
 if (hrConfig.pluginConfig) {
   window.hroomie.mergeDeep(HHM.config.plugins, hrConfig.pluginConfig);
-} 
+}
+
+// Temporarily remove the pluginConfigs for plugins that are passed
+// into haxroomie in the `plugins` option so that the plugins won't get
+// loaded from a repository.
+const removedPluginConfigs = {};
+for (let plugin of hrConfig.plugins) {
+  if (HHM.config.plugins[plugin.name]) {
+    removedPluginConfigs[plugin.name] = HHM.config.plugins[plugin.name];
+    delete HHM.config.plugins[plugin.name];
+  }
+}
 
 // Default plugin repositories.
 HHM.config.repositories = [
@@ -93,3 +80,33 @@ if (HHM.manager === undefined) {
   }
   document.head.appendChild(s);
 }
+
+// Work after HHM has been initialized.
+HHM.config.postInit = HBInit => {
+  let room = HBInit();
+
+  // Load the `plugins`.
+  if (hrConfig.plugins) {
+    for (let plugin of hrConfig.plugins) {
+      window.HHM.manager.addPluginByCode(plugin.content, plugin.name);
+    }
+  }
+
+  // Set the configs for `plugins`
+  for (let [pluginName, cfg] of Object.entries(removedPluginConfigs)) {
+    let id = HHM.manager.getPluginId(pluginName);
+    HHM.manager.setPluginConfig(id, cfg)
+  }
+
+  // Load the `roomScript`.
+  if (hrConfig.roomScript) {
+    let name = hrConfig.roomScript.name;
+    let content = hrConfig.roomScript.content
+    window.HHM.manager.addPluginByCode(content, name);
+  }
+
+  room.onRoomLink = () => {
+    // This tells Haxroomie that HHM has fully loaded.
+    window.hroomie.hhmStarted = true;
+  }
+};
