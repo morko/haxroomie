@@ -68,8 +68,6 @@ class Haxroomie extends EventEmitter {
     this.headless = opt.hasOwnProperty('headless') ? opt.headless : true;
     this.userDataDir = opt.userDataDir || path.join(__dirname, '..', 'user-data-dir');
     this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
-    console.log(opt);
-    console.log(this.userDataDir);
   }
 
   /**
