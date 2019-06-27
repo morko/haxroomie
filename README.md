@@ -5,6 +5,7 @@
 Haxroomie is an API and CLI to run headless HaxBall rooms without GUI.
 
 With haxroomie you can
+  - run rooms without desktop environment
   - run multiple rooms with ease
   - use a modular plugin system
   - monitor and control rooms from command line
@@ -13,7 +14,8 @@ With haxroomie you can
 ## Links
 
 - [Installation](#installation)
-- [Step-by-step installation tutorial](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
+- [Step-by-step installation tutorial for beginners](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
+- [Changelog](https://github.com/morko/haxroomie/wiki/Changelog)
 - [Using the Command Line Interface](#cli-usage)
 - [API](https://morko.github.io/haxroomie) 
 
@@ -69,6 +71,47 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 
 For dependencies in other systems see puppeteers
 [troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix).
+
+# Updating
+
+Please see the [CHANGELOG](https://github.com/morko/haxroomie/wiki/Changelog)
+before updating to watch out for any breaking updates!
+
+## Updating with git
+
+If you have download the project with `git clone` you can also use `git` to update.
+
+To update to latest release:
+```sh
+cd haxroomie
+git checkout master
+git pull
+```
+
+To update to a specific release
+(see [releases](https://github.com/morko/haxroomie/releases)):
+```sh
+cd haxroomie
+git fetch
+git checkout tags/[release_number]
+```
+e.g. `git checkout tags/1.0.5`
+
+## Updating with npm
+
+If you installed with npm use the `npm` command.
+
+To update to latest release run the install command again:
+```
+npm install morko/haxroomie -g
+```
+
+To update to a specific release
+(see [releases](https://github.com/morko/haxroomie/releases)):
+```
+npm install morko/haxroomie#[release_number]
+```
+e.g. `npm install morko/haxroomie#1.0.5`
 
 # CLI usage
 
@@ -141,30 +184,48 @@ let config = {
 module.exports = config;
 ```
 
-## Using own room scripts or plugins
+## Scripts and plugins
 
-You can run your script with the configs [roomScript](#roomscript) option.
+You can run your script with the configs 
+[roomScript](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#roomscript) 
+option.
 
 Running a script this way will disable the default plugins that haxroomie loads
 (except few essential ones).
 
 ### Running plugins instead of a room script
 
-[HHM](https://github.com/saviola777/haxball-headless-manager)
+[Haxball Headless Manager](https://github.com/saviola777/haxball-headless-manager) (HHM)
 allows you to modularize your room script. Instead of one massive
 JavaScript file you can implement the functionality in smaller modules called
 plugins.
 
-Read the guide for writing own HHM plugins at
-[HHM docs](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
-You can test them by loading them with the configs [plugins](#plugins) 
-option.
+See the saviolas
+[guide for writing plugins](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
+
+#### Developing plugins with haxroomie
+
+Haxroomie allows you to load the plugins from the filesystem. This makes
+developing slightly more easy. You can give the file paths in the configs 
+[plugins](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#plugins) 
+property.
+
+Take note that the `pluginConfig` property does not work with the `plugins`
+property and it should be avoided when using the `plugins` option.
+
+#### Publishing your plugins
 
 To publish the plugins you can create your own
 [HHM plugin repository](https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository).
 
-Use the configs [repositories](#repositories) option to enable the repository and
-[pluginConfig](#pluginConfig) option to load plugins from the repository.
+To enable a repository in config:
+
+- use [repositories](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#repositories) 
+option
+
+To load plugins from the repository:
+- use [pluginConfig](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#pluginconfig) 
+option
 
 ## Using own HHM config
 
