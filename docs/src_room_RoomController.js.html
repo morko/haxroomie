@@ -264,6 +264,8 @@ class RoomController extends EventEmitter {
    * @param {object} opt - Options.
    * @param {object} opt.id - ID for the room.
    * @param {object} opt.page - Puppeteer.Page object to control.
+   * @param {number} [opt.timeout=30] - Time to wait in seconds for the room to
+   *    open.
    */
   constructor(opt) {
     super();
@@ -272,11 +274,12 @@ class RoomController extends EventEmitter {
 
     this.id = opt.id;
     this.page = opt.page;
+    this.timeout = opt.timeout || 30;
 
-    this.usable = true; // Is this RoomController still usable?
-    this.roomInfo = null; // If room is running, contains its data.
-    this.openRoomLock = false; // Lock for openRoom method.
-    this.timeout = 15; // Open room timeout in seconds.
+    this._usable = true;
+    this._roomInfo = null;
+    this._openRoomLock = false;
+
     this.roomOpener = this.createRoomOpener();
 
     this.registerPageListeners(this.page);
@@ -286,9 +289,44 @@ class RoomController extends EventEmitter {
     return 'RoomController';
   }
 
+  /**
+   * Is the room running.
+   * @type boolean
+   * @default true
+   */
   get running() {
-    return this.roomInfo ? true : false;
+    return this._roomInfo ? true : false;
   }
+
+  /**
+   * Is the instance still usable.
+   * @type boolean
+   * @default true
+   */
+  get usable() {
+    return this._usable;
+  }
+
+  /**
+   * If room is running, contains its data (like e.g. `roomInfo.roomLink`).
+   * If not running, then this is `null`. Returns a copy of the original
+   * object.
+   * @type object
+   * @default null
+   */
+  get roomInfo() {
+    return JSON.parse(JSON.stringify(this._roomInfo));
+  }
+
+  /**
+   * If opening of the room is in process, then this will be `true`.
+   * @type boolean
+   * @default false
+   */
+  get openRoomLock() {
+    return this._openRoomLock;
+  }
+
   /**
    * Validates the arguments for the constructor.
    * 
@@ -323,7 +361,7 @@ class RoomController extends EventEmitter {
 
     page.on('error', (error) => {
       this.emit(`page-crash`, error);
-      this.usable = false;
+      this._usable = false;
       logger.debug(`[${this.id}]: Page crashed: ${error}`);
     });
 
@@ -348,7 +386,7 @@ class RoomController extends EventEmitter {
 
     page.on('close', () => {
       this.emit(`page-closed`, this);
-      this.usable = false;
+      this._usable = false;
     });
   }
 
@@ -379,6 +417,10 @@ class RoomController extends EventEmitter {
     return logMsg;
   }
 
+  /**
+   * Creates new RoomOpener.
+   * @private
+   */
   createRoomOpener() {
     let roomOpener = new RoomOpener({
       id: this.id,
@@ -434,7 +476,9 @@ class RoomController extends EventEmitter {
    * Opens a HaxBall room in a browser tab.
    * 
    * On top of the documentated properties here, the config object can contain
-   * any properties you want to use in your own HHM config file. The config object is
+   * any properties you want to use in your own HHM config file. 
+   * 
+   * The config object is
    * usable globally from within the HHM config as the `hrConfig` object.
    * 
    * @param {object} config - Config object that contains the room information.
@@ -484,7 +528,7 @@ class RoomController extends EventEmitter {
    * @emits RoomController#open-room-error
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {ConnectionError} - Could not connect to HaxBall headless page.
    * @throws {TimeoutError} - Haxball Headless Manager took too much time to 
    *    start.
@@ -492,25 +536,25 @@ class RoomController extends EventEmitter {
    * @throws {RoomLockedError} - The room is already being opened.
    */
   async openRoom(config) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (this.openRoomLock) throw new RoomLockedError(
+    if (!this._usable) throw new UnusableError('Instance unusable!');
+    if (this._openRoomLock) throw new RoomLockedError(
       'Room is already being opened!'
     );
     logger.debug(`RoomController#openRoom: ${this.id}`);
     this.emit(`open-room-start`, config);
-    this.openRoomLock = true;
+    this._openRoomLock = true;
 
     try {
-      this.roomInfo = await this.roomOpener.open(config);
+      this._roomInfo = await this.roomOpener.open(config);
     } catch (err) {
-      this.openRoomLock = false;
+      this._openRoomLock = false;
       this.roomOpener.close();
       this.emit(`open-room-error`, err);
       throw err;
     }
-    this.openRoomLock = false;
+    this._openRoomLock = false;
     this.emit(`open-room-stop`, this.roomInfo);
-    return this.roomInfo;
+    return this._roomInfo;
   }
 
   /**
@@ -519,28 +563,31 @@ class RoomController extends EventEmitter {
    * @emits RoomController#close-room
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    */
   async closeRoom() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     logger.debug(`RoomController#closeRoom`);
     await this.roomOpener.close();
-    this.roomInfo = null;
+    this._roomInfo = null;
     this.emit(`close-room`);
   }
 
   /**
-   * Calls a function of the HaxBall roomObject in the browsers context.
+   * Calls a function of the 
+   * [HaxBall roomObject](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject) 
+   * in the browsers context.
    * 
-   * @param {string} fn - name of the haxball roomObject function
-   * @param {any} ...args - arguments for the function
+   * @param {string} fn - Name of the haxball roomObject function.
+   * @param {any} ...args - Arguments for the function.
+   * @returns {any} - Return value of the called function.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async callRoom(fn, ...args) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
     if (!fn) throw new TypeError('Missing required argument: fn');
     logger.debug(`RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`);
@@ -553,16 +600,16 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Returns a list of PluginData objects.
+   * Returns loaded plugins.
    * 
-   * @returns {Promise&lt;Array.&lt;PluginData>>} - array of plugins
+   * @returns {Promise&lt;Array.&lt;PluginData>>} - Array of plugins.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async getPlugins() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     let result = await this.page.evaluate(() => {
@@ -572,18 +619,18 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Returns PluginData of the given plugin id.
+   * Returns PluginData of the given plugin name.
    * 
-   * @param {string} name - name of the plugin
-   * @returns {?Promise&lt;PluginData>} - data of the plugin or null if
-   *    plugin was not found
+   * @param {string} name - Name of the plugin.
+   * @returns {?Promise&lt;PluginData>} - Data of the plugin or `null` if
+   *    plugin was not found.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async getPlugin(name) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate((name) => {
@@ -592,17 +639,17 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Enables a HHM plugin with the given id.
+   * Enables a HHM plugin with the given name.
    * 
-   * @param {string} name - name of the plugin
+   * @param {string} name - Name of the plugin
    * @returns {Promise.&lt;boolean>} - `true` if plugin was enabled, `false` otherwise.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async enablePlugin(name) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate((name) => {
@@ -611,18 +658,20 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Disables a HHM plugin with the given id. If the name is an Array then
+   * Disables a HHM plugin with the given name. 
+   * 
+   * If the name is an Array then
    * it disables all the plugins in the given order.
    * 
-   * @param {(string|Array.&lt;string>)} name - name or array of names of the plugin(s)
-   * @returns {Promise.&lt;boolean>} - was the plugin disabled or not?
+   * @param {(string|Array.&lt;string>)} name - Name or array of names of the plugin(s).
+   * @returns {Promise.&lt;boolean>} - Was the plugin disabled or not?
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async disablePlugin(name) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate((name) => {
@@ -637,11 +686,11 @@ class RoomController extends EventEmitter {
    * @returns {Promise&lt;Array.&lt;PluginData>>} - array of plugins
    *
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async getPluginsThatDependOn(name) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate((name) => {
@@ -667,11 +716,11 @@ class RoomController extends EventEmitter {
    *    return value of pageFunction.
 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async eval(pageFunction, ...args) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate(pageFunction, ...args);
@@ -679,20 +728,20 @@ class RoomController extends EventEmitter {
 
   /**
    * Checks if the room has a plugin with given name loaded.
-   * @param {string} plugin - Name of the plugin.
+   * @param {string} name - Name of the plugin.
    * @returns {boolean} - `true` if it had the plugin, `false` if not.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
-  async hasPlugin(plugin) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+  async hasPlugin(name) {
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
-    return this.page.evaluate(async (plugin) => {
-      return HHM.manager.hasPluginByName(plugin);
-    }, plugin);
+    return this.page.evaluate(async (name) => {
+      return HHM.manager.hasPluginByName(name);
+    }, name);
   }
 
   /**
@@ -702,11 +751,11 @@ class RoomController extends EventEmitter {
    *    have been loaded, -1 otherwise.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async addPlugin(plugin) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     return this.page.evaluate(async (plugin) => {
@@ -731,11 +780,11 @@ class RoomController extends EventEmitter {
    * @returns {boolean} - Whether the repository was successfully added.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async addRepository(repository, append) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     if (!repository) {
@@ -752,11 +801,11 @@ class RoomController extends EventEmitter {
    * @returns {Array.&lt;object|string>} - An array of available repositories.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async getRepositories() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
     
     return this.page.evaluate(() => {
@@ -770,11 +819,11 @@ class RoomController extends EventEmitter {
    * Will not unload the plugins that are already loaded from the repositories.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async clearRepositories() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
     
     return this.page.evaluate(() => {
@@ -797,12 +846,12 @@ class RoomController extends EventEmitter {
    *    config of only one plugin.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    * 
    */
   async setPluginConfig(pluginConfig, pluginName) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     if (!pluginConfig) {
@@ -860,11 +909,11 @@ class RoomController extends EventEmitter {
    * @param {string} [pluginName] - Config for the plugin.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser, or if the tab has been closed.
+   *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
   async getPluginConfig(pluginName) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     if (typeof pluginName === 'string') {
@@ -901,7 +950,7 @@ module.exports = RoomController;</code></pre>
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 26th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 27th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
