@@ -13,6 +13,24 @@ HHM.config.room = {
   token: hrConfig.token
 };
 
+// Default plugin repositories.
+HHM.config.repositories = [
+  {
+    type: `github`,
+    repository: `saviola777/hhm-plugins`
+  },
+];
+
+// Merge user repositories with default ones.
+if (hrConfig.repositories && !Array.isArray(hrConfig.repositories)) {
+  throw new Error(`Haxroomie's "repositories" should be an array!`);
+} else if (hrConfig.repositories) {
+  HHM.config.repositories = [
+    ...HHM.config.repositories, 
+    ...hrConfig.repositories
+  ];
+}
+
 // The default plugin configuration.
 HHM.config.plugins = {
   'sav/players': {
@@ -38,7 +56,9 @@ if (hrConfig.disableDefaultPlugins || hrConfig.roomScript) {
 }
 
 // Merge user plugin configuration with the default.
-if (hrConfig.pluginConfig) {
+if (hrConfig.pluginConfig && typeof hrConfig.pluginConfig !== 'object') {
+  throw new Error(`Haxroomie's "pluginConfig" should be an object!`);
+} else if (hrConfig.pluginConfig) {
   window.hroomie.mergeDeep(HHM.config.plugins, hrConfig.pluginConfig);
 }
 
@@ -46,39 +66,15 @@ if (hrConfig.pluginConfig) {
 // into haxroomie in the `plugins` option so that the plugins won't get
 // loaded from a repository.
 const removedPluginConfigs = {};
-for (let plugin of hrConfig.plugins) {
-  if (HHM.config.plugins[plugin.name]) {
-    removedPluginConfigs[plugin.name] = HHM.config.plugins[plugin.name];
-    delete HHM.config.plugins[plugin.name];
+if (hrConfig.plugins && !Array.isArray(hrConfig.plugins)) {
+  throw new Error(`Haxroomie's "plugins" should be an array!`);
+} else if (hrConfig.plugins) {
+  for (let plugin of hrConfig.plugins) {
+    if (HHM.config.plugins[plugin.name]) {
+      removedPluginConfigs[plugin.name] = HHM.config.plugins[plugin.name];
+      delete HHM.config.plugins[plugin.name];
+    }
   }
-}
-
-// Default plugin repositories.
-HHM.config.repositories = [
-  {
-    type: `github`,
-    repository: `saviola777/hhm-plugins`
-  },
-];
-
-// Merge user repositories with default ones.
-if (hrConfig.repositories) {
-  HHM.config.repositories = [
-    ...HHM.config.repositories, 
-    ...hrConfig.repositories
-  ];
-}
-
-// Start HHM.
-if (HHM.manager === undefined) {
-  let s = document.createElement(`script`);
-  // Load the HHM from ´hhm´ property if given. Otherwise from the default URL.
-  if (hrConfig.hhm && hrConfig.hhm.content) {
-    s.innerHTML = hrConfig.hhm.content;
-  } else {
-    s.src = `${HHM.baseUrl}hhm.js`;
-  }
-  document.head.appendChild(s);
 }
 
 // Work after HHM has been initialized.
@@ -86,7 +82,7 @@ HHM.config.postInit = HBInit => {
   let room = HBInit();
 
   // Load the `plugins`.
-  if (hrConfig.plugins) {
+  if (hrConfig.plugins && Array.isArray(hrConfig.plugins)) {
     for (let plugin of hrConfig.plugins) {
       window.HHM.manager.addPluginByCode(plugin.content, plugin.name);
     }
@@ -110,3 +106,15 @@ HHM.config.postInit = HBInit => {
     window.hroomie.hhmStarted = true;
   }
 };
+
+// Start HHM.
+if (HHM.manager === undefined) {
+  let s = document.createElement(`script`);
+  // Load the HHM from ´hhm´ property if given. Otherwise from the default URL.
+  if (hrConfig.hhm && hrConfig.hhm.content) {
+    s.innerHTML = hrConfig.hhm.content;
+  } else {
+    s.src = `${HHM.baseUrl}hhm.js`;
+  }
+  document.head.appendChild(s);
+}
