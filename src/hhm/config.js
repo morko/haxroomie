@@ -114,7 +114,7 @@ if (HHM.manager === undefined) {
   if (hrConfig.hhm && hrConfig.hhm.content) {
     s.innerHTML = hrConfig.hhm.content;
   } else {
-    s.src = `${HHM.baseUrl}hhm.js`;
+    s.src = `${HHM.baseUrl}hhm.js?_=${Date.now()}`;
   }
   document.head.appendChild(s);
 }
