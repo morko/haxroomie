@@ -171,40 +171,22 @@ class Commands extends CommandHandler {
           let room = this.haxroomie.getRoom(roomId);
           if (room.running) {
             let cannotHotLoad = modifiedProperties.find(p => {
-              return p !== 'pluginConfig' && p !== 'repositories' && p !== 'plugins';
+              return p !== 'pluginConfig';
             });
 
             // Restart rooms that cannot be hotloaded.
             if (cannotHotLoad) {
               await this.openRoom(roomId);
-              return;
+              continue;
             }
 
             // If we can hotload the properties.
             let roomConfig = this.config.getRoomConfig(roomId);
 
-            let repositories;
             let pluginConfig;
-            let plugins;
 
             for (let p of modifiedProperties) {
-              if (p === 'repositories') repositories = roomConfig.repositories;
               if (p === 'pluginConfig') pluginConfig = roomConfig.pluginConfig;
-              if (p === 'plugins') plugins = roomConfig.plugins;
-            }
-
-            if (repositories) {
-              cprompt.print(`Setting repositories for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
-              await room.clearRepositories();
-              try {
-                for (let repo of repositories) {
-                  let success = await room.addRepository(repo);
-                  if (!success) cprompt.print(`Could not add repository ${repo}.`, 'ERROR');
-                }
-              } catch (err) {
-                cprompt.print(err.message);
-                logger.debug(err.stack);
-              }
             }
 
             if (pluginConfig) {
@@ -214,19 +196,6 @@ class Commands extends CommandHandler {
               } catch (err) {
                 cprompt.print(err.message);
                 logger.debug(err.stack);
-              }
-            }
-
-            if (plugins) {
-              cprompt.print(`Setting plugins for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
-              for (let pluginDef of plugins.values()) {
-                let hasPlugin = await room.hasPlugin(pluginDef.name);
-                if (!hasPlugin) {
-                  let id = await room.addPlugin(pluginDef);
-                  if (id < 0) {
-                    cprompt.print(`Could not add plugin ${pluginDef.name}.`, 'ERROR');
-                  }
-                }
               }
             }
           }

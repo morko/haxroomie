@@ -805,9 +805,7 @@ class RoomController extends EventEmitter {
         if (pluginId < 0) {
           pluginId = await manager.addPluginByName(name);
           if (pluginId < 0) {
-            throw new Error(
-              `Cannot load plugin "${name}" from available repositories.`
-            );
+            return;
           }
         }
         manager.setPluginConfig(pluginId, config);

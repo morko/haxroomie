@@ -80,22 +80,46 @@ class Config {
       throw err;
     }
     
-    // Load the files of each room in the config.
+    // Serialize the properties of each room in the config.
     for (let key of Object.keys(config)) {
-      config[key] = this.loadFilesInRoomConfig(config[key]);
+      config[key] = this.serializeConfig(config[key]);
     }
 
     return config;
   }
 
   /**
+   * Serializes the room config the 
+   * 
    * Loads all the files in the config. The files get transformed into
    * FileDef objects that the RoomController#open method accepts.
-   * @param {object} roomConfig - "Root property" value of the Haxroomie
-   *    config. In other words the config object of 1 room.
-   * @return {object} - Haxroomie room config where all files have been loaded.
+   * 
+   * Repositories that are of type 'local' get serialized to a format
+   * that HHM accepts.
+   * e.g.
+   * ```js
+   * {
+   *   type: 'local'
+   *   path: '/path/to/repo'
+   * }
+   * ```
+   * to
+   * ```js
+   * {
+   *   type: 'local'
+   *   path: '/path/to/repo'
+   *   plugins: {
+   *     'pluginName1': 'plugin contents',
+   *     'pluginName2': 'plugin contents',
+   *   }
+   * }
+   * ```
+   * @param {object} roomConfig - One rooms config in the Haxroomie
+   *    config.
+   * @return {object} - Haxroomie room config where all properties are
+   *    serialized.
    */
-  loadFilesInRoomConfig(roomConfig) {
+  serializeConfig(roomConfig) {
     let newRoomConfig = Object.assign({}, roomConfig);
     if (roomConfig.roomScript) {
       newRoomConfig.roomScript = this.loadFile(roomConfig.roomScript);
@@ -108,15 +132,15 @@ class Config {
     }
     if (roomConfig.plugins) {
       if (!Array.isArray(roomConfig.plugins)) {
-        throw new Error('Plugin config should be an array!');
+        throw new Error('The "plugins" config option should be an array!');
       }
       let loadedPlugins = [];
       for (let plugin of roomConfig.plugins) {
         if (!plugin.path) {
-          throw new Error('Plugin config is missing path property!')
+          throw new Error('Plugins config is missing path property!')
         }
         if (!plugin.name) {
-          throw new Error('Plugin config is missing name property!')
+          throw new Error('Plugins config is missing name property!')
         }
         let fileDef = this.loadFile(plugin.path);
         if (!fileDef) {
@@ -127,7 +151,82 @@ class Config {
       }
       newRoomConfig.plugins = loadedPlugins;
     }
+
+    if (roomConfig.repositories) {
+      if (!Array.isArray(roomConfig.repositories)) {
+        throw new Error('The "repositories" config option should be an array!');
+      }
+      let serialized = [];
+      for (let repo of roomConfig.repositories) {
+        if (typeof repo === 'object') {
+          serialized.push(this.serializeRepository(repo));
+        } else {
+          serialized.push(repo);
+        }
+      }
+      newRoomConfig.repositories = serialized;
+    }
+
     return newRoomConfig;
+  }
+
+  /**
+   * Serializes the repository to be ready to sent to browser.
+   * @param {object} repository - The repository object.
+   * @private
+   */
+  serializeRepository(repository) {
+    let serialized = {};
+    if (repository.type === 'local') {
+      serialized = this.loadLocalRepository(repository);
+    } else {
+      Object.assign(serialized, repository);
+    }
+    return serialized;
+  }
+
+  /**
+   * Tries to load a repository from filesystem.
+   * @param {string} repo - The repository object.
+   */
+  loadLocalRepository(repo) {
+
+    // do not modify the original object
+    repo = Object.assign({}, repo);
+
+    function listPlugins(dir, pluginList) {
+      let files = fs.readdirSync(dir);
+      pluginList = pluginList || [];
+      for (let file of files) {
+        if (fs.statSync(path.join(dir, file)).isDirectory()) {
+          pluginList = listPlugins(path.join(dir, file), pluginList);
+        } else {
+          if (file.endsWith('.js')) {
+            pluginList.push(path.join(dir, file));
+          }
+        }
+      }
+      return pluginList;
+    };
+
+    let pluginPaths = listPlugins(path.join(repo.path, 'src'));
+
+    let plugins = {};
+    for (let pPath of pluginPaths) {
+      let file = this.loadFile(pPath);
+      // try to extract the name from plugin contents
+      let regexp = /pluginSpec.*\n*.*name.+['`"](.+)['`"]/gm;
+      let match = regexp.exec(file.content);
+      let pluginName = pPath;
+      if (match) {
+        pluginName = match[1];
+      }
+      plugins[pluginName] = file.content;
+    }
+
+    repo.plugins = plugins;
+    
+    return repo;
   }
 
   /**
