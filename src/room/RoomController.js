@@ -316,8 +316,7 @@ class RoomController extends EventEmitter {
   parseErrorLoggedInBrowser(msg) {
     // do not display the errors that happen during loading a plugin
     if (msg.text().startsWith(
-      'Failed to load resource: the server responded with a '
-      + 'status of 404 (Not Found)'
+      'Failed to load resource: the server responded with a status of 404'
     )) {
       return;
     }
