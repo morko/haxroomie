@@ -660,7 +660,15 @@ class RoomController extends EventEmitter {
 
   /**
    * Adds a new plugin.
-   * @param {PluginDef} plugin - File definiton of the plugin.
+   * 
+   * If the `plugin` is `string`, then it will be loaded from the available
+   * repositories.
+   * 
+   * If the `plugin` is [PluginDef]{@link PluginDef}, then it will be loaded
+   * from contents of `PluginDef`.
+   * 
+   * @param {string|PluginDef} plugin - Plugins name if loading from repositories
+   *    or plugin definition if loading it from a string.
    * @returns {number} - Plugin ID if the plugin and all of its dependencies
    *    have been loaded, -1 otherwise.
    * 
@@ -672,10 +680,25 @@ class RoomController extends EventEmitter {
     if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
+    if (!plugin) {
+      throw new TypeError('Missing required argument: plugin');
+    }
+
+    if (typeof plugin === 'string') {
+      return this.page.evaluate(async (name) => {
+        return HHM.manager.addPluginByName(name);
+      }, plugin);
+    }
+
+    if (!plugin.content) {
+      throw new TypeError('PluginDef is missing required property: content');
+    }
+
     return this.page.evaluate(async (plugin) => {
       return HHM.manager.addPluginByCode(plugin.content, plugin.name);
     }, plugin);
   }
+
 
   /**
    * Adds a repository.
