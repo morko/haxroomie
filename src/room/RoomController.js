@@ -462,7 +462,7 @@ class RoomController extends EventEmitter {
       this._roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this._openRoomLock = false;
-      this.roomOpener.close();
+      if (process.env('NODE_ENV') !== 'development') this.roomOpener.close();
       this.emit(`open-room-error`, err);
       throw err;
     }
