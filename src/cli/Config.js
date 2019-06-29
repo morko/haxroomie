@@ -193,6 +193,8 @@ class Config {
 
     // do not modify the original object
     repo = Object.assign({}, repo);
+    let subpath = repo.subpath || 'src';
+    let suffix = repo.suffix || '.js';
 
     function listPlugins(dir, pluginList) {
       let files = fs.readdirSync(dir);
@@ -201,7 +203,7 @@ class Config {
         if (fs.statSync(path.join(dir, file)).isDirectory()) {
           pluginList = listPlugins(path.join(dir, file), pluginList);
         } else {
-          if (file.endsWith('.js')) {
+          if (file.endsWith(suffix)) {
             pluginList.push(path.join(dir, file));
           }
         }
@@ -209,7 +211,7 @@ class Config {
       return pluginList;
     };
 
-    let pluginPaths = listPlugins(path.join(repo.path, 'src'));
+    let pluginPaths = listPlugins(path.join(repo.path, subpath));
 
     let plugins = {};
     for (let pPath of pluginPaths) {
