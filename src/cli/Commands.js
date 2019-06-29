@@ -433,8 +433,8 @@ class Commands extends CommandHandler {
           return;
         }
         let depPlugins = await this.room.getPluginsThatDependOn(name);
-        if (depPlugins || depPlugins.length > 0) {
-          await this.room.disablePlugin(depPlugins.map((p) => p.pluginSpec.name));
+        if (depPlugins && depPlugins.length > 0) {
+          await this.room.disablePlugin(depPlugins.map((p) => p.name));
         }
         let success = await this.room.disablePlugin(name);
         pluginData = await this.room.getPlugin(name);

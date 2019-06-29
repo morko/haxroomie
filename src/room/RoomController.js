@@ -578,19 +578,32 @@ class RoomController extends EventEmitter {
    * it disables all the plugins in the given order.
    * 
    * @param {(string|Array.<string>)} name - Name or array of names of the plugin(s).
+   * @param {boolean} [force=false] - If true all the plugins that depend on
+   *    the plugin will get disabled also.
    * @returns {Promise.<boolean>} - Was the plugin disabled or not?
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
-  async disablePlugin(name) {
+  async disablePlugin(name, force=false) {
     if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
-    return this.page.evaluate((name) => {
-      return window.hroomie.disablePlugin(name);
-    }, name);
+    if (!force) {
+      return this.page.evaluate(async (name) => {
+        return window.hroomie.disablePlugin(name);
+      }, name);
+
+    } else {
+      let depPlugins = await this.getPluginsThatDependOn(name);
+      return this.page.evaluate(async (name, depPlugins) => {
+        if (depPlugins && depPlugins.length > 0) {
+          await window.hroomie.disablePlugin(depPlugins.map((p) => p.name));
+        }
+        return window.hroomie.disablePlugin(name);
+      }, name, depPlugins);
+    }
   }
 
   /**
@@ -751,24 +764,6 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * This will clear the available repositories.
-   * 
-   * Will not unload the plugins that are already loaded from the repositories.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async clearRepositories() {
-    if (!this._usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    
-    return this.page.evaluate(() => {
-      HHM.manager.getPluginLoader().repositories = [];
-    });
-  }
-
-  /**
    * Sets the rooms plugin config.
    * 
    * Tries to load plugins that are not loaded from the available
@@ -792,7 +787,7 @@ class RoomController extends EventEmitter {
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     if (!pluginConfig) {
-      throw new Error('Missing required argument: pluginConfig');
+      throw new TypeError('Missing required argument: pluginConfig');
     }
     if (typeof pluginConfig !== 'object') {
       throw new TypeError('typeof pluginConfig should be object');
@@ -841,7 +836,8 @@ class RoomController extends EventEmitter {
    * Returns the plugin config for all loaded plugins in the room or
    * if `pluginName` is given, then return the config for that plugin.
    * 
-   * @param {string} [pluginName] - Config for the plugin.
+   * @param {string} [pluginName] - The name of the plugin.
+   * @returns {object} - The config object of plugin(s).
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -856,7 +852,7 @@ class RoomController extends EventEmitter {
 
         let plugin = HHM.manager.getPluginByName(pluginName);
         if (!plugin) {
-          throw new Error(`Invalid plugin "${pluginName}".`);
+          throw new TypeError(`Invalid plugin "${pluginName}".`);
         }
 
         return plugin.getConfig();

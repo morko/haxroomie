@@ -401,8 +401,7 @@ class RoomController extends EventEmitter {
   parseErrorLoggedInBrowser(msg) {
     // do not display the errors that happen during loading a plugin
     if (msg.text().startsWith(
-      'Failed to load resource: the server responded with a '
-      + 'status of 404 (Not Found)'
+      'Failed to load resource: the server responded with a status of 404'
     )) {
       return;
     }
@@ -664,19 +663,29 @@ class RoomController extends EventEmitter {
    * it disables all the plugins in the given order.
    * 
    * @param {(string|Array.&lt;string>)} name - Name or array of names of the plugin(s).
+   * @param {boolean} [force=false] - If true all the plugins that depend on
+   *    the plugin will get disabled also.
    * @returns {Promise.&lt;boolean>} - Was the plugin disabled or not?
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
    * @throws {NotRunningError} - The room is not running.
    */
-  async disablePlugin(name) {
+  async disablePlugin(name, force=false) {
     if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
-    return this.page.evaluate((name) => {
-      return window.hroomie.disablePlugin(name);
-    }, name);
+    return this.page.evaluate(async (name, force) => {
+      if (!force) {
+        return window.hroomie.disablePlugin(name);
+      } else {
+        let depPlugins = await this.getPluginsThatDependOn(name);
+        if (depPlugins &amp;&amp; depPlugins.length > 0) {
+          await this.disablePlugin(depPlugins.map((p) => p.name));
+        }
+        return window.hroomie.disablePlugin(name);
+      }
+    }, name, force);
   }
 
   /**
@@ -746,7 +755,15 @@ class RoomController extends EventEmitter {
 
   /**
    * Adds a new plugin.
-   * @param {PluginDef} plugin - File definiton of the plugin.
+   * 
+   * If the `plugin` is `string`, then it will be loaded from the available
+   * repositories.
+   * 
+   * If the `plugin` is [PluginDef]{@link PluginDef}, then it will be loaded
+   * from contents of `PluginDef`.
+   * 
+   * @param {string|PluginDef} plugin - Plugins name if loading from repositories
+   *    or plugin definition if loading it from a string.
    * @returns {number} - Plugin ID if the plugin and all of its dependencies
    *    have been loaded, -1 otherwise.
    * 
@@ -758,10 +775,25 @@ class RoomController extends EventEmitter {
     if (!this._usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new NotRunningError('Room is not running.');
 
+    if (!plugin) {
+      throw new TypeError('Missing required argument: plugin');
+    }
+
+    if (typeof plugin === 'string') {
+      return this.page.evaluate(async (name) => {
+        return HHM.manager.addPluginByName(name);
+      }, plugin);
+    }
+
+    if (!plugin.content) {
+      throw new TypeError('PluginDef is missing required property: content');
+    }
+
     return this.page.evaluate(async (plugin) => {
       return HHM.manager.addPluginByCode(plugin.content, plugin.name);
     }, plugin);
   }
+
 
   /**
    * Adds a repository.
@@ -814,24 +846,6 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * This will clear the available repositories.
-   * 
-   * Will not unload the plugins that are already loaded from the repositories.
-   * 
-   * @throws {UnusableError} - The instance is no longer usable due to some
-   *    fatal error in browser or if the tab has been closed.
-   * @throws {NotRunningError} - The room is not running.
-   */
-  async clearRepositories() {
-    if (!this._usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-    
-    return this.page.evaluate(() => {
-      HHM.manager.getPluginLoader().repositories = [];
-    });
-  }
-
-  /**
    * Sets the rooms plugin config.
    * 
    * Tries to load plugins that are not loaded from the available
@@ -855,7 +869,7 @@ class RoomController extends EventEmitter {
     if (!this.running) throw new NotRunningError('Room is not running.');
 
     if (!pluginConfig) {
-      throw new Error('Missing required argument: pluginConfig');
+      throw new TypeError('Missing required argument: pluginConfig');
     }
     if (typeof pluginConfig !== 'object') {
       throw new TypeError('typeof pluginConfig should be object');
@@ -891,9 +905,7 @@ class RoomController extends EventEmitter {
         if (pluginId &lt; 0) {
           pluginId = await manager.addPluginByName(name);
           if (pluginId &lt; 0) {
-            throw new Error(
-              `Cannot load plugin "${name}" from available repositories.`
-            );
+            return;
           }
         }
         manager.setPluginConfig(pluginId, config);
@@ -906,7 +918,8 @@ class RoomController extends EventEmitter {
    * Returns the plugin config for all loaded plugins in the room or
    * if `pluginName` is given, then return the config for that plugin.
    * 
-   * @param {string} [pluginName] - Config for the plugin.
+   * @param {string} [pluginName] - The name of the plugin.
+   * @returns {object} - The config object of plugin(s).
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -921,7 +934,7 @@ class RoomController extends EventEmitter {
 
         let plugin = HHM.manager.getPluginByName(pluginName);
         if (!plugin) {
-          throw new Error(`Invalid plugin "${pluginName}".`);
+          throw new TypeError(`Invalid plugin "${pluginName}".`);
         }
 
         return plugin.getConfig();
@@ -950,7 +963,7 @@ module.exports = RoomController;</code></pre>
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 27th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 29th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
