@@ -220,6 +220,8 @@ class Config {
       let pluginName = pPath;
       if (match) {
         pluginName = match[1];
+      } else {
+        cprompt.warn(`Could not find a name for plugin in ${pPath}`);
       }
       plugins[pluginName] = file.content;
     }
