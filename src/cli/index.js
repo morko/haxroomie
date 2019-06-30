@@ -3,11 +3,14 @@ const path = require(`path`);
 const HRConsoleApp = require(`./HRConsoleApp`);
 const logger = require(`../logger`);
 const fs = require('fs');
+const os = require('os');
 const lockFile = require(`lockfile`);
-const configDir = path.join(require('os').homedir(), '.haxroomie');
+
+const configDir = path.join(os.homedir(), '.haxroomie');
 const configSkeleton = path.join(
   __dirname, '..', '..', 'examples', 'configs', '1-private-room.js'
 );
+const lockFilePath = path.join(os.tmpdir(), 'haxroomie.lock');
 
 const argv = require(`yargs`)
   .usage(`Usage: $0 [options]`)
@@ -34,19 +37,17 @@ const argv = require(`yargs`)
 
   .argv;
 
-argv.noSandbox = argv.noSandbox || process.env.HR_NO_SANDBOX,
-argv.headless = !argv.window || process.env.HR_WINDOW,
-argv.port = argv.port || process.env.HR_PORT
-
-const lockFilePath = path.join(__dirname, 'haxroomie.lock');
+argv.noSandbox = argv.noSandbox || process.env.HR_NO_SANDBOX;
+argv.headless = !argv.window || process.env.HR_WINDOW;
+argv.port = argv.port || process.env.HR_PORT;
 
 (async function bootstrap() {
   try {
     lockFile.lockSync(lockFilePath);
   } catch (err) {
     logger.error(
-      `Could not acquire lock.\n`
-      + `Running multiple Haxroomie instances is not supported.\n\n`
+      `Could not acquire lock:\n`
+      + `Running multiple Haxroomie instances is not supported.\n`
       + `If you are sure you are not running multiple instances `
       + `you can delete the file in\n${lockFilePath}`
     );
