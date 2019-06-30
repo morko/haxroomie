@@ -1,3 +1,8 @@
+# Tutorials
+
+- {@tutorial cli-using-haxroomie-config}
+- {@tutorial cli-install-to-vps}
+
 # API
 
 To install haxroomie for your project its preferred to install it locally with

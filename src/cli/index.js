@@ -15,6 +15,10 @@ const lockFilePath = path.join(os.tmpdir(), 'haxroomie.lock');
 const argv = require(`yargs`)
   .usage(`Usage: $0 [options]`)
   
+  .alias(`v`, `version`)
+  .boolean(`window`)
+  .describe(`version`, `Print out the current version.`)
+
   .alias(`r`, `port`)
   .describe(`port`, `Communication port for the headless Chrome browser.`)
 
@@ -36,6 +40,11 @@ const argv = require(`yargs`)
   .describe(`window`, `Tries to spawn a browser window for debugging.`)
 
   .argv;
+
+if (argv.version) {
+  console.log(require('../../package.json').version);
+  process.exit(0);
+}
 
 argv.noSandbox = argv.noSandbox || process.env.HR_NO_SANDBOX;
 argv.headless = !argv.window || process.env.HR_WINDOW;

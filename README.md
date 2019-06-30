@@ -15,9 +15,8 @@ With haxroomie you can
 
 - [Installation](#installation)
 - [Step-by-step installation tutorial for beginners](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
-- [Changelog](https://github.com/morko/haxroomie/wiki/Changelog)
-- [Using the Command Line Interface](#cli-usage)
-- [API](https://morko.github.io/haxroomie) 
+- [Documentation](https://morko.github.io/haxroomie) 
+- [Changelog](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 
 # Installation
 
@@ -71,6 +70,8 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 
 For dependencies in other systems see puppeteers
 [troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix).
+
+For support join the [discord](https://nodejs.org/en/).
 
 # Updating
 

@@ -1,0 +1,214 @@
+# Using the haxroomie config
+
+The config is a JavaScript
+[object literal](https://www.dyn-web.com/tutorials/object-literal/).
+You can use [Node.js](https://nodejs.org/en/) API inside the config.
+
+Each room in the config can be given options.
+
+e.g.
+```js
+let config = {
+  'room1': {
+    // Options for room1 here
+  },
+  'room2': {
+    // Options for room2 here
+  }
+};
+module.exports = config;
+```
+This page explains each option.
+
+## `autoStart`
+
+Set to `true` if you want the room to start on startup. Default is `false`.
+
+e.g.
+```js
+autoStart: true
+```
+
+## `roomName`
+
+The name for the room. Default is `haxroomie`
+
+e.g.
+```js
+roomName: 'my room'
+```
+
+## `playerName`
+
+The name for the host player. Default is `host`.
+
+e.g.
+```js
+playerName: 'my host player name'
+```
+
+## `maxPlayers`
+
+Max number of players the room accepts. Default is `10`.
+
+e.g.
+```js
+maxPlayers: 12
+```
+
+## `public`
+
+If `true` the room will appear in the room list. Default is `false`.
+
+e.g.
+```js
+public: true
+```
+
+## `geo`
+
+Geolocation override for the room.
+
+You can use <https://www.latlong.net/> to find the coordinates easily.
+The code is a country code in two letter ISO format listed in
+<https://countrycode.org/>. Default is where your server is located.
+
+e.g.
+```js
+geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
+```
+
+## `token`
+
+You can give the token needed to open the rooms in the config.
+This is useful if you are testing something and need to restart
+the rooms often or if you wish to load it from an environment
+variable
+
+e.g.
+```js
+token: "thr1.AAAAAF0TeK7u5GEoncvMdA.9OxaBO75kJY"
+```
+
+## `repositories`
+
+Array of plugin repositories to load.
+
+With this you can tell which repositories to load in addition to the default one 
+([plugin repository by saviola](https://github.com/saviola777/hhm-plugins)).
+
+Adding a repository will not automagically loads the plugins in them. To load
+plugins from a repository you must use the [pluginConfig](#pluginconfig) option.
+
+To load a repository from GitHub:
+```js
+repositories: [
+  {
+    type: `github`,
+    repository: `morko/hhm-sala-plugins`,
+    version: `master`, // optional
+    suffix: `.js`, // optional
+  }
+],
+```
+
+## `pluginConfig`
+
+Object containing the plugins to load and their configurations.
+
+With this you can tell which plugins to load from the repositories that are
+available and give them optional configurations. 
+
+By default the plugins from
+[saviolas repository](https://github.com/saviola777/hhm-plugins) are available.
+
+Haxroomie loads `sav/roles`, `sav/commands`, `sav/help`, `sav/players` and
+`sav/chat` plugins even if you dont define them here. To disable these
+plugins you can use the [disableDefaultPlugins](#disabledefaultplugins) option.
+
+The `pluginConfig` object follows the format of
+[HHM configuration file's](https://github.com/saviola777/haxball-headless-manager#configuration-file)
+`HHM.config.plugin` object.
+
+See 
+[writing plugins tutorial](https://haxplugins.tk/docs/tutorial-writing-plugins.html)
+for information about saviolas default plugins and how to write your own.
+
+e.g.
+```js
+pluginConfig: {
+  'sav/roles': {
+    roles: {
+      admin: 'superSecretAdminPass',
+      host: 'superSecretHostPass',
+    }
+  },
+  'my/cool-plugin': {}
+}
+```
+
+## `roomScript`
+
+Use this if you do not wish to use the plugin system and just run a traditional
+HaxBall headless script.
+
+**Disables the default plugins!**
+
+e.g.
+```js
+roomScript: '/path/to/myScript.js'
+```
+
+## `disableDefaultPlugins`
+
+Set to `true` if you want to disable the default
+HHM plugins that haxroomie loads.
+
+This can be useful if for example you
+want to test some plugins without others interfering with it.
+
+e.g.
+```js
+disableDefaultPlugins: true
+```
+
+## `hhmConfig`
+
+Path to custom Haxball Headless Manager (HHM) configuration file.
+You rarely need this.
+
+See [Using own HHM config](#using-own-hhm-config)
+
+e.g.
+```js
+hhmConfig: '/path/to/hhmConfig.js'
+```
+
+## `plugins`
+
+Plugins that you want to load from the filesystem. This should
+be an array of objects that contain the plugin name and file path.
+
+**The [pluginConfig](#pluginconfig) option does not affect these plugins!**
+
+e.g.
+```js
+plugins: [
+  {
+    name: 'myplugin',
+    path: '/path/to/myplugin.js'
+  }
+]
+```
+Useful for testing plugins before uploading them to a server or GitHub.
+
+## `hhm`
+
+Path to built source of Headless Haxball Manager (HHM).
+
+Useful for testing changes to the source.
+
+e.g.
+```js
+hhm: '/path/to/hhm.js'
+```

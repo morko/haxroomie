@@ -1,10 +1,9 @@
-<!-- start:readme.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Haxroomie</title>
+		<title>Classes</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -13,7 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Host HaxBall rooms without GUI.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
 			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
@@ -57,6 +56,13 @@
 											<li><a href="module-haxroomie.html">haxroomie</a></li>
 									</ul>
 								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+											<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
+									</ul>
+								</li>
 				</ul>
 					<!-- start:lunr-search-navbar.hbs -->
 					<form class="navbar-form navbar-right" role="search">
@@ -74,52 +80,40 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">readme</span>
-				<h1><span class="name">Haxroomie</span></h1>
-				<div class="summary"><p>Host HaxBall rooms without GUI.</p></div>			</div>
+				<span class="kind">list</span>
+				<h1><span class="name">Classes</span></h1>
+				<div class="summary"><p>All documented classes.</p></div>			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
 			<div class="col-md-9 main-content">
-		<section class="readme-section">
-			<article><h1>API</h1>
-<p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install morko/haxroomie
-</code></pre>
-<p>Easiest way to create
-<a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie instances</a>
-is to use the asynchronous factory function <code>createHaxroomie</code> in the
-<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
-<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
-Each browser tab can run one HaxBall room. These browser tabs are controlled with
-the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
-<h2>Example API usage</h2>
-<p>Example that requires the token to be set as an environment variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-(async function bootstrap() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-		
-    room.on('open-room-start' (roomInfo) => {
-      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
-    });
-    room.openRoom({
-      roomName: `haxroomie`,
-      playerName: `host`,
-      maxPlayers: 10,
-      public: false,
-      token: process.env.HAXBALL_TOKEN
-    });
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-})();
-
-</code></pre></article>
-		</section>
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li class="active">Classes</li>
+						</ol>
+					<section>
+		<h2><span class="name">Classes</span></h2>
+		<article class="secondary">
+				<dl class="symbol">
+						
+						<dt class="symbol-title class public">
+			<h4 id="Haxroomie" class="class public"><a href="Haxroomie.html"><span class="signature-new">new&nbsp;</span><span class="name">Haxroomie</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+						<hr/>
+						<dt class="symbol-title class public">
+			<h4 id="RoomController" class="class public"><a href="RoomController.html"><span class="signature-new">new&nbsp;</span><span class="name">RoomController</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"></span></a></h4>
+</dt>
+<dd class="symbol-details class public">
+	<div class="symbol-details-inner">
+	</div>
+</dd>
+				</dl>
+		</article>
+					</section>
 			</div>
 				<div class="col-md-3 side-content">
 					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
@@ -128,7 +122,7 @@ the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomControll
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 29th Jun 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 1st Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -155,4 +149,3 @@ the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomControll
 	
 </body>
 </html>
-<!-- end:readme.hbs -->
