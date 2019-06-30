@@ -157,9 +157,15 @@ module.exports = class RoomOpener extends EventEmitter {
   async startHHM(config) {
     logger.debug('Starting Headless Haxball Manager');
 
+    let hrConfig = Object.assign({}, config);
+
+    if (process.env.NODE_ENV === 'development') {
+      hrConfig.hhmDebug = true;
+    }
+
     let configFn;
     try {
-      if (config.hhmConfig) {
+      if (hrConfig.hhmConfig) {
         configFn = new Function('hrConfig', config.hhmConfig.content);
       } else {
         configFn = new Function(
@@ -173,7 +179,7 @@ module.exports = class RoomOpener extends EventEmitter {
     }
 
     try {
-      await this.page.evaluate(configFn, config);
+      await this.page.evaluate(configFn, hrConfig);
     } catch (err) {
       logger.debug(err);
       throw err;

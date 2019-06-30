@@ -3,6 +3,9 @@ HHM.baseUrl = HHM.baseUrl || `https://haxplugins.tk/`;
 HHM.config = HHM.config || {};
 hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
 
+// set the HHM log level to debug if haxroomie desires so
+HHM.config.logLevel = hrConfig.hhmDebug ? 'debug' : undefined;
+
 HHM.config.room = {
   roomName: hrConfig.roomName || `haxroomie`,
   playerName : hrConfig.playerName || `host`,
