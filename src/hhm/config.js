@@ -26,8 +26,8 @@ if (hrConfig.repositories && !Array.isArray(hrConfig.repositories)) {
   throw new Error(`Haxroomie's "repositories" should be an array!`);
 } else if (hrConfig.repositories) {
   HHM.config.repositories = [
-    ...HHM.config.repositories, 
-    ...hrConfig.repositories
+    ...hrConfig.repositories,
+    ...HHM.config.repositories
   ];
 }
 
