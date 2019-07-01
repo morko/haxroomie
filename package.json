@@ -1,6 +1,6 @@
 {
   "name": "haxroomie",
-  "version": "1.0.6-git",
+  "version": "1.0.7-git",
   "description": "Host haxball rooms without GUI.",
   "main": "index.js",
   "scripts": {
