@@ -1,7 +1,9 @@
 HHM = typeof HHM === `undefined` ? {} : HHM;
-HHM.baseUrl = HHM.baseUrl || `https://haxplugins.tk/`;
 HHM.config = HHM.config || {};
 hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
+
+// Set the HHM version to use.
+HHM.config.version = hrConfig.hhmVersion || '0.9.2';
 
 HHM.config.room = {
   roomName: hrConfig.roomName || `haxroomie`,
@@ -93,7 +95,7 @@ if (HHM.manager === undefined) {
   if (hrConfig.hhm && hrConfig.hhm.content) {
     s.innerHTML = hrConfig.hhm.content;
   } else {
-    s.src = `${HHM.baseUrl}hhm.js`;
+    s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js`;
   }
   document.head.appendChild(s);
 }
