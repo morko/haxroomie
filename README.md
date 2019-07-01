@@ -14,7 +14,7 @@ With haxroomie you can
 ## Links
 
 - [Installation](#installing-with-git)
-- [Step-by-step installation tutorial for beginners](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
+- [Step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/latest/tutorial-cli-install-to-vps.html)
 - [Documentation](https://morko.github.io/haxroomie) 
 - [Changelog](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 
@@ -33,12 +33,12 @@ git clone https://www.github.com/morko/haxroomie
 Then go to the directory you cloned it and install dependencies with npm:
 ```sh
 cd haxroomie
-npm install
+npm install --production
 ```
 
 If you do not have Chrome installed in your system, then install the dependencies for it listed in the [troubleshooting](#troubleshooting) section.
 
-Now you are ready to start using Haxroomie. See [CLI usage section](#cli-usage)
+Now you are ready to start using haxroomie. See [CLI usage section](#cli-usage)
 for help on how to use the command line interface.
 
 ## Installing with npm
@@ -108,6 +108,7 @@ To update to a specific release
 cd haxroomie
 git fetch
 git checkout tags/[release_number]
+npm install
 ```
 e.g. `git checkout tags/1.0.7`
 
@@ -148,10 +149,11 @@ haxroomie -c [path/to/config.js]
 ```
 **Note the extra `--` when using the npm start command*
 
-
 Every room requires a token from <https://www.haxball.com/headlesstoken>.
+
 You will be prompted for the tokens when opening a room. Or you can give
-it in the config ([token property](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#token)).
+it in the config
+([token property](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#token)).
 
 Once haxroomie CLI is running you can type `help` for available commands.
 
@@ -163,12 +165,21 @@ Haxroomies config file is a Node.js module that exports the config object.
 It is used to tell haxroomie how many rooms you are planning to run
 and with what kind of options.
 
+See [the documentation](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html)
+for all the possible options and their explanations.
+
 You can find examples of configs in
 [examples directory](https://github.com/morko/haxroomie/tree/master/examples/configs).
 
-See the 
-[Options in the haxroomie config](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config) 
-for information about each option.
+To enable a repository in config:
+
+- use [repositories](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#repositories)
+option
+
+To load plugins from the repository:
+
+- use [pluginConfig](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#pluginconfig)
+option
 
 Here is a simple example of a config that starts one private room.
 
@@ -199,7 +210,7 @@ module.exports = config;
 ## Scripts and plugins
 
 You can run your script with the configs 
-[roomScript](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#roomscript) 
+[roomScript](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#roomscript) 
 option.
 
 Running a script this way will disable the default plugins that haxroomie loads
@@ -213,38 +224,31 @@ JavaScript file you can implement the functionality in smaller modules called
 plugins.
 
 See the saviolas
-[guide for writing plugins](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
+[guide for writing plugins](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins).
 
 #### Developing plugins with haxroomie
 
-Haxroomie allows you to load the plugins from the filesystem. This makes
-developing slightly more easy. You can give the file paths in the configs 
-[plugins](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#plugins) 
-property.
+You can load your repository from the file system.
 
-Take note that the `pluginConfig` property does not work with the `plugins`
-property and it should be avoided when using the `plugins` option.
-
+Add this to the `repository` array in haxroomie config:
+```js
+{
+  type: 'local',
+  path: '/path/to/local/repo',
+  subpath: 'src' // optional (src is default)
+  suffix: '.js' // optional (.js is default)
+}
+```
 #### Publishing your plugins
 
 To publish the plugins you can create your own
-[HHM plugin repository](https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository).
-
-To enable a repository in config:
-
-- use [repositories](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#repositories) 
-option
-
-To load plugins from the repository:
-- use [pluginConfig](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#pluginconfig) 
-option
+[HHM plugin repository](https://hhm.surge.sh/api/tutorial-writing-plugins.html#creating-your-own-plugin-repository).
 
 ## Using own HHM config
 
 Haxroomie supports custom
-[Haxball Headless Manager configuration files](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
-However there should rarely be a reason to do this. The files have couple
-requirements to work with haxroomie
+Haxball Headless Manager (HHM) configs. However there should rarely be a reason to do this.
+
 (see [HHM config requirements](https://github.com/morko/haxroomie#hhm-config-requirements)).
 
 ### HHM config requirements

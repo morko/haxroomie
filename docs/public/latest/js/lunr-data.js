@@ -295,8 +295,12 @@ window.lunrData = {
           "haxbal",
           "headless",
           "lt;async&gt",
+          "navig",
+          "out",
+          "page",
           "room",
-          "roomcontroller#closeroom"
+          "roomcontroller#closeroom",
+          "url"
         ],
         "RoomController.html#callRoom": [
           "browser",
@@ -307,6 +311,7 @@ window.lunrData = {
           "function",
           "haxbal",
           "lt;async&gt",
+          "promise.&lt;any&gt",
           "roomcontroller#callroom",
           "roomobject"
         ],
@@ -328,7 +333,7 @@ window.lunrData = {
           "name",
           "plugin",
           "plugindata",
-          "promise.&lt;plugindata&gt",
+          "promise.&lt;?plugindata&gt",
           "return",
           "roomcontroller#getplugin"
         ],
@@ -398,7 +403,6 @@ window.lunrData = {
           "wrapper"
         ],
         "RoomController.html#hasPlugin": [
-          "boolean",
           "check",
           "function",
           "given",
@@ -407,6 +411,7 @@ window.lunrData = {
           "lt;async&gt",
           "name",
           "plugin",
+          "promise.&lt;boolean&gt",
           "room",
           "roomcontroller#hasplugin"
         ],
@@ -419,9 +424,9 @@ window.lunrData = {
           "load",
           "lt;async&gt",
           "new",
-          "number",
           "plugin",
           "plugindef",
+          "promise.&lt;number&gt",
           "repositori",
           "roomcontroller#addplugin",
           "string"
@@ -431,7 +436,6 @@ window.lunrData = {
           "add",
           "addrepositori",
           "append",
-          "boolean",
           "can't",
           "found",
           "function",
@@ -447,6 +451,7 @@ window.lunrData = {
           "plain",
           "plugin",
           "prioriti",
+          "promise.&lt;boolean&gt",
           "repositori",
           "roomcontroller#addrepositori",
           "set",
@@ -493,9 +498,9 @@ window.lunrData = {
           "given",
           "load",
           "lt;async&gt",
-          "object",
           "plugin",
           "pluginnam",
+          "promise.&lt;object&gt",
           "return",
           "room",
           "roomcontroller#getpluginconfig"
@@ -980,7 +985,7 @@ window.lunrData = {
                       },
                       "RoomController.html#closeRoom": {
                         "ref": "RoomController.html#closeRoom",
-                        "tf": 12.5
+                        "tf": 10
                       },
                       "RoomController.html#callRoom": {
                         "ref": "RoomController.html#callRoom",
@@ -1063,7 +1068,7 @@ window.lunrData = {
                           },
                           "RoomController.html#closeRoom": {
                             "ref": "RoomController.html#closeRoom",
-                            "tf": 12.5
+                            "tf": 10
                           }
                         }
                       }
@@ -1558,7 +1563,7 @@ window.lunrData = {
                   },
                   "RoomController.html#closeRoom": {
                     "ref": "RoomController.html#closeRoom",
-                    "tf": 12.5
+                    "tf": 5
                   },
                   "RoomController.html#eval": {
                     "ref": "RoomController.html#eval",
@@ -2844,7 +2849,7 @@ window.lunrData = {
                     },
                     "RoomController.html#closeRoom": {
                       "ref": "RoomController.html#closeRoom",
-                      "tf": 12.5
+                      "tf": 5
                     }
                   },
                   "b": {
@@ -3160,7 +3165,7 @@ window.lunrData = {
                         "docs": {
                           "RoomController.html#callRoom": {
                             "ref": "RoomController.html#callRoom",
-                            "tf": 683.3333333333334
+                            "tf": 675
                           }
                         }
                       }
@@ -3238,6 +3243,10 @@ window.lunrData = {
             "docs": {},
             "l": {
               "docs": {
+                "RoomController.html#closeRoom": {
+                  "ref": "RoomController.html#closeRoom",
+                  "tf": 5
+                },
                 "RoomController.html#addRepository": {
                   "ref": "RoomController.html#addRepository",
                   "tf": 1.6666666666666667
@@ -3454,7 +3463,7 @@ window.lunrData = {
                                 },
                                 "RoomController.html#callRoom": {
                                   "ref": "RoomController.html#callRoom",
-                                  "tf": 33.33333333333333
+                                  "tf": 25
                                 },
                                 "RoomController.html#getPlugins": {
                                   "ref": "RoomController.html#getPlugins",
@@ -4175,14 +4184,6 @@ window.lunrData = {
                         "RoomController.html#openRoomLock": {
                           "ref": "RoomController.html#openRoomLock",
                           "tf": 50
-                        },
-                        "RoomController.html#hasPlugin": {
-                          "ref": "RoomController.html#hasPlugin",
-                          "tf": 25
-                        },
-                        "RoomController.html#addRepository": {
-                          "ref": "RoomController.html#addRepository",
-                          "tf": 20
                         }
                       }
                     }
@@ -4332,10 +4333,6 @@ window.lunrData = {
                       "RoomController.html#addRepository": {
                         "ref": "RoomController.html#addRepository",
                         "tf": 1.6666666666666667
-                      },
-                      "RoomController.html#getPluginConfig": {
-                        "ref": "RoomController.html#getPluginConfig",
-                        "tf": 25
                       }
                     }
                   }
@@ -4442,6 +4439,17 @@ window.lunrData = {
                       }
                     }
                   }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "t": {
+              "docs": {
+                "RoomController.html#closeRoom": {
+                  "ref": "RoomController.html#closeRoom",
+                  "tf": 5
                 }
               }
             }
@@ -4755,7 +4763,7 @@ window.lunrData = {
             "docs": {
               "RoomController.html#callRoom": {
                 "ref": "RoomController.html#callRoom",
-                "tf": 33.33333333333333
+                "tf": 25
               }
             }
           },
@@ -4927,6 +4935,26 @@ window.lunrData = {
                                 "docs": {},
                                 "a": {
                                   "docs": {},
+                                  "n": {
+                                    "docs": {},
+                                    "y": {
+                                      "docs": {},
+                                      "&": {
+                                        "docs": {},
+                                        "g": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {
+                                              "RoomController.html#callRoom": {
+                                                "ref": "RoomController.html#callRoom",
+                                                "tf": 25
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
                                   "r": {
                                     "docs": {},
                                     "r": {
@@ -5015,35 +5043,38 @@ window.lunrData = {
                                     }
                                   }
                                 },
-                                "p": {
+                                "?": {
                                   "docs": {},
-                                  "l": {
+                                  "p": {
                                     "docs": {},
-                                    "u": {
+                                    "l": {
                                       "docs": {},
-                                      "g": {
+                                      "u": {
                                         "docs": {},
-                                        "i": {
+                                        "g": {
                                           "docs": {},
-                                          "n": {
+                                          "i": {
                                             "docs": {},
-                                            "d": {
+                                            "n": {
                                               "docs": {},
-                                              "a": {
+                                              "d": {
                                                 "docs": {},
-                                                "t": {
+                                                "a": {
                                                   "docs": {},
-                                                  "a": {
+                                                  "t": {
                                                     "docs": {},
-                                                    "&": {
+                                                    "a": {
                                                       "docs": {},
-                                                      "g": {
+                                                      "&": {
                                                         "docs": {},
-                                                        "t": {
-                                                          "docs": {
-                                                            "RoomController.html#getPlugin": {
-                                                              "ref": "RoomController.html#getPlugin",
-                                                              "tf": 25
+                                                        "g": {
+                                                          "docs": {},
+                                                          "t": {
+                                                            "docs": {
+                                                              "RoomController.html#getPlugin": {
+                                                                "ref": "RoomController.html#getPlugin",
+                                                                "tf": 25
+                                                              }
                                                             }
                                                           }
                                                         }
@@ -5085,6 +5116,14 @@ window.lunrData = {
                                                       },
                                                       "RoomController.html#disablePlugin": {
                                                         "ref": "RoomController.html#disablePlugin",
+                                                        "tf": 20
+                                                      },
+                                                      "RoomController.html#hasPlugin": {
+                                                        "ref": "RoomController.html#hasPlugin",
+                                                        "tf": 25
+                                                      },
+                                                      "RoomController.html#addRepository": {
+                                                        "ref": "RoomController.html#addRepository",
                                                         "tf": 20
                                                       }
                                                     }
@@ -5147,6 +5186,70 @@ window.lunrData = {
                                       }
                                     }
                                   }
+                                },
+                                "n": {
+                                  "docs": {},
+                                  "u": {
+                                    "docs": {},
+                                    "m": {
+                                      "docs": {},
+                                      "b": {
+                                        "docs": {},
+                                        "e": {
+                                          "docs": {},
+                                          "r": {
+                                            "docs": {},
+                                            "&": {
+                                              "docs": {},
+                                              "g": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {
+                                                    "RoomController.html#addPlugin": {
+                                                      "ref": "RoomController.html#addPlugin",
+                                                      "tf": 25
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "o": {
+                                  "docs": {},
+                                  "b": {
+                                    "docs": {},
+                                    "j": {
+                                      "docs": {},
+                                      "e": {
+                                        "docs": {},
+                                        "c": {
+                                          "docs": {},
+                                          "t": {
+                                            "docs": {},
+                                            "&": {
+                                              "docs": {},
+                                              "g": {
+                                                "docs": {},
+                                                "t": {
+                                                  "docs": {
+                                                    "RoomController.html#getPluginConfig": {
+                                                      "ref": "RoomController.html#getPluginConfig",
+                                                      "tf": 25
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
                                 }
                               }
                             }
@@ -5173,6 +5276,63 @@ window.lunrData = {
                           "RoomController.html#addRepository": {
                             "ref": "RoomController.html#addRepository",
                             "tf": 3.3333333333333335
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "a": {
+            "docs": {},
+            "g": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "RoomController.html#closeRoom": {
+                    "ref": "RoomController.html#closeRoom",
+                    "tf": 5
+                  }
+                },
+                ".": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "v": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "l": {
+                          "docs": {},
+                          "u": {
+                            "docs": {
+                              "RoomController.html#eval": {
+                                "ref": "RoomController.html#eval",
+                                "tf": 3.125
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "f": {
+                  "docs": {},
+                  "u": {
+                    "docs": {},
+                    "n": {
+                      "docs": {},
+                      "c": {
+                        "docs": {},
+                        "t": {
+                          "docs": {
+                            "RoomController.html#eval": {
+                              "ref": "RoomController.html#eval",
+                              "tf": 20
+                            }
                           }
                         }
                       }
@@ -5320,58 +5480,6 @@ window.lunrData = {
                 }
               }
             }
-          },
-          "a": {
-            "docs": {},
-            "g": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                ".": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "v": {
-                      "docs": {},
-                      "a": {
-                        "docs": {},
-                        "l": {
-                          "docs": {},
-                          "u": {
-                            "docs": {
-                              "RoomController.html#eval": {
-                                "ref": "RoomController.html#eval",
-                                "tf": 3.125
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                },
-                "f": {
-                  "docs": {},
-                  "u": {
-                    "docs": {},
-                    "n": {
-                      "docs": {},
-                      "c": {
-                        "docs": {},
-                        "t": {
-                          "docs": {
-                            "RoomController.html#eval": {
-                              "ref": "RoomController.html#eval",
-                              "tf": 20
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "n": {
@@ -5411,27 +5519,24 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "m": {
-              "docs": {},
-              "b": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {
-                      "RoomController.html#addPlugin": {
-                        "ref": "RoomController.html#addPlugin",
-                        "tf": 25
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "a": {
             "docs": {},
+            "v": {
+              "docs": {},
+              "i": {
+                "docs": {},
+                "g": {
+                  "docs": {
+                    "RoomController.html#closeRoom": {
+                      "ref": "RoomController.html#closeRoom",
+                      "tf": 5
+                    }
+                  }
+                }
+              }
+            },
             "m": {
               "docs": {},
               "e": {
@@ -5522,7 +5627,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 403
+      "length": 408
     },
     "corpusTokens": [
       "access",
@@ -5632,9 +5737,9 @@ window.lunrData = {
       "modul",
       "module:haxroomi",
       "name",
+      "navig",
       "new",
       "null",
-      "number",
       "object",
       "obtain",
       "on",
@@ -5644,6 +5749,8 @@ window.lunrData = {
       "order",
       "origin",
       "otherwis",
+      "out",
+      "page",
       "page.evalu",
       "pagefunct",
       "plain",
@@ -5656,9 +5763,12 @@ window.lunrData = {
       "possibl",
       "prioriti",
       "process",
+      "promise.&lt;?plugindata&gt",
+      "promise.&lt;any&gt",
       "promise.&lt;array.&lt;plugindata&gt;&gt",
       "promise.&lt;boolean&gt",
-      "promise.&lt;plugindata&gt",
+      "promise.&lt;number&gt",
+      "promise.&lt;object&gt",
       "promise.&lt;serializable&gt",
       "properti",
       "provid",
@@ -5949,12 +6059,12 @@ window.lunrData = {
       "name": "closeRoom",
       "tags": "RoomController#closeRoom closeRoom",
       "summary": "",
-      "description": "Closes the headless haxball room."
+      "description": "Closes the headless HaxBall room by navigating the page out of the headless HaxBall URL."
     },
     "RoomController.html#callRoom": {
       "id": "RoomController.html#callRoom",
       "kind": "function",
-      "title": "&lt;async&gt; callRoom( fn ) → {any}",
+      "title": "&lt;async&gt; callRoom( fn ) → {Promise.&lt;any&gt;}",
       "longname": "RoomController#callRoom",
       "name": "callRoom",
       "tags": "RoomController#callRoom callRoom",
@@ -5974,7 +6084,7 @@ window.lunrData = {
     "RoomController.html#getPlugin": {
       "id": "RoomController.html#getPlugin",
       "kind": "function",
-      "title": "&lt;async&gt; getPlugin( name ) → {Promise.&lt;PluginData&gt;}",
+      "title": "&lt;async&gt; getPlugin( name ) → {Promise.&lt;?PluginData&gt;}",
       "longname": "RoomController#getPlugin",
       "name": "getPlugin",
       "tags": "RoomController#getPlugin getPlugin",
@@ -6024,7 +6134,7 @@ window.lunrData = {
     "RoomController.html#hasPlugin": {
       "id": "RoomController.html#hasPlugin",
       "kind": "function",
-      "title": "&lt;async&gt; hasPlugin( name ) → {boolean}",
+      "title": "&lt;async&gt; hasPlugin( name ) → {Promise.&lt;boolean&gt;}",
       "longname": "RoomController#hasPlugin",
       "name": "hasPlugin",
       "tags": "RoomController#hasPlugin hasPlugin",
@@ -6034,7 +6144,7 @@ window.lunrData = {
     "RoomController.html#addPlugin": {
       "id": "RoomController.html#addPlugin",
       "kind": "function",
-      "title": "&lt;async&gt; addPlugin( plugin ) → {number}",
+      "title": "&lt;async&gt; addPlugin( plugin ) → {Promise.&lt;number&gt;}",
       "longname": "RoomController#addPlugin",
       "name": "addPlugin",
       "tags": "RoomController#addPlugin addPlugin",
@@ -6044,7 +6154,7 @@ window.lunrData = {
     "RoomController.html#addRepository": {
       "id": "RoomController.html#addRepository",
       "kind": "function",
-      "title": "&lt;async&gt; addRepository( repository [, append ] ) → {boolean}",
+      "title": "&lt;async&gt; addRepository( repository [, append ] ) → {Promise.&lt;boolean&gt;}",
       "longname": "RoomController#addRepository",
       "name": "addRepository",
       "tags": "RoomController#addRepository addRepository",
@@ -6074,7 +6184,7 @@ window.lunrData = {
     "RoomController.html#getPluginConfig": {
       "id": "RoomController.html#getPluginConfig",
       "kind": "function",
-      "title": "&lt;async&gt; getPluginConfig( [ pluginName ] ) → {object}",
+      "title": "&lt;async&gt; getPluginConfig( [ pluginName ] ) → {Promise.&lt;object&gt;}",
       "longname": "RoomController#getPluginConfig",
       "name": "getPluginConfig",
       "tags": "RoomController#getPluginConfig getPluginConfig",

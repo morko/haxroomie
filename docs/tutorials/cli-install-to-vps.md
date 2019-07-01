@@ -89,14 +89,16 @@ screen -r haxroomie
 
 When you connect to your server you have to resume the screen session to be able to control haxroomie again.
 
-# Step 7: Prepare your room config
+# Step 7: Configuration
 
-Haxroomie requires a config file to run. Copy one of the examples from `~/haxroomie/examples/config` directory to `~/haxroomie/config.js` and edit the `config.js` to suit your needs.
+Haxroomie uses a config file to define how many and what kind of rooms you want to run.
+
+You can copy one of the examples to `~/.haxroomie/config.js` to get a starting point.
+If you don't, then one of the examples is copied there anyways.
 
 e.g.
 ```
-cd ~/haxroomie
-cp examples/configs/1-public-room.js ./config.js
+cp ~/haxroomie/examples/configs/1-public-room.js ./haxroomie/config.js
 nano ./config.js
 ```
 
@@ -107,11 +109,9 @@ If you do not like to edit the config file in the console, you can create/edit t
 Now you are ready to run haxroomie:
 ```
 cd ~/haxroomie
-npm start
+./haxroomie
 ```
 
-When started you will be prompted for tokens for rooms that have the `autoStart: true` option set in their config. Obtain tokens from <https://www.haxball.com/headlesstoken> and enter them when asked.
+When started you will be prompted for tokens for rooms that have the `autoStart: true` option set in their config. Obtain tokens from <https://www.haxball.com/headlesstoken>. One token is valid for only some time (30-60 minutes?).
 
 After entering the tokens (if any) you can type `help` to see the commands that you can use to control the rooms.
-
-When haxroomie is running you can type `help` in the console to see available commands.

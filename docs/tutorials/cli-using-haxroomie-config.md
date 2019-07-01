@@ -67,27 +67,15 @@ public: true
 
 ## `geo`
 
-Geolocation override for the room.
+Geolocation override for the room. Default is where your server is located.
 
 You can use <https://www.latlong.net/> to find the coordinates easily.
 The code is a country code in two letter ISO format listed in
-<https://countrycode.org/>. Default is where your server is located.
+<https://countrycode.org/>.
 
 e.g.
 ```js
 geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
-```
-
-## `token`
-
-You can give the token needed to open the rooms in the config.
-This is useful if you are testing something and need to restart
-the rooms often or if you wish to load it from an environment
-variable
-
-e.g.
-```js
-token: "thr1.AAAAAF0TeK7u5GEoncvMdA.9OxaBO75kJY"
 ```
 
 ## `repositories`
@@ -97,7 +85,7 @@ Array of plugin repositories to load.
 With this you can tell which repositories to load in addition to the default one 
 ([plugin repository by saviola](https://github.com/saviola777/hhm-plugins)).
 
-Adding a repository will not automagically loads the plugins in them. To load
+Adding a repository will not automagically load the plugins in them. To load
 plugins from a repository you must use the [pluginConfig](#pluginconfig) option.
 
 To load a repository from GitHub:
@@ -106,8 +94,21 @@ repositories: [
   {
     type: `github`,
     repository: `morko/hhm-sala-plugins`,
-    version: `master`, // optional
-    suffix: `.js`, // optional
+    path: `src`, // optional (defaults to src)
+    version: `master`, // optional (defaults to master)
+    suffix: `.js`, // optional (defaults to .js)
+  }
+],
+```
+
+To load a repository from local file system:
+```js
+repositories: [
+  {
+    type: `local`,
+    path: `/path/to/local/repo`,
+    subpath: `src`, // optional (defaults to src)
+    suffix: `.js`, // optional (defaults to .js)
   }
 ],
 ```
@@ -131,7 +132,7 @@ The `pluginConfig` object follows the format of
 `HHM.config.plugin` object.
 
 See 
-[writing plugins tutorial](https://haxplugins.tk/docs/tutorial-writing-plugins.html)
+the [guide for writing plugins](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins)
 for information about saviolas default plugins and how to write your own.
 
 e.g.
@@ -159,6 +160,18 @@ e.g.
 roomScript: '/path/to/myScript.js'
 ```
 
+## `token`
+
+You can give the token needed to open the rooms in the config.
+This is useful if you are testing something and need to restart
+the rooms often or if you wish to load it from an environment
+variable.
+
+e.g.
+```js
+token: process.env.HAXBALL_TOKEN
+```
+
 ## `disableDefaultPlugins`
 
 Set to `true` if you want to disable the default
@@ -177,30 +190,10 @@ disableDefaultPlugins: true
 Path to custom Haxball Headless Manager (HHM) configuration file.
 You rarely need this.
 
-See [Using own HHM config](#using-own-hhm-config)
-
 e.g.
 ```js
 hhmConfig: '/path/to/hhmConfig.js'
 ```
-
-## `plugins`
-
-Plugins that you want to load from the filesystem. This should
-be an array of objects that contain the plugin name and file path.
-
-**The [pluginConfig](#pluginconfig) option does not affect these plugins!**
-
-e.g.
-```js
-plugins: [
-  {
-    name: 'myplugin',
-    path: '/path/to/myplugin.js'
-  }
-]
-```
-Useful for testing plugins before uploading them to a server or GitHub.
 
 ## `hhm`
 

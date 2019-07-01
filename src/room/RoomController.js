@@ -403,36 +403,29 @@ class RoomController extends EventEmitter {
    * @param {int} [config.maxPlayers] - Max players.
    * @param {boolean} [config.public] - Should the room be public?
    * @param {object} [config.geo] - Geolocation override for the room.
-   * @param {string} [config.hostPassword] - Password for getting host 
-   *  priviledges with `!auth host <password>` if the roles plugin is enabled.
-   * @param {string} [config.adminPassword] - Password for getting admin 
-   *  priviledges with `!auth host <password>` if the roles plugin is enabled.
-   * @param {FileDef} [config.hhmConfig] - Configuration for the haxball 
-   *    headless manager (HHM).
+   * @param {Array.<object>} [config.repositories] - Array of 
+   *    HHM plugin repositories.
+   * 
+   *    See [HHM documentation](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins)
+   *    about these objects (they are passed to `HHM.config.repositories`).
+   * @param {object} [config.pluginConfig] - Haxball Headless Manager
+   *    plugin config object. Passed to `HHM.config.plugins`.
+   * 
+   *    See [Haxball Headless Manager](https://github.com/saviola777/haxball-headless-manager)
+   *    This tells HHM which plugins to load from the available repositories.
+   *    You can also give the initial config to plugins here.
+   * @param {boolean} [config.disableDefaultPlugins=false] - Set to true if you
+   *    want to disable the non essential default HHM plugins.
+   *    This can be useful if for example you want to test some plugins without
+   *    others interfering with it.
    * @param {FileDef} [config.roomScript] - Regular haxball
    *    headless script to load when starting the room.
    * 
-   *    **Note that** this will disable the default HHM plugins
-   *    so that `config.hostPassword`, `config.adminPassword` and 
-   *    `config.pluginConfig` are ignored.
-   * @param {object} [config.pluginConfig] - Haxball Headless Manager
-   *    plugin config object.
-   * @param {Array.<object>} [config.repositories] - Array of additional
-   *    HHM plugin repositories.
-   * 
-   *    [Here](https://github.com/saviola777/haxball-headless-manager#using-a-webserver)
-   *    you can see how to add repository from an URL and
-   * 
-   *    [here](https://github.com/saviola777/haxball-headless-manager#using-a-github-repository)
-   *    how to add one from GitHub.
-   * @param {Array.<FileDef>} [config.plugins] - Useful for testing plugins
-   *    before uploading them to a server or GitHub.
+   *    Disables the non essential default plugins.
+   * @param {FileDef} [config.hhmConfig] - Configuration for the haxball 
+   *    headless manager (HHM).
    * @param {FileDef} [config.hhm] - Path to built source of HHM. Useful
    *    for testing changes to the source.
-   * @param {boolean} [config.disableDefaultPlugins=false] - Set to true if you
-   *    want to disable the default HHM plugins that Haxroomie loads.
-   *    This can be useful if for example you want to test some plugins without
-   *    others interfering with it.
    * @returns {object} - Config that the room was started with. 
    *    The `roomLink` property is added to the config (contains URL to the
    *    room).
@@ -472,7 +465,8 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Closes the headless haxball room.
+   * Closes the headless HaxBall room by navigating the page out of the
+   * headless HaxBall URL.
    * 
    * @emits RoomController#close-room
    * 
@@ -494,7 +488,7 @@ class RoomController extends EventEmitter {
    * 
    * @param {string} fn - Name of the haxball roomObject function.
    * @param {any} ...args - Arguments for the function.
-   * @returns {any} - Return value of the called function.
+   * @returns {Promise.<any>} - Return value of the called function.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -536,7 +530,7 @@ class RoomController extends EventEmitter {
    * Returns PluginData of the given plugin name.
    * 
    * @param {string} name - Name of the plugin.
-   * @returns {?Promise<PluginData>} - Data of the plugin or `null` if
+   * @returns {Promise.<?PluginData>} - Data of the plugin or `null` if
    *    plugin was not found.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
@@ -656,7 +650,7 @@ class RoomController extends EventEmitter {
   /**
    * Checks if the room has a plugin with given name loaded.
    * @param {string} name - Name of the plugin.
-   * @returns {boolean} - `true` if it had the plugin, `false` if not.
+   * @returns {Promise.<boolean>} - `true` if it had the plugin, `false` if not.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -682,7 +676,7 @@ class RoomController extends EventEmitter {
    * 
    * @param {string|PluginDef} plugin - Plugins name if loading from repositories
    *    or plugin definition if loading it from a string.
-   * @returns {number} - Plugin ID if the plugin and all of its dependencies
+   * @returns {Promise.<number>} - Plugin ID if the plugin and all of its dependencies
    *    have been loaded, -1 otherwise.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
@@ -727,7 +721,7 @@ class RoomController extends EventEmitter {
    * @param {object|string} repository - The repository to be added.
    * @param {boolean} [append] - Whether to append or prepend the repository 
    *    to the Array of repositories.
-   * @returns {boolean} - Whether the repository was successfully added.
+   * @returns {Promise.<boolean>} - Whether the repository was successfully added.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -837,7 +831,7 @@ class RoomController extends EventEmitter {
    * if `pluginName` is given, then return the config for that plugin.
    * 
    * @param {string} [pluginName] - The name of the plugin.
-   * @returns {object} - The config object of plugin(s).
+   * @returns {Promise.<object>} - The config object of plugin(s).
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
