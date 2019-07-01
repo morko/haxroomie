@@ -50,6 +50,10 @@
 - updated `RoomController` documentation and added documentation for missing properties
 - do not close the page on ´open-room-error` when `NODE_ENV === development'
 
+#### 1.0.7
+
+- HHM now gets loaded from surge.
+
 #### 1.0.6
 
 ##### Fixed bugs (CLI)
