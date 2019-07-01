@@ -2,16 +2,11 @@ HHM = typeof HHM === `undefined` ? {} : HHM;
 HHM.config = HHM.config || {};
 hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
 
-<<<<<<< Updated upstream
 // set the HHM log level to debug if haxroomie desires so
 HHM.config.logLevel = hrConfig.hhmDebug ? 'debug' : undefined;
 
 // set the version of HHM to use
 HHM.config.version = hrConfig.hhmVersion || 'git';
-=======
-// Set the HHM version to use.
-HHM.config.version = hrConfig.hhmVersion || '0.9.2';
->>>>>>> Stashed changes
 
 HHM.config.room = {
   roomName: hrConfig.roomName || `haxroomie`,
@@ -124,15 +119,11 @@ if (HHM.manager === undefined) {
   if (hrConfig.hhm && hrConfig.hhm.content) {
     s.innerHTML = hrConfig.hhm.content;
   } else {
-<<<<<<< Updated upstream
     if (HHM.config.version === 'git') {
       s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js?_=${Date.now()}`;
     } else {
       s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js`;
     }
-=======
-    s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js`;
->>>>>>> Stashed changes
   }
   document.head.appendChild(s);
 }
