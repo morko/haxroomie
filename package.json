@@ -1,6 +1,6 @@
 {
   "name": "haxroomie",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Host haxball rooms without GUI.",
   "main": "index.js",
   "scripts": {
