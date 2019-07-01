@@ -191,6 +191,7 @@ class HRConsoleApp {
         if (err.name === 'InvalidTokenError'){
           cprompt.print(`${colors.cyan(room.id)}: ${err.message}`, `ROOM NOT STARTED`);
         } else {
+          cprompt.print(`${err.name}: ${err.message}`, 'ERROR');
           return;
         }
       }
