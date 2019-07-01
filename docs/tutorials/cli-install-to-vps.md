@@ -20,12 +20,12 @@ sudo apt upgrade
 
 # Step 2: Install required dependencies
 
-Run this command to install Git:
-```
-sudo apt install git
-```
+Haxroomie is developed with Node.js and is available in the npm repositories.
 
-Installing Node.js from the default repositories gets us version 8.10.0, but haxroomie has been developed in a newer version. You can get a newer version following the installation instructions below.
+Installing Node.js from the default repositories in Ubuntu 18.04 gets us version 8.10.0.
+Haxroomie requires a newer version.
+
+You can get a newer version following the installation instructions below.
 
 To install Node.js and npm:
 ```
@@ -35,25 +35,21 @@ sudo bash nodesource_setup.sh
 sudo apt install -y nodejs
 ```
 
-# Step 3: Clone (download) the haxball repository
+# Step 3: Configure npm
 
-Use Git to get the haxball repository from git:
-```
-cd ~
-git clone https://github.com/morko/haxroomie.git
-```
+Node Package Manager (npm) needs a bit of configuring before you can use it to
+install haxroomie with it.
 
-Now you have a directory called `haxroomie` in your home directory.
+Follow 
+[this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3)
+to configure your npm properly!
 
 # Step 4: Install haxroomie
 
-Next we use the Node Package Manager (npm) to install the Node.js dependencies for haxroomie:
+Next we use npm to install haxroomie:
 ```
-cd ~/haxroomie
-npm install --production
+npm install haxroomie -g
 ```
-
-This will also download the headless Chrome browser that haxroomie uses to run the rooms.
 
 # Step 5: Install dependencies for the Chrome browser
 
@@ -89,7 +85,7 @@ screen -r haxroomie
 
 When you connect to your server you have to resume the screen session to be able to control haxroomie again.
 
-# Step 7: Configuration
+# Step 7: Configuring haxroomie
 
 Haxroomie uses a config file to define how many and what kind of rooms you want to run.
 
@@ -106,12 +102,19 @@ If you do not like to edit the config file in the console, you can create/edit t
 
 # Step 8: Start haxroomie
 
-Now you are ready to run haxroomie:
+Now you are ready to run haxroomie!
+
+To see all available command line arguments:
 ```
-cd ~/haxroomie
-./haxroomie
+haxroomie --help
+```
+
+To start haxroomie:
+```
+haxroomie
 ```
 
 When started you will be prompted for tokens for rooms that have the `autoStart: true` option set in their config. Obtain tokens from <https://www.haxball.com/headlesstoken>. One token is valid for only some time (30-60 minutes?).
 
 After entering the tokens (if any) you can type `help` to see the commands that you can use to control the rooms.
+

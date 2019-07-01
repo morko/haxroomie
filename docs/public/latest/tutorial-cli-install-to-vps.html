@@ -113,28 +113,26 @@
 sudo apt upgrade
 </code></pre>
 <h1>Step 2: Install required dependencies</h1>
-<p>Run this command to install Git:</p>
-<pre class="prettyprint source"><code>sudo apt install git
-</code></pre>
-<p>Installing Node.js from the default repositories gets us version 8.10.0, but haxroomie has been developed in a newer version. You can get a newer version following the installation instructions below.</p>
+<p>Haxroomie is developed with Node.js and is available in the npm repositories.</p>
+<p>Installing Node.js from the default repositories in Ubuntu 18.04 gets us version 8.10.0.
+Haxroomie requires a newer version.</p>
+<p>You can get a newer version following the installation instructions below.</p>
 <p>To install Node.js and npm:</p>
 <pre class="prettyprint source"><code>cd ~
 curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
 sudo apt install -y nodejs
 </code></pre>
-<h1>Step 3: Clone (download) the haxball repository</h1>
-<p>Use Git to get the haxball repository from git:</p>
-<pre class="prettyprint source"><code>cd ~
-git clone https://github.com/morko/haxroomie.git
-</code></pre>
-<p>Now you have a directory called <code>haxroomie</code> in your home directory.</p>
+<h1>Step 3: Configure npm</h1>
+<p>Node Package Manager (npm) needs a bit of configuring before you can use it to
+install haxroomie with it.</p>
+<p>Follow
+<a href="https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3">this guide</a>
+to configure your npm properly!</p>
 <h1>Step 4: Install haxroomie</h1>
-<p>Next we use the Node Package Manager (npm) to install the Node.js dependencies for haxroomie:</p>
-<pre class="prettyprint source"><code>cd ~/haxroomie
-npm install --production
+<p>Next we use npm to install haxroomie:</p>
+<pre class="prettyprint source"><code>npm install haxroomie -g
 </code></pre>
-<p>This will also download the headless Chrome browser that haxroomie uses to run the rooms.</p>
 <h1>Step 5: Install dependencies for the Chrome browser</h1>
 <p>You can try running haxroomie already, but it will probably fail if you have not previously installed Chrome using the Ubuntu package manager etc. Chrome requires some system libraries to run.</p>
 <p>You can install the Chrome dependencies with:</p>
@@ -154,7 +152,7 @@ npm install --production
 <pre class="prettyprint source"><code>screen -r haxroomie
 </code></pre>
 <p>When you connect to your server you have to resume the screen session to be able to control haxroomie again.</p>
-<h1>Step 7: Configuration</h1>
+<h1>Step 7: Configuring haxroomie</h1>
 <p>Haxroomie uses a config file to define how many and what kind of rooms you want to run.</p>
 <p>You can copy one of the examples to <code>~/.haxroomie/config.js</code> to get a starting point.
 If you don't, then one of the examples is copied there anyways.</p>
@@ -164,9 +162,12 @@ nano ./config.js
 </code></pre>
 <p>If you do not like to edit the config file in the console, you can create/edit the config with your preferred editor and then upload the file with your preferred SFTP client e.g. <a href="https://filezilla-project.org/">FileZilla</a>.</p>
 <h1>Step 8: Start haxroomie</h1>
-<p>Now you are ready to run haxroomie:</p>
-<pre class="prettyprint source"><code>cd ~/haxroomie
-./haxroomie
+<p>Now you are ready to run haxroomie!</p>
+<p>To see all available command line arguments:</p>
+<pre class="prettyprint source"><code>haxroomie --help
+</code></pre>
+<p>To start haxroomie:</p>
+<pre class="prettyprint source"><code>haxroomie
 </code></pre>
 <p>When started you will be prompted for tokens for rooms that have the <code>autoStart: true</code> option set in their config. Obtain tokens from <a href="https:%5C/%5C/www.haxball.com/headlesstoken">https://www.haxball.com/headlesstoken</a>. One token is valid for only some time (30-60 minutes?).</p>
 <p>After entering the tokens (if any) you can type <code>help</code> to see the commands that you can use to control the rooms.</p></article>

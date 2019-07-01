@@ -13,52 +13,27 @@ With haxroomie you can
 
 ## Links
 
-- [Installation](#installing-with-git)
+- [Installation](#installing)
 - [Step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/latest/tutorial-cli-install-to-vps.html)
 - [Documentation](https://morko.github.io/haxroomie) 
 - [Changelog](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 
-# Installing with git
-
-**Prerequisites:**
-
-- [Node.js](https://nodejs.org) version 10.15.1 or newer 
-- `npm` (usually comes with [Node.js](https://nodejs.org))
-- [Git](https://git-scm.com/)
-
-To install haxroomie, clone the repository with git:
-```sh
-git clone https://www.github.com/morko/haxroomie
-```
-Then go to the directory you cloned it and install dependencies with npm:
-```sh
-cd haxroomie
-npm install --production
-```
-
-If you do not have Chrome installed in your system, then install the dependencies for it listed in the [troubleshooting](#troubleshooting) section.
-
-Now you are ready to start using haxroomie. See [CLI usage section](#cli-usage)
-for help on how to use the command line interface.
-
-## Installing with npm
+## Installing
 
 **Prerequisites:**
 
 - [Node.js](https://nodejs.org) version 10.15.1 or newer 
 - `npm` (usually comes with [Node.js](https://nodejs.org))
 
-This will give you a `haxroomie` command that you can run from
-anywhere if your npm configuration is correct.
-
-Installing using the `-g` flag (or with `sudo`) **wont work unless your user
-has pemissions for the global npm installation directory**.
+Installing using the `-g` flag (or with `sudo`) wont work unless your user
+has pemissions for the global npm installation directory. Do not install
+as a root user!
 
 Follow 
 [this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3)
-to 
+to configure your npm properly!
 
-To install with npm run:
+To install run:
 ```sh
 npm install haxroomie -g
 ```
@@ -91,38 +66,12 @@ Please see the
 [CHANGELOG](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 before updating to watch out for any breaking updates!
 
-## Updating with git
-
-If you have download the project with `git clone` you can also use `git` to update.
-
-To update to latest release:
-```sh
-cd haxroomie
-git checkout master
-git pull
-```
-
-To update to a specific release
-(see [releases](https://github.com/morko/haxroomie/releases)):
-```sh
-cd haxroomie
-git fetch
-git checkout tags/[release_number]
-npm install
-```
-e.g. `git checkout tags/1.0.7`
-
-## Updating with npm
-
-If you installed with npm use the `npm` command.
-
 To update to latest release run the install command again:
 ```
 npm install haxroomie -g
 ```
 
-To update to a specific release
-(see [releases](https://github.com/morko/haxroomie/releases)):
+To update to a specific release:
 ```
 npm install morko/haxroomie#[release_number] -g
 ```
@@ -130,7 +79,7 @@ e.g. `npm install haxroomie@1.0.7 -g`
 
 # CLI usage
 
-By default haxroomie uses the config from `[user_home_directory]/.haxroomie/config.js`.
+By default haxroomie uses the config from `~/.haxroomie/config.js`.
 If the config does not exist, then one will be created using [this](examples/configs/1-private-room.js)
 example configuration.
 
@@ -147,8 +96,6 @@ e.g.
 ```sh
 haxroomie -c [path/to/config.js]
 ```
-**Note the extra `--` when using the npm start command*
-
 Every room requires a token from <https://www.haxball.com/headlesstoken>.
 
 You will be prompted for the tokens when opening a room. Or you can give
@@ -161,8 +108,7 @@ See [config section](#config) for more information about the config file.
 
 ## Config
 
-Haxroomies config file is a Node.js module that exports the config object.
-It is used to tell haxroomie how many rooms you are planning to run
+Haxroomies config is used to tell haxroomie how many rooms you are planning to run
 and with what kind of options.
 
 See [the documentation](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html)
