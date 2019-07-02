@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/cli",
     "test": "mocha",
-    "docs": "vjsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./docs/HOMEPAGE.md -c ./docs/config.js",
+    "docs": "vjsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./docs-config/HOMEPAGE.md -c ./docs-config/config.js",
     "release": "./scripts/create_release.sh"
   },
   "keywords": [

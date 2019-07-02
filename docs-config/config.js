@@ -8,12 +8,12 @@ module.exports = {
     "copyright"             : "© Oskari Pöntinen 2019"
   },
   opts: {
-    destination: 'docs/public',
+    destination: 'docs',
     template: 'node_modules/foodoc/template',
-    tutorials: 'docs/tutorials',
+    tutorials: 'docs-config/tutorials',
   },
   vjsdoc: {
-    template: 'docs/vtemplates/haxroomie',
+    template: 'docs-config/vtemplates/haxroomie',
     version: 'latest',
     opts: {
       title: 'Haxroomie documentation'
