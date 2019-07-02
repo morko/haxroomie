@@ -1,0 +1,402 @@
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>src/Haxroomie.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Haxroomie
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#FileDef">FileDef</a></li>
+											<li><a href="global.html#PluginData">PluginData</a></li>
+											<li><a href="global.html#PluginDef">PluginDef</a></li>
+											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="Haxroomie.html">Haxroomie</a></li>
+											<li><a href="RoomController.html">RoomController</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-haxroomie.html">haxroomie</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+											<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">src/Haxroomie.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">const { RoomController } = require('./room');
+const puppeteer = require('puppeteer');
+const path = require('path');
+const EventEmitter = require('events');
+const logger = require('./logger');
+
+/**
+ * Emitted when new RoomController is added.
+ * @event Haxroomie#room-added
+ * @param {RoomController} room - The added RoomController.
+ */
+
+/**
+ * Emitted when RoomController is removed.
+ * @event Haxroomie#room-removed
+ * @param {RoomController} room - The removed RoomController.
+ */
+
+// allow only launching one browser
+let browserLock = undefined;
+
+/**
+ * Class for spawning the headless chrome browser and managing
+ * [RoomControllers]{@link RoomController}.
+ * 
+ * Each [RoomController]{@link RoomController} controls one room
+ * running in a browsers tab.
+ * 
+ * After creating the Haxroomie instance it is required to launch the browser
+ * with the [launchBrowser method]{@link Haxroomie#launchBrowser} before 
+ * anything else.
+ */
+class Haxroomie extends EventEmitter {
+
+  /**
+   * Constructor for Haxroomie.
+   * 
+   * @param {object} opt - options
+   * @param {object} [opt.viewport={ width: 400, height: 500 }] - Viewport 
+   *    size settings for the browser.
+   * @param {number} [opt.port=3066] - Port that the headless browser will use
+   *    as the remote-debugging-port to communicate with Haxroomie. Use a
+   *    port that is not open outside your LAN!
+   * @param {boolean} [opt.noSandbox=false] - Makes the browser run without
+   *    sandbox. Useful only if it gives you error in sandboxed mode. It is
+   *    not recommended to set this true for security reasons.
+   * @param {boolean} [opt.headless=true] - Setting this to false will make
+   *    puppeteer try to spawn a browser window. Useful for debugging.
+   * @param {boolean} [opt.userDataDir] - Path to where
+   *    browser should store data like localStorage. Defaults to [project
+   *    root directory]/user-data-dir.
+   * @param {boolean} [opt.timeout=30] - How long to wait for a room to open
+   *    before failing.
+   */
+  constructor(opt) {
+    super();
+    this.browser = null;
+    this.rooms = new Map();
+
+    opt = opt || {};
+
+    this.viewport = opt.viewport || { width: 400, height: 500 };
+
+    this.port = opt.port || 3066;
+    if (this.port === 0) {
+      throw new Error('INVALID_PORT: 0');
+    }
+
+    this.noSandbox = opt.noSandbox || false;
+    this.headless = opt.hasOwnProperty('headless') ? opt.headless : true;
+    this.userDataDir = opt.userDataDir || path.join(__dirname, '..', 'user-data-dir');
+    this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
+    this.timeout = opt.timeout || 30;
+  }
+
+  /**
+   * Launches the puppeteer controlled browser using the remote-debugging-port
+   * given in Haxroomie classes constructor. It is only possible to launch one
+   * browser.
+   */
+  async launchBrowser() {
+    // make sure there isnt a browser running already
+    let browser = await this.getRunningBrowser();
+    // if there is a browser running throw an error
+    if (browser || browserLock) throw new Error('You can launch only 1 browser!')
+
+    this.browser = await puppeteer.launch({
+      headless: this.headless,
+      devtools: !this.headless,
+      userDataDir: this.userDataDir,
+      args: [
+        `--remote-debugging-port=${this.port}`,
+        `--no-sandbox=${this.noSandbox}`
+      ]
+    });
+    browserLock = true;
+    return this.browser;
+  }
+
+  /**
+   * @private
+   */
+  async getRunningBrowser() {
+    try {
+      this.browser = await puppeteer.connect({
+        browserURL: `http://localhost:${this.port}`
+      });
+    } catch (err) {
+      return null;
+    }
+    return this.browser;
+  }
+
+
+  /**
+   * Closes the puppeteer controlled browser.
+   */
+  async closeBrowser() {
+    if (this.browser) await this.browser.close();
+    this.rooms = new Map();
+    browserLock = false;
+    this.browser = null;
+  }
+
+  /**
+   * Checks that the instance has a connection to the browser.
+   * @private
+   */
+  ensureInstanceIsUsable() {
+    if (!this.browser) {
+      throw new Error(`Browser is not running!`)
+    }
+  }
+
+  /**
+   * Validates the given id.
+   * @param {string|number} id - ID to validate.
+   * @private
+   */
+  validateRoomID(id) {
+    if (!id &amp;&amp; id !== 0 || typeof id !== 'number' &amp;&amp; typeof id !== 'string') {
+      throw new Error('invalid id');
+    }
+  }
+
+  /**
+   * Checks if there is a room running with the given id.
+   * 
+   * @param {string|number} id - An id of the room.
+   * @returns {boolean} - Is there a room with given id?
+   */
+  hasRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    return this.rooms.has(id);
+  }
+  /**
+   * Returns a RoomController with the given id.
+   * 
+   * @param {string|number} id - An id of the room.
+   * @returns {RoomController} - RoomController with the given id or
+   *    undefined if there is no such room.
+   */
+  getRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    return this.rooms.get(id);
+  }
+
+  /**
+   * Returns an array of available RoomControllers.
+   * @returns {Array.&lt;RoomController>} - Available RoomControllers.
+   */
+  getRooms() {
+    let rooms = [];
+    for(let r of this.rooms.values()) {
+      rooms.push(r);
+    }
+    return rooms;
+  }
+
+  /**
+   * Returns the RoomController that was first added.
+   * @returns {RoomController} - First RoomController or
+   *    undefined if there is no such room.
+   */
+  getFirstRoom() {
+    for(let r of this.rooms.values()) {
+      return r;
+    }
+  }
+
+  /**
+   * Removes a RoomController with the given id.
+   * 
+   * Removing deletes the RoomController and closes the browser tab
+   * it is controlling.
+   * 
+   * @param {string|number} id 
+   */
+  async removeRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    let roomController = this.rooms.get(id);
+    if (roomController) {
+      try {
+        await roomController.page.close();
+      } catch (err) {
+        logger.debug(err);
+      }
+      this.rooms.delete(id);
+      this.emit('room-removed', roomController);
+    }
+  }
+
+  /**
+   * Creates and adds a new RoomController with the given id.
+   * 
+   * @param {string|number} id 
+   * @return {RoomController} - The created RoomController.
+   */
+  async addRoom(id) {
+    this.validateRoomID(id);
+    this.ensureInstanceIsUsable();
+    if (this.rooms.has(id)) throw new Error('id must be unique');
+    let page = await this.getNewPage();
+    let roomController = await this.createRoomController(page, id);
+    this.rooms.set(id, roomController);
+    this.emit('room-added', roomController);
+    return roomController;
+  }
+
+  /**
+   * Returns a new Puppeteer.Page object.
+   * @private
+   */
+  async getNewPage() {
+    if (this.rooms.size === 0) {
+      let pages = await this.browser.pages();
+      return pages[0];
+    }
+    return this.browser.newPage();
+  }
+
+  /**
+   * Factory method for creating RoomController instances.
+   * @private
+   */
+  async createRoomController(page, id) {
+
+    const device = {
+      'name': 'Galaxy S5',
+      'userAgent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3452.0 Mobile Safari/537.36',
+      'viewport': {
+        'width': this.viewport.width,
+        'height': this.viewport.height,
+        'deviceScaleFactor': 1,
+        'isMobile': false,
+        'hasTouch': false,
+        'isLandscape': false
+      }
+    }
+
+    await page.emulate(device);
+
+    let room = new RoomController({
+      page: page,
+      id: id,
+      timeout: this.timeout
+    });
+
+    return room;
+  }
+}
+
+module.exports = Haxroomie;</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">© Oskari Pöntinen 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 2nd Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->
