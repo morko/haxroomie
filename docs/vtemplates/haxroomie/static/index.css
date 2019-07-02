@@ -1,0 +1,26 @@
+  body,h1 {font-family: "Raleway", sans-serif}
+  body, html {height: 100%}
+  .bgimg {
+    background-image: url('glenn-carstens-penters-unsplas.jpg');
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+  }
+  .logo {
+    max-width: 25%;
+    min-width: 250px;
+  }
+  .header {
+    background-color: rgba(6, 6, 6, 0.6);
+    border-bottom: 2px solid white;
+    text-align: center;
+  }
+  #docs a {
+    text-decoration: none;
+  }
+  #docs p {
+    transition: 0.3;
+  }
+  #docs p:hover {
+    background-color: rgba(6, 6, 6, 0.3);
+  }

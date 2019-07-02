@@ -3,6 +3,7 @@ const fs = require('fs');
 const sleep = require('../utils').sleep;
 const logger = require('../logger');
 const EventEmitter = require('events');
+const { ConnectionError, TimeoutError, InvalidTokenError } = require('../errors');
 
 /**
  * Handles the opening and closing processes of the haxball room using puppeteer.
@@ -20,28 +21,28 @@ module.exports = class RoomOpener extends EventEmitter {
    *    browser context when a haxball roomObject event happens.
    * @param {function} opt.onHHMEvent - Function that gets called from the
    *    browser context when a Haxball Headless Manager (HHM) event happens.
-   * @param {object} [opt.timeout] - Time to wait for the room link before
+   * @param {number} [opt.timeout=30] - Time to wait for the room link before
    *    giving up.
    */
   constructor(opt) {
     super();
-    if (!opt) throw new Error('Missing required argument: opt');
+    if (!opt) throw new TypeError('Missing required argument: opt');
     if (!opt.id && opt.id !== 0) {
-      throw new Error('Missing required argument: opt.id');
+      throw new TypeError('Missing required argument: opt.id');
     }
     if (!opt.page) {
-      throw new Error('Missing required argument: opt.page');
+      throw new TypeError('Missing required argument: opt.page');
     }
     if (!opt.onRoomEvent) {
-      throw new Error('Missing required argument: opt.onRoomEvent');
+      throw new TypeError('Missing required argument: opt.onRoomEvent');
     }
     if (!opt.onHHMEvent) {
-      throw new Error('Missing required argument: opt.onHHMEvent');
+      throw new TypeError('Missing required argument: opt.onHHMEvent');
     }
     this.page = opt.page;
     this.onRoomEvent = opt.onRoomEvent;
     this.onHHMEvent = opt.onHHMEvent;
-    this.timeout = opt.timeout || 12;
+    this.timeout = opt.timeout || 30;
     this.id = opt.id;
 
     /** URL of the HaxBall headless host site. */
@@ -64,15 +65,20 @@ module.exports = class RoomOpener extends EventEmitter {
    * See RoomController#openRoom for documentation.
    *
    * @returns {RoomInfo} - Information about the opened room.
+   * @throws {TypeError} - Missing arguments.
+   * @throws {ConnectionError} - Can not connect to HaxBall headless page.
+   * @throws {TimeoutError} - Haxball Headless Manager took too much time to 
+   *    start.
+   * @throws {InvalidTokenError} - The token is invalid or expired.
    */
   async open(config) {
 
     if (!config) {
-      throw new Error('Missing config');
+      throw new TypeError('Missing required argument: config');
     }
 
     if (!config.token) {
-      throw new Error('config is missing token');
+      throw new TypeError('Missing required argument: config.token');
     }
 
     config.token = this.trimToken(config.token)
@@ -89,7 +95,7 @@ module.exports = class RoomOpener extends EventEmitter {
 
     let roomLink = await this.waitForHHMToStart(this.timeout * 1000);
     if (!roomLink) {
-      throw new Error('Timeout while waiting for HHM to start.')
+      throw new TimeoutError('Timeout while waiting for HHM to start.')
     }
     // add the roomLink to the config
     config.roomLink = roomLink;
@@ -106,6 +112,9 @@ module.exports = class RoomOpener extends EventEmitter {
   
   /**
    * Navigates the browser to the HaxBall headless page.
+   * 
+   * @throws {ConnectionError} - Can not connect to HaxBall headless page.
+
    * @private
    */
   async navigateToHaxballHeadlessPage() {
@@ -113,8 +122,10 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.page.goto(this.url);
     } catch (err) {
-      logger.error(err);
-      throw new Error(this.url + ' is unreachable!');
+      logger.debug(err);
+      throw new ConnectionError(
+        `Could not navigate the browser to ${this.url}`
+      );
     }
   }
 
@@ -146,9 +157,15 @@ module.exports = class RoomOpener extends EventEmitter {
   async startHHM(config) {
     logger.debug('Starting Headless Haxball Manager');
 
+    let hrConfig = Object.assign({}, config);
+
+    if (process.env.NODE_ENV === 'development') {
+      hrConfig.hhmDebug = true;
+    }
+
     let configFn;
     try {
-      if (config.hhmConfig) {
+      if (hrConfig.hhmConfig) {
         configFn = new Function('hrConfig', config.hhmConfig.content);
       } else {
         configFn = new Function(
@@ -157,20 +174,23 @@ module.exports = class RoomOpener extends EventEmitter {
         );
       }
     } catch (err) {
-      logger.error(err);
-      throw new Error('Invalid HHM config!');
+      logger.debug(err);
+      throw err;
     }
 
     try {
-      await this.page.evaluate(configFn, config);
+      await this.page.evaluate(configFn, hrConfig);
     } catch (err) {
-      logger.error(err);
-      throw new Error(`Unable to start Headless Haxball Manager!`);
+      logger.debug(err);
+      throw err;
     }
   }
 
   /**
    * Waits for the headless haxball page to load.
+   * 
+   * @throws {ConnectionError} - Can not find HBInit function.
+
    * @private
    */
   async waitForHaxballToLoad() {
@@ -178,8 +198,8 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {
-      logger.error(err);
-      throw new Error('Could not load the HaxBall headless page!');
+      logger.debug(err);
+      throw new ConnectionError('Could not find the HBInit function!');
     }
   }
 
@@ -229,7 +249,7 @@ module.exports = class RoomOpener extends EventEmitter {
     try {
       hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
     } catch (err) {
-      logger.error(err);
+      logger.debug(err);
       throw new Error(`Unable to fetch the room info from HHM.`)
     }
     return hhmRoomInfo;
@@ -244,13 +264,11 @@ module.exports = class RoomOpener extends EventEmitter {
     logger.debug('Injecting haxroomie core HHM plugins.');
     try {
       let corePlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'core-plugin.js'));
-      let kickbanPlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'kickban-plugin.js'));
-      await this.page.evaluate((corePlugin, kickbanPlugin) => {
+      await this.page.evaluate((corePlugin) => {
         window.HHM.manager.addPluginByCode(corePlugin, 'hr/core');
-        window.HHM.manager.addPluginByCode(kickbanPlugin, 'hr/kickban');
-      }, corePlugin, kickbanPlugin);
+      }, corePlugin);
     } catch (err) {
-      logger.error(err);
+      logger.debug(err);
       throw new Error(`Failed to inject haxroomie core HHM plugins!`);
     }
   }
@@ -306,6 +324,9 @@ module.exports = class RoomOpener extends EventEmitter {
    * 
    * @param {int} timeout Time to wait in ms before failing.
    * @returns {string|null} the roomLink or null if time ran out
+   * 
+   * @throws {InvalidTokenError} - The token is invalid or expired.
+
    * @private
    */
   async waitForHHMToStart(timeout) {
@@ -320,7 +341,7 @@ module.exports = class RoomOpener extends EventEmitter {
       // if the recaptcha appears the token must be invalid
       let recaptcha = await haxframe.$eval('#recaptcha', e => e.innerHTML);
       if (recaptcha) {
-        throw new Error(`Invalid token!`)
+        throw new InvalidTokenError(`Token is invalid or has expired!`)
       }
       hhmStarted = await this.page.evaluate(`window.hroomie.hhmStarted`);
       await sleep(1000);

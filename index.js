@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /**
  * Main module of Haxroomie.
  * 

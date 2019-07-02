@@ -1,12 +1,13 @@
 {
   "name": "haxroomie",
-  "version": "1.0.7",
+  "version": "1.0.7-git",
   "description": "Host haxball rooms without GUI.",
   "main": "index.js",
   "scripts": {
     "start": "node src/cli",
     "test": "mocha",
-    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./API.md -d ./docs -c ./jsdoc-config.js"
+    "docs": "vjsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./docs/HOMEPAGE.md -c ./docs/config.js",
+    "release": "./scripts/create_release.sh"
   },
   "keywords": [
     "haxball"
@@ -26,6 +27,7 @@
   "dependencies": {
     "colors": "^1.3.3",
     "deep-equal": "^1.0.1",
+    "dotenv": "^8.0.0",
     "lockfile": "^1.0.4",
     "puppeteer": "^1.14.0",
     "winston": "^3.2.1",

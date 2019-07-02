@@ -1,0 +1,271 @@
+<!-- start:readme.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>Using the haxroomie config (CLI)</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Haxroomie
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#FileDef">FileDef</a></li>
+											<li><a href="global.html#PluginData">PluginData</a></li>
+											<li><a href="global.html#PluginDef">PluginDef</a></li>
+											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="Haxroomie.html">Haxroomie</a></li>
+											<li><a href="RoomController.html">RoomController</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-haxroomie.html">haxroomie</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+											<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Using the haxroomie config (CLI)</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li class="active">Using the haxroomie config (CLI)</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><h1>Using the haxroomie config</h1>
+<p>The config is a JavaScript
+<a href="https://www.dyn-web.com/tutorials/object-literal/">object literal</a>.
+You can use <a href="https://nodejs.org/en/">Node.js</a> API inside the config.</p>
+<p>Each room in the config can be given options.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>let config = {
+  'room1': {
+    // Options for room1 here
+  },
+  'room2': {
+    // Options for room2 here
+  }
+};
+module.exports = config;
+</code></pre>
+<p>This page explains each option.</p>
+<h2><code>autoStart</code></h2>
+<p>Set to <code>true</code> if you want the room to start on startup. Default is <code>false</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>autoStart: true
+</code></pre>
+<h2><code>roomName</code></h2>
+<p>The name for the room. Default is <code>haxroomie</code></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>roomName: 'my room'
+</code></pre>
+<h2><code>playerName</code></h2>
+<p>The name for the host player. Default is <code>host</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>playerName: 'my host player name'
+</code></pre>
+<h2><code>maxPlayers</code></h2>
+<p>Max number of players the room accepts. Default is <code>10</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>maxPlayers: 12
+</code></pre>
+<h2><code>public</code></h2>
+<p>If <code>true</code> the room will appear in the room list. Default is <code>false</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>public: true
+</code></pre>
+<h2><code>geo</code></h2>
+<p>Geolocation override for the room. Default is where your server is located.</p>
+<p>You can use <a href="https:%5C/%5C/www.latlong.net/">https://www.latlong.net/</a> to find the coordinates easily.
+The code is a country code in two letter ISO format listed in
+<a href="https:%5C/%5C/countrycode.org/">https://countrycode.org/</a>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
+</code></pre>
+<h2><code>repositories</code></h2>
+<p>Array of plugin repositories to load.</p>
+<p>With this you can tell which repositories to load in addition to the default one
+(<a href="https://github.com/saviola777/hhm-plugins">plugin repository by saviola</a>).</p>
+<p>Adding a repository will not automagically load the plugins in them. To load
+plugins from a repository you must use the <a href="#pluginconfig">pluginConfig</a> option.</p>
+<p>To load a repository from GitHub:</p>
+<pre class="prettyprint source lang-js"><code>repositories: [
+  {
+    type: `github`,
+    repository: `morko/hhm-sala-plugins`,
+    path: `src`, // optional (defaults to src)
+    version: `master`, // optional (defaults to master)
+    suffix: `.js`, // optional (defaults to .js)
+  }
+],
+</code></pre>
+<p>To load a repository from local file system:</p>
+<pre class="prettyprint source lang-js"><code>repositories: [
+  {
+    type: `local`,
+    path: `/path/to/local/repo`,
+    subpath: `src`, // optional (defaults to src)
+    suffix: `.js`, // optional (defaults to .js)
+  }
+],
+</code></pre>
+<h2><code>pluginConfig</code></h2>
+<p>Object containing the plugins to load and their configurations.</p>
+<p>With this you can tell which plugins to load from the repositories that are
+available and give them optional configurations.</p>
+<p>By default the plugins from
+<a href="https://github.com/saviola777/hhm-plugins">saviolas repository</a> are available.</p>
+<p>Haxroomie loads <code>sav/roles</code>, <code>sav/commands</code>, <code>sav/help</code>, <code>sav/players</code> and
+<code>sav/chat</code> plugins even if you dont define them here. To disable these
+plugins you can use the <a href="#disabledefaultplugins">disableDefaultPlugins</a> option.</p>
+<p>The <code>pluginConfig</code> object follows the format of
+<a href="https://github.com/saviola777/haxball-headless-manager#configuration-file">HHM configuration file's</a>
+<code>HHM.config.plugin</code> object.</p>
+<p>See
+the <a href="https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins">guide for writing plugins</a>
+for information about saviolas default plugins and how to write your own.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>pluginConfig: {
+  'sav/roles': {
+    roles: {
+      admin: 'superSecretAdminPass',
+      host: 'superSecretHostPass',
+    }
+  },
+  'my/cool-plugin': {}
+}
+</code></pre>
+<h2><code>roomScript</code></h2>
+<p>Use this if you do not wish to use the plugin system and just run a traditional
+HaxBall headless script.</p>
+<p><strong>Disables the default plugins!</strong></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>roomScript: '/path/to/myScript.js'
+</code></pre>
+<h2><code>token</code></h2>
+<p>You can give the token needed to open the rooms in the config.
+This is useful if you are testing something and need to restart
+the rooms often or if you wish to load it from an environment
+variable.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>token: process.env.HAXBALL_TOKEN
+</code></pre>
+<h2><code>disableDefaultPlugins</code></h2>
+<p>Set to <code>true</code> if you want to disable the default
+HHM plugins that haxroomie loads.</p>
+<p>This can be useful if for example you
+want to test some plugins without others interfering with it.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>disableDefaultPlugins: true
+</code></pre>
+<h2><code>hhmConfig</code></h2>
+<p>Path to custom Haxball Headless Manager (HHM) configuration file.
+You rarely need this.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhmConfig: '/path/to/hhmConfig.js'
+</code></pre>
+<h2><code>hhm</code></h2>
+<p>Path to built source of Headless Haxball Manager (HHM).</p>
+<p>Useful for testing changes to the source.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhm: '/path/to/hhm.js'
+</code></pre></article>
+		</section>
+			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">© Oskari Pöntinen 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 2nd Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:readme.hbs -->

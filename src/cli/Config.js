@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const deepEqual = require('deep-equal');
-const logger = require('../logger');
+const cprompt = require('./cprompt');
 
 class Config {
   constructor(opt) {
@@ -10,8 +10,10 @@ class Config {
     if (!opt.haxroomie) throw new TypeError('invalid arguments');
 
     this.haxroomie = opt.haxroomie;
-    this.configPath = opt.configPath;
+    this.configPath = path.resolve(process.cwd(), opt.configPath);
+
     this.config = this.load(this.configPath);
+    this.tokens = {};
   }
 
   /**
@@ -19,9 +21,30 @@ class Config {
    * @param {string|number} id - Room id.
    * @returns {object|undefined} - Room config.
    */
-  getRoom(id) {
+  getRoomConfig(id) {
     if (!this.config[id]) return undefined;
-    return this.config[id];
+    return this.cloneConfig(this.config[id]);
+  }
+
+  /**
+   * Sets the config of the room.
+   * @param {string|number} id - Room id.
+   * @param {object} config - Room config.
+   */
+  setRoomConfig(id, config) {
+    this.config[id] = config;
+  }
+
+  getToken(id) {
+    if (this.tokens[id]) {
+      return this.tokens[id];
+    } else {
+      return this.config[id].token;
+    }
+  }
+
+  setToken(id, token) {
+    this.tokens[id] = token;
   }
 
   /**
@@ -32,36 +55,71 @@ class Config {
   }
 
   /**
+   * Creates a new copy of a config object.
+   * @param {object} - Config object
+   * @returns {object} - Copy of the config.
+   * @private
+   */
+  cloneConfig(config) {
+    return JSON.parse(JSON.stringify(config));
+  }
+
+  /**
    * Parses the Haxroomie config.
    * @param {string} configPath - Path to the config file relative to
    *    current working directory.
    */
   load(configPath) {
-    configPath = path.resolve(process.cwd(), configPath);
+    cprompt.print(`from ${configPath}`, 'LOADING CONFIG');
+
     let config;
     try {
       config = require(configPath);
     } catch (err) {
-      logger.error(`Could not load the config: ${configPath}`);
+      cprompt.print(`Could not load the config: ${configPath}`, 'ERROR');
       throw err;
     }
     
-    // Load the files of each room in the config.
+    // Serialize the properties of each room in the config.
     for (let key of Object.keys(config)) {
-      config[key] = this.loadFilesInRoomConfig(config[key]);
+      config[key] = this.serializeConfig(config[key]);
     }
 
     return config;
   }
 
   /**
+   * Serializes the room config the 
+   * 
    * Loads all the files in the config. The files get transformed into
    * FileDef objects that the RoomController#open method accepts.
-   * @param {object} roomConfig - "Root property" value of the Haxroomie
-   *    config. In other words the config object of 1 room.
-   * @return {object} - Haxroomie room config where all files have been loaded.
+   * 
+   * Repositories that are of type 'local' get serialized to a format
+   * that HHM accepts.
+   * e.g.
+   * ```js
+   * {
+   *   type: 'local'
+   *   path: '/path/to/repo'
+   * }
+   * ```
+   * to
+   * ```js
+   * {
+   *   type: 'local'
+   *   path: '/path/to/repo'
+   *   plugins: {
+   *     'pluginName1': 'plugin contents',
+   *     'pluginName2': 'plugin contents',
+   *   }
+   * }
+   * ```
+   * @param {object} roomConfig - One rooms config in the Haxroomie
+   *    config.
+   * @return {object} - Haxroomie room config where all properties are
+   *    serialized.
    */
-  loadFilesInRoomConfig(roomConfig) {
+  serializeConfig(roomConfig) {
     let newRoomConfig = Object.assign({}, roomConfig);
     if (roomConfig.roomScript) {
       newRoomConfig.roomScript = this.loadFile(roomConfig.roomScript);
@@ -74,15 +132,15 @@ class Config {
     }
     if (roomConfig.plugins) {
       if (!Array.isArray(roomConfig.plugins)) {
-        throw new Error('Plugin config should be an array!');
+        throw new Error('The "plugins" config option should be an array!');
       }
       let loadedPlugins = [];
       for (let plugin of roomConfig.plugins) {
         if (!plugin.path) {
-          throw new Error('Plugin config is missing path property!')
+          throw new Error('Plugins config is missing path property!')
         }
         if (!plugin.name) {
-          throw new Error('Plugin config is missing name property!')
+          throw new Error('Plugins config is missing name property!')
         }
         let fileDef = this.loadFile(plugin.path);
         if (!fileDef) {
@@ -93,7 +151,86 @@ class Config {
       }
       newRoomConfig.plugins = loadedPlugins;
     }
+
+    if (roomConfig.repositories) {
+      if (!Array.isArray(roomConfig.repositories)) {
+        throw new Error('The "repositories" config option should be an array!');
+      }
+      let serialized = [];
+      for (let repo of roomConfig.repositories) {
+        if (typeof repo === 'object') {
+          serialized.push(this.serializeRepository(repo));
+        } else {
+          serialized.push(repo);
+        }
+      }
+      newRoomConfig.repositories = serialized;
+    }
+
     return newRoomConfig;
+  }
+
+  /**
+   * Serializes the repository to be ready to sent to browser.
+   * @param {object} repository - The repository object.
+   * @private
+   */
+  serializeRepository(repository) {
+    let serialized = {};
+    if (repository.type === 'local') {
+      serialized = this.loadLocalRepository(repository);
+    } else {
+      Object.assign(serialized, repository);
+    }
+    return serialized;
+  }
+
+  /**
+   * Tries to load a repository from filesystem.
+   * @param {string} repo - The repository object.
+   */
+  loadLocalRepository(repo) {
+
+    // do not modify the original object
+    repo = Object.assign({}, repo);
+    let subpath = repo.subpath || 'src';
+    let suffix = repo.suffix || '.js';
+
+    function listPlugins(dir, pluginList) {
+      let files = fs.readdirSync(dir);
+      pluginList = pluginList || [];
+      for (let file of files) {
+        if (fs.statSync(path.join(dir, file)).isDirectory()) {
+          pluginList = listPlugins(path.join(dir, file), pluginList);
+        } else {
+          if (file.endsWith(suffix)) {
+            pluginList.push(path.join(dir, file));
+          }
+        }
+      }
+      return pluginList;
+    };
+
+    let pluginPaths = listPlugins(path.join(repo.path, subpath));
+
+    let plugins = {};
+    for (let pPath of pluginPaths) {
+      let file = this.loadFile(pPath);
+      // try to extract the name from plugin contents
+      let regexp = /pluginSpec.*\n*.*name.+['`"](.+)['`"]/gm;
+      let match = regexp.exec(file.content);
+      let pluginName = pPath;
+      if (match) {
+        pluginName = match[1];
+      } else {
+        cprompt.warn(`Could not find a name for plugin in ${pPath}`);
+      }
+      plugins[pluginName] = file.content;
+    }
+
+    repo.plugins = plugins;
+    
+    return repo;
   }
 
   /**
@@ -106,7 +243,7 @@ class Config {
    */
   loadFile(filePath) {
     if (!fs.existsSync(filePath)) {
-      logger.error(`No such file: ${filePath}`);
+      cprompt.print(`No such file: ${filePath}`, 'ERROR');
       return;
     }
     let modifiedTime = fs.statSync(filePath).mtimeMs;
@@ -142,12 +279,17 @@ class Config {
       if (modifiedProperties.length !== 0) {
         modifiedRooms.set(roomId, modifiedProperties);
       }
+
+      if (modifiedProperties.find(p => p === 'token')) {
+        this.setToken(roomId, newConfig[roomId].token);
+      }
     }
 
     // check for removed rooms
     for (let roomId of Object.keys(oldConfig)) {
       if (!newConfig[roomId]) {
         modifiedRooms.set(roomId, null);
+        delete this.config[roomId];
       }
     }
 
@@ -169,12 +311,13 @@ class Config {
     let modifiedProperties = [];
 
     for (let property of Object.keys(newConfig)) {
-      if (property === 'token') continue;
+
       if (property === 'roomScript' || property === 'hhmConfig' || property === 'hhm') {
         if (this.hasFileBeenModified(newConfig[property], oldConfig[property])) {
           modifiedProperties.push(property);
           continue;
         }
+
       } else if (property === 'plugins') {
         if (!oldConfig[property] || newConfig[property].length !== oldConfig[property].length) {
           modifiedProperties.push(property);
@@ -192,6 +335,7 @@ class Config {
           modifiedProperties.push(property);
           continue;
         }
+
       } else {
         if (!deepEqual(newConfig[property], oldConfig[property])) {
           modifiedProperties.push(property);
@@ -200,7 +344,6 @@ class Config {
       }
     }
     for (let property of Object.keys(oldConfig)) {
-      if (property === 'token' || property === 'roomLink') continue;
       if (typeof newConfig[property] === 'undefined') {
         modifiedProperties.push(property);
       }

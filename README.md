@@ -13,52 +13,38 @@ With haxroomie you can
 
 ## Links
 
-- [Installation](#installation)
-- [Step-by-step installation tutorial for beginners](https://github.com/morko/haxroomie/wiki/Tutorial:-Install-and-run-haxroomie-in-new-VPS)
-- [Changelog](https://github.com/morko/haxroomie/wiki/Changelog)
-- [Using the Command Line Interface](#cli-usage)
-- [API](https://morko.github.io/haxroomie) 
+- [Installation](#installing)
+- [Step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/latest/tutorial-cli-install-to-vps.html)
+- [Documentation](https://morko.github.io/haxroomie) 
+- [Changelog](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 
-# Installation
+## Installing
 
 **Prerequisites:**
 
 - [Node.js](https://nodejs.org) version 10.15.1 or newer 
 - `npm` (usually comes with [Node.js](https://nodejs.org))
-- [Git](https://git-scm.com/)
 
-To install haxroomie, clone the repository with git:
+Installing using the `-g` flag (or with `sudo`) wont work unless your user
+has pemissions for the global npm installation directory. Do not install
+as a root user!
+
+Follow 
+[this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3)
+to configure your npm properly!
+
+To install run:
 ```sh
-git clone https://www.github.com/morko/haxroomie
+npm install haxroomie -g
 ```
-Then go to the directory you cloned it and install dependencies with npm:
+
+To install the API for your own project:
 ```sh
-cd haxroomie
-npm install
+npm install haxroomie
 ```
 
 If you do not have Chrome installed in your system, then install the dependencies for it listed in the [troubleshooting](#troubleshooting) section.
 
-Now you are ready to start using Haxroomie. See [CLI usage section](#cli-usage)
-for help on how to use the command line interface.
-
-## Alternative installation
-
-You can also install haxroomie to a global npm installation directory.
-This will give you a `haxroomie` command that you can run from
-anywhere if your npm configuration is correct.
-
-To install with npm run:
-```sh
-npm install morko/haxroomie -g
-```
-
-This will probably fail if you have not set your global npm directory.
-
-In Linux it is recommended to set the directory to
-somewhere where you dont need `sudo` to install npm packages.
-To do so you can follow 
-[this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3).
 
 ## Troubleshooting
 
@@ -72,75 +58,49 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 For dependencies in other systems see puppeteers
 [troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix).
 
+For support join the [discord](https://nodejs.org/en/).
+
 # Updating
 
-Please see the [CHANGELOG](https://github.com/morko/haxroomie/wiki/Changelog)
+Please see the 
+[CHANGELOG](https://github.com/morko/haxroomie/blob/master/CHANGELOG.md#changelog)
 before updating to watch out for any breaking updates!
-
-## Updating with git
-
-If you have download the project with `git clone` you can also use `git` to update.
-
-To update to latest release:
-```sh
-cd haxroomie
-git checkout master
-git pull
-```
-
-To update to a specific release
-(see [releases](https://github.com/morko/haxroomie/releases)):
-```sh
-cd haxroomie
-git fetch
-git checkout tags/[release_number]
-```
-e.g. `git checkout tags/1.0.5`
-
-## Updating with npm
-
-If you installed with npm use the `npm` command.
 
 To update to latest release run the install command again:
 ```
-npm install morko/haxroomie -g
+npm install haxroomie -g
 ```
 
-To update to a specific release
-(see [releases](https://github.com/morko/haxroomie/releases)):
+To update to a specific release:
 ```
 npm install morko/haxroomie#[release_number] -g
 ```
-e.g. `npm install morko/haxroomie#1.0.5 -g`
+e.g. `npm install haxroomie@1.0.7 -g`
 
 # CLI usage
 
-To start the CLI it needs a [config](#config) file. 
+By default haxroomie uses the config from `~/.haxroomie/config.js`.
+If the config does not exist, then one will be created using [this](examples/configs/1-private-room.js)
+example configuration.
 
-For a quick start copy one of the
-example configs from 
-[haxroomie/examples/configs](https://github.com/morko/haxroomie/tree/master/examples/configs)
-to the directory you cloned/downloaded haxroomie to as `config.js` and modify
-it to your liking.
-
-By default Haxroomie searches for `config.js` in the current working directory.
-
-Every room requires a token from <https://www.haxball.com/headlesstoken>.
-You will be prompted for the tokens when opening a room.
+[Here](https://github.com/morko/haxroomie/tree/master/examples/configs) you can find more examples.
 
 To start run:
 ```sh
-npm start
+haxroomie
 ```
 
-If you wish to load the config from elsewhere than `config.js` in the current
-working directory you can give it the `-c` argument.
+If you wish to load the config from elsewhere you can give haxroomie the `-c` argument.
 
 e.g.
 ```sh
-npm start -- -c [path/to/config.js]
+haxroomie -c [path/to/config.js]
 ```
-**Note the extra `--` when using the npm start command*
+Every room requires a token from <https://www.haxball.com/headlesstoken>.
+
+You will be prompted for the tokens when opening a room. Or you can give
+it in the config
+([token property](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#token)).
 
 Once haxroomie CLI is running you can type `help` for available commands.
 
@@ -148,18 +108,26 @@ See [config section](#config) for more information about the config file.
 
 ## Config
 
-Haxroomies config file is a Node.js module that exports the config object.
-It is used to tell haxroomie how many rooms you are planning to run
+Haxroomies config is used to tell haxroomie how many rooms you are planning to run
 and with what kind of options.
+
+See [the documentation](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html)
+for all the possible options and their explanations.
 
 You can find examples of configs in
 [examples directory](https://github.com/morko/haxroomie/tree/master/examples/configs).
 
-See the 
-[Options in the haxroomie config](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config) 
-for information about each option.
+To enable a repository in config:
 
-Here is an example of a config that starts one private room.
+- use [repositories](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#repositories)
+option
+
+To load plugins from the repository:
+
+- use [pluginConfig](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#pluginconfig)
+option
+
+Here is a simple example of a config that starts one private room.
 
 ```js
 let config = {
@@ -176,6 +144,7 @@ let config = {
       'sav/roles': {
         roles: {
           admin: 'adminpass',
+          host: 'hostpass',
         }
       }
     }
@@ -187,7 +156,7 @@ module.exports = config;
 ## Scripts and plugins
 
 You can run your script with the configs 
-[roomScript](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#roomscript) 
+[roomScript](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html#roomscript) 
 option.
 
 Running a script this way will disable the default plugins that haxroomie loads
@@ -201,38 +170,31 @@ JavaScript file you can implement the functionality in smaller modules called
 plugins.
 
 See the saviolas
-[guide for writing plugins](https://haxplugins.tk/docs/tutorial-writing-plugins.html).
+[guide for writing plugins](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins).
 
 #### Developing plugins with haxroomie
 
-Haxroomie allows you to load the plugins from the filesystem. This makes
-developing slightly more easy. You can give the file paths in the configs 
-[plugins](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#plugins) 
-property.
+You can load your repository from the file system.
 
-Take note that the `pluginConfig` property does not work with the `plugins`
-property and it should be avoided when using the `plugins` option.
-
+Add this to the `repository` array in haxroomie config:
+```js
+{
+  type: 'local',
+  path: '/path/to/local/repo',
+  subpath: 'src' // optional (src is default)
+  suffix: '.js' // optional (.js is default)
+}
+```
 #### Publishing your plugins
 
 To publish the plugins you can create your own
-[HHM plugin repository](https://github.com/saviola777/haxball-headless-manager#creating-your-own-plugin-repository).
-
-To enable a repository in config:
-
-- use [repositories](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#repositories) 
-option
-
-To load plugins from the repository:
-- use [pluginConfig](https://github.com/morko/haxroomie/wiki/Options-in-the-haxroomie-config#pluginconfig) 
-option
+[HHM plugin repository](https://hhm.surge.sh/api/tutorial-writing-plugins.html#creating-your-own-plugin-repository).
 
 ## Using own HHM config
 
 Haxroomie supports custom
-[Haxball Headless Manager configuration files](https://github.com/saviola777/haxball-headless-manager#preparing-your-configuration).
-However there should rarely be a reason to do this. The files have couple
-requirements to work with haxroomie
+Haxball Headless Manager (HHM) configs. However there should rarely be a reason to do this.
+
 (see [HHM config requirements](https://github.com/morko/haxroomie#hhm-config-requirements)).
 
 ### HHM config requirements

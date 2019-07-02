@@ -1,4 +1,96 @@
-const logger = require('../logger');
+<!-- start:source.tmpl.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+		<title>src/room/RoomController.js</title>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
+		<link type="text/css" rel="stylesheet" href="css/template.min.css">
+		<script type="text/javascript">
+			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
+			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_AFILTER_ENABLED = false;
+		</script>
+</head>
+<body>
+	<!-- start:navbar.hbs -->
+	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">
+					Haxroomie
+				</a>
+				<!-- displayed on small devices -->
+				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+			<div class="navbar-collapse collapse" id="topNavigation">
+				<ul class="nav navbar-nav">
+								<li class="dropdown">
+									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="global.html#FileDef">FileDef</a></li>
+											<li><a href="global.html#PluginData">PluginData</a></li>
+											<li><a href="global.html#PluginDef">PluginDef</a></li>
+											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="Haxroomie.html">Haxroomie</a></li>
+											<li><a href="RoomController.html">RoomController</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="module-haxroomie.html">haxroomie</a></li>
+									</ul>
+								</li>
+								<li class="dropdown">
+									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+									<ul class="dropdown-menu">
+											<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+											<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
+									</ul>
+								</li>
+				</ul>
+					<!-- start:lunr-search-navbar.hbs -->
+					<form class="navbar-form navbar-right" role="search">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
+							<div class="input-group-btn">
+								<button class="btn btn-default" id="lunr-search-submit">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- start:lunr-search-navbar.hbs -->		</div>
+		</div>
+	</header>
+	<!-- end:navbar.hbs -->		<div class="page-header">
+			<div class="container">
+				<span class="kind">source</span>
+				<h1><span class="name">src/room/RoomController.js</span></h1>
+			</div>
+		</div>
+	<div class="container content">
+		<div class="row">
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">const logger = require('../logger');
 const { UnusableError, NotRunningError, RoomLockedError } = require('../errors');
 const EventEmitter = require('events');
 const RoomOpener = require('./RoomOpener');
@@ -136,7 +228,7 @@ class RoomController extends EventEmitter {
    * @typedef {Object} RoomEventArgs
    * @property {string} handlerName - Name of the haxball room event handler
    *    function that got triggered.
-   * @property {Array.<any>} args - Arguments that the event handler function
+   * @property {Array.&lt;any>} args - Arguments that the event handler function
    *    received.
    */
 
@@ -179,8 +271,8 @@ class RoomController extends EventEmitter {
    * @param {object} opt - Options.
    * @param {object} opt.id - ID for the room.
    * @param {object} opt.page - Puppeteer.Page object to control.
-   * @param {number} [opt.timeout=30] - Max time to wait in seconds for the
-   *    room to open.
+   * @param {number} [opt.timeout=30] - Time to wait in seconds for the room to
+   *    open.
    */
   constructor(opt) {
     super();
@@ -252,7 +344,7 @@ class RoomController extends EventEmitter {
     if (!opt) {
       throw new Error('Missing required argument: opt');
     }
-    if (!opt.id && opt.id !== 0) {
+    if (!opt.id &amp;&amp; opt.id !== 0) {
       throw new Error('Missing required argument: opt.id');
     }
     if (!opt.page) throw new Error('Missing required argument: opt.page');
@@ -397,13 +489,13 @@ class RoomController extends EventEmitter {
    * 
    * @param {object} config - Config object that contains the room information.
    * @param {string} config.token - Token to start the room with.
-   *    Obtain one from <https://www.haxball.com/headlesstoken>.
+   *    Obtain one from &lt;https://www.haxball.com/headlesstoken>.
    * @param {string} [config.roomName] - Room name.
    * @param {string} [config.playerName] - Host player name.
    * @param {int} [config.maxPlayers] - Max players.
    * @param {boolean} [config.public] - Should the room be public?
    * @param {object} [config.geo] - Geolocation override for the room.
-   * @param {Array.<object>} [config.repositories] - Array of 
+   * @param {Array.&lt;object>} [config.repositories] - Array of 
    *    HHM plugin repositories.
    * 
    *    See [HHM documentation](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins)
@@ -488,7 +580,7 @@ class RoomController extends EventEmitter {
    * 
    * @param {string} fn - Name of the haxball roomObject function.
    * @param {any} ...args - Arguments for the function.
-   * @returns {Promise.<any>} - Return value of the called function.
+   * @returns {Promise.&lt;any>} - Return value of the called function.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -510,7 +602,7 @@ class RoomController extends EventEmitter {
   /**
    * Returns loaded plugins.
    * 
-   * @returns {Promise<Array.<PluginData>>} - Array of plugins.
+   * @returns {Promise&lt;Array.&lt;PluginData>>} - Array of plugins.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -530,7 +622,7 @@ class RoomController extends EventEmitter {
    * Returns PluginData of the given plugin name.
    * 
    * @param {string} name - Name of the plugin.
-   * @returns {Promise.<?PluginData>} - Data of the plugin or `null` if
+   * @returns {Promise.&lt;?PluginData>} - Data of the plugin or `null` if
    *    plugin was not found.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
@@ -550,7 +642,7 @@ class RoomController extends EventEmitter {
    * Enables a HHM plugin with the given name.
    * 
    * @param {string} name - Name of the plugin
-   * @returns {Promise.<boolean>} - `true` if plugin was enabled, `false` otherwise.
+   * @returns {Promise.&lt;boolean>} - `true` if plugin was enabled, `false` otherwise.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -571,10 +663,10 @@ class RoomController extends EventEmitter {
    * If the name is an Array then
    * it disables all the plugins in the given order.
    * 
-   * @param {(string|Array.<string>)} name - Name or array of names of the plugin(s).
+   * @param {(string|Array.&lt;string>)} name - Name or array of names of the plugin(s).
    * @param {boolean} [force=false] - If true all the plugins that depend on
    *    the plugin will get disabled also.
-   * @returns {Promise.<boolean>} - Was the plugin disabled or not?
+   * @returns {Promise.&lt;boolean>} - Was the plugin disabled or not?
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -592,7 +684,7 @@ class RoomController extends EventEmitter {
     } else {
       let depPlugins = await this.getPluginsThatDependOn(name);
       return this.page.evaluate(async (name, depPlugins) => {
-        if (depPlugins && depPlugins.length > 0) {
+        if (depPlugins &amp;&amp; depPlugins.length > 0) {
           await window.hroomie.disablePlugin(depPlugins.map((p) => p.name));
         }
         return window.hroomie.disablePlugin(name);
@@ -604,7 +696,7 @@ class RoomController extends EventEmitter {
    * Gets a list of plugins that depend on the given plugin.
    * 
    * @param {string} name - name of the plugin
-   * @returns {Promise<Array.<PluginData>>} - array of plugins
+   * @returns {Promise&lt;Array.&lt;PluginData>>} - array of plugins
    *
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -633,7 +725,7 @@ class RoomController extends EventEmitter {
    * 
    * @param {string|function} pageFunction - JavaScript to evaluate.
    * @param {...Serializable|...JSHandle} [args] - Arguments to pass to `js`.
-   * @returns {Promise.<Serializable>} -  Promise which resolves to the 
+   * @returns {Promise.&lt;Serializable>} -  Promise which resolves to the 
    *    return value of pageFunction.
 
    * @throws {UnusableError} - The instance is no longer usable due to some
@@ -650,7 +742,7 @@ class RoomController extends EventEmitter {
   /**
    * Checks if the room has a plugin with given name loaded.
    * @param {string} name - Name of the plugin.
-   * @returns {Promise.<boolean>} - `true` if it had the plugin, `false` if not.
+   * @returns {Promise.&lt;boolean>} - `true` if it had the plugin, `false` if not.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -676,7 +768,7 @@ class RoomController extends EventEmitter {
    * 
    * @param {string|PluginDef} plugin - Plugins name if loading from repositories
    *    or plugin definition if loading it from a string.
-   * @returns {Promise.<number>} - Plugin ID if the plugin and all of its dependencies
+   * @returns {Promise.&lt;number>} - Plugin ID if the plugin and all of its dependencies
    *    have been loaded, -1 otherwise.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
@@ -721,7 +813,7 @@ class RoomController extends EventEmitter {
    * @param {object|string} repository - The repository to be added.
    * @param {boolean} [append] - Whether to append or prepend the repository 
    *    to the Array of repositories.
-   * @returns {Promise.<boolean>} - Whether the repository was successfully added.
+   * @returns {Promise.&lt;boolean>} - Whether the repository was successfully added.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -742,7 +834,7 @@ class RoomController extends EventEmitter {
 
   /**
    * Returns available repositories.
-   * @returns {Array.<object|string>} - An array of available repositories.
+   * @returns {Array.&lt;object|string>} - An array of available repositories.
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -792,9 +884,9 @@ class RoomController extends EventEmitter {
 
         let pluginId = HHM.manager.getPluginId(pluginName);
         
-        if (pluginId < 0) {
+        if (pluginId &lt; 0) {
           pluginId = await HHM.manager.addPluginByName(pluginName);
-          if (pluginId < 0) {
+          if (pluginId &lt; 0) {
             throw new Error(
               `Cannot load plugin "${pluginName}" from available repositories.`
             );
@@ -814,9 +906,9 @@ class RoomController extends EventEmitter {
 
         let pluginId = manager.getPluginId(name);
         
-        if (pluginId < 0) {
+        if (pluginId &lt; 0) {
           pluginId = await manager.addPluginByName(name);
-          if (pluginId < 0) {
+          if (pluginId &lt; 0) {
             return;
           }
         }
@@ -831,7 +923,7 @@ class RoomController extends EventEmitter {
    * if `pluginName` is given, then return the config for that plugin.
    * 
    * @param {string} [pluginName] - The name of the plugin.
-   * @returns {Promise.<object>} - The config object of plugin(s).
+   * @returns {Promise.&lt;object>} - The config object of plugin(s).
    * 
    * @throws {UnusableError} - The instance is no longer usable due to some
    *    fatal error in browser or if the tab has been closed.
@@ -868,4 +960,38 @@ class RoomController extends EventEmitter {
   }
 }
 
-module.exports = RoomController;
+module.exports = RoomController;</code></pre>
+		</section>
+			</div>
+		</div>
+	</div>
+	<footer>
+				<div class="copyright">© Oskari Pöntinen 2019</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 2nd Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+	</footer>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/clipboard.min.js"></script>
+	<script src="js/prism.min.js"></script>
+	<script src="js/template.min.js"></script>
+		<!-- start:lunr-search-modal.hbs -->
+		<div class="modal fade" id="lunr-search-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Search results</h4>
+					</div>
+					<div class="modal-body" id="lunr-search-body">
+					</div>
+					<div class="modal-footer" id="lunr-search-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div>
+		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
+	
+</body>
+</html>
+<!-- end:source.tmpl.hbs -->
