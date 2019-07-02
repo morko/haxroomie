@@ -34,7 +34,7 @@ const argv = require(`yargs`)
   .alias(`t`, `timeout`)
   .describe(`timeout`, `How long to wait before failing to start room. `
     + `Try adjusting this if your room starting times out often.`)
-  .default(`timeout`, 30)
+  .default(`timeout`, 40)
 
   .boolean(`no-sandbox`)
   .describe(`no-sandbox`, `Makes chrome run without sandbox (useful only if `
