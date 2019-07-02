@@ -1,9 +1,10 @@
 # Changelog
 
-### 1.1.0 (not yet released)
+### 1.1.0
 
 #### Potentially breaking changes
 
+- Haxroomie is now released to `npm` and installing with git is no longer recommended.
 - Config is now loaded from `~/.haxroomie/config.js` by default. If `~/.haxroomie/config.js` does not exist, one is created from an example config.
 - The `user-data-dir` is now loaded from `~/.haxroomie/user-data-dir` by default. Copy your `user-data-dir` there or use the `-d` argument for haxroomie if you have some data you do not want to loose.
 - The `banlist` command is now hidden in CLI unless you load the `hr/kickban` plugin from [my plugin repository](https://github.com/morko/hhm-sala-plugins) (also the `!kick`, `!ban` and `!banlist` commands in the room won't exist if this plugin is not loaded)
@@ -11,6 +12,12 @@
 - The API of `RoomController` has changed so that now the methods can throw bunch of custom errors for better error handling. Please review the new API at [documentation website](https://morko.github.io/haxroomie/RoomController.html).
 
 \* *`~` is a shorthand for users home directory in Linux*
+
+#### Migration guide from 1.0.x => 1.1.0
+
+1. Copy your config to `~/.haxroomie/config.js`.
+2. Copy the `user-data-dir` in the `haxroomie` folder to `~/.haxroomie/user-data-dir`.
+3. Follow installatin instructions in [README](https://github.com/morko/haxroomie#installation)
 
 #### New features (CLI)
 
