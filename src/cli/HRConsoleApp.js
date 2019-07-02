@@ -22,6 +22,7 @@ class HRConsoleApp {
     this.noSandbox = opt.noSandbox;
     this.headless = opt.headless;
     this.port = opt.port;
+    this.timeout = opt.timeout || 30;
 
     this.config = null;
     this.currentRoom = null;
@@ -34,7 +35,8 @@ class HRConsoleApp {
       userDataDir: this.userDataDir,
       noSandbox: this.noSandbox,
       headless: this.headless,
-      port: this.port
+      port: this.port,
+      timeout: this.timeout
     });
 
     this.haxroomie.on('room-added', (room) => this.onNewRoom(room));

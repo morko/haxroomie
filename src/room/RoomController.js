@@ -179,8 +179,8 @@ class RoomController extends EventEmitter {
    * @param {object} opt - Options.
    * @param {object} opt.id - ID for the room.
    * @param {object} opt.page - Puppeteer.Page object to control.
-   * @param {number} [opt.timeout=30] - Time to wait in seconds for the room to
-   *    open.
+   * @param {number} [opt.timeout=30] - Max time to wait in seconds for the
+   *    room to open.
    */
   constructor(opt) {
     super();

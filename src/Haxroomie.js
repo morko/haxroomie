@@ -49,6 +49,8 @@ class Haxroomie extends EventEmitter {
    * @param {boolean} [opt.userDataDir] - Path to where
    *    browser should store data like localStorage. Defaults to [project
    *    root directory]/user-data-dir.
+   * @param {boolean} [opt.timeout=30] - How long to wait for a room to open
+   *    before failing.
    */
   constructor(opt) {
     super();
@@ -68,6 +70,7 @@ class Haxroomie extends EventEmitter {
     this.headless = opt.hasOwnProperty('headless') ? opt.headless : true;
     this.userDataDir = opt.userDataDir || path.join(__dirname, '..', 'user-data-dir');
     this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
+    this.timeout = opt.timeout || 30;
   }
 
   /**
@@ -263,6 +266,7 @@ class Haxroomie extends EventEmitter {
     let room = new RoomController({
       page: page,
       id: id,
+      timeout: this.timeout
     });
 
     return room;

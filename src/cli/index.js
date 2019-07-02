@@ -31,6 +31,11 @@ const argv = require(`yargs`)
     + `the data like localStorage.`)
   .default(`user-data-dir`, path.join(configDir, 'user-data-dir'))
   
+  .alias(`t`, `timeout`)
+  .describe(`timeout`, `How long to wait before failing to start room. `
+    + `Try adjusting this if your room starting times out often.`)
+  .default(`timeout`, 30)
+
   .boolean(`no-sandbox`)
   .describe(`no-sandbox`, `Makes chrome run without sandbox (useful only if `
     + `running with sandbox wont work in your machine)`)
