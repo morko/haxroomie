@@ -14,7 +14,7 @@ module.exports = {
   },
   vjsdoc: {
     template: 'docs-config/vtemplates/haxroomie',
-    version: 'latest',
+    version: '1.1.0',
     opts: {
       title: 'Haxroomie documentation'
     }

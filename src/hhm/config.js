@@ -6,7 +6,7 @@ hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
 HHM.config.logLevel = hrConfig.hhmDebug ? 'debug' : undefined;
 
 // set the version of HHM to use
-HHM.config.version = hrConfig.hhmVersion || 'git';
+HHM.config.version = hrConfig.hhmVersion || '0.9.2';
 
 HHM.config.room = {
   roomName: hrConfig.roomName || `haxroomie`,
