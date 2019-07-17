@@ -40,6 +40,8 @@
 											<li><a href="global.html#FileDef">FileDef</a></li>
 											<li><a href="global.html#PluginData">PluginData</a></li>
 											<li><a href="global.html#PluginDef">PluginDef</a></li>
+											<li><a href="global.html#Repository">Repository</a></li>
+											<li><a href="global.html#RepositoryData">RepositoryData</a></li>
 											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
 									</ul>
 								</li>
@@ -47,6 +49,8 @@
 									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 									<ul class="dropdown-menu">
 											<li><a href="Haxroomie.html">Haxroomie</a></li>
+											<li><a href="PluginController.html">PluginController</a></li>
+											<li><a href="RepositoryController.html">RepositoryController</a></li>
 											<li><a href="RoomController.html">RoomController</a></li>
 									</ul>
 								</li>
@@ -95,171 +99,6 @@
 							<article class="secondary">
 									<h3>Type Definitions</h3>
 									<dl class="symbol">
-											<hr/>
-											<dt class="symbol-title typedef public collapsible-symbol">
-			<h4 id="RoomEventArgs" class="typedef public"><span class="name">RoomEventArgs</span></h4>
-		</dt>
-<dd class="symbol-details typedef public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event argument object that gets sent from the browser when a room event happens.</p>
-			<p>The <code>handlerName</code> can be one of the following:
-			<code>onPlayerJoin</code>
-			<code>onPlayerLeave</code>
-			<code>onTeamVictory</code>
-			<code>onPlayerChat</code>
-			<code>onTeamGoal</code>
-			<code>onGameStart</code>
-			<code>onGameStop</code>
-			<code>onPlayerAdminChange</code>
-			<code>onPlayerTeamChange</code>
-			<code>onPlayerKicked</code>
-			<code>onGamePause</code>
-			<code>onGameUnpause</code>
-			<code>onPositionsReset</code>
-			or
-			<code>onStadiumChange</code></p>
-			<p>See the
-			<a href="https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject">roomObject documentation</a>
-			to find out what kind of arguments to expect.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Properties</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>handlerName</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>Name of the haxball room event handler
-			function that got triggered.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>args</code></td>
-							<td><span class="param-type">Array.&lt;any></span></td>
-							<td class="last">
-									<p>Arguments that the event handler function
-			received.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-112">line 112</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title typedef public collapsible-symbol">
-			<h4 id="FileDef" class="typedef public"><span class="name">FileDef</span></h4>
-		</dt>
-<dd class="symbol-details typedef public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Object containing files name and content.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Properties</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>name</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>Files name.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>content</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>UTF-8 encoded contents of the file.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-							<!-- type -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Type</label>
-								<div class="col-sm-9">
-									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
-								</div>
-							</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-143">line 143</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
 											<hr/>
 											<dt class="symbol-title typedef public collapsible-symbol">
 			<h4 id="PluginDef" class="typedef public"><span class="name">PluginDef</span></h4>
@@ -326,7 +165,145 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-151">line 151</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-1">line 1</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title typedef public collapsible-symbol">
+			<h4 id="Repository" class="typedef public"><span class="name">Repository</span></h4>
+		</dt>
+<dd class="symbol-details typedef public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Repository definition.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Properties</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>type</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes"></td>
+							<td class="last">
+									<p>Repository type. Can be one of <code>github</code>, <code>url</code>
+			or <code>local</code>.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>repository</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>github</code> this is a
+			<strong>mandatory</strong> field. If your GitHub repository is at
+			<code>https://github.com/user/repository</code> then this value should be
+			<code>user/repository</code>.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>path</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>github</code> this is an <strong>optional</strong>
+			field. The path under the repository where the plugins are. Default is
+			<code>src</code>.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>version</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>github</code> this is an <strong>optional</strong>
+			field. This is the branch, tag or commit of the repository you want to
+			use.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>url</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>url</code> this is a <strong>mandatory</strong>
+			field. The URL to your repository. Take care that your host has CORS
+			enabled.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>plugins</code></td>
+							<td><span class="param-type">object</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>local</code> this is a
+			<strong>mandatory</strong> field. This property contains the code for plugins in
+			a <code>local</code> repository.</p>
+			<p>e.g.</p>
+			<pre class="prettyprint source lang-js"><code>{
+			  type: 'local',
+			  plugins: {
+			    'pluginName1': 'JavaScript code',
+			    'pluginName2': 'JavaScript code'
+			  }
+			}
+			</code></pre>
+							</td>
+						</tr>
+						<tr>
+								<td><code>path</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>When type is <code>local</code> this is an
+			<strong>optional</strong> field. This property contains the path from where the
+			local repository has been loaded.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-1">line 1</a></p>
 								</div>
 							</div>
 			
@@ -417,7 +394,272 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-160">line 160</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-10">line 10</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title typedef public collapsible-symbol">
+			<h4 id="RoomEventArgs" class="typedef public"><span class="name">RoomEventArgs</span></h4>
+		</dt>
+<dd class="symbol-details typedef public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Event argument object that gets sent from the browser when a room event happens.</p>
+			<p>The <code>handlerName</code> can be one of the following:
+			<code>onPlayerJoin</code>
+			<code>onPlayerLeave</code>
+			<code>onTeamVictory</code>
+			<code>onPlayerChat</code>
+			<code>onTeamGoal</code>
+			<code>onGameStart</code>
+			<code>onGameStop</code>
+			<code>onPlayerAdminChange</code>
+			<code>onPlayerTeamChange</code>
+			<code>onPlayerKicked</code>
+			<code>onGamePause</code>
+			<code>onGameUnpause</code>
+			<code>onPositionsReset</code>
+			or
+			<code>onStadiumChange</code></p>
+			<p>See the
+			<a href="https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject">roomObject documentation</a>
+			to find out what kind of arguments to expect.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Properties</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>handlerName</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>Name of the haxball room event handler
+			function that got triggered.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>args</code></td>
+							<td><span class="param-type">Array.&lt;any></span></td>
+							<td class="last">
+									<p>Arguments that the event handler function
+			received.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-14">line 14</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title typedef public collapsible-symbol">
+			<h4 id="RepositoryData" class="typedef public"><span class="name">RepositoryData</span></h4>
+		</dt>
+<dd class="symbol-details typedef public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Repository data.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Properties</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes"></td>
+							<td class="last">
+									<p>Name of the repository.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>description</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Description of repository.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>author</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Author of the repository.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>plugins</code></td>
+							<td><span class="param-type">Array.&lt;string></span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Plugins that the repository contains.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>config</code></td>
+							<td><span class="param-type">object</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Configuration object for this repository.
+			Can for example define the path of where to load the plugins.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-39">line 39</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title typedef public collapsible-symbol">
+			<h4 id="FileDef" class="typedef public"><span class="name">FileDef</span></h4>
+		</dt>
+<dd class="symbol-details typedef public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Object containing files name and content.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Properties</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>Files name.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>content</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>UTF-8 encoded contents of the file.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+							<!-- type -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Type</label>
+								<div class="col-sm-9">
+									<div class="form-control-static type-names"><span class="param-type">Object</span></div>
+								</div>
+							</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-45">line 45</a></p>
 								</div>
 							</div>
 			
@@ -438,7 +680,7 @@
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 2nd Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 30th Jul 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Haxroomie</title>
+		<title>PluginController</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -85,7 +85,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">class</span>
-				<h1><span class="name">Haxroomie</span></h1>
+				<h1><span class="name">PluginController</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -94,120 +94,17 @@
 						<ol class="breadcrumb">
 							<li><a href="index.html">Home</a></li>
 							<li><a href="list_class.html">Classes</a></li>
-							<li class="active">Haxroomie</li>
+							<li class="active">PluginController</li>
 						</ol>
 					<section>
 							<dl class="symbol primary">
 								<dt class="symbol-title class collapsible-symbol expanded">
-			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">Haxroomie</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"></span></h2>
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">PluginController</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
 </dt>
 <dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Class for spawning the headless chrome browser and managing
-			<a href="RoomController.html">RoomControllers</a>.</p>
-			<p>Each <a href="RoomController.html">RoomController</a> controls one room
-			running in a browsers tab.</p>
-			<p>After creating the Haxroomie instance it is required to launch the browser
-			with the <a href="Haxroomie.html#launchBrowser">launchBrowser method</a> before
-			anything else.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>opt</code></td>
-							<td><span class="param-type">object</span></td>
-							<td class="last">
-									<p>options</p>
-										<table class="params table table-striped">
-											<thead>
-											<tr>
-													<th>Name</th>
-												<th>Type</th>
-													<th>Attributes</th>
-													<th>Default</th>
-												<th class="last">Description</th>
-											</tr>
-											</thead>
-											<tbody>
-												<tr>
-														<td><code>viewport</code></td>
-													<td><span class="param-type">object</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td>{ width: 400, height: 500 }</td>
-													<td class="last">
-															<p>Viewport
-									size settings for the browser.</p>
-													</td>
-												</tr>
-												<tr>
-														<td><code>port</code></td>
-													<td><span class="param-type">number</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td>3066</td>
-													<td class="last">
-															<p>Port that the headless browser will use
-									as the remote-debugging-port to communicate with Haxroomie. Use a
-									port that is not open outside your LAN!</p>
-													</td>
-												</tr>
-												<tr>
-														<td><code>noSandbox</code></td>
-													<td><span class="param-type">boolean</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td>false</td>
-													<td class="last">
-															<p>Makes the browser run without
-									sandbox. Useful only if it gives you error in sandboxed mode. It is
-									not recommended to set this true for security reasons.</p>
-													</td>
-												</tr>
-												<tr>
-														<td><code>headless</code></td>
-													<td><span class="param-type">boolean</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td>true</td>
-													<td class="last">
-															<p>Setting this to false will make
-									puppeteer try to spawn a browser window. Useful for debugging.</p>
-													</td>
-												</tr>
-												<tr>
-														<td><code>userDataDir</code></td>
-													<td><span class="param-type">boolean</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td></td>
-													<td class="last">
-															<p>Path to where
-									browser should store data like localStorage. Defaults to [project
-									root directory]/user-data-dir.</p>
-													</td>
-												</tr>
-												<tr>
-														<td><code>timeout</code></td>
-													<td><span class="param-type">boolean</span></td>
-														<td class="attributes">&lt;optional&gt;<br/></td>
-														<td>30</td>
-													<td class="last">
-															<p>How long to wait for a room to open
-									before failing.</p>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Class for controlling Haxball Headless Manager (HHM) plugins.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -227,7 +124,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-55">line 55</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-24">line 24</a></p>
 								</div>
 							</div>
 			
@@ -243,13 +140,21 @@
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="launchBrowser" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">launchBrowser</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+			<h4 id="getPlugins" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugins</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Launches the puppeteer controlled browser using the remote-debugging-port
-			given in Haxroomie classes constructor. It is only possible to launch one
-			browser.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns loaded plugins.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Array of plugins.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
 			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
@@ -270,7 +175,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-81">line 81</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-35">line 35</a></p>
 								</div>
 							</div>
 			
@@ -282,48 +187,11 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="closeBrowser" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">closeBrowser</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+			<h4 id="getPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;?<a href="global.html#PluginData">PluginData</a>>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Closes the puppeteer controlled browser.</p></div>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-118">line 118</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="hasRoom" class="function public"><span class="name">hasRoom</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{boolean}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Checks if there is a room running with the given id.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns PluginData of the given plugin name.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -336,10 +204,10 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">number</span></td>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
 							<td class="last">
-									<p>An id of the room.</p>
+									<p>Name of the plugin.</p>
 							</td>
 						</tr>
 					</tbody>
@@ -347,10 +215,11 @@
 			</div>
 			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">boolean</span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;?<a href="global.html#PluginData">PluginData</a>></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>Is there a room with given id?</li>
+			<li>Data of the plugin or <code>null</code> if
+			plugin was not found.</li>
 			</ul></div>
 								</div>
 							</div>
@@ -375,7 +244,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-152">line 152</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-49">line 49</a></p>
 								</div>
 							</div>
 			
@@ -387,11 +256,11 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getRoom" class="function public"><span class="name">getRoom</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="RoomController.html">RoomController</a>}</span></h4>
+			<h4 id="enablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">enablePlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns a RoomController with the given id.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Enables a HHM plugin with the given name.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -404,10 +273,10 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">number</span></td>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
 							<td class="last">
-									<p>An id of the room.</p>
+									<p>Name of the plugin</p>
 							</td>
 						</tr>
 					</tbody>
@@ -415,11 +284,10 @@
 			</div>
 			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="RoomController.html">RoomController</a></span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>RoomController with the given id or
-			undefined if there is no such room.</li>
+			<li><code>true</code> if plugin was enabled, <code>false</code> otherwise.</li>
 			</ul></div>
 								</div>
 							</div>
@@ -444,7 +312,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-164">line 164</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-61">line 61</a></p>
 								</div>
 							</div>
 			
@@ -456,17 +324,54 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getRooms" class="function public"><span class="name">getRooms</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;<a href="RoomController.html">RoomController</a>>}</span></h4>
+			<h4 id="disablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">disablePlugin</span><span class="signature-params">( <span class="signature-param">name</span> [,&nbsp;<span class="signature-param">force</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns an array of available RoomControllers.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Disables a HHM plugin with the given name.</p>
+			<p>If the name is an Array then
+			it disables all the plugins in the given order.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+							<th>Default</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span> | <span class="param-type">Array.&lt;string></span></td>
+								<td class="attributes"></td>
+								<td></td>
+							<td class="last">
+									<p>Name or array of names of the plugin(s).</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>force</code></td>
+							<td><span class="param-type">boolean</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+								<td>false</td>
+							<td class="last">
+									<p>If true all the plugins that depend on
+			the plugin will get disabled also.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;<a href="RoomController.html">RoomController</a>></span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>Available RoomControllers.</li>
+			<li>Was the plugin disabled or not?</li>
 			</ul></div>
 								</div>
 							</div>
@@ -491,7 +396,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-174">line 174</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-78">line 78</a></p>
 								</div>
 							</div>
 			
@@ -503,61 +408,11 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="getFirstRoom" class="function public"><span class="name">getFirstRoom</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{<a href="RoomController.html">RoomController</a>}</span></h4>
+			<h4 id="getPluginsThatDependOn" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginsThatDependOn</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns the RoomController that was first added.</p></div>
-			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="RoomController.html">RoomController</a></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>First RoomController or
-			undefined if there is no such room.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-187">line 187</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="removeRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">removeRoom</span><span class="signature-params">( <span class="signature-param">id</span>&nbsp;)</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Removes a RoomController with the given id.</p>
-			<p>Removing deletes the RoomController and closes the browser tab
-			it is controlling.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Gets a list of plugins that depend on the given plugin.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -570,15 +425,26 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">number</span></td>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
 							<td class="last">
+									<p>name of the plugin</p>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;<a href="global.html#PluginData">PluginData</a>>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>array of plugins</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
 			
 			
 			
@@ -598,7 +464,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-201">line 201</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-101">line 101</a></p>
 								</div>
 							</div>
 			
@@ -610,11 +476,158 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="addRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addRoom</span><span class="signature-params">( <span class="signature-param">id</span> [,&nbsp;<span class="signature-param">config</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="RoomController.html">RoomController</a>}</span></h4>
+			<h4 id="hasPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">hasPlugin</span><span class="signature-params">( <span class="signature-param">name</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Creates and adds a new RoomController with the given id.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Checks if the room has a plugin with given name loaded.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>name</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>Name of the plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li><code>true</code> if it had the plugin, <code>false</code> if not.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-113">line 113</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="addPlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addPlugin</span><span class="signature-params">( <span class="signature-param">plugin</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;number>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a new plugin.</p>
+			<p>If the <code>plugin</code> is <code>string</code>, then it will be loaded from the available
+			repositories.</p>
+			<p>If the <code>plugin</code> is <a href="global.html#PluginDef">PluginDef</a>, then it will be loaded
+			from contents of <code>PluginDef</code>.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>plugin</code></td>
+							<td><span class="param-type">string</span> | <span class="param-type"><a href="global.html#PluginDef">PluginDef</a></span></td>
+							<td class="last">
+									<p>Plugins name if loading from repositories
+			or plugin definition if loading it from a string.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;number></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Plugin ID if the plugin and all of its dependencies
+			have been loaded, -1 otherwise.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-133">line 133</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="setPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">setPluginConfig</span><span class="signature-params">( <span class="signature-param">pluginConfig</span> [,&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Sets the rooms plugin config.</p>
+			<p>Tries to load plugins that are not loaded from the available
+			repositories.</p>
+			<p><strong>Plugins will not get unloaded using this method.</strong></p>
+			<p>If <code>pluginName</code> is given then only config for the given plugin
+			is set.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -628,20 +641,81 @@
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>id</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">number</span></td>
+								<td><code>pluginConfig</code></td>
+							<td><span class="param-type">object</span></td>
 								<td class="attributes"></td>
 							<td class="last">
-									<p>Id for the RoomController.</p>
+									<p>Room wide config or plugins config.</p>
 							</td>
 						</tr>
 						<tr>
-								<td><code>config</code></td>
-							<td><span class="param-type">object</span></td>
+								<td><code>pluginName</code></td>
+							<td><span class="param-type">string</span></td>
 								<td class="attributes">&lt;optional&gt;<br/></td>
 							<td class="last">
-									<p>Optional parameters for the
-			<a href="RoomController.html#init">RoomController#init()</a> method.</p>
+									<p>Name of the plugin if wanting to change
+			config of only one plugin.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-167">line 167</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getPluginConfig" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getPluginConfig</span><span class="signature-params">( [&nbsp;<span class="signature-param">pluginName</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;object>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns the plugin config for all loaded plugins in the room or
+			if <code>pluginName</code> is given, then return the config for that plugin.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>pluginName</code></td>
+							<td><span class="param-type">string</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>The name of the plugin.</p>
 							</td>
 						</tr>
 					</tbody>
@@ -649,10 +723,10 @@
 			</div>
 			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="RoomController.html">RoomController</a></span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;object></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>The created RoomController.</li>
+			<li>The config object of plugin(s).</li>
 			</ul></div>
 								</div>
 							</div>
@@ -677,126 +751,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-224">line 224</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-									</dl>
-									<h3>Events</h3>
-									<dl class="symbol">
-											<hr/>
-											<dt class="symbol-title event public collapsible-symbol">
-			<h4 id="event:room-added" class="event public"><span class="name">room-added</span></h4>
-		</dt>
-<dd class="symbol-details event public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Emitted when new RoomController is added.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>room</code></td>
-							<td><span class="param-type"><a href="RoomController.html">RoomController</a></span></td>
-							<td class="last">
-									<p>The added RoomController.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-7">line 7</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title event public collapsible-symbol">
-			<h4 id="event:room-removed" class="event public"><span class="name">room-removed</span></h4>
-		</dt>
-<dd class="symbol-details event public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Emitted when RoomController is removed.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>room</code></td>
-							<td><span class="param-type"><a href="RoomController.html">RoomController</a></span></td>
-							<td class="last">
-									<p>The removed RoomController.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_Haxroomie.js.html">src/Haxroomie.js</a>, <a href="src_Haxroomie.js.html#line-13">line 13</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-221">line 221</a></p>
 								</div>
 							</div>
 			

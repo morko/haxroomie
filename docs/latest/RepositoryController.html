@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>haxroomie</title>
+		<title>RepositoryController</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -84,8 +84,8 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">module</span>
-				<h1><span class="name">haxroomie</span></h1>
+				<span class="kind">class</span>
+				<h1><span class="name">RepositoryController</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -93,62 +93,62 @@
 			<div class="col-md-9 main-content">
 						<ol class="breadcrumb">
 							<li><a href="index.html">Home</a></li>
-							<li><a href="list_module.html">Modules</a></li>
-							<li class="active">haxroomie</li>
+							<li><a href="list_class.html">Classes</a></li>
+							<li class="active">RepositoryController</li>
 						</ol>
 					<section>
-		<dl class="symbol">
-			<dt class="symbol-title "></dt>
-			<dd class="symbol-details ">
-				<div class="symbol-details-inner">
-					<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Main module of Haxroomie.</p>
-					<p>Can be obtained with</p>
-					<pre class="prettyprint source lang-js"><code>const haxroomie = require('haxroomie');
-					</code></pre></div>
-					</div>					<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-									<!-- source -->
-									<div class="form-group">
-										<label class="col-sm-3 control-label">Source</label>
-										<div class="col-sm-9">
-											<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-3">line 3</a></p>
-										</div>
-									</div>
-					
-					
-					
-					
-							</form>
-					</div>				</div>
-			</dd>
-		</dl>
+							<dl class="symbol primary">
+								<dt class="symbol-title class collapsible-symbol expanded">
+			<h2 class="class"><span class="signature-new">new&nbsp;</span><span class="name">RepositoryController</span><span class="signature-params">()</span><span class="signature-type"></span></h2>
+</dt>
+<dd class="symbol-details class  collapsible-symbol expanded" style="max-height: 9999px;">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description classdesc"><p>Class for controlling Haxball Headless Manager (HHM) repositories.</p></div>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-56">line 56</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+							</dl>
 							<article class="secondary">
 									<h3>Methods</h3>
 									<dl class="symbol">
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="~createHaxroomie" class="function public"><span class="signature-attribs">&lt;async, inner> </span><span class="name">createHaxroomie</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="Haxroomie.html">Haxroomie</a>}</span></h4>
+			<h4 id="addRepository" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">addRepository</span><span class="signature-params">( <span class="signature-param">repository</span> [,&nbsp;<span class="signature-param">append</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Asynchronous factory function to create an instance of
-			<a href="Haxroomie.html">Haxroomie</a> without
-			the need to call <a href="Haxroomie.html#launchBrowser">Haxroomie#launchBrowser</a>
-			after constructing the object.</p></div>
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Adds a repository.</p>
+			<p>If append is set to true, the new repository will be added with the
+			lowest priority, i.e. plugins will only be loaded from it they can't
+			be found in any other repository. Otherwise the repository will be
+			added with the highest priority.</p></div>
 			</div>			<div class="callout callout-info">
 				<h5>Parameters</h5>
 				<table class="params table table-striped">
@@ -156,15 +156,26 @@
 					<tr>
 							<th>Name</th>
 						<th>Type</th>
+							<th>Attributes</th>
 						<th class="last">Description</th>
 					</tr>
 					</thead>
 					<tbody>
 						<tr>
-								<td><code>opt</code></td>
-							<td><span class="param-type">object</span></td>
+								<td><code>repository</code></td>
+							<td><span class="param-type"><a href="global.html#Repository">Repository</a></span></td>
+								<td class="attributes"></td>
 							<td class="last">
-									<p>Options for the Haxroomie constructor.</p>
+									<p>The repository to be added.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>append</code></td>
+							<td><span class="param-type">boolean</span></td>
+								<td class="attributes">&lt;optional&gt;<br/></td>
+							<td class="last">
+									<p>Whether to append or prepend the repository
+			to the Array of repositories.</p>
 							</td>
 						</tr>
 					</tbody>
@@ -172,11 +183,10 @@
 			</div>
 			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="Haxroomie.html">Haxroomie</a></span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>Ready to use instance of
-			<a href="Haxroomie.html">Haxroomie</a>.</li>
+			<li>Whether the repository was successfully added.</li>
 			</ul></div>
 								</div>
 							</div>
@@ -201,7 +211,124 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-30">line 30</a></p>
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-76">line 76</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getRepositories" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getRepositories</span><span class="signature-params">()</span><span class="signature-type"> &rarr;&nbsp;{Array.&lt;<a href="global.html#Repository">Repository</a>>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Returns available repositories.</p></div>
+			</div>			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Array.&lt;<a href="global.html#Repository">Repository</a>></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>An array of available repositories.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-91">line 91</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="getRepositoryInformation" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">getRepositoryInformation</span><span class="signature-params">( <span class="signature-param">repository</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="global.html#RepositoryData">RepositoryData</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Retrieves information about the given repository.</p>
+			<p>The information is loaded from repositorys <code>repository.json</code> config file.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>repository</code></td>
+							<td><span class="param-type"><a href="global.html#Repository">Repository</a></span></td>
+							<td class="last">
+									<p>The repository that you want to get
+			information from.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="global.html#RepositoryData">RepositoryData</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>The metadata of the repository.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RepositoryController.js.html">src/room/RepositoryController.js</a>, <a href="src_room_RepositoryController.js.html#line-105">line 105</a></p>
 								</div>
 							</div>
 			

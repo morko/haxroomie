@@ -96,6 +96,7 @@ class Commands extends CommandHandler {
   onCommand_link() {
     return {
       description: 'Get the room link.',
+      disabled: !this.room.running,
       run: () => {
         if (!this.room.running) {
           cprompt.print(`Room is not running!`);
@@ -122,8 +123,22 @@ class Commands extends CommandHandler {
       description: `Closes room with given id (see ${colors.cyan('rooms')} for the ids).`,
       args: ['id'],
       alias: ['stop'],
-      run: (id) => {
+      run: async (id) => {
         return this.closeRoom(id);
+      }
+    }
+  }
+
+  onCommand_init() {
+    return {
+      description: `Reloads and initializes the room if it for some reason ` +
+        `goes to an unusable state.`,
+      args: ['id'],
+      run: async (id) => {
+        cprompt.print(`${colors.cyan(id)}`, 'INITIALIZING ROOM');
+        await this.haxroomie.removeRoom(id);
+        await this.haxroomie.addRoom(id);
+        cprompt.print(`${colors.cyan(id)}`, 'ROOM INITIALIZED');
       }
     }
   }
@@ -192,7 +207,7 @@ class Commands extends CommandHandler {
             if (pluginConfig) {
               cprompt.print(`Setting plugin config for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
               try {
-                await room.setPluginConfig(roomConfig.pluginConfig);
+                await room.plugins.setPluginConfig(roomConfig.pluginConfig);
               } catch (err) {
                 cprompt.print(err.message);
                 logger.debug(err.stack);
@@ -210,10 +225,15 @@ class Commands extends CommandHandler {
       run: async () => {
         let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(rooms.map(async (r) => {
+          let id = colors.cyan(r.id);
+
+          if (!r.usable) {
+            return `id: ${id} - ${colors.red('not usable')} - ` +
+              `reinitialize with "init ${id}"`;
+          }
           let isRunning = r.running ?
             colors.green('running') :
             colors.yellow('stopped');
-          let id = colors.cyan(r.id);
           if (!r.running) return `id: ${id} - ${isRunning}`;
 
           let roomLink = r.roomInfo.roomLink;
@@ -245,6 +265,7 @@ class Commands extends CommandHandler {
   onCommand_chat() {
     return {
       description: 'Sends a chat message to the room.',
+      disabled: !this.room.running,
       args: ['msg'],
       run: async (msg) => {
         if (!msg && msg !== 0) return;
@@ -256,6 +277,7 @@ class Commands extends CommandHandler {
   onCommand_players() {
     return {
       description: 'Prints players in the room.',
+      disabled: !this.room.running,
       run: async () => {
         let playerList = await this.room.callRoom('getPlayerList')
         playerList = playerList.filter(p => p.id !== 0);
@@ -277,6 +299,7 @@ class Commands extends CommandHandler {
   onCommand_kick() {
     return {
       description: 'Kicks a player with given id.',
+      disabled: !this.room.running,
       args: ['id'],
       run: async (id) => {
         let hasPlayer = await this.checkIfRoomHasPlayer(id);
@@ -291,6 +314,7 @@ class Commands extends CommandHandler {
   onCommand_ban() {
     return {
       description: 'Bans a player with given id.',
+      disabled: !this.room.running,
       args: ['id'],
       run: async (id) => {
         let hasPlayer = await this.checkIfRoomHasPlayer(id);
@@ -306,6 +330,7 @@ class Commands extends CommandHandler {
   onCommand_unban() {
     return {
       description: 'Removes a ban of player with given id.',
+      disabled: !this.room.running,
       args: ['id'],
       run: async (id) => {
         await this.room.callRoom.clearBan(id);
@@ -319,7 +344,7 @@ class Commands extends CommandHandler {
     if (!this.room.running) {
       isDisabled = true;
     } else {
-      isDisabled = await this.room.hasPlugin(('hr/kickban'));
+      isDisabled = await this.room.plugins.hasPlugin(('hr/kickban'));
       isDisabled = !isDisabled;
     }
 
@@ -343,6 +368,7 @@ class Commands extends CommandHandler {
   onCommand_admin() {
     return {
       description: 'Gives admin to a player with given id.',
+      disabled: !this.room.running,
       args: ['id'],
       run: async (id) => {
         let hasPlayer = await this.checkIfRoomHasPlayer(id);
@@ -358,6 +384,7 @@ class Commands extends CommandHandler {
   onCommand_unadmin(id) {
     return {
       description: 'Removes admin from a player with given id.',
+      disabled: !this.room.running,
       args: ['id'],
       run: async (id) => {
         let hasPlayer = await this.checkIfRoomHasPlayer(id);
@@ -373,6 +400,7 @@ class Commands extends CommandHandler {
   onCommand_clearbans() {
     return {
       description: 'Clears all the bans.',
+      disabled: !this.room.running,
       run: async () => {
         await this.room.callRoom('clearBans');
       }
@@ -382,8 +410,9 @@ class Commands extends CommandHandler {
   onCommand_plugins() {
     return {
       description: 'Prints available plugins.',
+      disabled: !this.room.running,
       run: async () => {
-        let plugins = await this.room.getPlugins();
+        let plugins = await this.room.plugins.getPlugins();
         let pluginList = [];
         for (let p of plugins) {
           const isEnabled = p.isEnabled ?
@@ -399,9 +428,10 @@ class Commands extends CommandHandler {
   onCommand_plugin() {
     return {
       description: 'Prints detailed information about given plugin name.',
+      disabled: !this.room.running,
       args: ['name'],
       run: async (name) => {
-        let plugin = await this.room.getPlugin(name);
+        let plugin = await this.room.plugins.getPlugin(name);
         cprompt.print(this.pluginDataToString(plugin));
       }
     }
@@ -410,14 +440,15 @@ class Commands extends CommandHandler {
   onCommand_enable() {
     return {
       description: 'Enables the plugin with given name.',
+      disabled: !this.room.running,
       args: ['name'],
       run: async (name) => {
-        let pluginData = await this.room.getPlugin(name);
+        let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           cprompt.print(`Invalid plugin name: ${name}`, `ERROR`);
           return;
         }
-        await this.room.enablePlugin(name);
+        await this.room.plugins.enablePlugin(name);
       }
     }
   }
@@ -425,19 +456,20 @@ class Commands extends CommandHandler {
   onCommand_disable() {
     return {
       description: 'Disables the plugin with given name.',
+      disabled: !this.room.running,
       args: ['name'],
       run: async (name) => {
-        let pluginData = await this.room.getPlugin(name);
+        let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           cprompt.print(`Invalid plugin name: ${name}`, `ERROR`);
           return;
         }
-        let depPlugins = await this.room.getPluginsThatDependOn(name);
+        let depPlugins = await this.room.plugins.getPluginsThatDependOn(name);
         if (depPlugins && depPlugins.length > 0) {
-          await this.room.disablePlugin(depPlugins.map((p) => p.name));
+          await this.room.plugins.disablePlugin(depPlugins.map((p) => p.name));
         }
-        let success = await this.room.disablePlugin(name);
-        pluginData = await this.room.getPlugin(name);
+        let success = await this.room.plugins.disablePlugin(name);
+        pluginData = await this.room.plugins.getPlugin(name);
 
         if (!success) {
           cprompt.print(`Could not disable ${name}`, `ERROR`);
@@ -449,9 +481,10 @@ class Commands extends CommandHandler {
   onCommand_dependsof() {
     return {
       description: 'Prints the plugins that depend of given plugin.',
+      disabled: !this.room.running,
       args: ['name'],
       run: async (name) => {
-        let plugins = await this.room.getPluginsThatDependOn(name);
+        let plugins = await this.room.plugins.getPluginsThatDependOn(name);
         if (!plugins || plugins.length < 1) {
           cprompt.print(`Plugin ${name} has no plugins that depend on it.`);
           return;

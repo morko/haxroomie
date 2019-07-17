@@ -3,6 +3,10 @@ const colors = require('colors/safe');
 const logger = require('../logger');
 
 const COLORS = {
+  'INITIALIZING ROOM': colors.green,
+  'ROOM INITIALIZED': colors.green.bold,
+  'CLOSING ROOM': colors.yellow,
+  'ROOM CLOSED': colors.yellow.bold,
   'STARTING ROOM': colors.green,
   'ROOM STARTED': colors.green.bold,
   'ROOM NOT STARTED': colors.red.bold,
@@ -137,7 +141,12 @@ function createPrompt() {
  */
 async function onNewLine(line) {
   try {
-    await cmd.execute(line);
+    if (cmd) {
+      await cmd.execute(line);
+    } else {
+      print('Console is not yet ready.')
+    }
+
   } catch (err) {
 
     switch (err.name) {

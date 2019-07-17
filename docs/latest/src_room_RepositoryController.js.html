@@ -1,9 +1,10 @@
+<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>haxroomie</title>
+		<title>src/room/RepositoryController.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -13,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -84,140 +85,131 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">module</span>
-				<h1><span class="name">haxroomie</span></h1>
+				<span class="kind">source</span>
+				<h1><span class="name">src/room/RepositoryController.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-9 main-content">
-						<ol class="breadcrumb">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="list_module.html">Modules</a></li>
-							<li class="active">haxroomie</li>
-						</ol>
-					<section>
-		<dl class="symbol">
-			<dt class="symbol-title "></dt>
-			<dd class="symbol-details ">
-				<div class="symbol-details-inner">
-					<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Main module of Haxroomie.</p>
-					<p>Can be obtained with</p>
-					<pre class="prettyprint source lang-js"><code>const haxroomie = require('haxroomie');
-					</code></pre></div>
-					</div>					<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-									<!-- source -->
-									<div class="form-group">
-										<label class="col-sm-3 control-label">Source</label>
-										<div class="col-sm-9">
-											<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-3">line 3</a></p>
-										</div>
-									</div>
-					
-					
-					
-					
-							</form>
-					</div>				</div>
-			</dd>
-		</dl>
-							<article class="secondary">
-									<h3>Methods</h3>
-									<dl class="symbol">
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="~createHaxroomie" class="function public"><span class="signature-attribs">&lt;async, inner> </span><span class="name">createHaxroomie</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="Haxroomie.html">Haxroomie</a>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Asynchronous factory function to create an instance of
-			<a href="Haxroomie.html">Haxroomie</a> without
-			the need to call <a href="Haxroomie.html#launchBrowser">Haxroomie#launchBrowser</a>
-			after constructing the object.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>opt</code></td>
-							<td><span class="param-type">object</span></td>
-							<td class="last">
-									<p>Options for the Haxroomie constructor.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Repository definition.
+ * 
+ * @typedef {Object} Repository
+ * @property {string} type - Repository type. Can be one of `github`, `url`
+ *    or `local`.
+ * @property {string} [repository] - When type is `github` this is a
+ *    **mandatory** field. If your GitHub repository is at
+ *    `https://github.com/user/repository` then this value should be 
+ *    `user/repository`.
+ * @property {string} [path] - When type is `github` this is an **optional**
+ *    field. The path under the repository where the plugins are. Default is
+ *    `src`.
+ * @property {string} [version] - When type is `github` this is an **optional**
+ *    field. This is the branch, tag or commit of the repository you want to 
+ *    use.
+ * @property {string} [url] - When type is `url` this is a **mandatory**
+ *    field. The URL to your repository. Take care that your host has CORS
+ *    enabled.
+ * @property {object} [plugins] - When type is `local` this is a 
+ *    **mandatory** field. This property contains the code for plugins in
+ *    a `local` repository.
+ * 
+ *    e.g.
+ * ```js
+ * {
+ *   type: 'local',
+ *   plugins: {
+ *     'pluginName1': 'JavaScript code',
+ *     'pluginName2': 'JavaScript code'
+ *   }
+ * }
+ * ```
+ * @property {string} [path] - When type is `local` this is an 
+ *    **optional** field. This property contains the path from where the
+ *    local repository has been loaded.
+ */
+
+/**
+ * Repository data.
+ * 
+ * @typedef {Object} RepositoryData
+ * 
+ * @property {string} name - Name of the repository.
+ * @property {string} [description] - Description of repository.
+ * @property {string} [author] - Author of the repository.
+ * @property {Array.&lt;string>} [plugins] - Plugins that the repository contains.
+ * @property {object} [config] - Configuration object for this repository.
+ *    Can for example define the path of where to load the plugins.
+ */
+
+/**
+ * Class for controlling Haxball Headless Manager (HHM) repositories.
+ */
+class RepositoryController {
+  constructor(opt) {
+    this.page = opt.page;
+    this.running = false;
+    this._usable = false;
+  }
+
+  /**
+   * Adds a repository.
+   *
+   * If append is set to true, the new repository will be added with the 
+   * lowest priority, i.e. plugins will only be loaded from it they can't 
+   * be found in any other repository. Otherwise the repository will be 
+   * added with the highest priority.
+   *
+   * @param {Repository} repository - The repository to be added.
+   * @param {boolean} [append] - Whether to append or prepend the repository 
+   *    to the Array of repositories.
+   * @returns {Promise.&lt;boolean>} - Whether the repository was successfully added.
+   * 
+   */
+  async addRepository(repository, append) {
+    if (!repository) {
+      throw new TypeError('Missing required argument: repository')
+    }
+
+    return this.page.evaluate(async (repository, append) => {
+      return HHM.manager.getPluginLoader().addRepository(repository, append);
+    }, repository, append);
+  }
+
+  /**
+   * Returns available repositories.
+   * @returns {Array.&lt;Repository>} - An array of available repositories.
+   * 
+   */
+  async getRepositories() {
+    return this.page.evaluate(() => {
+      return HHM.manager.getPluginLoader().repositories;
+    });
+  }
+
+  /**
+   * Retrieves information about the given repository.
+   * 
+   * The information is loaded from repositorys `repository.json` config file.
+   * @param {Repository} repository - The repository that you want to get
+   *    information from. 
+   * @returns {RepositoryData} - The metadata of the repository.
+   */
+  async getRepositoryInformation(repository) {
+    return this.page.evaluate(async (rd) => {
+      let r = await HHM.manager.getPluginRepositoryFactory().createRepository(rd);
+      return r.repositoryInformation;
+    }, repository);
+  }
+}
+
+module.exports = RepositoryController;
+</code></pre>
+		</section>
 			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="Haxroomie.html">Haxroomie</a></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Ready to use instance of
-			<a href="Haxroomie.html">Haxroomie</a>.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-30">line 30</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-									</dl>
-							</article>
-					</section>
-			</div>
-				<div class="col-md-3 side-content">
-					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
-				</div>
 		</div>
 	</div>
 	<footer>
@@ -249,3 +241,4 @@
 	
 </body>
 </html>
+<!-- end:source.tmpl.hbs -->

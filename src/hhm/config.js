@@ -1,12 +1,4 @@
-HHM = typeof HHM === `undefined` ? {} : HHM;
-HHM.config = HHM.config || {};
 hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
-
-// set the HHM log level to debug if haxroomie desires so
-HHM.config.logLevel = hrConfig.hhmDebug ? 'debug' : undefined;
-
-// set the version of HHM to use
-HHM.config.version = hrConfig.hhmVersion || 'git';
 
 HHM.config.room = {
   roomName: hrConfig.roomName || `haxroomie`,
@@ -112,18 +104,4 @@ HHM.config.postInit = HBInit => {
   }
 };
 
-// Start HHM.
-if (HHM.manager === undefined) {
-  let s = document.createElement(`script`);
-  // Load the HHM from ´hhm´ property if given. Otherwise from the default URL.
-  if (hrConfig.hhm && hrConfig.hhm.content) {
-    s.innerHTML = hrConfig.hhm.content;
-  } else {
-    if (HHM.config.version === 'git') {
-      s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js?_=${Date.now()}`;
-    } else {
-      s.src = `https://hhm.surge.sh/releases/hhm-${HHM.config.version}.js`;
-    }
-  }
-  document.head.appendChild(s);
-}
+HHM.manager.start();

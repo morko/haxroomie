@@ -45,6 +45,9 @@ module.exports = class RoomOpener extends EventEmitter {
     this.timeout = opt.timeout || 30;
     this.id = opt.id;
 
+    this._hhmVersion = null;
+    this._hhm= null;
+
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
   }
@@ -83,14 +86,6 @@ module.exports = class RoomOpener extends EventEmitter {
 
     config.token = this.trimToken(config.token)
 
-    await this.navigateToHaxballHeadlessPage();
-
-    await this.waitForHaxballToLoad();
-
-    await this.injectSharedStorage();
-
-    await this.injectUtils();
-
     await this.startHHM(config);
 
     let roomLink = await this.waitForHHMToStart(this.timeout * 1000);
@@ -104,10 +99,27 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
+   * Initializes the page so that HHM and required libraries are ready to be
+   * used.
+   * @private
+   */
+  async initializePage({hhmVersion, hhm = {}}) {
+    this._hhmVersion = hhmVersion;
+    this._hhm = hhm;
+
+    await this.navigateToHaxballHeadlessPage();
+    await this.waitForHaxballToLoad();
+    await this.injectSharedStorage();
+    await this.injectUtils();
+    await this.loadHHM({ version: hhmVersion, hhm });
+  }
+
+  /**
    * Closes the room by navigating the tab to about:blank.
    */
   async close() {
-    return this.page.goto('about:blank');
+    await this.page.goto('about:blank');
+    return this.initializePage({hhmVersion: this._hhmVersion, hhm: this._hhm});
   }
   
   /**
@@ -148,6 +160,30 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
+   * @param {object} opt - Options.
+   * @param {string} opt.version - Version of HHM to load.
+   * @param {FileDef} [opt.hhm] - Optionally load HHM from a string.
+   */
+  async loadHHM(opt) {
+    logger.debug('Loading Haxball Headless Manager.');
+
+    const config = {...opt};
+
+    if (process.env.NODE_ENV === 'development') {
+      config.logLevel = 'debug';
+    }
+
+    const hhmLoader = new Function(
+      'config',
+      this.readFile(path.join(__dirname, '..', 'hhm', 'hhm-loader.js'))
+    );
+
+    await this.page.evaluate(hhmLoader, config);
+    await this.page.waitForFunction('typeof HHM === "object"');
+    await this.page.waitForFunction('typeof HHM.manager === "object"');
+  }
+
+  /**
    * Starts Haxball Headless Manager (HHM). If config does not contain
    * hhmConfig the default config is used.
    * 
@@ -155,13 +191,9 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async startHHM(config) {
-    logger.debug('Starting Headless Haxball Manager');
+    logger.debug('Starting Headless Haxball Manager.');
 
     let hrConfig = Object.assign({}, config);
-
-    if (process.env.NODE_ENV === 'development') {
-      hrConfig.hhmDebug = true;
-    }
 
     let configFn;
     try {
@@ -194,7 +226,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async waitForHaxballToLoad() {
-    logger.debug('Waiting for HaxBall to load');
+    logger.debug('Waiting for HaxBall to load.');
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {

@@ -60,9 +60,12 @@ class HRConsoleApp {
    * Creates the rooms.
    */
   async createRooms() {
-    for (let roomId of this.config.getRoomIds()) {
+    const roomIds = this.config.getRoomIds();
+    await Promise.all(roomIds.map(async (roomId) => {
+      cprompt.print(`${colors.cyan(roomId)}`, 'INITIALIZING ROOM');
       await this.haxroomie.addRoom(roomId);
-    }
+      cprompt.print(`${colors.cyan(roomId)}`, 'ROOM INITIALIZED');
+    }));
   }
 
   /**
@@ -70,6 +73,14 @@ class HRConsoleApp {
    */
   async autoStartRooms() {
     for (let id of this.haxroomie.rooms.keys()) {
+      let rConfig = this.config.getRoomConfig(id);
+      let room = this.haxroomie.getRoom(id);
+      if (rConfig.repositories) {
+        for (let r of rConfig.repositories) {
+          let i = await room.repositories.getRepositoryInformation(r);
+          console.log(i);
+        }
+      }
       if (this.config.getRoomConfig(id).autoStart) {
         let roomInfo;
         try {
@@ -119,6 +130,8 @@ class HRConsoleApp {
     room.on(`open-room-start`, (e) => this.onOpenRoomStart(room, e));
     room.on(`open-room-stop`, (e) => this.onOpenRoomStop(room, e));
     room.on(`open-room-error`, (e) => this.onOpenRoomError(room, e));
+    room.on(`close-room-start`, () => this.onCloseRoomStart(room));
+    room.on(`close-room-stop`, (error) => this.onCloseRoomStop(error, room));
     room.on(`page-closed`, (e) => this.onPageClosed(e));
     room.on(`page-crash`, (e) => cprompt.error(e));
     room.on(`page-error`, (e) => cprompt.error(e));
@@ -134,6 +147,8 @@ class HRConsoleApp {
     room.removeAllListeners(`open-room-start`);
     room.removeAllListeners(`open-room-stop`);
     room.removeAllListeners(`open-room-error`);
+    room.removeAllListeners(`close-room-start`);
+    room.removeAllListeners(`close-room-stop`);
     room.removeAllListeners(`page-closed`);
     room.removeAllListeners(`page-crash`);
     room.removeAllListeners(`page-error`);
@@ -153,6 +168,19 @@ class HRConsoleApp {
     cprompt.print(`for ${colors.cyan(room.id)}`, 'PLUGINS LOADED');
     let cmd = this.createCommands(room);
     cmd.execute('plugins');
+  }
+
+  onCloseRoomStart(room) {
+    cprompt.print(`${colors.cyan(room.id)}`, `CLOSING ROOM`);
+  }
+
+  onCloseRoomStop(error, room) {
+    if (error) {
+      cprompt.print(`Room was not closed properly and is ` +
+        `probably unusable.`, `ERROR`);
+    } else {
+      cprompt.print(`${colors.cyan(room.id)}`, `ROOM CLOSED`);
+    }
   }
 
   onOpenRoomError(room, error) {

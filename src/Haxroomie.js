@@ -216,15 +216,17 @@ class Haxroomie extends EventEmitter {
   /**
    * Creates and adds a new RoomController with the given id.
    * 
-   * @param {string|number} id 
+   * @param {string|number} id - Id for the RoomController.
+   * @param {object} [config] - Optional parameters for the
+   *    [RoomController#init()]{@link RoomController#init} method.
    * @return {RoomController} - The created RoomController.
    */
-  async addRoom(id) {
+  async addRoom(id, config) {
     this.validateRoomID(id);
     this.ensureInstanceIsUsable();
     if (this.rooms.has(id)) throw new Error('id must be unique');
     let page = await this.getNewPage();
-    let roomController = await this.createRoomController(page, id);
+    let roomController = await this.createRoomController(page, id, config);
     this.rooms.set(id, roomController);
     this.emit('room-added', roomController);
     return roomController;
@@ -242,7 +244,7 @@ class Haxroomie extends EventEmitter {
    * Factory method for creating RoomController instances.
    * @private
    */
-  async createRoomController(page, id) {
+  async createRoomController(page, id, config) {
 
     const device = {
       'name': 'Galaxy S5',
@@ -264,6 +266,7 @@ class Haxroomie extends EventEmitter {
       id: id,
       timeout: this.timeout
     });
+    await room.init(config);
 
     return room;
   }

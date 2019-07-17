@@ -38,13 +38,13 @@ describe('RoomController tests that require running rooms', function() {
 
   describe('#getPlugins', function() {
     it('should return an Array', async function() {
-      let plugins = await rooms[0].getPlugins();
+      let plugins = await rooms[0].plugins.getPlugins();
       expect(plugins).to.be.an('array');
     });
 
     it('should contain the plugins defined in the config', async function() {
       let pluginConfig = configs[0].pluginConfig;
-      let plugins = await rooms[0].getPlugins();
+      let plugins = await rooms[0].plugins.getPlugins();
       plugins = plugins.map(p => p.name);
       for (let pluginName of Object.keys(pluginConfig)) {
         expect(plugins).to.contain(pluginName);
@@ -54,64 +54,64 @@ describe('RoomController tests that require running rooms', function() {
 
   describe('#getPlugin', function() {
     it('should return the plugin', async function() {
-      let plugin = await rooms[0].getPlugin('sav/commands');
+      let plugin = await rooms[0].plugins.getPlugin('sav/commands');
       expect(plugin.pluginSpec.name).to.be.a('string').and.equal('sav/commands');
     });
 
     it('should return null if no plugin', async function() {
-      let plugin = await rooms[0].getPlugin('invalidPlugin');
+      let plugin = await rooms[0].plugins.getPlugin('invalidPlugin');
       expect(plugin).to.equal(null);
     });
   });
 
   describe('#disablePlugin', function() {
     it('should disable the specified plugin', async function() {
-      let isDisabled = await rooms[0].disablePlugin('sav/commands');
+      let isDisabled = await rooms[0].plugins.disablePlugin('sav/commands');
       expect(isDisabled).to.equal(true);
-      let plugin = await rooms[0].getPlugin('sav/commands');
+      let plugin = await rooms[0].plugins.getPlugin('sav/commands');
       expect(plugin.isEnabled).to.equal(false);
     });
   });
 
   describe('#enablePlugin', function() {
     it('should enable the specified plugin', async function() {
-      await rooms[0].disablePlugin('sav/commands');
-      let isEnabled = await rooms[0].enablePlugin('sav/commands');
+      await rooms[0].plugins.disablePlugin('sav/commands');
+      let isEnabled = await rooms[0].plugins.enablePlugin('sav/commands');
       expect(isEnabled).to.equal(true);
-      let plugin = await rooms[0].getPlugin('sav/commands');
+      let plugin = await rooms[0].plugins.getPlugin('sav/commands');
       expect(plugin.isEnabled).to.equal(true);
     });
   });
 
   describe('#addPlugin', function() {
     it('should add a plugin for the room', async function() {
-      await rooms[0].addPlugin({
+      await rooms[0].plugins.addPlugin({
         name: 'mock-plugin',
         content: fs.readFileSync(
           path.join(__dirname, 'utils', 'plugin.js'),
           { encoding: 'utf-8' }
         )
       });
-      let plugin = await rooms[0].getPlugin('mock-plugin');
+      let plugin = await rooms[0].plugins.getPlugin('mock-plugin');
       expect(plugin.name).to.equal('mock-plugin');
     });
 
     it('should assign correct name for the plugin', async function() {
-      await rooms[0].addPlugin({
+      await rooms[0].plugins.addPlugin({
         name: 'custom-name',
         content: fs.readFileSync(
           path.join(__dirname, 'utils', 'plugin-without-pluginspec.js'),
           { encoding: 'utf-8' }
         )
       });
-      let plugin = await rooms[0].getPlugin('custom-name');
+      let plugin = await rooms[0].plugins.getPlugin('custom-name');
       expect(plugin.name).to.equal('custom-name');
     });
   });
 
   describe('#getRepositories', function() {
     it('should retrieve array of repositories', async function() {
-      let repos = await rooms[0].getRepositories();
+      let repos = await rooms[0].repositories.getRepositories();
       expect(repos).to.be.an('array');
     });
   });
@@ -122,26 +122,17 @@ describe('RoomController tests that require running rooms', function() {
         type: 'github',
         repository: 'morko/hhm-sala-plugins'
       };
-      let wasAdded = await rooms[0].addRepository(repo);
+      let wasAdded = await rooms[0].repositories.addRepository(repo);
       expect(wasAdded).to.equal(true);
-      let repos = await rooms[0].getRepositories();
+      let repos = await rooms[0].repositories.getRepositories();
       let repoFromHr = repos.find(r => r.repository === 'morko/hhm-sala-plugins');
       expect(repoFromHr).to.be.an('object');
     });
   });
 
-  describe('#clearRepositories', function() {
-    it('should clear the repositories', async function() {
-      await rooms[0].clearRepositories();
-      let repos = await rooms[0].getRepositories();
-      expect(repos).to.be.an('array');
-      expect(repos).to.have.lengthOf(0);
-    });
-  });
-
   describe('#getPluginConfig', function() {
     it('should retrieve the plugins config', async function() {
-      let config = await rooms[0].getPluginConfig('sav/commands');
+      let config = await rooms[0].plugins.getPluginConfig('sav/commands');
       expect(config.commandPrefix).to.equal(
         configs[0].pluginConfig['sav/commands'].commandPrefix
       );
@@ -150,28 +141,28 @@ describe('RoomController tests that require running rooms', function() {
 
   describe('#getPluginConfig', function() {
     it('should set a plugins config', async function() {
-      await rooms[0].setPluginConfig(
+      await rooms[0].plugins.setPluginConfig(
         { commandPrefix: '.' }, 'sav/commands'
       );
-      let config = await rooms[0].getPluginConfig('sav/commands');
+      let config = await rooms[0].plugins.getPluginConfig('sav/commands');
       expect(config.commandPrefix).to.equal('.');
     });
 
     it('should replace all plugin configs', async function() {
-      await rooms[0].addPlugin({
+      await rooms[0].plugins.addPlugin({
         name: 'mock-plugin',
         content: fs.readFileSync(
           path.join(__dirname, 'utils', 'plugin-without-pluginspec.js'),
           { encoding: 'utf-8' }
         )
       });
-      await rooms[0].setPluginConfig({
+      await rooms[0].plugins.setPluginConfig({
         'sav/commands': { commandPrefix: '.' }, 
         'mock-plugin': { test: 'test' }, 
       });
-      let cConfig = await rooms[0].getPluginConfig('sav/commands');
+      let cConfig = await rooms[0].plugins.getPluginConfig('sav/commands');
       expect(cConfig.commandPrefix).to.equal('.');
-      let mConfig = await rooms[0].getPluginConfig('mock-plugin');
+      let mConfig = await rooms[0].plugins.getPluginConfig('mock-plugin');
       expect(mConfig.test).to.equal('test');
     });
   });

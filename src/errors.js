@@ -7,6 +7,7 @@
  */
 class ConnectionError extends Error {
   constructor(message) {
+    message = message || 'The HaxBall headless page is unreachable!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -19,6 +20,7 @@ class ConnectionError extends Error {
  */
 class InvalidTokenError extends Error {
   constructor(message) {
+    message = message || 'The token is invalid or expired!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -30,6 +32,8 @@ class InvalidTokenError extends Error {
  */
 class TimeoutError extends Error {
   constructor(message) {
+    message = message || 'Could not open the room because HHM took too ' +
+      'much time to start!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -38,10 +42,13 @@ class TimeoutError extends Error {
 
 /**
  * Error thrown by RoomController methods when RoomController can not control 
- * the room anymore, due to some fatal error happening in the browser.
+ * the room. This can happen if RoomController.init() is not called before
+ * using it, if the tab that the RoomController is controlling gets closed
+ * or if some fatal error happens in the page.
  */
 class UnusableError extends Error {
   constructor(message) {
+    message = message || 'This room is not usable!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -54,6 +61,7 @@ class UnusableError extends Error {
  */
 class NotRunningError extends Error {
   constructor(message) {
+    message = message || 'This room is not running!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -66,6 +74,7 @@ class NotRunningError extends Error {
  */
 class RoomLockedError extends Error {
   constructor(message) {
+    message = message || 'The room is already being opened!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -77,6 +86,7 @@ class RoomLockedError extends Error {
  */
 class InvalidCommandError extends Error {
   constructor(message) {
+    message = message || 'Invalid command!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -90,6 +100,7 @@ class InvalidCommandError extends Error {
 class InvalidCommandArgsError extends Error {
   constructor(message) {
     super(message);
+    message = message || 'Invalid command arguments!';
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
   }
