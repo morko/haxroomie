@@ -1,5 +1,9 @@
 # Changelog
 
+#### 1.1.0
+
+- Updated the lodash dependency due security vulnerability.
+
 ### 1.1.0
 
 #### Potentially breaking changes
