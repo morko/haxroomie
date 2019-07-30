@@ -7,7 +7,7 @@
     "start": "node src/cli",
     "test": "mocha",
     "docs": "vjsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./src/room/PluginController.js ./src/room/RepositoryController.js ./docs-config/HOMEPAGE.md -c ./docs-config/config.js",
-    "release": "./scripts/create_release.sh"
+    "release": "./scripts/create-release.js"
   },
   "keywords": [
     "haxball"
