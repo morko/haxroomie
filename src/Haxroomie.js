@@ -235,10 +235,6 @@ class Haxroomie extends EventEmitter {
    * @private
    */
   async getNewPage() {
-    if (this.rooms.size === 0) {
-      let pages = await this.browser.pages();
-      return pages[0];
-    }
     return this.browser.newPage();
   }
 
