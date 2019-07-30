@@ -81,7 +81,7 @@ function setHhmVersion(hhmVersion) {
   let config = require('../config.json');
   config.hhmVersion = hhmVersion;
   configJson = JSON.stringify(config, null, 2);
-  fs.writeFileSync(path.join(__dirname, '..', 'config.json', configJson));
+  fs.writeFileSync(path.join(__dirname, '..', 'config.json'), configJson);
 }
 createRelease();
 
