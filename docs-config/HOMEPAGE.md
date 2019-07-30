@@ -7,7 +7,7 @@
 
 To install haxroomie for your project its preferred to install it locally with
 ```sh
-npm install morko/haxroomie
+npm install haxroomie
 ```
 
 Easiest way to create
