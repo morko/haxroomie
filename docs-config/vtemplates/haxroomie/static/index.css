@@ -5,6 +5,7 @@
     min-height: 100%;
     background-position: center;
     background-size: cover;
+    background-color: #333333;
   }
   .logo {
     max-width: 25%;
