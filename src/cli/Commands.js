@@ -284,7 +284,7 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${id}`, `ERROR`);
           return;
         }
-        await this.room.callRoom.kickPlayer(id, 'Bye!', false);      }
+        await this.room.callRoom('kickPlayer', id, 'Bye!', false);      }
     }
   }
 
@@ -298,7 +298,7 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${id}`, `ERROR`);
           return;
         }
-        await this.room.callRoom.kickPlayer(id, 'Bye!', true);
+        await this.room.callRoom('kickPlayer', id, 'Bye!', true);
       }
     }
   }
@@ -308,7 +308,7 @@ class Commands extends CommandHandler {
       description: 'Removes a ban of player with given id.',
       args: ['id'],
       run: async (id) => {
-        await this.room.callRoom.clearBan(id);
+        await this.room.callRoom('clearBan', id);
       }
     }
   }
