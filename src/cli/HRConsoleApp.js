@@ -73,14 +73,6 @@ class HRConsoleApp {
    */
   async autoStartRooms() {
     for (let id of this.haxroomie.rooms.keys()) {
-      let rConfig = this.config.getRoomConfig(id);
-      let room = this.haxroomie.getRoom(id);
-      if (rConfig.repositories) {
-        for (let r of rConfig.repositories) {
-          let i = await room.repositories.getRepositoryInformation(r);
-          console.log(i);
-        }
-      }
       if (this.config.getRoomConfig(id).autoStart) {
         let roomInfo;
         try {
