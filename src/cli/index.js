@@ -65,7 +65,7 @@ argv.port = argv.port || process.env.HR_PORT;
       + `If you are sure you are not running multiple instances `
       + `you can delete the file in\n${lockFilePath}`
     );
-    return;
+    process.exit(1);
   }
 
   try {
