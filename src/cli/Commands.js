@@ -279,12 +279,17 @@ class Commands extends CommandHandler {
       description: 'Kicks a player with given id.',
       args: ['id'],
       run: async (id) => {
-        let hasPlayer = await this.checkIfRoomHasPlayer(id);
-        if (!hasPlayer) {
-          cprompt.print(`no player with id: ${id}`, `ERROR`);
+        let intId = parseInt(id);
+        if (intId === NaN) {
+          cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
-        await this.room.callRoom('kickPlayer', id, 'Bye!', false);      }
+        let hasPlayer = await this.checkIfRoomHasPlayer(intId);
+        if (!hasPlayer) {
+          cprompt.print(`no player with id: ${intId}`, `ERROR`);
+          return;
+        }
+        await this.room.callRoom('kickPlayer', intId, 'Bye!', false);      }
     }
   }
 
@@ -293,12 +298,17 @@ class Commands extends CommandHandler {
       description: 'Bans a player with given id.',
       args: ['id'],
       run: async (id) => {
-        let hasPlayer = await this.checkIfRoomHasPlayer(id);
-        if (!hasPlayer) {
-          cprompt.print(`no player with id: ${id}`, `ERROR`);
+        let intId = parseInt(id);
+        if (intId === NaN) {
+          cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
-        await this.room.callRoom('kickPlayer', id, 'Bye!', true);
+        let hasPlayer = await this.checkIfRoomHasPlayer(intId);
+        if (!hasPlayer) {
+          cprompt.print(`no player with id: ${intId}`, `ERROR`);
+          return;
+        }
+        await this.room.callRoom('kickPlayer', intId, 'Bye!', true);
       }
     }
   }
@@ -308,7 +318,12 @@ class Commands extends CommandHandler {
       description: 'Removes a ban of player with given id.',
       args: ['id'],
       run: async (id) => {
-        await this.room.callRoom('clearBan', id);
+        let intId = parseInt(id);
+        if (intId === NaN) {
+          cprompt.print('Player ID has to be a number!', 'ERROR');
+          return;
+        }
+        await this.room.callRoom('clearBan', intId);
       }
     }
   }
@@ -345,12 +360,17 @@ class Commands extends CommandHandler {
       description: 'Gives admin to a player with given id.',
       args: ['id'],
       run: async (id) => {
-        let hasPlayer = await this.checkIfRoomHasPlayer(id);
-        if (!hasPlayer) {
-          cprompt.print(`no player with id: ${id}`, `ERROR`);
+        let intId = parseInt(id);
+        if (intId === NaN) {
+          cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
-        await this.room.callRoom('setPlayerAdmin', id, true);
+        let hasPlayer = await this.checkIfRoomHasPlayer(intId);
+        if (!hasPlayer) {
+          cprompt.print(`no player with id: ${intId}`, `ERROR`);
+          return;
+        }
+        await this.room.callRoom('setPlayerAdmin', intId, true);
       }
     }
   }
@@ -360,12 +380,17 @@ class Commands extends CommandHandler {
       description: 'Removes admin from a player with given id.',
       args: ['id'],
       run: async (id) => {
-        let hasPlayer = await this.checkIfRoomHasPlayer(id);
-        if (!hasPlayer) {
-          cprompt.print(`no player with id: ${id}`, `ERROR`);
+        let intId = parseInt(id);
+        if (intId === NaN) {
+          cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
-        await this.room.callRoom('setPlayerAdmin', id, false);
+        let hasPlayer = await this.checkIfRoomHasPlayer(intId);
+        if (!hasPlayer) {
+          cprompt.print(`no player with id: ${intId}`, `ERROR`);
+          return;
+        }
+        await this.room.callRoom('setPlayerAdmin', intId, false);
       }
     }
   }
