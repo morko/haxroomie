@@ -208,7 +208,7 @@ class RoomController extends EventEmitter {
   /**
    * Is the room running.
    * @type boolean
-   * @default true
+   * @default false
    */
   get running() {
     return this._roomInfo ? true : false;
