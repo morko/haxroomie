@@ -62,10 +62,24 @@ class HRConsoleApp {
   async createRooms() {
     const roomIds = this.config.getRoomIds();
     await Promise.all(roomIds.map(async (roomId) => {
-      cprompt.print(`${colors.cyan(roomId)}`, 'INITIALIZING ROOM');
-      await this.haxroomie.addRoom(roomId);
-      cprompt.print(`${colors.cyan(roomId)}`, 'ROOM INITIALIZED');
+      return this.createRoom(roomId);
     }));
+  }
+  
+  /**
+   * Factory method for creating a RoomController.
+   */
+  async createRoom(roomId) {
+    const roomConfig = this.config.getRoomConfig(roomId);
+
+    cprompt.print(`${colors.cyan(roomId)}`, 'ADDING ROOM');
+
+    await this.haxroomie.addRoom(roomId, {
+      hhmVersion: roomConfig.hhmVersion,
+      hhm: roomConfig.hhm
+    });
+    
+    cprompt.print(`${colors.cyan(roomId)}`, 'ROOM ADDED');
   }
 
   /**
@@ -110,7 +124,8 @@ class HRConsoleApp {
       config: this.config,
       setRoom: (room) => this.setRoom(room),
       openRoom: (id) => this.openRoom(id),
-      closeRoom: (id) => this.closeRoom(id)
+      closeRoom: (id) => this.closeRoom(id),
+      createRoom: (id) => this.createRoom(id)
     });
   }
 

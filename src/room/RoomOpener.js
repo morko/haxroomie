@@ -118,8 +118,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * Closes the room by navigating the tab to about:blank.
    */
   async close() {
-    await this.page.goto('about:blank');
-    return this.initializePage({hhmVersion: this._hhmVersion, hhm: this._hhm});
+    return this.page.goto('about:blank');
   }
   
   /**

@@ -3,8 +3,8 @@ const colors = require('colors/safe');
 const logger = require('../logger');
 
 const COLORS = {
-  'INITIALIZING ROOM': colors.green,
-  'ROOM INITIALIZED': colors.green.bold,
+  'ADDING ROOM': colors.green,
+  'ROOM ADDED': colors.green.bold,
   'CLOSING ROOM': colors.yellow,
   'ROOM CLOSED': colors.yellow.bold,
   'STARTING ROOM': colors.green,

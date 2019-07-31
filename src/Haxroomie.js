@@ -3,6 +3,7 @@ const puppeteer = require('puppeteer');
 const path = require('path');
 const EventEmitter = require('events');
 const logger = require('./logger');
+const config = require('./../config.json');
 
 /**
  * Emitted when new RoomController is added.
@@ -214,22 +215,41 @@ class Haxroomie extends EventEmitter {
   }
 
   /**
-   * Creates and adds a new RoomController with the given id.
+   * Adds a new RoomController.
    * 
-   * @param {string|number} id - Id for the RoomController.
-   * @param {object} [config] - Optional parameters for the
-   *    [RoomController#init()]{@link RoomController#init} method.
+   * If `roomController` is a string or number, then it will be used as
+   * an id for the new RoomController.
+   * 
+   * @param {RoomController|string|number} roomController - Instance of 
+   *    RoomController or id for the RoomController.
+   * @param {object} [roomControllerOptions] - Additional options for the
+   *    [RoomController constructor]{@link RoomController#constructor} if
+   *    `roomController` is an id.
    * @return {RoomController} - The created RoomController.
    */
-  async addRoom(id, config) {
-    this.validateRoomID(id);
+  async addRoom(roomController, roomControllerOptions) {
     this.ensureInstanceIsUsable();
+
+    if (typeof roomController === 'RoomController') {
+      if (this.rooms.has(roomController.id)) throw new Error('id must be unique');
+      this.rooms.set(roomController.id, roomController);
+      this.emit('room-added', roomController);
+      return roomController;
+    }
+
+    const id = roomController;
+
+    this.validateRoomID(id);
     if (this.rooms.has(id)) throw new Error('id must be unique');
-    let page = await this.getNewPage();
-    let roomController = await this.createRoomController(page, id, config);
-    this.rooms.set(id, roomController);
-    this.emit('room-added', roomController);
-    return roomController;
+
+    const rcOptions = {...roomControllerOptions};
+    rcOptions.id = rcOptions.id || id;
+    rcOptions.hhmVersion = rcOptions.hhmVersion || config.hhmVersion;
+
+    const room = await this.createRoomController(rcOptions);
+    this.rooms.set(id, room);
+    this.emit('room-added', room);
+    return room;
   }
 
   /**
@@ -244,8 +264,8 @@ class Haxroomie extends EventEmitter {
    * Factory method for creating RoomController instances.
    * @private
    */
-  async createRoomController(page, id, config) {
-
+  async createRoomController(rcOptions) {
+    const page = await this.getNewPage();
     const device = {
       'name': 'Galaxy S5',
       'userAgent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3452.0 Mobile Safari/537.36',
@@ -262,11 +282,10 @@ class Haxroomie extends EventEmitter {
     await page.emulate(device);
 
     let room = new RoomController({
-      page: page,
-      id: id,
-      timeout: this.timeout
+      timeout: this.timeout,
+      page,
+      ...rcOptions
     });
-    await room.init(config);
 
     return room;
   }

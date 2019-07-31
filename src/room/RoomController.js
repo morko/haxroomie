@@ -1,9 +1,10 @@
 const logger = require('../logger');
-const config = require('../../config');
 const {
   UnusableError,
-  NotRunningError,
-  RoomLockedError
+  RoomNotRunningError,
+  RoomIsRunningError,
+  RoomLockedError,
+  HHMNotLoadedError
 } = require('../errors');
 const EventEmitter = require('events');
 const RoomOpener = require('./RoomOpener');
@@ -152,11 +153,8 @@ const stringify = require('../stringify');
  * [Haxball Headless Manager (HHM)]{@link https://github.com/saviola777/haxball-headless-manager}. 
  * Each RoomController controls one tab in the headless browser.
  * 
- * **The constructor is not ment to be called directly!**
- * 
- * Create new RoomController instances with the
- * [Haxroomie#addRoom]{@link Haxroomie#addRoom}
- * method.
+ * You can also create new RoomController instances with the
+ * [Haxroomie#addRoom]{@link Haxroomie#addRoom} method.
  * 
  */
 class RoomController extends EventEmitter {
@@ -164,15 +162,14 @@ class RoomController extends EventEmitter {
   /**
    * Constructs a new RoomController object.
    * 
-   * Create new instances with the
-   * [Haxroomie#addRoom]{@link Haxroomie#addRoom}
-   * method.
-   * 
    * @param {object} opt - Options.
    * @param {object} opt.id - ID for the room.
    * @param {object} opt.page - Puppeteer.Page object to control.
    * @param {number} [opt.timeout=30] - Max time to wait in seconds for the
    *    room to open.
+   * @param {string} [opt.hhmVersion] - Version of Haxball Headless
+   *    Manager to use.
+   * @param {FileDef} [hhm] - Haxball Headless Manager source.
    */
   constructor(opt) {
     super();
@@ -183,7 +180,11 @@ class RoomController extends EventEmitter {
     this.page = opt.page;
     this.timeout = opt.timeout || 30;
 
-    this._usable = false;
+    this._hhmVersion = opt.hhmVersion;
+    this._hhm = opt.hhm;
+
+    this._usable = true;
+    this._hhmLoaded = false;
     this._roomInfo = null;
     this._openRoomLock = false;
 
@@ -215,9 +216,18 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Is the instance still usable.
+   * Is Haxball Headless Manager loaded.
    * @type boolean
    * @default false
+   */
+  get hhmLoaded() {
+    return this._hhmLoaded;
+  }
+
+  /**
+   * Is the instance still usable.
+   * @type boolean
+   * @default true
    */
   get usable() {
     return this._usable;
@@ -251,17 +261,24 @@ class RoomController extends EventEmitter {
    * @type PluginController
    */
   get plugins() {
-    if (!this.running) throw new NotRunningError();
     if (!this.usable) throw new UnusableError();
+    if (!this.running) throw new RoomNotRunningError();
     return this._plugins;
   }
 
   /**
    * Object that can be used to control and get information about repositories.
+   * 
+   * **Requires the HHM library to be loaded!**
+   * 
+   * To load HHM you can use the [init()]{@link RoomController#init} method or
+   * open the room with [openRoom()]{@link RoomController#openRoom}.
+   * 
    * @type RepositoryController
    */
   get repositories() {
     if (!this.usable) throw new UnusableError();
+    if (!this._hhmLoaded) throw new HHMNotLoadedError();
     return this._repositories;
   }
   /**
@@ -278,32 +295,6 @@ class RoomController extends EventEmitter {
       throw new Error('Missing required argument: opt.id');
     }
     if (!opt.page) throw new Error('Missing required argument: opt.page');
-  }
-
-  /**
-   * Initializes the RoomController so that it can be used.
-   * 
-   * Navigates the page to the headless HaxBall URL and loads the Haxball
-   * Headless Manager library.
-   * 
-   * @param {object} [opt] - Options.
-   * @param {string} [opt.hhmVersion] - Version of HHM to load. By default this
-   *    is set to be whatever the current version supports and it is hardcoded
-   *    at the `config.json`.
-   * @param {FileDef} [opt.hhm] - Optionally load HHM source from a string.
-   */
-  async init(opt) {
-    opt = opt || {};
-    const hhmVersion = opt.hhmVersion || config.hhmVersion;
-    const hhm = opt.hhm || {};
-
-    try {
-      await this.roomOpener.initializePage({ hhmVersion, hhm });
-    } catch (err) {
-      this._usable = false;
-      throw new UnusableError(err.msg);
-    }
-    this._usable = true;
   }
 
   /**
@@ -437,6 +428,38 @@ class RoomController extends EventEmitter {
   }
 
   /**
+   * Initializes the RoomController by navigating the page to the headless 
+   * HaxBall URL and loads the Haxball Headless Manager library.
+   * 
+   * This enables the use of the [repositories]{@link RoomController#repositories}
+   * object to get information about repositories before opening the room.
+   * 
+   * **Note that calling [close]{@link RoomController#close} will undo this.**
+   * 
+   * @param {object} [opt] - Options.
+   * @param {string} [opt.hhmVersion] - Version of HHM to load. By default this
+   *    is set to whatever is given in constructors `hhmVersion` option.
+   * @param {FileDef} [opt.hhm] - Optionally load HHM source from a string.
+   * @throws {UnusableError} - The instance is not usable because the browser
+   *    page crashed or closed.
+   */
+  async init(opt) {
+    if (!this.usable) throw new UnusableError('Instance unusable!');
+
+    opt = opt || {};
+    const hhmVersion = opt.hhmVersion || this._hhmVersion;
+    const hhm = opt.hhm || this._hhm;
+
+    try {
+      await this.roomOpener.initializePage({ hhmVersion, hhm });
+    } catch (err) {
+      this._hhmLoaded = false;
+      throw new UnusableError(err.msg);
+    }
+    this._hhmLoaded = true;
+  }
+
+  /**
    * Opens a HaxBall room in a browser tab.
    * 
    * On top of the documentated properties here, the config object can contain
@@ -482,28 +505,34 @@ class RoomController extends EventEmitter {
    * @emits RoomController#open-room-stop
    * @emits RoomController#open-room-error
    * 
-   * @throws {UnusableError} - The instance is not usable because it is not
-   *    initialized, browser had a fatal error or the tab closed.
+   * @throws {UnusableError} - The instance is not usable because the browser
+   *    page crashed or closed.
    * @throws {ConnectionError} - Could not connect to HaxBall headless page.
    * @throws {TimeoutError} - Haxball Headless Manager took too much time to 
    *    start.
    * @throws {InvalidTokenError} - The token is invalid or expired.
    * @throws {RoomLockedError} - The room is already being opened.
+   * @throws {RoomIsRunningError} - The room is already running.
    */
   async openRoom(config) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
+    if (this.running) throw new RoomIsRunningError(
+      'The room is already running. Close it before opening again!'
+    );
     if (this._openRoomLock) throw new RoomLockedError(
       'Room is already being opened!'
     );
     logger.debug(`RoomController#openRoom: ${this.id}`);
     this.emit(`open-room-start`, config);
     this._openRoomLock = true;
-
+    if (!this.hhmLoaded) {
+      await this.init();
+    }
     try {
       this._roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this._openRoomLock = false;
-      if (process.env.NODE_ENV !== 'development') await this.roomOpener.close();
+      if (process.env.NODE_ENV !== 'development') await this.closeRoom();
       this.emit(`open-room-error`, err);
       throw err;
     }
@@ -518,8 +547,8 @@ class RoomController extends EventEmitter {
    * 
    * @emits RoomController#close-room
    * 
-   * @throws {UnusableError} - The instance is not usable because it is not
-   *    initialized, browser had a fatal error or the tab closed.
+   * @throws {UnusableError} - The instance is not usable because the browser
+   *    page crashed or closed.
    */
   async closeRoom() {
     if (!this.usable) throw new UnusableError('Instance unusable!');
@@ -530,11 +559,12 @@ class RoomController extends EventEmitter {
       await this.roomOpener.close();
     } catch (err) {
       this._usable = false;
+      this._hhmLoaded = false;
       this._roomInfo = null;
       this.emit(`close-room-stop`, err);
       throw new UnusableError(err.msg);
     } 
-
+    this._hhmLoaded = false;
     this._roomInfo = null;
     this.emit(`close-room-stop`);
   }
@@ -548,13 +578,13 @@ class RoomController extends EventEmitter {
    * @param {any} ...args - Arguments for the function.
    * @returns {Promise.<any>} - Return value of the called function.
    * 
-   * @throws {UnusableError} - The instance is not usable because it is not
-   *    initialized, browser had a fatal error or the tab closed.
-   * @throws {NotRunningError} - The room is not running.
+   * @throws {UnusableError} - The instance is not usable because the browser
+   *    page crashed or closed.
+   * @throws {RoomNotRunningError} - The room is not running.
    */
   async callRoom(fn, ...args) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
+    if (!this.running) throw new RoomNotRunningError('Room is not running.');
     if (!fn) throw new TypeError('Missing required argument: fn');
     logger.debug(`RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`);
 
@@ -569,7 +599,7 @@ class RoomController extends EventEmitter {
    * Wrapper for Puppeteers 
    * [page.evaluate](https://github.com/GoogleChrome/puppeteer/blob/v1.18.0/docs/api.md#pageevaluatepagefunction-args).
    * 
-   * Evaluates the given code in the browser tab room is running.
+   * Evaluates the given code in the browser tab this instace is controlling.
    * You can access the HaxBall roomObject with `HHM.manager.room`.
    * 
    * e.g.
@@ -581,15 +611,8 @@ class RoomController extends EventEmitter {
    * @param {...Serializable|...JSHandle} [args] - Arguments to pass to `js`.
    * @returns {Promise.<Serializable>} -  Promise which resolves to the 
    *    return value of pageFunction.
-
-   * @throws {UnusableError} - The instance is not usable because it is not
-   *    initialized, browser had a fatal error or the tab closed.
-   * @throws {NotRunningError} - The room is not running.
    */
   async eval(pageFunction, ...args) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new NotRunningError('Room is not running.');
-
     return this.page.evaluate(pageFunction, ...args);
   }
 

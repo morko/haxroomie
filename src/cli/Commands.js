@@ -13,6 +13,7 @@ class Commands extends CommandHandler {
     if (!opt.setRoom) new TypeError('invalid arguments');
     if (!opt.openRoom) new TypeError('invalid arguments');
     if (!opt.closeRoom) new TypeError('invalid arguments');
+    if (!opt.createRoom) new TypeError('invalid arguments');
     if (!opt.config) new TypeError('invalid arguments');
 
     super(opt);
@@ -22,6 +23,7 @@ class Commands extends CommandHandler {
     this.setRoom = opt.setRoom;
     this.openRoom = opt.openRoom;
     this.closeRoom = opt.closeRoom;
+    this.createRoom = opt.createRoom;
     this.config = opt.config;
   }
   /**
@@ -113,6 +115,10 @@ class Commands extends CommandHandler {
       alias: ['start'],
       args: ['id'],
       run: (id) => {
+        if (this.room.running) {
+          cprompt.print(`The room is already running. Close it before opening!`)
+          return;
+        }
         return this.openRoom(id);
       }
     }
@@ -135,10 +141,8 @@ class Commands extends CommandHandler {
         `goes to an unusable state.`,
       args: ['id'],
       run: async (id) => {
-        cprompt.print(`${colors.cyan(id)}`, 'INITIALIZING ROOM');
         await this.haxroomie.removeRoom(id);
-        await this.haxroomie.addRoom(id);
-        cprompt.print(`${colors.cyan(id)}`, 'ROOM INITIALIZED');
+        await this.createRoom(id);
       }
     }
   }
@@ -174,7 +178,7 @@ class Commands extends CommandHandler {
 
           // Add new rooms.
           if (!this.haxroomie.hasRoom(roomId)) {
-            await this.haxroomie.addRoom(roomId);
+            await this.createRoom(roomId);
             let roomConfig = this.config.getRoomConfig(roomId);
             if (roomConfig.autoStart) {
               await this.openRoom(roomId)
@@ -191,6 +195,7 @@ class Commands extends CommandHandler {
 
             // Restart rooms that cannot be hotloaded.
             if (cannotHotLoad) {
+              await this.closeRoom(roomId);
               await this.openRoom(roomId);
               continue;
             }

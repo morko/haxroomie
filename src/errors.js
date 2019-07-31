@@ -42,9 +42,8 @@ class TimeoutError extends Error {
 
 /**
  * Error thrown by RoomController methods when RoomController can not control 
- * the room. This can happen if RoomController.init() is not called before
- * using it, if the tab that the RoomController is controlling gets closed
- * or if some fatal error happens in the page.
+ * the room. This can happen if the tab that the RoomController is controlling 
+ * gets closed or if some fatal error happens in the page.
  */
 class UnusableError extends Error {
   constructor(message) {
@@ -59,9 +58,35 @@ class UnusableError extends Error {
  * Error thrown by RoomController methods when trying to call methods that
  * require the room to be running, but it is not.
  */
-class NotRunningError extends Error {
+class RoomNotRunningError extends Error {
   constructor(message) {
     message = message || 'This room is not running!';
+    super(message);
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * Error thrown by RoomController methods when trying to call methods that
+ * require the room to not be running, but it is.
+ */
+class RoomRunningError extends Error {
+  constructor(message) {
+    message = message || 'This room is running!';
+    super(message);
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * Error thrown by RoomController when trying to call methods that
+ * require Haxball Headless Manager to be loaded, but it is not.
+ */
+class HHMNotLoadedError extends Error {
+  constructor(message) {
+    message = message || 'Haxball Headless Manager is not loaded!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -111,8 +136,9 @@ module.exports = {
   TimeoutError,
   InvalidTokenError,
   UnusableError,
-  NotRunningError,
+  RoomNotRunningError,
   RoomLockedError,
   InvalidCommandError,
-  InvalidCommandArgsError
+  InvalidCommandArgsError,
+  HHMNotLoadedError
 };
