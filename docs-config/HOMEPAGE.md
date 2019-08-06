@@ -21,19 +21,21 @@ the [RoomController](https://morko.github.io/haxroomie/RoomController.html) obje
 
 ## Example API usage
 
-Example that requires the token to be set as an environment variable named `HAXBALL_TOKEN`.
+Example of opening one room. Requires the token to be set as an environment
+variable named `HAXBALL_TOKEN`.
 
 ```js
 const { createHaxroomie } = require(`haxroomie`);
 
-(async function bootstrap() {
+async function bootstrap() {
   try {
     let haxroomie = await createHaxroomie();
     let room = await haxroomie.addRoom(`example`);
-		
-    room.on('open-room-start' (roomInfo) => {
+
+    room.on('open-room-stop' (roomInfo) => {
       console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
     });
+
     room.openRoom({
       roomName: `haxroomie`,
       playerName: `host`,
@@ -41,10 +43,46 @@ const { createHaxroomie } = require(`haxroomie`);
       public: false,
       token: process.env.HAXBALL_TOKEN
     });
+
   } catch (err) {
     logger.error(err.stack);
     process.exit(1);
   }
-})();
+}
 
+bootstrap();
+
+```
+
+If you wish to get information about repositories before opening a room you
+need to initialize the room before using
+[RoomController#repositories]{@link RoomController#repositories}.
+Initializing loads the Haxball Headless Manager library required to use the
+object.
+
+e.g.
+
+```js
+const { createHaxroomie } = require(`haxroomie`);
+
+async function getRepoInfoExample() {
+  try {
+    let haxroomie = await createHaxroomie();
+    let room = await haxroomie.addRoom(`example`);
+    await room.init();
+
+    repoInfo = await room.repositories.getRepositoryInformation({
+      type: 'github',
+      repository: 'morko/hhm-sala-plugins'
+    });
+
+    console.log(repoInfo);
+
+  } catch (err) {
+    logger.error(err.stack);
+    process.exit(1);
+  }
+}
+
+getRepoInfoExample();
 ```
