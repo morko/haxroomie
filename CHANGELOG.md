@@ -1,6 +1,44 @@
 # Changelog
 
-#### 1.1.0
+### 1.2.0 (not yet released)
+
+#### Potentially breaking changes
+
+- Repository related methods are now organized under `RoomController.repositories`.
+- Plugin related methods are now organized under `RoomController.plugins`.
+- RoomController close-room event is now split into two events called
+"close-room-start" and "close-room-stop"
+- `RoomController.openRoom(config)` can throw `RoomIsRunningError` if called on
+room that is already running.
+
+#### Fixed bugs (API)
+
+- Fixed race condition that happened when adding multiple rooms into haxroomie
+"simultaniously". The rooms might have got the same page to control.
+- Fixed loading of local repositories in windows.
+
+#### New features (API)
+
+- Ability to get repository information before opening a room with
+`RoomController.repositories.getRepositoryInformation(repository)`.
+- Support the new HHM repository.json definiton for faster loading
+times.
+
+#### New Features (CLI)
+
+- The commands in CLI are organized into categories.
+- Commands that are not usable when selected room is not running are now hidden.
+- New "init" command that reinitializes the room if it goes to a unusable state.
+
+#### 1.1.3
+
+- Fixed `unban` command in CLI.
+
+#### 1.1.2
+
+- Fixed CLI commands that were not working.
+
+#### 1.1.1
 
 - Updated the lodash dependency due security vulnerability.
 
