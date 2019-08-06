@@ -11,11 +11,15 @@
 - `RoomController.openRoom(config)` can throw `RoomIsRunningError` if called on
 room that is already running.
 
-#### Fixed bugs (API)
+#### New Features (CLI)
 
-- Fixed race condition that happened when adding multiple rooms into haxroomie
-"simultaniously". The rooms might have got the same page to control.
-- Fixed loading of local repositories in windows.
+- The commands in CLI are organized into categories.
+- Commands that are not usable when selected room is not running are now hidden.
+- New "init" command that reinitializes the room if it goes to a unusable state.
+
+#### Fixed Bugs (CLI)
+
+- Can now close haxroomie by pressing ctrl-c or ctrl-d.
 
 #### New features (API)
 
@@ -24,11 +28,11 @@ room that is already running.
 - Support the new HHM repository.json definiton for faster loading
 times.
 
-#### New Features (CLI)
+#### Fixed bugs (API)
 
-- The commands in CLI are organized into categories.
-- Commands that are not usable when selected room is not running are now hidden.
-- New "init" command that reinitializes the room if it goes to a unusable state.
+- Fixed race condition that happened when adding multiple rooms into haxroomie
+"simultaniously". The rooms might have got the same page to control.
+- Fixed loading of local repositories in windows.
 
 #### 1.1.3
 

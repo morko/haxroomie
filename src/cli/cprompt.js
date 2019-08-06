@@ -39,9 +39,17 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-rl.on(`line`, (line) => onNewLine(line));
 
 let cmd = null;
+
+rl.on(`line`, (line) => onNewLine(line));
+rl.on(`close`, () => {
+  if (!cmd) {
+    process.exit(0);
+  } else {
+    cmd.execute(`q`);
+  }
+});
 
 /**
  * Sets the prompt string
