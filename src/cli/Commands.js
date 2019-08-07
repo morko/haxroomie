@@ -312,9 +312,11 @@ class Commands extends CommandHandler {
 
         for (let player of playerList) {
           if (!player) continue;
-          let playerString = `${player.name} | id: ${player.id}`
+          let playerString = `id: ${player.id} - ${player.name} ` +
+            `- ${player.auth}`;
+
           if (player.admin) {
-            playerString += ' | ' + colors.green('admin');
+            playerString += ' - ' + colors.green('admin');
           }
           players.push(playerString);
         }
