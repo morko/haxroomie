@@ -440,8 +440,6 @@ class RoomController extends EventEmitter {
    * @param {string} [opt.hhmVersion] - Version of HHM to load. By default this
    *    is set to whatever is given in constructors `hhmVersion` option.
    * @param {FileDef} [opt.hhm] - Optionally load HHM source from a string.
-   * @throws {UnusableError} - The instance is not usable because the browser
-   *    page crashed or closed.
    */
   async init(opt) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
@@ -454,7 +452,7 @@ class RoomController extends EventEmitter {
       await this.roomOpener.initializePage({ hhmVersion, hhm });
     } catch (err) {
       this._hhmLoaded = false;
-      throw new UnusableError(err.msg);
+      throw err;
     }
     this._hhmLoaded = true;
   }
@@ -525,10 +523,9 @@ class RoomController extends EventEmitter {
     logger.debug(`RoomController#openRoom: ${this.id}`);
     this.emit(`open-room-start`, config);
     this._openRoomLock = true;
-    if (!this.hhmLoaded) {
-      await this.init();
-    }
+
     try {
+      if (!this.hhmLoaded) await this.init();
       this._roomInfo = await this.roomOpener.open(config);
     } catch (err) {
       this._openRoomLock = false;
