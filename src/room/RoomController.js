@@ -10,6 +10,7 @@ const EventEmitter = require('events');
 const RoomOpener = require('./RoomOpener');
 const RepositoryController = require('./RepositoryController');
 const PluginController = require('./PluginController');
+const RoleController = require('./RoleController');
 const stringify = require('../stringify');
 
 /**
@@ -196,8 +197,11 @@ class RoomController extends EventEmitter {
       timeout: this.timeout,
     });
 
-    this._repositories = new RepositoryController({ page: this.page, });
-    this._plugins = new PluginController({ page: this.page, });
+    this._repositories = new RepositoryController({ page: this.page });
+    this._plugins = new PluginController({ page: this.page });
+    this._roles = new RoleController(
+      { page: this.page, plugins: this._plugins }
+    );
 
     this.registerPageListeners(this.page);
   }
@@ -280,6 +284,20 @@ class RoomController extends EventEmitter {
     if (!this.usable) throw new UnusableError();
     if (!this._hhmLoaded) throw new HHMNotLoadedError();
     return this._repositories;
+  }
+
+  /**
+   * Object that can be used to control and get information about roles.
+   * 
+   * **Requires the room to be running and sav/roles plugin to be loaded
+   * and enabled!**
+   * 
+   * @type RoleController
+   */
+  get roles() {
+    if (!this.usable) throw new UnusableError();
+    if (!this.running) throw new RoomNotRunningError();
+    return this._roles;
   }
   /**
    * Validates the arguments for the constructor.

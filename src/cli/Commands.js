@@ -312,15 +312,46 @@ class Commands extends CommandHandler {
 
         for (let player of playerList) {
           if (!player) continue;
-          let playerString = `id: ${player.id} - ${player.name} ` +
-            `- ${player.auth}`;
-
+          let playerString = `nickname: ${colors.cyan(player.name)}`;
           if (player.admin) {
-            playerString += ' - ' + colors.green('admin');
+            playerString += ' ' + colors.green('admin');
           }
+          playerString += `\n  id: ${player.id}` 
+          playerString += `\n  auth: ${player.auth}`;
+          
+
+          let roles = await this.room.roles.getPlayerRoles(player.id);
+          if (roles && roles.length > 0) {
+            playerString += `\n  roles: ${roles.join(',')}`
+          }
+
           players.push(playerString);
         }
         cprompt.print(players.join(`\n`), `PLAYERS`);
+      }
+    }
+  }
+
+  onCommand_addrole() {
+    return {
+      description: 'Adds given role to a player with given id.',
+      disabled: !this.room.running,
+      args: ['id', 'role'],
+      category: 'Room control',
+      run: async (id, role) => {
+        await this.room.roles.setPlayerRole(id, role, true, true);
+      }
+    }
+  }
+
+  onCommand_delrole() {
+    return {
+      description: 'Removes given role from a player with given id.',
+      disabled: !this.room.running,
+      args: ['id|auth', 'role'],
+      category: 'Room control',
+      run: async (id, role) => {
+        await this.room.roles.setPlayerRole(id, role, false, true);
       }
     }
   }
