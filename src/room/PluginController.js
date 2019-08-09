@@ -23,8 +23,6 @@
 class PluginController {
   constructor(opt) {
     this.page = opt.page;
-    this.running = false;
-    this._usable = false;
   }
 
   /**
