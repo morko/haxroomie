@@ -332,6 +332,32 @@ class Commands extends CommandHandler {
     }
   }
 
+  onCommand_role() {
+    return {
+      description: 'Prints information and players in given role.',
+      disabled: !this.room.running,
+      args: ['role'],
+      category: 'Room control',
+      run: async (role) => {
+        const roleInfo = await this.room.roles.getRole(role);
+
+        if (roleInfo.players.length > 0) {
+          let players = [];
+          for (let p of roleInfo.players) {
+            let playerString = `nickname: ${colors.cyan(p.name)}`;
+            playerString += `\n  id: ${p.id}` 
+            playerString += `\n  auth: ${p.auth}`;
+            players.push(playerString);
+          }
+          cprompt.print(players.join(`\n`), `PLAYERS`);
+        }
+        cprompt.print(`Role: ${colors.cyan(roleInfo.name)} ` +
+          `- Password: ${colors.yellow(roleInfo)} ` +
+          `- Players: ${roleInfo.players.length}`);
+      }
+    }
+  }
+
   onCommand_addrole() {
     return {
       description: 'Adds given role to a player with given id.',
