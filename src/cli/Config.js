@@ -216,20 +216,9 @@ class Config {
     let plugins = {};
     for (let pPath of pluginPaths) {
       let file = this.loadFile(pPath);
-      // try to extract the name from plugin contents
-      let regexp = /pluginSpec[\s\S]+name.+['`"](.+)['`"]/g;
-      let match = regexp.exec(file.content);
       let splitPath = pPath.split(path.sep);
       let pluginName = splitPath[splitPath.length - 2] + '/' + 
         splitPath[splitPath.length - 1].split('.')[0];
-      if (match) {
-        pluginName = match[1];
-      } else {
-        cprompt.warn(
-          `Could not find pluginSpec.name in plugin ${pPath}. ` +
-          `Defaulting name to ${pluginName}.`
-        );
-      }
       plugins[pluginName] = file.content;
     }
 
