@@ -10,22 +10,32 @@ HHM.config.room = {
   token: hrConfig.token
 };
 
-// Default plugin repositories.
-HHM.config.repositories = [
-  {
-    type: `github`,
-    repository: `saviola777/hhm-plugins`
-  },
-];
+
+HHM.config.repositories = [];
 
 // Merge user repositories with default ones.
 if (hrConfig.repositories && !Array.isArray(hrConfig.repositories)) {
   throw new Error(`Haxroomie's "repositories" should be an array!`);
 } else if (hrConfig.repositories) {
-  HHM.config.repositories = [
-    ...hrConfig.repositories,
-    ...HHM.config.repositories
-  ];
+  HHM.config.repositories = [...hrConfig.repositories];
+}
+
+let hasDefaultRepo = false;
+for (let repo of HHM.config.repositories) {
+  if (repo.type === `github` && repo.repository === `saviola777/hhm-plugins`) {
+    hasDefaultRepo = true;
+    break;
+  }
+}
+
+if (!hasDefaultRepo) {
+  // Add default plugin repository.
+  HHM.config.repositories.push(
+    {
+      type: `github`,
+      repository: `saviola777/hhm-plugins`
+    }
+  );
 }
 
 // The default plugin configuration.
