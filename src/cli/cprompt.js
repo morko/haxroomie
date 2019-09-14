@@ -22,6 +22,7 @@ const COLORS = {
   'ADMIN': colors.yellow,
   'UNADMIN': colors.yellow,
   'PLAYERS': colors.green,
+  'ROLE INFO': colors.green,
   'PAGE CLOSED': colors.red,
   'ERROR': colors.red.bold,
   'INVALID COMMAND': colors.red,

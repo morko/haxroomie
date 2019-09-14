@@ -110,7 +110,7 @@ class PluginController {
    */
   async hasPlugin(name) {
     return this.page.evaluate(async (name) => {
-      return HHM.manager.hasPluginByName(name);
+      return HHM.manager.hasPlugin(name);
     }, name);
   }
 
@@ -135,7 +135,7 @@ class PluginController {
 
     if (typeof plugin === 'string') {
       return this.page.evaluate(async (name) => {
-        return HHM.manager.addPluginByName(name);
+        return HHM.manager.addPlugin({ pluginName: name });
       }, plugin);
     }
 
@@ -144,7 +144,10 @@ class PluginController {
     }
 
     return this.page.evaluate(async (plugin) => {
-      return HHM.manager.addPluginByCode(plugin.content, plugin.name);
+      return HHM.manager.addPlugin({ 
+        pluginCode: plugin.content, 
+        pluginName: plugin.name
+      });
     }, plugin);
   }
 
@@ -176,7 +179,7 @@ class PluginController {
         let pluginId = HHM.manager.getPluginId(pluginName);
         
         if (pluginId < 0) {
-          pluginId = await HHM.manager.addPluginByName(pluginName);
+          pluginId = await HHM.manager.addPlugin({ pluginName });
           if (pluginId < 0) {
             throw new Error(
               `Cannot load plugin "${pluginName}" from available repositories.`
@@ -198,7 +201,7 @@ class PluginController {
         let pluginId = manager.getPluginId(name);
         
         if (pluginId < 0) {
-          pluginId = await manager.addPluginByName(name);
+          pluginId = await manager.addPlugin({ pluginName: name });
           if (pluginId < 0) {
             return;
           }
@@ -220,7 +223,7 @@ class PluginController {
     if (typeof pluginName === 'string') {
       let config = await this.page.evaluate((pluginName) => {
 
-        let plugin = HHM.manager.getPluginByName(pluginName);
+        let plugin = HHM.manager.getPlugin(pluginName);
         if (!plugin) {
           throw new TypeError(`Invalid plugin "${pluginName}".`);
         }
@@ -232,7 +235,7 @@ class PluginController {
 
     let config = await this.page.evaluate(() => {
       let plugins = HHM.manager.getLoadedPluginIds().map(id => {
-        return HHM.manager.getPluginById(id);
+        return HHM.manager.getPlugin(id);
       });
       let cfg = {};
       for (let plugin of plugins) {

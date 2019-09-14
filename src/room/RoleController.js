@@ -26,12 +26,12 @@ class RoleController {
     return this.page.evaluate((playerId) => {
 
       if (typeof playerId === 'number') {
-        const rolesPlugin = HHM.manager.getPluginByName('sav/roles');
+        const rolesPlugin = HHM.manager.getPlugin('sav/roles');
         let roles = rolesPlugin.getPlayerRoles(playerId);
         return roles;
 
       } else if (typeof playerId === 'string') {
-        const playersPlugin = HHM.manager.getPluginByName('sav/players');
+        const playersPlugin = HHM.manager.getPlugin('sav/players');
         let roles = playersPlugin.getUserData(playerId, 'sav/roles').roles;
         return roles;
       }
@@ -53,7 +53,7 @@ class RoleController {
       throw new Error('sav/roles plugin needs to be loaded and enabled!');
     }
     return this.page.evaluate((roleName, opt) => {
-      const rolesPlugin = HHM.manager.getPluginByName('sav/roles');
+      const rolesPlugin = HHM.manager.getPlugin('sav/roles');
       let role = rolesPlugin.getRole(roleName, opt);
       return role;
     }, roleName, opt);
@@ -75,7 +75,7 @@ class RoleController {
     }
 
     return this.page.evaluate((playerId, role, state, persistent) => {
-      const rolesPlugin = HHM.manager.getPluginByName('sav/roles');
+      const rolesPlugin = HHM.manager.getPlugin('sav/roles');
 
       if (typeof playerId === 'number') {
         return rolesPlugin.setPlayerRole(playerId, role, state, persistent);

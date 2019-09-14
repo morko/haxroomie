@@ -91,7 +91,10 @@ HHM.config.postInit = HBInit => {
   // Load the `plugins`.
   if (hrConfig.plugins && Array.isArray(hrConfig.plugins)) {
     for (let plugin of hrConfig.plugins) {
-      window.HHM.manager.addPluginByCode(plugin.content, plugin.name);
+      window.HHM.manager.addPlugin({ 
+        pluginCode: plugin.content,
+        pluginName: plugin.name 
+      });
     }
   }
 
@@ -105,7 +108,10 @@ HHM.config.postInit = HBInit => {
   if (hrConfig.roomScript) {
     let name = hrConfig.roomScript.name;
     let content = hrConfig.roomScript.content
-    window.HHM.manager.addPluginByCode(content, name);
+    window.HHM.manager.addPlugin({
+      pluginCode: content,
+      pluginName: name
+    });
   }
 
   room.onRoomLink = () => {

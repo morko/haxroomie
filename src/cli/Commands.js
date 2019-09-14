@@ -115,22 +115,24 @@ class Commands extends CommandHandler {
       run: async () => {
         let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(rooms.map(async (r) => {
-          let id = colors.cyan(r.id);
+          let id = 'ID: ' + colors.cyan(r.id);
 
           if (!r.usable) {
-            return `id: ${id} - ${colors.red('not usable')} - ` +
-              `reinitialize with "init ${id}"`;
+            return `${id} Status: ${colors.red('not usable')} ` +
+              `try to reinitialize with "init ${r.id}"`;
           }
           let isRunning = r.running ?
-            colors.green('running') :
-            colors.yellow('stopped');
-          if (!r.running) return `id: ${id} - ${isRunning}`;
+            'Status: ' + colors.green('running') :
+            'Status: ' + colors.yellow('stopped');
+          if (!r.running) return `${id} ${isRunning}`;
 
-          let roomLink = r.roomInfo.roomLink;
+          let roomLink = 'Link: ' + colors.cyan(r.roomInfo.roomLink);
           let maxPlayers = r.roomInfo.maxPlayers;
           let playerList = await r.callRoom('getPlayerList');
-          let amountOfPlayers = `players ${playerList.length - 1}/${maxPlayers}`;
-          return `id: ${id} - ${isRunning} - ${amountOfPlayers} - ${roomLink}`;
+          let players = colors.cyan((playerList.length - 1) + '/' + maxPlayers);
+          let amountOfPlayers = `Players: ${players}`;
+
+          return `${id} ${isRunning} ${amountOfPlayers} ${roomLink}`;
         }));
         cprompt.print(rooms.join(`\n`));
       }
@@ -339,9 +341,12 @@ class Commands extends CommandHandler {
       args: ['role'],
       category: 'Room control',
       run: async (role) => {
-        const roleInfo = await this.room.roles.getRole(role);
+        const roleInfo = await this.room.roles.getRole(role, {
+           offlinePlayers: true
+        });
 
         if (roleInfo.players.length > 0) {
+          cprompt.print(`Players in the role ${colors.green(roleInfo.roleName)}:`);
           let players = [];
           for (let p of roleInfo.players) {
             let playerString = `nickname: ${colors.cyan(p.name)}`;
@@ -349,11 +354,15 @@ class Commands extends CommandHandler {
             playerString += `\n  auth: ${p.auth}`;
             players.push(playerString);
           }
-          cprompt.print(players.join(`\n`), `PLAYERS`);
+          cprompt.print(players.join(`\n`));
         }
-        cprompt.print(`Role: ${colors.cyan(roleInfo.name)} ` +
-          `- Password: ${colors.yellow(roleInfo)} ` +
-          `- Players: ${roleInfo.players.length}`);
+
+        cprompt.print(
+          `Role: ${colors.cyan(roleInfo.roleName)} ` +
+          `Password: ${colors.cyan(roleInfo.password)} ` +
+          `Players: ${colors.cyan(roleInfo.players.length)}`,
+          `ROLE INFO`
+        );
       }
     }
   }
@@ -458,7 +467,7 @@ class Commands extends CommandHandler {
       category: 'Room control',
       run: async () => {
         let bannedPlayers = await this.room.eval(() => {
-          return HHM.manager.getPluginByName('hr/kickban').bannedPlayers();
+          return HHM.manager.getPlugin('hr/kickban').bannedPlayers();
         });
         if (bannedPlayers.length === 0) {
           cprompt.print('No banned players.');

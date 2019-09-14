@@ -10,7 +10,6 @@ Object.assign(window.hroomie, (function(){
     isObject,
     mergeDeep,
     callRoom,
-    getPluginById,
     getPlugin,
     getPlugins,
     enablePlugin,
@@ -82,31 +81,19 @@ Object.assign(window.hroomie, (function(){
   }
 
   /**
-   * Returns PluginData of HHM plugin with the given id or null if not found.
+   * Returns PluginData of HHM plugin with the given id or name.
    * 
-   * @param {number} - id of the plugin
+   * Returns null if not found.
+   * 
+   * @param {number|string} - id or name of the plugin
    * @returns {PluginData|null} - data of plugin or null
    */
-  function getPluginById(id) {
-    const plugin = HHM.manager.getPluginById(id);
-    if (!plugin) return null;
-    let pluginData = {
-      id: id,
-      name: plugin.pluginSpec ? plugin.pluginSpec.name : undefined,
-      isEnabled: plugin.isEnabled(),
-      pluginSpec: plugin.pluginSpec
+  function getPlugin(id) {
+    let parsed = parseInt(id, 10);
+    if (isNaN(parsed)) { 
+      parsed = id;
     }
-    return pluginData;
-  }
-
-  /**
-   * Returns PluginData of HHM plugin with the given name or null if not found.
-   * 
-   * @param {string} - name of the plugin
-   * @returns {PluginData|null} - data of plugin or null
-   */
-  function getPlugin(name) {
-    const plugin = HHM.manager.getPluginByName(name);
+    const plugin = HHM.manager.getPlugin(parsed);
     if (!plugin) return null;
     let pluginData = {
       id: plugin._id,
@@ -125,7 +112,7 @@ Object.assign(window.hroomie, (function(){
    */
   function getPlugins() {
     let plugins = HHM.manager.getLoadedPluginIds()
-      .map(id => this.getPluginById(id))
+      .map(id => this.getPlugin(id))
       .filter(pluginData => {
         const name = pluginData.pluginSpec.name;
         // ignore these plugins
@@ -142,8 +129,7 @@ Object.assign(window.hroomie, (function(){
    * @returns {boolean} - `true` if plugin was enabled, `false` otherwise.
    */
   function enablePlugin(name) {
-    const plugin = HHM.manager.getPluginByName(name);
-    return HHM.manager.enablePluginById(plugin._id);
+    return HHM.manager.enablePlugin(name);
   }
 
   /**
@@ -158,20 +144,20 @@ Object.assign(window.hroomie, (function(){
   function disablePlugin(name) {
     if (Array.isArray(name)) {
       for (let i = 0; i < name.length; i++) {
-        const plugin = HHM.manager.getPluginByName(name[i]);
-        const success = HHM.manager.disablePluginById(plugin._id);
+        const plugin = HHM.manager.getPlugin(name[i]);
+        const success = HHM.manager.disablePlugin(plugin._id);
         if (!success) {
           for (let j = 0; j <= i; j++) {
-            const plugin = HHM.manager.getPluginByName(name[i - j]);
-            HHM.manager.enablePluginById(plugin._id);
+            const plugin = HHM.manager.getPlugin(name[i - j]);
+            HHM.manager.enablePlugin(plugin._id);
           }
           return false;
         }
       }
       return true;
     }
-    const plugin = HHM.manager.getPluginByName(name);
-    return HHM.manager.disablePluginById(plugin._id);
+    const plugin = HHM.manager.getPlugin(name);
+    return HHM.manager.disablePlugin(plugin._id);
   }
 
   /**
@@ -181,8 +167,8 @@ Object.assign(window.hroomie, (function(){
    */
   function getDependentPlugins(name) {
     const pluginId = HHM.manager.getPluginId(name);
-    return HHM.manager.getDependentPluginsById(pluginId)
-      .map(id => getPluginById(id));
+    return HHM.manager.getDependentPlugins(pluginId)
+      .map(id => getPlugin(id));
   }
 
 })());
