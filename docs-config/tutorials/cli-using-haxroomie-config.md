@@ -18,7 +18,9 @@ let config = {
 };
 module.exports = config;
 ```
-This page explains each option.
+In addition to normal values that the HBInit function accepts
+(see [Haxball Headless Host WiKi](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject))
+, following options can be used:
 
 ## `autoStart`
 
@@ -27,55 +29,6 @@ Set to `true` if you want the room to start on startup. Default is `false`.
 e.g.
 ```js
 autoStart: true
-```
-
-## `roomName`
-
-The name for the room. Default is `haxroomie`
-
-e.g.
-```js
-roomName: 'my room'
-```
-
-## `playerName`
-
-The name for the host player. Default is `host`.
-
-e.g.
-```js
-playerName: 'my host player name'
-```
-
-## `maxPlayers`
-
-Max number of players the room accepts. Default is `10`.
-
-e.g.
-```js
-maxPlayers: 12
-```
-
-## `public`
-
-If `true` the room will appear in the room list. Default is `false`.
-
-e.g.
-```js
-public: true
-```
-
-## `geo`
-
-Geolocation override for the room. Default is where your server is located.
-
-You can use <https://www.latlong.net/> to find the coordinates easily.
-The code is a country code in two letter ISO format listed in
-<https://countrycode.org/>.
-
-e.g.
-```js
-geo: { code: 'eu', lat: '52.5192', lon: '13.4061' }
 ```
 
 ## `repositories`
@@ -160,18 +113,6 @@ e.g.
 roomScript: '/path/to/myScript.js'
 ```
 
-## `token`
-
-You can give the token needed to open the rooms in the config.
-This is useful if you are testing something and need to restart
-the rooms often or if you wish to load it from an environment
-variable.
-
-e.g.
-```js
-token: process.env.HAXBALL_TOKEN
-```
-
 ## `disableDefaultPlugins`
 
 Set to `true` if you want to disable the default
@@ -183,6 +124,18 @@ want to test some plugins without others interfering with it.
 e.g.
 ```js
 disableDefaultPlugins: true
+```
+
+## `token`
+
+You can give the token needed to open the rooms in the config.
+This is useful if you are testing something and need to restart
+the rooms often or if you wish to load it from an environment
+variable.
+
+e.g.
+```js
+token: process.env.HAXBALL_TOKEN
 ```
 
 ## `hhmConfig`

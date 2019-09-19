@@ -80,10 +80,13 @@ e.g. `npm install haxroomie@1.0.7 -g`
 # CLI usage
 
 By default haxroomie uses the config from `~/.haxroomie/config.js`.
+
 If the config does not exist, then one will be created using [this](examples/configs/1-private-room.js)
 example configuration.
 
 [Here](https://github.com/morko/haxroomie/tree/master/examples/configs) you can find more examples.
+
+See [config section](#config) for more information about the config file.
 
 To start run:
 ```sh
@@ -104,12 +107,11 @@ it in the config
 
 Once haxroomie CLI is running you can type `help` for available commands.
 
-See [config section](#config) for more information about the config file.
-
 ## Config
 
 Haxroomies config is used to tell haxroomie how many rooms you are planning to run
-and with what kind of options.
+and with what kind of options. Each room config accepts same options than the regular
+`HBInit` function with some additional ones.
 
 See [the documentation](https://morko.github.io/haxroomie/latest/tutorial-cli-using-haxroomie-config.html)
 for all the possible options and their explanations.
