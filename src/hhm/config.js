@@ -6,7 +6,7 @@ hrConfig.playerName = hrConfig.playerName || 'host';
 hrConfig.maxPlayers = parseInt(hrConfig.maxPlayers, 10) || 10;
 hrConfig.public = hrConfig.hasOwnProperty('public') ? hrConfig.public : false;
 hrConfig.password = hrConfig.password || undefined;
-hrConfig.get = hrConfig.geo || undefined;
+hrConfig.geo = hrConfig.geo || undefined;
 
 HHM.config.room = hrConfig;
 
