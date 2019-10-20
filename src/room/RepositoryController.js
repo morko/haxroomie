@@ -1,26 +1,26 @@
 /**
  * Repository definition.
- * 
+ *
  * @typedef {Object} Repository
  * @property {string} type - Repository type. Can be one of `github`, `url`
  *    or `local`.
  * @property {string} [repository] - When type is `github` this is a
  *    **mandatory** field. If your GitHub repository is at
- *    `https://github.com/user/repository` then this value should be 
+ *    `https://github.com/user/repository` then this value should be
  *    `user/repository`.
  * @property {string} [path] - When type is `github` this is an **optional**
  *    field. The path under the repository where the plugins are. Default is
  *    `src`.
  * @property {string} [version] - When type is `github` this is an **optional**
- *    field. This is the branch, tag or commit of the repository you want to 
+ *    field. This is the branch, tag or commit of the repository you want to
  *    use.
  * @property {string} [url] - When type is `url` this is a **mandatory**
  *    field. The URL to your repository. Take care that your host has CORS
  *    enabled.
- * @property {object} [plugins] - When type is `local` this is a 
+ * @property {object} [plugins] - When type is `local` this is a
  *    **mandatory** field. This property contains the code for plugins in
  *    a `local` repository.
- * 
+ *
  *    e.g.
  * ```js
  * {
@@ -31,16 +31,16 @@
  *   }
  * }
  * ```
- * @property {string} [path] - When type is `local` this is an 
+ * @property {string} [path] - When type is `local` this is an
  *    **optional** field. This property contains the path from where the
  *    local repository has been loaded.
  */
 
 /**
  * Repository data.
- * 
+ *
  * @typedef {Object} RepositoryData
- * 
+ *
  * @property {string} name - Name of the repository.
  * @property {string} [description] - Description of repository.
  * @property {string} [author] - Author of the repository.
@@ -62,31 +62,35 @@ class RepositoryController {
   /**
    * Adds a repository.
    *
-   * If append is set to true, the new repository will be added with the 
-   * lowest priority, i.e. plugins will only be loaded from it they can't 
-   * be found in any other repository. Otherwise the repository will be 
+   * If append is set to true, the new repository will be added with the
+   * lowest priority, i.e. plugins will only be loaded from it they can't
+   * be found in any other repository. Otherwise the repository will be
    * added with the highest priority.
    *
    * @param {Repository} repository - The repository to be added.
-   * @param {boolean} [append] - Whether to append or prepend the repository 
+   * @param {boolean} [append] - Whether to append or prepend the repository
    *    to the Array of repositories.
    * @returns {Promise.<boolean>} - Whether the repository was successfully added.
-   * 
+   *
    */
   async addRepository(repository, append) {
     if (!repository) {
-      throw new TypeError('Missing required argument: repository')
+      throw new TypeError('Missing required argument: repository');
     }
 
-    return this.page.evaluate(async (repository, append) => {
-      return HHM.manager.getPluginLoader().addRepository(repository, append);
-    }, repository, append);
+    return this.page.evaluate(
+      async (repository, append) => {
+        return HHM.manager.getPluginLoader().addRepository(repository, append);
+      },
+      repository,
+      append
+    );
   }
 
   /**
    * Returns available repositories.
    * @returns {Array.<Repository>} - An array of available repositories.
-   * 
+   *
    */
   async getRepositories() {
     return this.page.evaluate(() => {
@@ -96,15 +100,17 @@ class RepositoryController {
 
   /**
    * Retrieves information about the given repository.
-   * 
+   *
    * The information is loaded from repositorys `repository.json` config file.
    * @param {Repository} repository - The repository that you want to get
-   *    information from. 
+   *    information from.
    * @returns {RepositoryData} - The metadata of the repository.
    */
   async getRepositoryInformation(repository) {
-    return this.page.evaluate(async (rd) => {
-      let r = await HHM.manager.getPluginRepositoryFactory().createRepository(rd);
+    return this.page.evaluate(async rd => {
+      let r = await HHM.manager
+        .getPluginRepositoryFactory()
+        .createRepository(rd);
       return r.repositoryInformation;
     }, repository);
   }

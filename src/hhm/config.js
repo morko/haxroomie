@@ -2,7 +2,9 @@
 hrConfig.roomName = hrConfig.roomName || 'haxroomie';
 hrConfig.playerName = hrConfig.playerName || 'host';
 hrConfig.maxPlayers = parseInt(hrConfig.maxPlayers, 10) || 10;
-hrConfig.public = hrConfig.hasOwnProperty('public') ? hrConfig.public : false;
+hrConfig.public = Object.prototype.hasOwnProperty.call(hrConfig, 'public')
+  ? hrConfig.public
+  : false;
 hrConfig.password = hrConfig.password || undefined;
 hrConfig.geo = hrConfig.geo || undefined;
 
@@ -27,12 +29,10 @@ for (let repo of HHM.config.repositories) {
 
 if (!hasDefaultRepo) {
   // Add default plugin repository.
-  HHM.config.repositories.push(
-    {
-      type: `github`,
-      repository: `saviola777/hhm-plugins`
-    }
-  );
+  HHM.config.repositories.push({
+    type: `github`,
+    repository: `saviola777/hhm-plugins`,
+  });
 }
 
 HHM.config.plugins = hrConfig.pluginConfig || {};
@@ -58,11 +58,11 @@ HHM.config.postInit = HBInit => {
 
   // Load the additional `plugins` outside of repositories.
   if (hrConfig.plugins && Array.isArray(hrConfig.plugins)) {
-    console.log(hrConfig)
+    console.log(hrConfig);
     for (let plugin of hrConfig.plugins) {
-      window.HHM.manager.addPlugin({ 
+      window.HHM.manager.addPlugin({
         pluginCode: plugin.content,
-        pluginName: plugin.name 
+        pluginName: plugin.name,
       });
     }
   }
@@ -70,23 +70,23 @@ HHM.config.postInit = HBInit => {
   // Set the configs for `plugins`.
   for (let [pluginName, cfg] of Object.entries(removedPluginConfigs)) {
     let id = HHM.manager.getPluginId(pluginName);
-    HHM.manager.setPluginConfig(id, cfg)
+    HHM.manager.setPluginConfig(id, cfg);
   }
 
   // Load the `roomScript`.
   if (hrConfig.roomScript) {
     let name = hrConfig.roomScript.name;
-    let content = hrConfig.roomScript.content
+    let content = hrConfig.roomScript.content;
     window.HHM.manager.addPlugin({
       pluginCode: content,
-      pluginName: name
+      pluginName: name,
     });
   }
 
   room.onRoomLink = () => {
     // This tells Haxroomie that HHM has fully loaded.
     window.hroomie.hhmStarted = true;
-  }
+  };
 };
 
 HHM.manager.start();

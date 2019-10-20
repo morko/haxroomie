@@ -4,9 +4,7 @@ const cprompt = require('./cprompt');
 const logger = require('../logger');
 
 class Commands extends CommandHandler {
-
   constructor(opt) {
-
     opt = opt || {};
     if (!opt.room) new TypeError('invalid arguments');
     if (!opt.haxroomie) new TypeError('invalid arguments');
@@ -46,9 +44,9 @@ class Commands extends CommandHandler {
    */
   pluginDataToString(pluginData) {
     const p = pluginData;
-    const isEnabled = p.isEnabled ?
-      `${colors.green(`enabled`)}` :
-      `${colors.yellow(`disabled`)}`;
+    const isEnabled = p.isEnabled
+      ? `${colors.green(`enabled`)}`
+      : `${colors.yellow(`disabled`)}`;
 
     let string =
       `${p.pluginSpec.name} (${isEnabled}):\n` +
@@ -68,11 +66,12 @@ class Commands extends CommandHandler {
       description: 'Prints help.',
       category: 'Basic commands',
       run: async () => {
-
         let categories = new Map();
         let indentation = 12;
 
-        for (let prop of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
+        for (let prop of Object.getOwnPropertyNames(
+          Object.getPrototypeOf(this)
+        )) {
           if (!prop.startsWith(this.cmdPrefix)) {
             continue;
           }
@@ -92,7 +91,7 @@ class Commands extends CommandHandler {
           if (categories.has(category)) {
             categories.get(category).push(help);
           } else {
-            categories.set(category, [help])
+            categories.set(category, [help]);
           }
         }
 
@@ -102,97 +101,107 @@ class Commands extends CommandHandler {
           let helps = categories.get(category);
           cprompt.print(helps.join(`\n`));
         }
-
-
-      }
-    }
+      },
+    };
   }
-  
+
   onCommand_rooms() {
     return {
       description: 'Prints available rooms and information about them.',
       category: 'Basic commands',
       run: async () => {
         let rooms = this.haxroomie.getRooms();
-        rooms = await Promise.all(rooms.map(async (r) => {
-          let id = 'ID: ' + colors.cyan(r.id);
+        rooms = await Promise.all(
+          rooms.map(async r => {
+            let id = 'ID: ' + colors.cyan(r.id);
 
-          if (!r.usable) {
-            return `${id} Status: ${colors.red('not usable')} ` +
-              `try to reinitialize with "init ${r.id}"`;
-          }
-          let isRunning = r.running ?
-            'Status: ' + colors.green('running') :
-            'Status: ' + colors.yellow('stopped');
-          if (!r.running) return `${id} ${isRunning}`;
+            if (!r.usable) {
+              return (
+                `${id} Status: ${colors.red('not usable')} ` +
+                `try to reinitialize with "init ${r.id}"`
+              );
+            }
+            let isRunning = r.running
+              ? 'Status: ' + colors.green('running')
+              : 'Status: ' + colors.yellow('stopped');
+            if (!r.running) return `${id} ${isRunning}`;
 
-          let roomLink = 'Link: ' + colors.cyan(r.roomInfo.roomLink);
-          let maxPlayers = r.roomInfo.maxPlayers;
-          let playerList = await r.callRoom('getPlayerList');
-          let players = colors.cyan((playerList.length - 1) + '/' + maxPlayers);
-          let amountOfPlayers = `Players: ${players}`;
+            let roomLink = 'Link: ' + colors.cyan(r.roomInfo.roomLink);
+            let maxPlayers = r.roomInfo.maxPlayers;
+            let playerList = await r.callRoom('getPlayerList');
+            let players = colors.cyan(playerList.length - 1 + '/' + maxPlayers);
+            let amountOfPlayers = `Players: ${players}`;
 
-          return `${id} ${isRunning} ${amountOfPlayers} ${roomLink}`;
-        }));
+            return `${id} ${isRunning} ${amountOfPlayers} ${roomLink}`;
+          })
+        );
         cprompt.print(rooms.join(`\n`));
-      }
-    }
+      },
+    };
   }
-  
+
   onCommand_setroom() {
     return {
-      description: `Selects which room to control using its id (see ${colors.cyan('rooms')}).`,
+      description: `Selects which room to control using its id (see ${colors.cyan(
+        'rooms'
+      )}).`,
       args: ['id'],
       category: 'Basic commands',
-      run: (id) => {
+      run: id => {
         let room = this.haxroomie.getRoom(id);
         if (!room) {
           cprompt.print(`Invalid room id`, `ERROR`);
           return;
         }
         this.setRoom(room);
-      }
-    }
+      },
+    };
   }
 
   onCommand_open() {
     return {
-      description: `Opens room with given id (see ${colors.cyan('rooms')} for the ids).`,
+      description: `Opens room with given id (see ${colors.cyan(
+        'rooms'
+      )} for the ids).`,
       alias: ['start'],
       args: ['id'],
       category: 'Basic commands',
-      run: (id) => {
+      run: id => {
         if (this.room.running) {
-          cprompt.print(`The room is already running. Close it before opening!`)
+          cprompt.print(
+            `The room is already running. Close it before opening!`
+          );
           return;
         }
         return this.openRoom(id);
-      }
-    }
+      },
+    };
   }
 
   onCommand_close() {
     return {
-      description: `Closes room with given id (see ${colors.cyan('rooms')} for the ids).`,
+      description: `Closes room with given id (see ${colors.cyan(
+        'rooms'
+      )} for the ids).`,
       args: ['id'],
       alias: ['stop'],
       category: 'Basic commands',
-      run: async (id) => {
+      run: async id => {
         return this.closeRoom(id);
-      }
-    }
+      },
+    };
   }
 
   onCommand_reload() {
     return {
-      description: 'Reloads the config and restarts the rooms that were modified (if needed).',
+      description:
+        'Reloads the config and restarts the rooms that were modified (if needed).',
       category: 'Basic commands',
       run: async () => {
         const reloadInfo = this.config.reload();
         const { oldConfig, newConfig, modifiedRooms } = reloadInfo;
 
         if (modifiedRooms.size > 0) {
-
           let rooms = [];
           for (let roomId of modifiedRooms.keys()) {
             rooms.push(colors.cyan(roomId));
@@ -208,8 +217,8 @@ class Commands extends CommandHandler {
         }
 
         await this.reloadRooms(oldConfig, newConfig, modifiedRooms);
-      }
-    }
+      },
+    };
   }
 
   async reloadRooms(oldConfig, newConfig, modifiedRooms) {
@@ -225,7 +234,7 @@ class Commands extends CommandHandler {
         await this.createRoom(roomId);
         let roomConfig = this.config.getRoomConfig(roomId);
         if (roomConfig.autoStart) {
-          await this.openRoom(roomId)
+          await this.openRoom(roomId);
         }
         continue;
       }
@@ -247,7 +256,10 @@ class Commands extends CommandHandler {
         // If we can hotload the properties.
         for (let prop of modifiedProperties) {
           if (prop === 'pluginConfig') {
-            cprompt.print(`Setting plugin config for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
+            cprompt.print(
+              `Setting plugin config for ${colors.cyan(roomId)}.`,
+              'RELOAD CONFIG'
+            );
             try {
               await room.plugins.setPluginConfig(
                 newConfig[roomId].pluginConfig
@@ -261,18 +273,18 @@ class Commands extends CommandHandler {
       }
     }
   }
-  
+
   onCommand_init() {
     return {
-      description: `Tries to reinitialize if room ` +
-        `goes to an unusable state.`,
+      description:
+        `Tries to reinitialize if room ` + `goes to an unusable state.`,
       args: ['id'],
       category: 'Basic commands',
-      run: async (id) => {
+      run: async id => {
         await this.haxroomie.removeRoom(id);
         await this.createRoom(id);
-      }
-    }
+      },
+    };
   }
 
   onCommand_link() {
@@ -286,8 +298,8 @@ class Commands extends CommandHandler {
           return;
         }
         cprompt.print(this.room.roomInfo.roomLink);
-      }
-    }
+      },
+    };
   }
 
   onCommand_chat() {
@@ -296,11 +308,11 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['msg'],
       category: 'Room control',
-      run: async (msg) => {
+      run: async msg => {
         if (!msg && msg !== 0) return;
         await this.room.callRoom('sendChat', msg);
-      }
-    }
+      },
+    };
   }
 
   onCommand_players() {
@@ -309,7 +321,7 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       category: 'Room control',
       run: async () => {
-        let playerList = await this.room.callRoom('getPlayerList')
+        let playerList = await this.room.callRoom('getPlayerList');
         playerList = playerList.filter(p => p.id !== 0);
         let players = [`${playerList.length}/${this.room.roomInfo.maxPlayers}`];
 
@@ -319,20 +331,19 @@ class Commands extends CommandHandler {
           if (player.admin) {
             playerString += ' ' + colors.green('admin');
           }
-          playerString += `\n  id: ${player.id}` 
+          playerString += `\n  id: ${player.id}`;
           playerString += `\n  auth: ${player.auth}`;
-          
 
           let roles = await this.room.roles.getPlayerRoles(player.id);
           if (roles && roles.length > 0) {
-            playerString += `\n  roles: ${roles.join(',')}`
+            playerString += `\n  roles: ${roles.join(',')}`;
           }
 
           players.push(playerString);
         }
         cprompt.print(players.join(`\n`), `PLAYERS`);
-      }
-    }
+      },
+    };
   }
 
   async onCommand_role() {
@@ -340,7 +351,7 @@ class Commands extends CommandHandler {
     if (!this.room.running) {
       isDisabled = true;
     } else {
-      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = await this.room.plugins.hasPlugin('sav/roles');
       isDisabled = !isDisabled;
     }
     return {
@@ -348,17 +359,19 @@ class Commands extends CommandHandler {
       disabled: isDisabled,
       args: ['role'],
       category: 'Room control',
-      run: async (role) => {
+      run: async role => {
         const roleInfo = await this.room.roles.getRole(role, {
-           offlinePlayers: true
+          offlinePlayers: true,
         });
 
         if (roleInfo.players.length > 0) {
-          cprompt.print(`Players in the role ${colors.green(roleInfo.roleName)}:`);
+          cprompt.print(
+            `Players in the role ${colors.green(roleInfo.roleName)}:`
+          );
           let players = [];
           for (let p of roleInfo.players) {
             let playerString = `nickname: ${colors.cyan(p.name)}`;
-            playerString += `\n  id: ${p.id}` 
+            playerString += `\n  id: ${p.id}`;
             playerString += `\n  auth: ${p.auth}`;
             players.push(playerString);
           }
@@ -367,12 +380,12 @@ class Commands extends CommandHandler {
 
         cprompt.print(
           `Role: ${colors.cyan(roleInfo.roleName)} ` +
-          `Password: ${colors.cyan(roleInfo.password)} ` +
-          `Players: ${colors.cyan(roleInfo.players.length)}`,
+            `Password: ${colors.cyan(roleInfo.password)} ` +
+            `Players: ${colors.cyan(roleInfo.players.length)}`,
           `ROLE INFO`
         );
-      }
-    }
+      },
+    };
   }
 
   async onCommand_addrole() {
@@ -380,7 +393,7 @@ class Commands extends CommandHandler {
     if (!this.room.running) {
       isDisabled = true;
     } else {
-      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = await this.room.plugins.hasPlugin('sav/roles');
       isDisabled = !isDisabled;
     }
     return {
@@ -390,8 +403,8 @@ class Commands extends CommandHandler {
       category: 'Room control',
       run: async (id, role) => {
         await this.room.roles.setPlayerRole(id, role, true, true);
-      }
-    }
+      },
+    };
   }
 
   async onCommand_delrole() {
@@ -399,7 +412,7 @@ class Commands extends CommandHandler {
     if (!this.room.running) {
       isDisabled = true;
     } else {
-      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = await this.room.plugins.hasPlugin('sav/roles');
       isDisabled = !isDisabled;
     }
 
@@ -410,8 +423,8 @@ class Commands extends CommandHandler {
       category: 'Room control',
       run: async (id, role) => {
         await this.room.roles.setPlayerRole(id, role, false, true);
-      }
-    }
+      },
+    };
   }
 
   onCommand_kick() {
@@ -420,9 +433,9 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async (id) => {
+      run: async id => {
         let intId = parseInt(id);
-        if (intId === NaN) {
+        if (isNaN(intId)) {
           cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
@@ -431,8 +444,9 @@ class Commands extends CommandHandler {
           cprompt.print(`no player with id: ${intId}`, `ERROR`);
           return;
         }
-        await this.room.callRoom('kickPlayer', intId, 'Bye!', false);      }
-    }
+        await this.room.callRoom('kickPlayer', intId, 'Bye!', false);
+      },
+    };
   }
 
   onCommand_ban() {
@@ -441,9 +455,9 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async (id) => {
+      run: async id => {
         let intId = parseInt(id);
-        if (intId === NaN) {
+        if (isNaN(intId)) {
           cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
@@ -453,8 +467,8 @@ class Commands extends CommandHandler {
           return;
         }
         await this.room.callRoom('kickPlayer', intId, 'Bye!', true);
-      }
-    }
+      },
+    };
   }
 
   onCommand_unban() {
@@ -463,24 +477,23 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async (id) => {
+      run: async id => {
         let intId = parseInt(id);
-        if (intId === NaN) {
+        if (isNaN(intId)) {
           cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
         await this.room.callRoom('clearBan', intId);
-      }
-    }
+      },
+    };
   }
 
   async onCommand_banlist() {
-
     let isDisabled;
     if (!this.room.running) {
       isDisabled = true;
     } else {
-      isDisabled = await this.room.plugins.hasPlugin(('hr/kickban'));
+      isDisabled = await this.room.plugins.hasPlugin('hr/kickban');
       isDisabled = !isDisabled;
     }
 
@@ -496,10 +509,10 @@ class Commands extends CommandHandler {
           cprompt.print('No banned players.');
           return;
         }
-        bannedPlayers = bannedPlayers.map((p) => `id:${p.id} - ${p.name}`);
+        bannedPlayers = bannedPlayers.map(p => `id:${p.id} - ${p.name}`);
         cprompt.print(bannedPlayers.join('\n'));
-      }
-    }
+      },
+    };
   }
 
   onCommand_admin() {
@@ -508,9 +521,9 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async (id) => {
+      run: async id => {
         let intId = parseInt(id);
-        if (intId === NaN) {
+        if (isNaN(intId)) {
           cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
@@ -520,19 +533,19 @@ class Commands extends CommandHandler {
           return;
         }
         await this.room.callRoom('setPlayerAdmin', intId, true);
-      }
-    }
+      },
+    };
   }
 
-  onCommand_unadmin(id) {
+  onCommand_unadmin() {
     return {
       description: 'Removes admin from a player with given id.',
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async (id) => {
+      run: async id => {
         let intId = parseInt(id);
-        if (intId === NaN) {
+        if (isNaN(intId)) {
           cprompt.print('Player ID has to be a number!', 'ERROR');
           return;
         }
@@ -542,8 +555,8 @@ class Commands extends CommandHandler {
           return;
         }
         await this.room.callRoom('setPlayerAdmin', intId, false);
-      }
-    }
+      },
+    };
   }
 
   onCommand_clearbans() {
@@ -553,8 +566,8 @@ class Commands extends CommandHandler {
       category: 'Room control',
       run: async () => {
         await this.room.callRoom('clearBans');
-      }
-    }
+      },
+    };
   }
 
   onCommand_plugins() {
@@ -566,14 +579,14 @@ class Commands extends CommandHandler {
         let plugins = await this.room.plugins.getPlugins();
         let pluginList = [];
         for (let p of plugins) {
-          const isEnabled = p.isEnabled ?
-            `${colors.green(`enabled`)}` :
-            `${colors.yellow(`disabled`)}`;
+          const isEnabled = p.isEnabled
+            ? `${colors.green(`enabled`)}`
+            : `${colors.yellow(`disabled`)}`;
           pluginList.push(`${p.pluginSpec.name} (${isEnabled})`);
         }
         cprompt.print(pluginList.join(`\n`));
-      }
-    }
+      },
+    };
   }
 
   onCommand_plugin() {
@@ -582,11 +595,11 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async (name) => {
+      run: async name => {
         let plugin = await this.room.plugins.getPlugin(name);
         cprompt.print(this.pluginDataToString(plugin));
-      }
-    }
+      },
+    };
   }
 
   onCommand_enable() {
@@ -595,15 +608,15 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async (name) => {
+      run: async name => {
         let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           cprompt.print(`Invalid plugin name: ${name}`, `ERROR`);
           return;
         }
         await this.room.plugins.enablePlugin(name);
-      }
-    }
+      },
+    };
   }
 
   onCommand_disable() {
@@ -612,24 +625,20 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async (name) => {
+      run: async name => {
         let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           cprompt.print(`Invalid plugin name: ${name}`, `ERROR`);
           return;
         }
-        let depPlugins = await this.room.plugins.getPluginsThatDependOn(name);
-        if (depPlugins && depPlugins.length > 0) {
-          await this.room.plugins.disablePlugin(depPlugins.map((p) => p.name));
-        }
-        let success = await this.room.plugins.disablePlugin(name);
+        let success = await this.room.plugins.disablePlugin(name, true);
         pluginData = await this.room.plugins.getPlugin(name);
 
         if (!success) {
           cprompt.print(`Could not disable ${name}`, `ERROR`);
         }
-      }
-    }
+      },
+    };
   }
 
   onCommand_dependsof() {
@@ -638,7 +647,7 @@ class Commands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async (name) => {
+      run: async name => {
         let plugins = await this.room.plugins.getPluginsThatDependOn(name);
         if (!plugins || plugins.length < 1) {
           cprompt.print(`Plugin ${name} has no plugins that depend on it.`);
@@ -649,8 +658,8 @@ class Commands extends CommandHandler {
           result.push(`${p.pluginSpec.name}`);
         }
         cprompt.print(result.join(`\n`));
-      }
-    }
+      },
+    };
   }
 
   onCommand_q() {
@@ -660,8 +669,8 @@ class Commands extends CommandHandler {
       run: async () => {
         await this.haxroomie.closeBrowser();
         process.exit(0);
-      }
-    }
+      },
+    };
   }
 }
 module.exports = Commands;

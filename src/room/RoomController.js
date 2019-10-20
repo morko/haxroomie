@@ -4,7 +4,7 @@ const {
   RoomNotRunningError,
   RoomIsRunningError,
   RoomLockedError,
-  HHMNotLoadedError
+  HHMNotLoadedError,
 } = require('../errors');
 const EventEmitter = require('events');
 const RoomOpener = require('./RoomOpener');
@@ -13,29 +13,29 @@ const PluginController = require('./PluginController');
 const RoleController = require('./RoleController');
 const RoomErrorHandler = require('./RoomErrorHandler');
 const RoomConsoleHandler = require('./RoomConsoleHandler');
-const stringify = require('../stringify');
+const { stringify } = require('../utils');
 
 /**
  * Event argument object that gets sent from the browser when a room event happens.
- * 
+ *
  * The `handlerName` can be one of the following:
  * `onPlayerJoin`
- * `onPlayerLeave` 
- * `onTeamVictory` 
- * `onPlayerChat` 
- * `onTeamGoal` 
- * `onGameStart` 
- * `onGameStop` 
- * `onPlayerAdminChange` 
- * `onPlayerTeamChange` 
- * `onPlayerKicked` 
- * `onGamePause` 
- * `onGameUnpause` 
- * `onPositionsReset` 
+ * `onPlayerLeave`
+ * `onTeamVictory`
+ * `onPlayerChat`
+ * `onTeamGoal`
+ * `onGameStart`
+ * `onGameStop`
+ * `onPlayerAdminChange`
+ * `onPlayerTeamChange`
+ * `onPlayerKicked`
+ * `onGamePause`
+ * `onGameUnpause`
+ * `onPositionsReset`
  * or
- * `onStadiumChange` 
- * 
- * See the 
+ * `onStadiumChange`
+ *
+ * See the
  * [roomObject documentation](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject)
  * to find out what kind of arguments to expect.
  *
@@ -48,7 +48,7 @@ const stringify = require('../stringify');
 
 /**
  * Object containing files name and content.
- * 
+ *
  * @typedef {Object} FileDef
  * @property {string} name - Files name.
  * @property {string} content - UTF-8 encoded contents of the file.
@@ -150,21 +150,20 @@ const stringify = require('../stringify');
  */
 
 /**
- * RoomController provides an interface to communicate with 
+ * RoomController provides an interface to communicate with
  * [HaxBall roomObject]{@link https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject}
  * and
- * [Haxball Headless Manager (HHM)]{@link https://github.com/saviola777/haxball-headless-manager}. 
+ * [Haxball Headless Manager (HHM)]{@link https://github.com/saviola777/haxball-headless-manager}.
  * Each RoomController controls one tab in the headless browser.
- * 
+ *
  * You can also create new RoomController instances with the
  * [Haxroomie#addRoom]{@link Haxroomie#addRoom} method.
- * 
+ *
  */
 class RoomController extends EventEmitter {
-
   /**
    * Constructs a new RoomController object.
-   * 
+   *
    * @param {object} opt - Options.
    * @param {object} opt.id - ID for the room.
    * @param {object} opt.page - Puppeteer.Page object to control.
@@ -194,26 +193,27 @@ class RoomController extends EventEmitter {
     this.roomOpener = new RoomOpener({
       id: this.id,
       page: this.page,
-      onRoomEvent: (eventArgs) => this.onRoomEvent(eventArgs),
-      onHHMEvent: (eventArgs) => this.onHHMEvent(eventArgs),
+      onRoomEvent: eventArgs => this.onRoomEvent(eventArgs),
+      onHHMEvent: eventArgs => this.onHHMEvent(eventArgs),
       timeout: this.timeout,
     });
 
     this._repositories = new RepositoryController({ page: this.page });
     this._plugins = new PluginController({ page: this.page });
-    this._roles = new RoleController(
-      { page: this.page, plugins: this._plugins }
-    );
+    this._roles = new RoleController({
+      page: this.page,
+      plugins: this._plugins,
+    });
     this._errorHandler = new RoomErrorHandler({
       page: this.page,
       setRoomState: this.setRoomState,
       emit: this.emit,
-      roomId: this.id
+      roomId: this.id,
     });
     this._consoleHandler = new RoomConsoleHandler({
       page: this.page,
       emit: this.emit,
-      roomId: this.id
+      roomId: this.id,
     });
 
     this.page.on('close', () => {
@@ -275,9 +275,9 @@ class RoomController extends EventEmitter {
 
   /**
    * Object that can be used to control and get information about plugins.
-   * 
+   *
    * **Requires the room to be running!**
-   * 
+   *
    * @type PluginController
    */
   get plugins() {
@@ -288,12 +288,12 @@ class RoomController extends EventEmitter {
 
   /**
    * Object that can be used to control and get information about repositories.
-   * 
+   *
    * **Requires the HHM library to be loaded!**
-   * 
+   *
    * To load HHM you can use the [init()]{@link RoomController#init} method or
    * open the room with [openRoom()]{@link RoomController#openRoom}.
-   * 
+   *
    * @type RepositoryController
    */
   get repositories() {
@@ -304,10 +304,10 @@ class RoomController extends EventEmitter {
 
   /**
    * Object that can be used to control and get information about roles.
-   * 
+   *
    * **Requires the room to be running and sav/roles plugin to be loaded
    * and enabled!**
-   * 
+   *
    * @type RoleController
    */
   get roles() {
@@ -317,7 +317,7 @@ class RoomController extends EventEmitter {
   }
   /**
    * Validates the arguments for the constructor.
-   * 
+   *
    * @param {object} opt - argument object for the constructor
    * @private
    */
@@ -333,8 +333,8 @@ class RoomController extends EventEmitter {
 
   /**
    * Sets a property in this RoomController.
-   * 
-   * Passing this to the composite objects allow them to modify the state 
+   *
+   * Passing this to the composite objects allow them to modify the state
    * of the RoomController.
    * @param {string} property - Property to set.
    * @param {any} value - Value for the property.
@@ -385,14 +385,14 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Initializes the RoomController by navigating the page to the headless 
+   * Initializes the RoomController by navigating the page to the headless
    * HaxBall URL and loads the Haxball Headless Manager library.
-   * 
+   *
    * This enables the use of the [repositories]{@link RoomController#repositories}
    * object to get information about repositories before opening the room.
-   * 
+   *
    * **Note that calling [close]{@link RoomController#close} will undo this.**
-   * 
+   *
    * @param {object} [opt] - Options.
    * @param {string} [opt.hhmVersion] - Version of HHM to load. By default this
    *    is set to whatever is given in constructors `hhmVersion` option.
@@ -416,13 +416,13 @@ class RoomController extends EventEmitter {
 
   /**
    * Opens a HaxBall room in a browser tab.
-   * 
+   *
    * On top of the documentated properties here, the config object can contain
-   * any properties you want to use in your own HHM config file. 
-   * 
+   * any properties you want to use in your own HHM config file.
+   *
    * The config object is
    * usable globally from within the HHM config as the `hrConfig` object.
-   * 
+   *
    * @param {object} config - Config object that contains the room information.
    * @param {string} config.token - Token to start the room with.
    *    Obtain one from <https://www.haxball.com/headlesstoken>.
@@ -431,14 +431,14 @@ class RoomController extends EventEmitter {
    * @param {int} [config.maxPlayers] - Max players.
    * @param {boolean} [config.public] - Should the room be public?
    * @param {object} [config.geo] - Geolocation override for the room.
-   * @param {Array.<object>} [config.repositories] - Array of 
+   * @param {Array.<object>} [config.repositories] - Array of
    *    HHM plugin repositories.
-   * 
+   *
    *    See [HHM documentation](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins)
    *    about these objects (they are passed to `HHM.config.repositories`).
    * @param {object} [config.pluginConfig] - Haxball Headless Manager
    *    plugin config object. Passed to `HHM.config.plugins`.
-   * 
+   *
    *    See [Haxball Headless Manager](https://github.com/saviola777/haxball-headless-manager)
    *    This tells HHM which plugins to load from the available repositories.
    *    You can also give the initial config to plugins here.
@@ -448,22 +448,22 @@ class RoomController extends EventEmitter {
    *    others interfering with it.
    * @param {FileDef} [config.roomScript] - Regular haxball
    *    headless script to load when starting the room.
-   * 
+   *
    *    Disables the non essential default plugins.
-   * @param {FileDef} [config.hhmConfig] - Configuration for the haxball 
+   * @param {FileDef} [config.hhmConfig] - Configuration for the haxball
    *    headless manager (HHM).
-   * @returns {object} - Config that the room was started with. 
+   * @returns {object} - Config that the room was started with.
    *    The `roomLink` property is added to the config (contains URL to the
    *    room).
-   * 
+   *
    * @emits RoomController#open-room-start
    * @emits RoomController#open-room-stop
    * @emits RoomController#open-room-error
-   * 
+   *
    * @throws {UnusableError} - The instance is not usable because the browser
    *    page crashed or closed.
    * @throws {ConnectionError} - Could not connect to HaxBall headless page.
-   * @throws {TimeoutError} - Haxball Headless Manager took too much time to 
+   * @throws {TimeoutError} - Haxball Headless Manager took too much time to
    *    start.
    * @throws {InvalidTokenError} - The token is invalid or expired.
    * @throws {RoomLockedError} - The room is already being opened.
@@ -471,12 +471,12 @@ class RoomController extends EventEmitter {
    */
   async openRoom(config) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (this.running) throw new RoomIsRunningError(
-      'The room is already running. Close it before opening again!'
-    );
-    if (this._openRoomLock) throw new RoomLockedError(
-      'Room is already being opened!'
-    );
+    if (this.running)
+      throw new RoomIsRunningError(
+        'The room is already running. Close it before opening again!'
+      );
+    if (this._openRoomLock)
+      throw new RoomLockedError('Room is already being opened!');
     logger.debug(`RoomController#openRoom: ${this.id}`);
     this.emit(`open-room-start`, config);
     this._openRoomLock = true;
@@ -498,9 +498,9 @@ class RoomController extends EventEmitter {
   /**
    * Closes the headless HaxBall room by navigating the page out of the
    * headless HaxBall URL.
-   * 
+   *
    * @emits RoomController#close-room
-   * 
+   *
    * @throws {UnusableError} - The instance is not usable because the browser
    *    page crashed or closed.
    */
@@ -517,21 +517,21 @@ class RoomController extends EventEmitter {
       this._roomInfo = null;
       this.emit(`close-room-stop`, err);
       throw new UnusableError(err.msg);
-    } 
+    }
     this._hhmLoaded = false;
     this._roomInfo = null;
     this.emit(`close-room-stop`);
   }
 
   /**
-   * Calls a function of the 
-   * [HaxBall roomObject](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject) 
+   * Calls a function of the
+   * [HaxBall roomObject](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject)
    * in the browsers context.
-   * 
+   *
    * @param {string} fn - Name of the haxball roomObject function.
    * @param {any} ...args - Arguments for the function.
    * @returns {Promise.<any>} - Return value of the called function.
-   * 
+   *
    * @throws {UnusableError} - The instance is not usable because the browser
    *    page crashed or closed.
    * @throws {RoomNotRunningError} - The room is not running.
@@ -540,36 +540,41 @@ class RoomController extends EventEmitter {
     if (!this.usable) throw new UnusableError('Instance unusable!');
     if (!this.running) throw new RoomNotRunningError('Room is not running.');
     if (!fn) throw new TypeError('Missing required argument: fn');
-    logger.debug(`RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`);
+    logger.debug(
+      `RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`
+    );
 
-    let result = await this.page.evaluate((fn, args) => {
-      return window.hroomie.callRoom(fn, ...args);
-    }, fn, args);
+    let result = await this.page.evaluate(
+      (fn, args) => {
+        return window.hroomie.callRoom(fn, ...args);
+      },
+      fn,
+      args
+    );
     if (result.error) throw new Error(result.payload);
     return result.payload.result;
   }
 
   /**
-   * Wrapper for Puppeteers 
+   * Wrapper for Puppeteers
    * [page.evaluate](https://github.com/GoogleChrome/puppeteer/blob/v1.18.0/docs/api.md#pageevaluatepagefunction-args).
-   * 
+   *
    * Evaluates the given code in the browser tab this instace is controlling.
    * You can access the HaxBall roomObject with `HHM.manager.room`.
-   * 
+   *
    * e.g.
    * ```js
    * room.eval('HHM.manager.room.getPlayerList()');
    * ```
-   * 
+   *
    * @param {string|function} pageFunction - JavaScript to evaluate.
    * @param {...Serializable|...JSHandle} [args] - Arguments to pass to `js`.
-   * @returns {Promise.<Serializable>} -  Promise which resolves to the 
+   * @returns {Promise.<Serializable>} -  Promise which resolves to the
    *    return value of pageFunction.
    */
   async eval(pageFunction, ...args) {
     return this.page.evaluate(pageFunction, ...args);
   }
-
 }
 
 module.exports = RoomController;

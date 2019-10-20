@@ -32,8 +32,9 @@ class InvalidTokenError extends Error {
  */
 class TimeoutError extends Error {
   constructor(message) {
-    message = message || 'Could not open the room because HHM took too ' +
-      'much time to start!';
+    message =
+      message ||
+      'Could not open the room because HHM took too ' + 'much time to start!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -41,8 +42,8 @@ class TimeoutError extends Error {
 }
 
 /**
- * Error thrown by RoomController methods when RoomController can not control 
- * the room. This can happen if the tab that the RoomController is controlling 
+ * Error thrown by RoomController methods when RoomController can not control
+ * the room. This can happen if the tab that the RoomController is controlling
  * gets closed or if some fatal error happens in the page.
  */
 class UnusableError extends Error {
@@ -61,19 +62,6 @@ class UnusableError extends Error {
 class RoomNotRunningError extends Error {
   constructor(message) {
     message = message || 'This room is not running!';
-    super(message);
-    this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
-
-/**
- * Error thrown by RoomController methods when trying to call methods that
- * require the room to not be running, but it is.
- */
-class RoomRunningError extends Error {
-  constructor(message) {
-    message = message || 'This room is running!';
     super(message);
     this.name = this.constructor.name;
     Error.captureStackTrace(this, this.constructor);
@@ -140,5 +128,5 @@ module.exports = {
   RoomLockedError,
   InvalidCommandError,
   InvalidCommandArgsError,
-  HHMNotLoadedError
+  HHMNotLoadedError,
 };

@@ -2,7 +2,6 @@ const parse = require('yargs-parser');
 const { InvalidCommandError, InvalidCommandArgsError } = require('../errors');
 
 class CommandHandler {
-
   constructor(opt) {
     opt = opt || {};
     this.cmdPrefix = opt.cmdPrefix || 'onCommand_';
@@ -10,10 +9,10 @@ class CommandHandler {
 
   /**
    * Validates the arguments given to a command.
-   * 
+   *
    * @param {object} command - The command object.
    * @param {Array} args - Arguments for the command.
-   * 
+   *
    * @throws {InvalidCommandArgsError}
    */
   validateArguments(command, args) {
@@ -27,7 +26,10 @@ class CommandHandler {
   }
 
   async getCommand(name) {
-    if (!this[this.cmdPrefix + name] || typeof this[this.cmdPrefix + name] !== 'function') {
+    if (
+      !this[this.cmdPrefix + name] ||
+      typeof this[this.cmdPrefix + name] !== 'function'
+    ) {
       return null;
     }
     return this[this.cmdPrefix + name]();
@@ -35,21 +37,21 @@ class CommandHandler {
 
   /**
    * Parses the line into a command.
-   * 
+   *
    * @param {string} line - Line to parse.
-   * 
+   *
    * @throws {InvalidCommandError}
    */
   async parseLine(line) {
     let tokens = parse(line, {
       configuration: {
-        "boolean-negation": false,
-        "dot-notation": false,
-        "camel-case-expansion": false,
-        "short-option-groups": false,
-        "duplicate-arguments-array": false,
-        "flatten-duplicate-arrays": false,
-      }
+        'boolean-negation': false,
+        'dot-notation': false,
+        'camel-case-expansion': false,
+        'short-option-groups': false,
+        'duplicate-arguments-array': false,
+        'flatten-duplicate-arrays': false,
+      },
     })['_'];
 
     let cmdName = tokens[0];
@@ -69,12 +71,12 @@ class CommandHandler {
 
     return {
       command,
-      args
+      args,
     };
   }
 
   async execute(line) {
-    let cmd = await this.parseLine(line)
+    let cmd = await this.parseLine(line);
     if (cmd.disabled) return false;
     return cmd.command.run(...cmd.args);
   }

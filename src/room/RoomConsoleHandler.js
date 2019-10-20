@@ -3,7 +3,6 @@ const colors = require('colors');
 
 /** Handles the console logs that happen in the headless browser. */
 class RoomErrorHandler {
-
   /**
    * @param {object} opt - Options.
    * @param {object} opt.page - RoomControllers page object.
@@ -19,7 +18,7 @@ class RoomErrorHandler {
     this.page.on('console', this.handleConsole);
   }
 
-  /** 
+  /**
    * Handle the `console` event from Puppeteer.
    */
   handleConsole(msg) {
@@ -30,15 +29,14 @@ class RoomErrorHandler {
     } else {
       logger.debug(
         `[${colors.cyan(this.roomId)}] ` +
-        `[${colors.green('INFO')}] ${msg.text()}`
+          `[${colors.green('INFO')}] ${msg.text()}`
       );
     }
   }
   /**
    * Handle console messages of type `error`.
    */
-  handleConsoleError(msg) {  
-    
+  handleConsoleError(msg) {
     if (this.ignoreConsoleMsg(msg)) {
       return;
     }
@@ -54,17 +52,14 @@ class RoomErrorHandler {
 
     this.emit(`error-logged`, logMsg);
     logger.debug(
-      `[${colors.cyan(this.roomId)}] ` +
-      `[${colors.red('ERROR')}] ${logMsg}`
+      `[${colors.cyan(this.roomId)}] [${colors.red('ERROR')}] ${logMsg}`
     );
   }
-
 
   /**
    * Handle console messages of type `warning`.
    */
   handleConsoleWarning(msg) {
-
     if (this.ignoreConsoleMsg(msg)) {
       return;
     }
@@ -75,7 +70,7 @@ class RoomErrorHandler {
     this.emit(`warning-logged`, logMsg);
     logger.debug(
       `[${colors.cyan(this.roomId)}] ` +
-      `[${colors.yellow('WARNING')}] ${logMsg}`
+        `[${colors.yellow('WARNING')}] ${logMsg}`
     );
   }
 
@@ -83,19 +78,20 @@ class RoomErrorHandler {
     const text = msg.text();
 
     // ignore the errors that happen during loading plugins
-    if (text.startsWith(
-      `Failed to load resource: the server responded with a status of 404`)
+    if (
+      text.startsWith(
+        `Failed to load resource: the server responded with a status of 404`
+      )
     ) {
       return true;
     }
 
     // do not display warning that happens during loading HHM
-    if (msg.text().startsWith( '[WARN HHM]:  No room config was provided')) {
+    if (msg.text().startsWith('[WARN HHM]:  No room config was provided')) {
       return true;
     }
     return false;
   }
-
 }
 
 module.exports = RoomErrorHandler;

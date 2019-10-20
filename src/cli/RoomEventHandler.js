@@ -1,7 +1,6 @@
 const EventEmitter = require('events');
 
 class RoomEventHandler extends EventEmitter {
-  
   constructor(opt) {
     if (!opt) {
       throw new Error(`Missing required argument: opt`);
@@ -72,7 +71,7 @@ class RoomEventHandler extends EventEmitter {
   onPlayerLeave(player) {
     this.emit(`print`, `${player.name} (id:${player.id})`, `PLAYER LEFT`);
   }
-  
+
   onGamePause(player) {
     if (!player) {
       this.emit(`print`, `by host`, `GAME PAUSED`);
@@ -108,31 +107,35 @@ class RoomEventHandler extends EventEmitter {
   onPlayerKicked(kickedPlayer, reason, ban, byPlayer) {
     if (ban) {
       if (byPlayer) {
-        this.emit(`print`, 
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by `
-          + `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
+        this.emit(
+          `print`,
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned by ` +
+            `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
           `PLAYER BANNED`
-        );    
+        );
       } else {
-        this.emit(`print`, 
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned `
-          + `reason: ${reason}`,
+        this.emit(
+          `print`,
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) banned ` +
+            `reason: ${reason}`,
           `PLAYER BANNED`
-        );    
+        );
       }
     } else {
       if (byPlayer) {
-        this.emit(`print`, 
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by `
-          + `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
+        this.emit(
+          `print`,
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked by ` +
+            `${byPlayer.name} (id:${byPlayer.id}) reason: ${reason}`,
           `PLAYER KICKED`
-        );    
+        );
       } else {
-        this.emit(`print`, 
-          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked `
-          + `| reason: ${reason}`,
+        this.emit(
+          `print`,
+          `${kickedPlayer.name} (id:${kickedPlayer.id}) kicked ` +
+            `| reason: ${reason}`,
           `PLAYER KICKED`
-        );    
+        );
       }
     }
   }
@@ -142,9 +145,10 @@ class RoomEventHandler extends EventEmitter {
     if (changedPlayer.admin) {
       type = 'ADMIN';
     }
-    this.emit(`print`, 
-      `${changedPlayer.name} (id:${changedPlayer.id}) `
-      + `by ${byPlayer.name} (id:${byPlayer.id})`,
+    this.emit(
+      `print`,
+      `${changedPlayer.name} (id:${changedPlayer.id}) ` +
+        `by ${byPlayer.name} (id:${byPlayer.id})`,
       type
     );
   }

@@ -3,7 +3,6 @@ const colors = require('colors');
 
 /** Handles the errors that happen in the headless browser. */
 class RoomErrorHandler {
-
   /**
    * @param {object} opt - Options.
    * @param {object} opt.page - RoomControllers page object.
@@ -23,18 +22,18 @@ class RoomErrorHandler {
     this.page.on('error', this.handleError);
   }
 
-  /** 
+  /**
    * Handle the `pageerror` event from Puppeteer.
    */
   handlePageError(error) {
     this.emit(`page-error`, error);
     logger.debug(
       `[${colors.cyan(this.roomId)}] ` +
-      `[${colors.red('PAGE ERROR')}] ${error}`
+        `[${colors.red('PAGE ERROR')}] ${error}`
     );
   }
 
-  /** 
+  /**
    * Handle the `error` event from Puppeteer.
    */
   handleError(error) {
@@ -42,7 +41,7 @@ class RoomErrorHandler {
     this.setRoomState('_usable', false);
     logger.debug(
       `[${colors.cyan(this.roomId)}] ` +
-      `[${colors.red('PAGE CRASHED')}] ${error}`
+        `[${colors.red('PAGE CRASHED')}] ${error}`
     );
   }
 }

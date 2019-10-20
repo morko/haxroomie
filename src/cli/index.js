@@ -8,13 +8,18 @@ const lockFile = require(`lockfile`);
 
 const configDir = path.join(os.homedir(), '.haxroomie');
 const configSkeleton = path.join(
-  __dirname, '..', '..', 'examples', 'configs', '1-private-room.js'
+  __dirname,
+  '..',
+  '..',
+  'examples',
+  'configs',
+  '1-private-room.js'
 );
 const lockFilePath = path.join(os.tmpdir(), 'haxroomie.lock');
 
 const argv = require(`yargs`)
   .usage(`Usage: $0 [options]`)
-  
+
   .alias(`v`, `version`)
   .boolean(`window`)
   .describe(`version`, `Print out the current version.`)
@@ -27,24 +32,30 @@ const argv = require(`yargs`)
   .default(`config`, path.join(configDir, 'config.js'))
 
   .alias(`d`, `user-data-dir`)
-  .describe(`user-data-dir`, `Path to where browser should store `
-    + `the data like localStorage.`)
+  .describe(
+    `user-data-dir`,
+    `Path to where browser should store ` + `the data like localStorage.`
+  )
   .default(`user-data-dir`, path.join(configDir, 'user-data-dir'))
-  
+
   .alias(`t`, `timeout`)
-  .describe(`timeout`, `How long to wait before failing to start room. `
-    + `Try adjusting this if your room starting times out often.`)
+  .describe(
+    `timeout`,
+    `How long to wait before failing to start room. ` +
+      `Try adjusting this if your room starting times out often.`
+  )
   .default(`timeout`, 40)
 
   .boolean(`no-sandbox`)
-  .describe(`no-sandbox`, `Makes chrome run without sandbox (useful only if `
-    + `running with sandbox wont work in your machine)`)
+  .describe(
+    `no-sandbox`,
+    `Makes chrome run without sandbox (useful only if ` +
+      `running with sandbox wont work in your machine)`
+  )
 
   .alias(`w`, `window`)
   .boolean(`window`)
-  .describe(`window`, `Tries to spawn a browser window for debugging.`)
-
-  .argv;
+  .describe(`window`, `Tries to spawn a browser window for debugging.`).argv;
 
 if (argv.version) {
   console.log(require('../../package.json').version);
@@ -60,10 +71,10 @@ argv.port = argv.port || process.env.HR_PORT;
     lockFile.lockSync(lockFilePath);
   } catch (err) {
     logger.error(
-      `Could not acquire lock:\n`
-      + `Running multiple Haxroomie instances is not supported.\n`
-      + `If you are sure you are not running multiple instances `
-      + `you can delete the file in\n${lockFilePath}`
+      `Could not acquire lock:\n` +
+        `Running multiple Haxroomie instances is not supported.\n` +
+        `If you are sure you are not running multiple instances ` +
+        `you can delete the file in\n${lockFilePath}`
     );
     process.exit(1);
   }
@@ -80,7 +91,6 @@ argv.port = argv.port || process.env.HR_PORT;
     logger.error(err.stack);
     process.exit(1);
   }
-
 })();
 
 /**
@@ -88,7 +98,7 @@ argv.port = argv.port || process.env.HR_PORT;
  */
 function initConfigDir() {
   if (!fs.existsSync(configDir)) {
-    fs.mkdirSync(configDir, { mode: '0770', recursive: true});
+    fs.mkdirSync(configDir, { mode: '0770', recursive: true });
   }
   if (argv.config === path.join(configDir, 'config.js')) {
     if (!fs.existsSync(argv.config)) {

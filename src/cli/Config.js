@@ -5,13 +5,13 @@ const cprompt = require('./cprompt');
 
 /**
  * Object containing information about reloaded config.
- * 
+ *
  * @typedef {Object} ReloadInfo
  * @property {object} oldConfig - The old config.
  * @property {object} newConfig - The new config.
- * @property {Map.<string|number, Array.<string>|null>} modifiedRooms - 
+ * @property {Map.<string|number, Array.<string>|null>} modifiedRooms -
  *    Rooms that were modified in the new config.
- * 
+ *
  *    The key is a room id and value is an array of modified
  *    property names or null if the room was removed.
  */
@@ -92,7 +92,7 @@ class Config {
       cprompt.print(`Could not load the config: ${configPath}`, 'ERROR');
       throw err;
     }
-    
+
     // Serialize the properties of each room in the config.
     for (let key of Object.keys(config)) {
       config[key] = this.serializeConfig(config[key]);
@@ -102,11 +102,11 @@ class Config {
   }
 
   /**
-   * Serializes the room config the 
-   * 
+   * Serializes the room config the
+   *
    * Loads all the files in the config. The files get transformed into
    * FileDef objects that the RoomController#open method accepts.
-   * 
+   *
    * Repositories that are of type 'local' get serialized to a format
    * that HHM accepts.
    * e.g.
@@ -150,10 +150,10 @@ class Config {
       let loadedPlugins = [];
       for (let plugin of roomConfig.plugins) {
         if (!plugin.path) {
-          throw new Error('Plugins config is missing path property!')
+          throw new Error('Plugins config is missing path property!');
         }
         if (!plugin.name) {
-          throw new Error('Plugins config is missing name property!')
+          throw new Error('Plugins config is missing name property!');
         }
         let fileDef = this.loadFile(plugin.path);
         if (!fileDef) {
@@ -203,7 +203,6 @@ class Config {
    * @param {string} repo - The repository object.
    */
   loadLocalRepository(repo) {
-
     // do not modify the original object
     repo = Object.assign({}, repo);
     let subpath = repo.subpath || 'src';
@@ -222,7 +221,7 @@ class Config {
         }
       }
       return pluginList;
-    };
+    }
 
     let pluginPaths = listPlugins(path.join(repo.path, subpath));
 
@@ -230,7 +229,9 @@ class Config {
     for (let pPath of pluginPaths) {
       let file = this.loadFile(pPath);
       let splitPath = pPath.split(path.sep);
-      let pluginName = splitPath[splitPath.length - 2] + '/' + 
+      let pluginName =
+        splitPath[splitPath.length - 2] +
+        '/' +
         splitPath[splitPath.length - 1].split('.')[0];
       plugins[pluginName] = file.content;
     }
@@ -241,7 +242,7 @@ class Config {
 
   /**
    * Tries to load a file from given filePath.
-   * 
+   *
    * @param {string} filePath - Path to the file.
    * @returns {FileDef} - FileDef with additional `modifiedTime` property that
    *    tells when the file has last been modified. The `name` property will
@@ -253,9 +254,9 @@ class Config {
       return;
     }
     let modifiedTime = fs.statSync(filePath).mtimeMs;
-    let content = fs.readFileSync(filePath, {encoding: `utf-8`});
+    let content = fs.readFileSync(filePath, { encoding: `utf-8` });
 
-    return {name: filePath, content: content, modifiedTime: modifiedTime};
+    return { name: filePath, content: content, modifiedTime: modifiedTime };
   }
 
   /**
@@ -264,7 +265,7 @@ class Config {
    */
   reload() {
     // delete the cached config module import
-    delete require.cache[require.resolve(this.configPath)];  
+    delete require.cache[require.resolve(this.configPath)];
 
     let newConfig = this.load(this.configPath);
     let oldConfig = this.config;
@@ -272,7 +273,6 @@ class Config {
     let modifiedRooms = new Map();
 
     for (let roomId of Object.keys(newConfig)) {
-
       let modifiedProperties = this.getModifiedProperties(
         newConfig[roomId],
         oldConfig[roomId] ? oldConfig[roomId] : {}
@@ -302,7 +302,7 @@ class Config {
   /**
    * Compares two room config objects and returns the modified properties
    * in an array.
-   * 
+   *
    * @param {object} newConfig - The new room config.
    * @param {object} oldConfig - The old room config.
    * @returns {Array.<string>} - Array of properties that were modified.
@@ -313,15 +313,22 @@ class Config {
     let modifiedProperties = [];
 
     for (let property of Object.keys(newConfig)) {
-
-      if (property === 'roomScript' || property === 'hhmConfig' || property === 'hhm') {
-        if (this.hasFileBeenModified(newConfig[property], oldConfig[property])) {
+      if (
+        property === 'roomScript' ||
+        property === 'hhmConfig' ||
+        property === 'hhm'
+      ) {
+        if (
+          this.hasFileBeenModified(newConfig[property], oldConfig[property])
+        ) {
           modifiedProperties.push(property);
           continue;
         }
-
       } else if (property === 'plugins') {
-        if (!oldConfig[property] || newConfig[property].length !== oldConfig[property].length) {
+        if (
+          !oldConfig[property] ||
+          newConfig[property].length !== oldConfig[property].length
+        ) {
           modifiedProperties.push(property);
           continue;
         }
@@ -333,11 +340,12 @@ class Config {
             continue;
           }
         }
-        if (this.hasPluginsBeenModified(newConfig[property], oldConfig[property])) {
+        if (
+          this.hasPluginsBeenModified(newConfig[property], oldConfig[property])
+        ) {
           modifiedProperties.push(property);
           continue;
         }
-
       } else {
         if (!deepEqual(newConfig[property], oldConfig[property])) {
           modifiedProperties.push(property);

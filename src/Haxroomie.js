@@ -23,21 +23,20 @@ let browserLock = undefined;
 /**
  * Class for spawning the headless chrome browser and managing
  * [RoomControllers]{@link RoomController}.
- * 
+ *
  * Each [RoomController]{@link RoomController} controls one room
  * running in a browsers tab.
- * 
+ *
  * After creating the Haxroomie instance it is required to launch the browser
- * with the [launchBrowser method]{@link Haxroomie#launchBrowser} before 
+ * with the [launchBrowser method]{@link Haxroomie#launchBrowser} before
  * anything else.
  */
 class Haxroomie extends EventEmitter {
-
   /**
    * Constructor for Haxroomie.
-   * 
+   *
    * @param {object} opt - options
-   * @param {object} [opt.viewport={ width: 400, height: 500 }] - Viewport 
+   * @param {object} [opt.viewport={ width: 400, height: 500 }] - Viewport
    *    size settings for the browser.
    * @param {number} [opt.port=3066] - Port that the headless browser will use
    *    as the remote-debugging-port to communicate with Haxroomie. Use a
@@ -53,25 +52,28 @@ class Haxroomie extends EventEmitter {
    * @param {boolean} [opt.timeout=30] - How long to wait for a room to open
    *    before failing.
    */
-  constructor(opt) {
+  constructor({
+    viewport = { width: 400, height: 500 },
+    port = 3066,
+    noSandbox = false,
+    headless = true,
+    userDataDir = path.join(__dirname, '..', 'user-data-dir'),
+    timeout = 30,
+  }) {
     super();
     this.browser = null;
     this.rooms = new Map();
 
-    opt = opt || {};
-
-    this.viewport = opt.viewport || { width: 400, height: 500 };
-
-    this.port = opt.port || 3066;
+    this.viewport = viewport;
+    this.port = port;
     if (this.port === 0) {
       throw new Error('INVALID_PORT: 0');
     }
-
-    this.noSandbox = opt.noSandbox || false;
-    this.headless = opt.hasOwnProperty('headless') ? opt.headless : true;
-    this.userDataDir = opt.userDataDir || path.join(__dirname, '..', 'user-data-dir');
+    this.noSandbox = noSandbox;
+    this.headless = headless;
+    this.userDataDir = userDataDir;
     this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
-    this.timeout = opt.timeout || 30;
+    this.timeout = timeout;
   }
 
   /**
@@ -83,7 +85,10 @@ class Haxroomie extends EventEmitter {
     // make sure there isnt a browser running already
     let browser = await this.getRunningBrowser();
     // if there is a browser running throw an error
-    if (browser || browserLock) throw new Error('You can launch only 1 browser!')
+    if (browser || browserLock)
+      throw new Error('You can launch only 1 browser!');
+
+    browserLock = true;
 
     this.browser = await puppeteer.launch({
       headless: this.headless,
@@ -91,10 +96,9 @@ class Haxroomie extends EventEmitter {
       userDataDir: this.userDataDir,
       args: [
         `--remote-debugging-port=${this.port}`,
-        `--no-sandbox=${this.noSandbox}`
-      ]
+        `--no-sandbox=${this.noSandbox}`,
+      ],
     });
-    browserLock = true;
     return this.browser;
   }
 
@@ -104,14 +108,13 @@ class Haxroomie extends EventEmitter {
   async getRunningBrowser() {
     try {
       this.browser = await puppeteer.connect({
-        browserURL: `http://localhost:${this.port}`
+        browserURL: `http://localhost:${this.port}`,
       });
     } catch (err) {
       return null;
     }
     return this.browser;
   }
-
 
   /**
    * Closes the puppeteer controlled browser.
@@ -129,7 +132,7 @@ class Haxroomie extends EventEmitter {
    */
   ensureInstanceIsUsable() {
     if (!this.browser) {
-      throw new Error(`Browser is not running!`)
+      throw new Error(`Browser is not running!`);
     }
   }
 
@@ -139,14 +142,17 @@ class Haxroomie extends EventEmitter {
    * @private
    */
   validateRoomID(id) {
-    if (!id && id !== 0 || typeof id !== 'number' && typeof id !== 'string') {
+    if (
+      (!id && id !== 0) ||
+      (typeof id !== 'number' && typeof id !== 'string')
+    ) {
       throw new Error('invalid id');
     }
   }
 
   /**
    * Checks if there is a room running with the given id.
-   * 
+   *
    * @param {string|number} id - An id of the room.
    * @returns {boolean} - Is there a room with given id?
    */
@@ -157,7 +163,7 @@ class Haxroomie extends EventEmitter {
   }
   /**
    * Returns a RoomController with the given id.
-   * 
+   *
    * @param {string|number} id - An id of the room.
    * @returns {RoomController} - RoomController with the given id or
    *    undefined if there is no such room.
@@ -174,7 +180,7 @@ class Haxroomie extends EventEmitter {
    */
   getRooms() {
     let rooms = [];
-    for(let r of this.rooms.values()) {
+    for (let r of this.rooms.values()) {
       rooms.push(r);
     }
     return rooms;
@@ -186,18 +192,18 @@ class Haxroomie extends EventEmitter {
    *    undefined if there is no such room.
    */
   getFirstRoom() {
-    for(let r of this.rooms.values()) {
+    for (let r of this.rooms.values()) {
       return r;
     }
   }
 
   /**
    * Removes a RoomController with the given id.
-   * 
+   *
    * Removing deletes the RoomController and closes the browser tab
    * it is controlling.
-   * 
-   * @param {string|number} id 
+   *
+   * @param {string|number} id
    */
   async removeRoom(id) {
     this.validateRoomID(id);
@@ -216,11 +222,11 @@ class Haxroomie extends EventEmitter {
 
   /**
    * Adds a new RoomController.
-   * 
+   *
    * If `roomController` is a string or number, then it will be used as
    * an id for the new RoomController.
-   * 
-   * @param {RoomController|string|number} roomController - Instance of 
+   *
+   * @param {RoomController|string|number} roomController - Instance of
    *    RoomController or id for the RoomController.
    * @param {object} [roomControllerOptions] - Additional options for the
    *    [RoomController constructor]{@link RoomController#constructor} if
@@ -230,8 +236,9 @@ class Haxroomie extends EventEmitter {
   async addRoom(roomController, roomControllerOptions) {
     this.ensureInstanceIsUsable();
 
-    if (typeof roomController === 'RoomController') {
-      if (this.rooms.has(roomController.id)) throw new Error('id must be unique');
+    if (typeof roomController === 'object') {
+      if (this.rooms.has(roomController.id))
+        throw new Error('id must be unique');
       this.rooms.set(roomController.id, roomController);
       this.emit('room-added', roomController);
       return roomController;
@@ -242,7 +249,7 @@ class Haxroomie extends EventEmitter {
     this.validateRoomID(id);
     if (this.rooms.has(id)) throw new Error('id must be unique');
 
-    const rcOptions = {...roomControllerOptions};
+    const rcOptions = { ...roomControllerOptions };
     rcOptions.id = rcOptions.id || id;
     rcOptions.hhmVersion = rcOptions.hhmVersion || config.hhmVersion;
 
@@ -267,24 +274,25 @@ class Haxroomie extends EventEmitter {
   async createRoomController(rcOptions) {
     const page = await this.getNewPage();
     const device = {
-      'name': 'Galaxy S5',
-      'userAgent': 'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3452.0 Mobile Safari/537.36',
-      'viewport': {
-        'width': this.viewport.width,
-        'height': this.viewport.height,
-        'deviceScaleFactor': 1,
-        'isMobile': false,
-        'hasTouch': false,
-        'isLandscape': false
-      }
-    }
+      name: 'Galaxy S5',
+      userAgent:
+        'Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3452.0 Mobile Safari/537.36',
+      viewport: {
+        width: this.viewport.width,
+        height: this.viewport.height,
+        deviceScaleFactor: 1,
+        isMobile: false,
+        hasTouch: false,
+        isLandscape: false,
+      },
+    };
 
     await page.emulate(device);
 
     let room = new RoomController({
       timeout: this.timeout,
       page,
-      ...rcOptions
+      ...rcOptions,
     });
 
     return room;

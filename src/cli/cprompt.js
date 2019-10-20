@@ -10,7 +10,7 @@ const COLORS = {
   'STARTING ROOM': colors.green,
   'ROOM STARTED': colors.green.bold,
   'ROOM NOT STARTED': colors.red.bold,
-  'CHAT': colors.white.bold,
+  CHAT: colors.white.bold,
   'PLAYER JOINED': colors.green,
   'PLAYER LEFT': colors.cyan,
   'PLAYER KICKED': colors.yellow.bold,
@@ -19,12 +19,12 @@ const COLORS = {
   'GAME STOPPED': colors.cyan,
   'GAME STARTED': colors.cyan,
   'PLAYER BANNED': colors.red,
-  'ADMIN': colors.yellow,
-  'UNADMIN': colors.yellow,
-  'PLAYERS': colors.green,
+  ADMIN: colors.yellow,
+  UNADMIN: colors.yellow,
+  PLAYERS: colors.green,
   'ROLE INFO': colors.green,
   'PAGE CLOSED': colors.red,
-  'ERROR': colors.red.bold,
+  ERROR: colors.red.bold,
   'INVALID COMMAND': colors.red,
   'INVALID ARGUMENTS': colors.red,
   'PLUGINS LOADED': colors.green,
@@ -33,8 +33,8 @@ const COLORS = {
   'PLUGIN ENABLED': colors.green,
   'PLUGIN DISABLED': colors.cyan,
   'LOADING CONFIG': colors.yellow,
-  'RELOAD CONFIG': colors.yellow
-}
+  'RELOAD CONFIG': colors.yellow,
+};
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -43,7 +43,7 @@ const rl = readline.createInterface({
 
 let cmd = null;
 
-rl.on(`line`, (line) => onNewLine(line));
+rl.on(`line`, line => onNewLine(line));
 rl.on(`close`, () => {
   if (!cmd) {
     process.exit(0);
@@ -100,7 +100,7 @@ function error(err) {
   readline.clearLine(process.stdout, 0);
   readline.cursorTo(process.stdout, 0);
 
-  if (typeof err === 'Error') {
+  if (err && err.stack) {
     logger.error(err.stack);
   } else {
     logger.error(err);
@@ -127,7 +127,7 @@ function warn(msg) {
  */
 function createMessage(type, msg) {
   let coloredType = `[${type}]`;
-  if(COLORS[type]) coloredType = COLORS[type](type);
+  if (COLORS[type]) coloredType = COLORS[type](type);
   let fullMsg = `${coloredType}`;
   if (!msg) return fullMsg;
   if (typeof msg !== `string`) {
@@ -146,18 +146,16 @@ function createPrompt() {
 
 /**
  * Receives the lines from process.stdout and executes commands.
- * @param {string} input 
+ * @param {string} input
  */
 async function onNewLine(line) {
   try {
     if (cmd) {
       await cmd.execute(line);
     } else {
-      print('Console is not yet ready.')
+      print('Console is not yet ready.');
     }
-
   } catch (err) {
-
     switch (err.name) {
       case 'InvalidCommandError':
         print(`${line} (type "help" for commands)`, 'INVALID COMMAND');
@@ -183,5 +181,5 @@ module.exports = {
   print,
   error,
   warn,
-  question
-}
+  question,
+};
