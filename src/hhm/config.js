@@ -1,5 +1,3 @@
-hrConfig = typeof hrConfig === `undefined` ? {} : hrConfig;
-
 // Default settings for the room.
 hrConfig.roomName = hrConfig.roomName || 'haxroomie';
 hrConfig.playerName = hrConfig.playerName || 'host';

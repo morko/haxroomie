@@ -168,18 +168,32 @@ module.exports = class RoomOpener extends EventEmitter {
 
     const config = {...opt};
 
-    if (process.env.NODE_ENV === 'development') {
-      config.logLevel = 'debug';
+    // initialize the HHM object and the log level of HHM
+    await this.page.evaluate((debug) => {
+      HHM = typeof HHM === `undefined` ? {} : HHM;
+      HHM.config = HHM.config || {};
+
+      if (debug) { HHM.config.logLevel = 'debug' }
+    }, process.env.NODE_ENV === 'development' ? true : false);
+
+    // load HHM from a the FileDef if its provided
+    if (config.hhm && config.hhm.content) {
+      await this.page.addScriptTag({ content: config.hhm.content });
+    } else {
+
+      // prevent caching if using the development version
+      if (config.version === 'git') {
+        await this.page.addScriptTag({
+          url: `https://hhm.surge.sh/releases/hhm-${config.version}.js?_=${Date.now()}`
+        });
+
+      // load the possibly cached version
+      } else {
+        await this.page.addScriptTag({
+          url: `https://hhm.surge.sh/releases/hhm-${config.version}.js`
+        });
+      }
     }
-
-    const hhmLoader = new Function(
-      'config',
-      this.readFile(path.join(__dirname, '..', 'hhm', 'hhm-loader.js'))
-    );
-
-    await this.page.evaluate(hhmLoader, config);
-    await this.page.waitForFunction('typeof HHM === "object"');
-    await this.page.waitForFunction('typeof HHM.manager === "object"');
   }
 
   /**
@@ -193,6 +207,10 @@ module.exports = class RoomOpener extends EventEmitter {
     logger.debug('Starting Headless Haxball Manager.');
 
     let hrConfig = Object.assign({}, config);
+    
+    if (process.env.NODE_ENV === 'development') {
+      hrConfig.logLevel = 'debug';
+    }
 
     let configFn;
     try {

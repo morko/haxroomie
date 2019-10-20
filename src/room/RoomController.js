@@ -11,6 +11,8 @@ const RoomOpener = require('./RoomOpener');
 const RepositoryController = require('./RepositoryController');
 const PluginController = require('./PluginController');
 const RoleController = require('./RoleController');
+const RoomErrorHandler = require('./RoomErrorHandler');
+const RoomConsoleHandler = require('./RoomConsoleHandler');
 const stringify = require('../stringify');
 
 /**
@@ -202,8 +204,22 @@ class RoomController extends EventEmitter {
     this._roles = new RoleController(
       { page: this.page, plugins: this._plugins }
     );
+    this._errorHandler = new RoomErrorHandler({
+      page: this.page,
+      setRoomState: this.setRoomState,
+      emit: this.emit,
+      roomId: this.id
+    });
+    this._consoleHandler = new RoomConsoleHandler({
+      page: this.page,
+      emit: this.emit,
+      roomId: this.id
+    });
 
-    this.registerPageListeners(this.page);
+    this.page.on('close', () => {
+      this.emit(`page-closed`, this);
+      this._usable = false;
+    });
   }
 
   get [Symbol.toStringTag]() {
@@ -316,93 +332,16 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * Registers puppeteer page listeners for the events happening in the page
-   * that is controlled by this instance.
-   * @emits RoomController#page-error
-   * @emits RoomController#page-crash
-   * @emits RoomController#error-logged
-   * @emits RoomController#warning-logged
-   * @private
-   */
-  registerPageListeners(page) {
-        
-    page.on('pageerror', (error) => {
-      this.emit(`pageerror`, error);
-      logger.debug(`[${this.id}]: Page error: ${error}`);
-    });
-
-    page.on('error', (error) => {
-      this.emit(`page-crash`, error);
-      this._usable = false;
-      logger.debug(`[${this.id}]: Page crashed: ${error}`);
-    });
-
-    page.on('console', (msg) => {
-
-      if (msg.type() === 'error') {
-
-        let logMsg = this.parseErrorLoggedInBrowser(msg);
-        if (!logMsg) return;
-        this.emit(`error-logged`, logMsg);
-        logger.debug(`[${this.id}]: Error logged: ${logMsg}`);
-
-      } else if (msg.type() === 'warning') {
-
-        let logMsg = this.parseWarningLoggedInBrowser(msg);
-        if (!logMsg) return;
-
-        this.emit(`warning-logged`, logMsg);
-        logger.debug(`[${this.id}]: Warning logged: ${logMsg}`);
-      
-      } else {
-        logger.debug(`[${this.id}]: ${msg.text()}`);
-      }
-    });
-
-    page.on('close', () => {
-      this.emit(`page-closed`, this);
-      this._usable = false;
-    });
-  }
-
-  /**
+   * Sets a property in this RoomController.
    * 
-   * @param {ConsoleMessage} msg 
-   * @returns {string} - Logged warning message.
+   * Passing this to the composite objects allow them to modify the state 
+   * of the RoomController.
+   * @param {string} property - Property to set.
+   * @param {any} value - Value for the property.
    * @private
    */
-  parseWarningLoggedInBrowser(msg) {
-    // do not display warning that happens during loading HHM
-    if (msg.text().startsWith( '[WARN HHM]:  No room config was provided')) {
-      return;
-    }
-    return msg.text();
-  }
-
-  /**
-   * Puppeteer sends the logged error objects as ConsoleMessage objects.
-   * To be able to show them this method parses the object to a string.
-   * 
-   * @param {ConsoleMessage} msg 
-   * @returns {string} - Error as a string.
-   * @private
-   */
-  parseErrorLoggedInBrowser(msg) {
-    // do not display the errors that happen during loading a plugin
-    if (msg.text().startsWith(
-      'Failed to load resource: the server responded with a status of 404'
-    )) {
-      return;
-    }
-
-    let logMsg = '';
-    for (let jsHandle of msg.args()) {
-      if (jsHandle._remoteObject.type === 'object') {
-        logMsg += jsHandle._remoteObject.description;
-      }
-    }
-    if (!logMsg) logMsg = msg.text();
-    return logMsg;
+  setRoomState(property, value) {
+    this[property] = value;
   }
 
   /**
