@@ -3,6 +3,19 @@ const fs = require('fs');
 const deepEqual = require('deep-equal');
 const cprompt = require('./cprompt');
 
+/**
+ * Object containing information about reloaded config.
+ * 
+ * @typedef {Object} ReloadInfo
+ * @property {object} oldConfig - The old config.
+ * @property {object} newConfig - The new config.
+ * @property {Map.<string|number, Array.<string>|null>} modifiedRooms - 
+ *    Rooms that were modified in the new config.
+ * 
+ *    The key is a room id and value is an array of modified
+ *    property names or null if the room was removed.
+ */
+
 class Config {
   constructor(opt) {
     opt = opt || {};
@@ -247,11 +260,7 @@ class Config {
 
   /**
    * Reloads the config from filesystem.
-   * @returns {Map.<string|number, Array.<string>|null>} - Map of rooms
-   *    that were modified compared to the last time the config was loaded.
-   * 
-   *    The key of the map is a room id and value is an array of modified
-   *    property names or null if the room was removed.
+   * @returns {ReloadInfo} - Information about the reload.
    */
   reload() {
     // delete the cached config module import
@@ -287,7 +296,7 @@ class Config {
     }
 
     this.config = newConfig;
-    return modifiedRooms;
+    return { oldConfig, newConfig, modifiedRooms };
   }
 
   /**

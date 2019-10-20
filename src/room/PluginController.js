@@ -152,12 +152,27 @@ class PluginController {
   }
 
   /**
+   * Removes a plugin.
+   * 
+   * @param {string} plugin - Plugins name.
+   * @returns {Promise.<boolean>} - Whether the removal was successful.
+   */
+  async removePlugin(plugin) {
+    if (!plugin) {
+      throw new TypeError('Missing required argument: plugin');
+    }
+
+    return this.page.evaluate(async (name) => {
+      let pluginId = HHM.manager.getPluginId(name);
+      return HHM.manager.removePlugin(pluginId);
+    }, plugin);
+  }
+  /**
    * Sets the rooms plugin config.
    * 
    * Tries to load plugins that are not loaded from the available
-   * repositories.
-   * 
-   * **Plugins will not get unloaded using this method.**
+   * repositories and removes the loaded plugins that are not in the given
+   * config.
    * 
    * If `pluginName` is given then only config for the given plugin
    * is set.
@@ -209,7 +224,23 @@ class PluginController {
         manager.setPluginConfig(pluginId, config);
 
       }, name, config);
-    }    
+    }
+
+    // remove the loaded plugins that are not in the given pluginConfig
+    const loadedPlugins = await this.getPlugins();
+
+    for (let plugin of loadedPlugins) {
+      let hasPlugin = await this.page.evaluate(async (name, pluginConfig) => {
+        if (pluginConfig.hasOwnProperty(name)) {
+          return true;
+        }
+      }, plugin.name, pluginConfig);
+
+      if (!hasPlugin) {
+        this.removePlugin(plugin.name);
+      }
+    }
+
   }
 
   /**

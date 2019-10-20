@@ -1,4 +1,5 @@
 const logger = require('../logger');
+const colors = require('colors');
 
 /** Handles the console logs that happen in the headless browser. */
 class RoomErrorHandler {
@@ -27,7 +28,10 @@ class RoomErrorHandler {
     } else if (msg.type() === 'warning') {
       this.handleConsoleWarning(msg);
     } else {
-      logger.debug(`[${this.roomId}]: ${msg.text()}`);
+      logger.debug(
+        `[${colors.cyan(this.roomId)}] ` +
+        `[${colors.green('INFO')}] ${msg.text()}`
+      );
     }
   }
   /**
@@ -49,7 +53,10 @@ class RoomErrorHandler {
     if (!logMsg) return;
 
     this.emit(`error-logged`, logMsg);
-    logger.debug(`[${this.roomId}]: Error logged: ${logMsg}`);
+    logger.debug(
+      `[${colors.cyan(this.roomId)}] ` +
+      `[${colors.red('ERROR')}] ${logMsg}`
+    );
   }
 
 
@@ -66,7 +73,10 @@ class RoomErrorHandler {
     if (!logMsg) return;
 
     this.emit(`warning-logged`, logMsg);
-    logger.debug(`[${this.roomId}]: Warning logged: ${logMsg}`);
+    logger.debug(
+      `[${colors.cyan(this.roomId)}] ` +
+      `[${colors.yellow('WARNING')}] ${logMsg}`
+    );
   }
 
   ignoreConsoleMsg(msg) {

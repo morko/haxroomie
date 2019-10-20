@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const sleep = require('../utils').sleep;
+const colors = require('colors');
 const logger = require('../logger');
 const EventEmitter = require('events');
 const { ConnectionError, TimeoutError, InvalidTokenError } = require('../errors');
@@ -129,11 +130,17 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async navigateToHaxballHeadlessPage() {
-    logger.debug('Navigating to ' + this.url);
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Navigating to ${this.url}.`
+    );
     try {
       await this.page.goto(this.url);
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw new ConnectionError(
         `Could not navigate the browser to ${this.url}`
       );
@@ -164,7 +171,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @param {FileDef} [opt.hhm] - Optionally load HHM from a string.
    */
   async loadHHM(opt) {
-    logger.debug('Loading Haxball Headless Manager.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Loading Haxball Headless Manager.`
+    );
 
     const config = {...opt};
 
@@ -204,7 +214,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async startHHM(config) {
-    logger.debug('Starting Headless Haxball Manager.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Starting Haxball Headless Manager`
+    );
 
     let hrConfig = Object.assign({}, config);
     
@@ -223,14 +236,20 @@ module.exports = class RoomOpener extends EventEmitter {
         );
       }
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw err;
     }
 
     try {
       await this.page.evaluate(configFn, hrConfig);
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw err;
     }
   }
@@ -243,11 +262,17 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async waitForHaxballToLoad() {
-    logger.debug('Waiting for HaxBall to load.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Waiting for HaxBall to load.`
+    );
     try {
       await this.page.waitForFunction('typeof HBInit === "function"');
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw new ConnectionError('Could not find the HBInit function!');
     }
   }
@@ -293,12 +318,18 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async getRoomInfoFromHHM() {
-    logger.debug('Fetching the room info from HHM.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Fetching the room info from HHM.`
+    );
     let hhmRoomInfo;
     try {
       hhmRoomInfo = await this.page.evaluate(() => {return window.HHM.config.room});
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw new Error(`Unable to fetch the room info from HHM.`)
     }
     return hhmRoomInfo;
@@ -310,7 +341,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async injectCorePlugins() {
-    logger.debug('Injecting haxroomie core HHM plugins.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Injecting haxroomie core HHM plugins.`
+    );
     try {
       let corePlugin = this.readFile(path.join(__dirname, '..', 'hhm', 'core-plugin.js'));
       await this.page.evaluate((corePlugin) => {
@@ -320,7 +354,10 @@ module.exports = class RoomOpener extends EventEmitter {
         });
       }, corePlugin);
     } catch (err) {
-      logger.debug(err);
+      logger.debug(
+        `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` +
+        `${err}`
+      );
       throw new Error(`Failed to inject haxroomie core HHM plugins!`);
     }
   }
@@ -332,7 +369,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async injectSharedStorage() {
-    logger.debug('Injecting shared-storage module.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Injecting shared-storage module.`
+    );
     let ss = require('./shared-storage');
     await this.page.evaluate(ss, this.id);
   }
@@ -341,7 +381,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * Injects the utils to the headless browser context.
    */
   async injectUtils() {
-    logger.debug('Injecting utils module.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Injecting utils module.`
+    );
     let utils = this.readFile(path.join(__dirname, '..', 'hhm', 'utils.js'));
     await this.page.evaluate(utils);
   }
@@ -353,7 +396,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async injectSharedStorage() {
-    logger.debug('Injecting shared-storage module.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Injecting shared-storage module.`
+    );
     let ss = require('./shared-storage');
     await this.page.evaluate(ss, this.id);
   }
@@ -382,7 +428,10 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async waitForHHMToStart(timeout) {
-    logger.debug('Waiting for HHM to start.');
+    logger.debug(
+      `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
+      `Waiting for HHM to start.`
+    );
     let haxframe = await this.getHaxframe();
 
     let startTime = new Date().getTime();

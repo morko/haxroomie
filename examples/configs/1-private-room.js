@@ -16,14 +16,9 @@ let config = {
         type: 'github',
         repository: 'morko/hhm-sala-plugins'
       },
-      // Herna's repository from https://github.com/XHerna/hhm-plugins
-      {
-        type: 'github',
-        repository: 'XHerna/hhm-plugins'
-      },
     ],
     pluginConfig: {
-      // uncomment the 'sav/roles' property if you want admin passwords
+      // uncomment the 'sav/roles' if you want admin passwords
       /*
       'sav/roles': {
         roles: {

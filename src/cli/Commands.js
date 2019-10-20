@@ -188,7 +188,8 @@ class Commands extends CommandHandler {
       description: 'Reloads the config and restarts the rooms that were modified (if needed).',
       category: 'Basic commands',
       run: async () => {
-        let modifiedRooms = this.config.reload();
+        const reloadInfo = this.config.reload();
+        const { oldConfig, newConfig, modifiedRooms } = reloadInfo;
 
         if (modifiedRooms.size > 0) {
 
@@ -206,54 +207,54 @@ class Commands extends CommandHandler {
           return;
         }
 
-        for (let [roomId, modifiedProperties] of modifiedRooms) {
-          // Remove removed rooms.
-          if (modifiedProperties === null) {
-            this.haxroomie.removeRoom(roomId);
-            continue;
-          }
+        await this.reloadRooms(oldConfig, newConfig, modifiedRooms);
+      }
+    }
+  }
 
-          // Add new rooms.
-          if (!this.haxroomie.hasRoom(roomId)) {
-            await this.createRoom(roomId);
-            let roomConfig = this.config.getRoomConfig(roomId);
-            if (roomConfig.autoStart) {
-              await this.openRoom(roomId)
-            }
-            continue;
-          }
+  async reloadRooms(oldConfig, newConfig, modifiedRooms) {
+    for (let [roomId, modifiedProperties] of modifiedRooms) {
+      // Remove removed rooms.
+      if (modifiedProperties === null) {
+        this.haxroomie.removeRoom(roomId);
+        continue;
+      }
 
-          // Restart/modify running rooms.
-          let room = this.haxroomie.getRoom(roomId);
-          if (room.running) {
-            let cannotHotLoad = modifiedProperties.find(p => {
-              return p !== 'pluginConfig';
-            });
+      // Add new rooms.
+      if (!this.haxroomie.hasRoom(roomId)) {
+        await this.createRoom(roomId);
+        let roomConfig = this.config.getRoomConfig(roomId);
+        if (roomConfig.autoStart) {
+          await this.openRoom(roomId)
+        }
+        continue;
+      }
 
-            // Restart rooms that cannot be hotloaded.
-            if (cannotHotLoad) {
-              await this.closeRoom(roomId);
-              await this.openRoom(roomId);
-              continue;
-            }
+      // Restart/modify running rooms.
+      let room = this.haxroomie.getRoom(roomId);
+      if (room.running) {
+        let cannotHotLoad = modifiedProperties.find(p => {
+          return p !== 'pluginConfig';
+        });
 
-            // If we can hotload the properties.
-            let roomConfig = this.config.getRoomConfig(roomId);
+        // Restart rooms that cannot be hotloaded.
+        if (cannotHotLoad) {
+          await this.closeRoom(roomId);
+          await this.openRoom(roomId);
+          continue;
+        }
 
-            let pluginConfig;
-
-            for (let p of modifiedProperties) {
-              if (p === 'pluginConfig') pluginConfig = roomConfig.pluginConfig;
-            }
-
-            if (pluginConfig) {
-              cprompt.print(`Setting plugin config for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
-              try {
-                await room.plugins.setPluginConfig(roomConfig.pluginConfig);
-              } catch (err) {
-                cprompt.print(err.message);
-                logger.debug(err.stack);
-              }
+        // If we can hotload the properties.
+        for (let prop of modifiedProperties) {
+          if (prop === 'pluginConfig') {
+            cprompt.print(`Setting plugin config for ${colors.cyan(roomId)}.`, 'RELOAD CONFIG');
+            try {
+              await room.plugins.setPluginConfig(
+                newConfig[roomId].pluginConfig
+              );
+            } catch (err) {
+              cprompt.print(err.message);
+              logger.debug(err.stack);
             }
           }
         }
@@ -334,10 +335,17 @@ class Commands extends CommandHandler {
     }
   }
 
-  onCommand_role() {
+  async onCommand_role() {
+    let isDisabled;
+    if (!this.room.running) {
+      isDisabled = true;
+    } else {
+      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = !isDisabled;
+    }
     return {
       description: 'Prints information and players in given role.',
-      disabled: !this.room.running,
+      disabled: isDisabled,
       args: ['role'],
       category: 'Room control',
       run: async (role) => {
@@ -367,10 +375,17 @@ class Commands extends CommandHandler {
     }
   }
 
-  onCommand_addrole() {
+  async onCommand_addrole() {
+    let isDisabled;
+    if (!this.room.running) {
+      isDisabled = true;
+    } else {
+      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = !isDisabled;
+    }
     return {
       description: 'Adds given role to a player with given id.',
-      disabled: !this.room.running,
+      disabled: isDisabled,
       args: ['id', 'role'],
       category: 'Room control',
       run: async (id, role) => {
@@ -379,10 +394,18 @@ class Commands extends CommandHandler {
     }
   }
 
-  onCommand_delrole() {
+  async onCommand_delrole() {
+    let isDisabled;
+    if (!this.room.running) {
+      isDisabled = true;
+    } else {
+      isDisabled = await this.room.plugins.hasPlugin(('sav/roles'));
+      isDisabled = !isDisabled;
+    }
+
     return {
       description: 'Removes given role from a player with given id.',
-      disabled: !this.room.running,
+      disabled: isDisabled,
       args: ['id|auth', 'role'],
       category: 'Room control',
       run: async (id, role) => {

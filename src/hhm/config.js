@@ -35,40 +35,11 @@ if (!hasDefaultRepo) {
   );
 }
 
-// The default plugin configuration.
-HHM.config.plugins = {
-  'sav/players': {
-    addPlayerIdToNickname: false
-  },
-  'sav/roles': {
-    roles: {
-      'host': hrConfig.hostPassword,
-      'admin': hrConfig.adminPassword
-    },
-  },
-  'sav/commands': {
-    commandPrefix: '!'
-  },
-  'sav/chat': {},
-  'sav/help': {}
-};
-
-// Clear the default plugin config if `disableDefaultPlugins` is true
-// or if user provided a room script.
-if (hrConfig.disableDefaultPlugins || hrConfig.roomScript) {
-  HHM.config.plugins = {};
-}
-
-// Merge user plugin configuration with the default.
-if (hrConfig.pluginConfig && typeof hrConfig.pluginConfig !== 'object') {
-  throw new Error(`Haxroomie's "pluginConfig" should be an object!`);
-} else if (hrConfig.pluginConfig) {
-  window.hroomie.mergeDeep(HHM.config.plugins, hrConfig.pluginConfig);
-}
+HHM.config.plugins = hrConfig.pluginConfig || {};
 
 // Temporarily remove the pluginConfigs for plugins that are passed
-// into haxroomie in the `plugins` option so that the plugins won't get
-// loaded from a repository.
+// into haxroomie in the `plugins` option so that HMM does not try to
+// load the plugin from a repository.
 const removedPluginConfigs = {};
 if (hrConfig.plugins && !Array.isArray(hrConfig.plugins)) {
   throw new Error(`Haxroomie's "plugins" should be an array!`);
@@ -85,8 +56,9 @@ if (hrConfig.plugins && !Array.isArray(hrConfig.plugins)) {
 HHM.config.postInit = HBInit => {
   let room = HBInit();
 
-  // Load the `plugins`.
+  // Load the additional `plugins` outside of repositories.
   if (hrConfig.plugins && Array.isArray(hrConfig.plugins)) {
+    console.log(hrConfig)
     for (let plugin of hrConfig.plugins) {
       window.HHM.manager.addPlugin({ 
         pluginCode: plugin.content,
@@ -95,7 +67,7 @@ HHM.config.postInit = HBInit => {
     }
   }
 
-  // Set the configs for `plugins`
+  // Set the configs for `plugins`.
   for (let [pluginName, cfg] of Object.entries(removedPluginConfigs)) {
     let id = HHM.manager.getPluginId(pluginName);
     HHM.manager.setPluginConfig(id, cfg)

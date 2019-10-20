@@ -1,4 +1,5 @@
 const logger = require('../logger');
+const colors = require('colors');
 
 /** Handles the errors that happen in the headless browser. */
 class RoomErrorHandler {
@@ -27,7 +28,10 @@ class RoomErrorHandler {
    */
   handlePageError(error) {
     this.emit(`page-error`, error);
-    logger.debug(`[${this.roomId}]: Page error: ${error}`);
+    logger.debug(
+      `[${colors.cyan(this.roomId)}] ` +
+      `[${colors.red('PAGE ERROR')}] ${error}`
+    );
   }
 
   /** 
@@ -36,7 +40,10 @@ class RoomErrorHandler {
   handleError(error) {
     this.emit(`page-crash`, error);
     this.setRoomState('_usable', false);
-    logger.debug(`[${this.roomId}]: Page crashed: ${error}`);
+    logger.debug(
+      `[${colors.cyan(this.roomId)}] ` +
+      `[${colors.red('PAGE CRASHED')}] ${error}`
+    );
   }
 }
 
