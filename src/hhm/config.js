@@ -22,7 +22,8 @@ HHM.config.room = {
 HHM.config.repositories = [
   {
     type: `github`,
-    repository: `saviola777/hhm-plugins`
+    repository: `saviola777/hhm-plugins`,
+    version: `631d16339f2a159e08a3fb2252861f44496f161a`
   },
 ];
 
