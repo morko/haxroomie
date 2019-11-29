@@ -3,3 +3,5 @@ user-data-dir
 /config.js
 haxroomie.lock
 .env
+.idea/
+.idea

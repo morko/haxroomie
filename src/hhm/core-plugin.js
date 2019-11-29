@@ -1,97 +1,177 @@
 /**
- * This is a Haxball Headless Manager plugin for Haxroomie that handles sending
- * the room events from browser to Haxroomie.
- * 
- * Haxroomie exposes two functions as window.haxroomieOnRoomEvent
- * and window.haxroomieOnHHMEvent that can be used to send event data to
- * the Haxroomie from the browser context.
+ * Registers some core event state handlers, pre-event handler hooks and
+ * extensions to the native room API.
+ *
+ *  - Game state: room.isGamePaused() and room.isGameStarted() provide access
+ *    to room states
+ *  - room.getRoomLink() provides access to the room link at all times
+ *  - native event state validators: validators for onGameStart, onGameStop,
+ *    onGamePause, and onGameUnpause
+ *
+ * Changelog:
+ *
+ * 1.2.1:
+ *  - if pluginSpec is no object, it is used as the plugin name
+ *
+ * 1.2.0:
+ *  - move non-plugin event handlers of the HHM to this plugin
+ *
+ * 1.1.0:
+ *  - improved book-keeping and event state validation for paused and
+ *    started/stopped game states
+ *
+ * 1.0.0:
+ *  - initial version
+ *
  */
-let room = HBInit();
+
+var room = HBInit();
 
 room.pluginSpec = {
-  name: `hr/core`,
-  author: `salamini`,
-  version: `1.0.0`,
-  config: {},
-  dependencies: [],
-  order: {},
-  incompatible_with: [],
+  name: `hhm/core`,
+  author: `saviola`,
+  version: `1.2.1`,
+  dependencies: [
+    `hhm/core` // Can't be disabled
+  ],
 };
 
-Object.assign(window.hroomie, (function(){
+//
+// Global variables
+//
 
-  /**
-   * List of default roomObject event handlers that the plugin will send 
-   * to the main process.
-  */
-  var defaultRoomEventHandlers = [
-    'onPlayerJoin',
-    'onPlayerLeave',
-    'onTeamVictory',
-    'onPlayerChat',
-    'onTeamGoal',
-    'onGameStart',
-    'onGameStop',
-    'onPlayerAdminChange',
-    'onPlayerTeamChange',
-    'onPlayerKicked',
-    'onGamePause',
-    'onGameUnpause',
-    'onPositionsReset',
-    'onStadiumChange'
-  ];
+const properties = { paused: false, started: false };
 
-  var defaultHHMEvents = [
-    window.HHM.events.PLUGIN_DISABLED,
-    window.HHM.events.PLUGIN_ENABLED,
-    window.HHM.events.PLUGIN_LOADED,
-    window.HHM.events.PLUGIN_REMOVED,
-  ];
+//
+// Event handlers
+//
 
-  var ignoredPlugins = new Set([
-    '_user/postInit',
-    'hr/core',
-    'hhm/core',
-    'hhm/persistence'
-  ]);
+function onHhmPluginStateChangeHandler() {
+  room.getPluginManager().getRoomManager().handlersDirty = true;
+}
 
-  registerEventHandlers();
-  
-  return {
-    registerEventHandlers,
-    ignoredPlugins
-  };
+/**
+ * Synchronizes the plugin name when the pluginSpec or _name is set.
+ */
+function onHhmPropertySetHandler({ plugin, propertyName, propertyValue }) {
+  // Register plugin name after setting the plugin specification
+  if (propertyName === `pluginSpec`) {
 
-  /**
-   * Registers handlers for the HaxBall roomObject and for the HHM manager
-   * events. Send all events to the main context of haxroomie.
-   *
-   * @param {Array.<string>} roomEventHandlers - handler names to attach 
-   *    listeners for
-   */  
-  function registerEventHandlers(roomEventHandlers) {
-    roomEventHandlers = roomEventHandlers || defaultRoomEventHandlers;
-
-    // send roomObject events to the main context
-    for (let handlerName of roomEventHandlers) {
-      room[handlerName] = function(...args) {
-        window.haxroomieOnRoomEvent({ handlerName, args });
-      };
+    // If pluginSpec is no object, use the value as plugin name
+    // TODO document behavior
+    if (typeof propertyValue !== `object`) {
+      plugin.pluginSpec = { name: propertyValue };
+      return true;
     }
-  
-    // send HHM events to the main context
-    for (let eventType of defaultHHMEvents) {
-      room[`onHhm_${eventType}`] = function(...args) {
-        // get the plugin data
-        let plugin = args[0].plugin || {};
-        let pluginSpec = plugin.pluginSpec || {};
-        let pluginName = pluginSpec.name || '';
-        if (!pluginName || ignoredPlugins.has(pluginName)) return;
-        let pluginData = window.hroomie.getPlugin(pluginName);
 
-        if (!pluginData) return;
-        window.haxroomieOnHHMEvent({ eventType, pluginData });
-      };
+    if (propertyValue.hasOwnProperty(`name`)
+        && propertyValue.name !== plugin._name) {
+
+      plugin._name = propertyValue.name;
+
+    } else if (plugin._name !== plugin._id) {
+      propertyValue.name = plugin._name;
     }
+
+    plugin.setConfig();
+
+    return true;
   }
-})());
+
+  if (propertyName === `_name`) {
+    if (plugin.pluginSpec === undefined) {
+      plugin.pluginSpec = {};
+    }
+
+    plugin.pluginSpec.name = propertyValue;
+    room.getPluginManager().pluginIds.set(propertyValue, plugin._id);
+
+    return true;
+  }
+}
+
+function onRoomLinkHandler(roomLink) {
+
+  room.extend(`pauseGame`, ({ previousFunction: pauseGame }, pause) => {
+    pauseGame(pause);
+
+    if (room.isGameStarted()) {
+      properties.paused = pause;
+    }
+  });
+
+  room.extend(`isGamePaused`, () => {
+    return properties.paused === true;
+  });
+
+  room.extend(`isGameStarted`, () => {
+    return room.getScores() !== null;
+  });
+
+  room.extend(`startGame`, ({ previousFunction: startGame }) => {
+    // Set paused state to false on game start
+    if (!room.isGameStarted()) {
+      properties.paused = false;
+    }
+
+    startGame();
+
+    properties.started = true;
+  });
+
+  room.extend(`stopGame`, ({ previousFunction: stopGame }) => {
+    // Set paused state to false on game stop
+    properties.paused = false;
+
+    stopGame();
+
+    properties.started = false;
+  });
+
+  room.extend(`getRoomLink`, () => {
+    return roomLink;
+  });
+
+  room
+  // Pre-event handler hooks
+      .addPreEventHandlerHook(`onGameStart`, () => {
+        return properties.started === true;
+      })
+      .addPreEventHandlerHook(`onGameStop`, () => {
+        return properties.started === false;
+      })
+      .addPreEventHandlerHook(`onGamePause`, () => {
+        return properties.paused === true;
+      })
+      .addPreEventHandlerHook(`onGameUnpause`, () => {
+        return properties.paused === false;
+      })
+      // Prevent native onRoomLink events from propagating
+      .addPreEventHook(`onRoomLink`, () => {
+        return false;
+      })
+      // Pre and post event handler hooks
+      .addPreEventHook(`onGamePause`, () => {
+        properties.paused = true;
+      })
+      .addPreEventHook(`onGameUnpause`, () => {
+        properties.paused = false;
+      })
+      .addPreEventHook(`onGameStart`, () => {
+        properties.started = true;
+      })
+      .addPreEventHook(`onGameStop`, () => {
+        properties.started = false;
+      });
+
+  onHhmPluginStateChangeHandler();
+}
+
+//
+// Exports
+//
+
+room.onRoomLink = onRoomLinkHandler;
+room.onHhm_pluginLoaded = room.onHhm_pluginDisabled = room.onHhm_pluginEnabled
+    = onHhmPluginStateChangeHandler;
+room.onHhm_propertySet = onHhmPropertySetHandler;
