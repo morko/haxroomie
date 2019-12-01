@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/cli",
     "test": "mocha",
-    "docs": "vjsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./src/room/PluginController.js ./src/room/RepositoryController.js ./docs-config/HOMEPAGE.md -c ./docs-config/config.js",
-    "release": "./scripts/create-release.js",
+    "docs": "jsdoc ./index.js ./src/Haxroomie.js ./src/room/RoomController.js ./src/room/PluginController.js ./src/room/RepositoryController.js ./assets/docs/HOMEPAGE.md -c ./assets/docs/jsdoc.config.js",
+    "release": "./assets/scripts/create-release.js",
     "format": "eslint --fix ./src"
   },
   "keywords": [
@@ -41,6 +41,7 @@
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
     "foodoc": "0.0.9",
+    "jsdoc": "^3.6.3",
     "mocha": "^5.2.0",
     "prettier": "1.19.1",
     "sinon": "^6.3.5"

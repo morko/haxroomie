@@ -1,10 +1,10 @@
-<!-- start:readme.hbs -->
+<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Haxroomie</title>
+		<title>src/room/RepositoryController.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -85,95 +85,137 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">readme</span>
-				<h1><span class="name">Haxroomie</span></h1>
-				<div class="summary"><p>Documentation and tutorials.</p></div>			</div>
+				<span class="kind">source</span>
+				<h1><span class="name">src/room/RepositoryController.js</span></h1>
+			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-9 main-content">
-		<section class="readme-section">
-			<article><h1>Tutorials</h1>
-<ul>
-<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
-<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
-</ul>
-<h1>API</h1>
-<p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install haxroomie
-</code></pre>
-<p>Easiest way to create
-<a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie instances</a>
-is to use the asynchronous factory function <code>createHaxroomie</code> in the
-<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
-<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
-Each browser tab can run one HaxBall room. These browser tabs are controlled with
-the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
-<h2>Example API usage</h2>
-<p>Example of opening one room. Requires the token to be set as an environment
-variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Repository definition.
+ *
+ * @typedef {Object} Repository
+ * @property {string} type - Repository type. Can be one of `github`, `url`
+ *    or `local`.
+ * @property {string} [repository] - When type is `github` this is a
+ *    **mandatory** field. If your GitHub repository is at
+ *    `https://github.com/user/repository` then this value should be
+ *    `user/repository`.
+ * @property {string} [path] - When type is `github` this is an **optional**
+ *    field. The path under the repository where the plugins are. Default is
+ *    `src`.
+ * @property {string} [version] - When type is `github` this is an **optional**
+ *    field. This is the branch, tag or commit of the repository you want to
+ *    use.
+ * @property {string} [url] - When type is `url` this is a **mandatory**
+ *    field. The URL to your repository. Take care that your host has CORS
+ *    enabled.
+ * @property {object} [plugins] - When type is `local` this is a
+ *    **mandatory** field. This property contains the code for plugins in
+ *    a `local` repository.
+ *
+ *    e.g.
+ * ```js
+ * {
+ *   type: 'local',
+ *   plugins: {
+ *     'pluginName1': 'JavaScript code',
+ *     'pluginName2': 'JavaScript code'
+ *   }
+ * }
+ * ```
+ * @property {string} [path] - When type is `local` this is an
+ *    **optional** field. This property contains the path from where the
+ *    local repository has been loaded.
+ */
 
-async function bootstrap() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
+/**
+ * Repository data.
+ *
+ * @typedef {Object} RepositoryData
+ *
+ * @property {string} name - Name of the repository.
+ * @property {string} [description] - Description of repository.
+ * @property {string} [author] - Author of the repository.
+ * @property {Array.&lt;string>} [plugins] - Plugins that the repository contains.
+ * @property {object} [config] - Configuration object for this repository.
+ *    Can for example define the path of where to load the plugins.
+ */
 
-    room.on('open-room-stop' (roomInfo) => {
-      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
+/**
+ * Class for controlling Haxball Headless Manager (HHM) repositories.
+ */
+class RepositoryController {
+  constructor(opt) {
+    this.page = opt.page;
+    this.running = false;
+    this._usable = false;
+  }
+
+  /**
+   * Adds a repository.
+   *
+   * If append is set to true, the new repository will be added with the
+   * lowest priority, i.e. plugins will only be loaded from it they can't
+   * be found in any other repository. Otherwise the repository will be
+   * added with the highest priority.
+   *
+   * @param {Repository} repository - The repository to be added.
+   * @param {boolean} [append] - Whether to append or prepend the repository
+   *    to the Array of repositories.
+   * @returns {Promise.&lt;boolean>} - Whether the repository was successfully added.
+   *
+   */
+  async addRepository(repository, append) {
+    if (!repository) {
+      throw new TypeError('Missing required argument: repository');
+    }
+
+    return this.page.evaluate(
+      async (repository, append) => {
+        return HHM.manager.getPluginLoader().addRepository(repository, append);
+      },
+      repository,
+      append
+    );
+  }
+
+  /**
+   * Returns available repositories.
+   * @returns {Array.&lt;Repository>} - An array of available repositories.
+   *
+   */
+  async getRepositories() {
+    return this.page.evaluate(() => {
+      return HHM.manager.getPluginLoader().repositories;
     });
+  }
 
-    room.openRoom({
-      roomName: `haxroomie`,
-      playerName: `host`,
-      maxPlayers: 10,
-      public: false,
-      token: process.env.HAXBALL_TOKEN
-    });
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
+  /**
+   * Retrieves information about the given repository.
+   *
+   * The information is loaded from repositorys `repository.json` config file.
+   * @param {Repository} repository - The repository that you want to get
+   *    information from.
+   * @returns {RepositoryData} - The metadata of the repository.
+   */
+  async getRepositoryInformation(repository) {
+    return this.page.evaluate(async rd => {
+      let r = await HHM.manager
+        .getPluginRepositoryFactory()
+        .createRepository(rd);
+      return r.repositoryInformation;
+    }, repository);
   }
 }
 
-bootstrap();
-
+module.exports = RepositoryController;
 </code></pre>
-<p>If you wish to get information about repositories before opening a room you
-need to initialize the room before using
-<a href="RoomController.html#repositories">RoomController#repositories</a>.
-Initializing loads the Haxball Headless Manager library required to use the
-object.</p>
-<p>e.g.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-async function getRepoInfoExample() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-    await room.init();
-
-    repoInfo = await room.repositories.getRepositoryInformation({
-      type: 'github',
-      repository: 'morko/hhm-sala-plugins'
-    });
-
-    console.log(repoInfo);
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-}
-
-getRepoInfoExample();
-</code></pre></article>
 		</section>
 			</div>
-				<div class="col-md-3 side-content">
-					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
-				</div>
 		</div>
 	</div>
 	<footer>
@@ -205,4 +247,4 @@ getRepoInfoExample();
 	
 </body>
 </html>
-<!-- end:readme.hbs -->
+<!-- end:source.tmpl.hbs -->

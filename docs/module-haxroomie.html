@@ -1,10 +1,9 @@
-<!-- start:readme.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Haxroomie</title>
+		<title>haxroomie</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -85,91 +84,136 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">readme</span>
-				<h1><span class="name">Haxroomie</span></h1>
-				<div class="summary"><p>Documentation and tutorials.</p></div>			</div>
+				<span class="kind">module</span>
+				<h1><span class="name">haxroomie</span></h1>
+			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
 			<div class="col-md-9 main-content">
-		<section class="readme-section">
-			<article><h1>Tutorials</h1>
-<ul>
-<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
-<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
-</ul>
-<h1>API</h1>
-<p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install haxroomie
-</code></pre>
-<p>Easiest way to create
-<a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie instances</a>
-is to use the asynchronous factory function <code>createHaxroomie</code> in the
-<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
-<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
-Each browser tab can run one HaxBall room. These browser tabs are controlled with
-the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
-<h2>Example API usage</h2>
-<p>Example of opening one room. Requires the token to be set as an environment
-variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-async function bootstrap() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-
-    room.on('open-room-stop' (roomInfo) => {
-      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
-    });
-
-    room.openRoom({
-      roomName: `haxroomie`,
-      playerName: `host`,
-      maxPlayers: 10,
-      public: false,
-      token: process.env.HAXBALL_TOKEN
-    });
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-}
-
-bootstrap();
-
-</code></pre>
-<p>If you wish to get information about repositories before opening a room you
-need to initialize the room before using
-<a href="RoomController.html#repositories">RoomController#repositories</a>.
-Initializing loads the Haxball Headless Manager library required to use the
-object.</p>
-<p>e.g.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-async function getRepoInfoExample() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-    await room.init();
-
-    repoInfo = await room.repositories.getRepositoryInformation({
-      type: 'github',
-      repository: 'morko/hhm-sala-plugins'
-    });
-
-    console.log(repoInfo);
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-}
-
-getRepoInfoExample();
-</code></pre></article>
-		</section>
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_module.html">Modules</a></li>
+							<li class="active">haxroomie</li>
+						</ol>
+					<section>
+		<dl class="symbol">
+			<dt class="symbol-title "></dt>
+			<dd class="symbol-details ">
+				<div class="symbol-details-inner">
+					<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Main module of Haxroomie.</p>
+					<p>Can be obtained with</p>
+					<pre class="prettyprint source lang-js"><code>const haxroomie = require('haxroomie');
+					</code></pre></div>
+					</div>					<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+									<!-- source -->
+									<div class="form-group">
+										<label class="col-sm-3 control-label">Source</label>
+										<div class="col-sm-9">
+											<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-3">line 3</a></p>
+										</div>
+									</div>
+					
+					
+					
+					
+							</form>
+					</div>				</div>
+			</dd>
+		</dl>
+							<article class="secondary">
+									<h3>Methods</h3>
+									<dl class="symbol">
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="~createHaxroomie" class="function public"><span class="signature-attribs">&lt;async, inner> </span><span class="name">createHaxroomie</span><span class="signature-params">( <span class="signature-param">opt</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{<a href="Haxroomie.html">Haxroomie</a>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Asynchronous factory function to create an instance of
+			<a href="Haxroomie.html">Haxroomie</a> without
+			the need to call <a href="Haxroomie.html#launchBrowser">Haxroomie#launchBrowser</a>
+			after constructing the object.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>opt</code></td>
+							<td><span class="param-type">object</span></td>
+							<td class="last">
+									<p>Options for the Haxroomie constructor.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type"><a href="Haxroomie.html">Haxroomie</a></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Ready to use instance of
+			<a href="Haxroomie.html">Haxroomie</a>.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="index.js.html">index.js</a>, <a href="index.js.html#line-30">line 30</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+									</dl>
+							</article>
+					</section>
 			</div>
 				<div class="col-md-3 side-content">
 					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
@@ -205,4 +249,3 @@ getRepoInfoExample();
 	
 </body>
 </html>
-<!-- end:readme.hbs -->

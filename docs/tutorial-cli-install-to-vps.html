@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Haxroomie</title>
+		<title>Install haxroomie to a VPS (CLI)</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -85,90 +85,96 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">readme</span>
-				<h1><span class="name">Haxroomie</span></h1>
-				<div class="summary"><p>Documentation and tutorials.</p></div>			</div>
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Install haxroomie to a VPS (CLI)</span></h1>
+			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
 			<div class="col-md-9 main-content">
-		<section class="readme-section">
-			<article><h1>Tutorials</h1>
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li class="active">Install haxroomie to a VPS (CLI)</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><h1>Introduction</h1>
+<p>This tutorial will show you how to install haxroomie into a VPS running Ubuntu 18.04 LTS (probably works for Debian too).</p>
+<h1>Prerequisites</h1>
 <ul>
-<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
-<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+<li>VPS with Ubuntu 18.04 LTS installed</li>
+<li>SSH access to the server</li>
+<li>An user to run haxroomie with
+<ul>
+<li><strong>DO NOT RUN HAXROOMIE AS ROOT USER</strong></li>
+<li>search how to <code>create linux user</code> if u dont know how</li>
 </ul>
-<h1>API</h1>
-<p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install haxroomie
+</li>
+</ul>
+<h1>Step 1: Make sure your system is updated</h1>
+<p>Run these in console to update the system:</p>
+<pre class="prettyprint source"><code>sudo apt update
+sudo apt upgrade
 </code></pre>
-<p>Easiest way to create
-<a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie instances</a>
-is to use the asynchronous factory function <code>createHaxroomie</code> in the
-<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
-<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
-Each browser tab can run one HaxBall room. These browser tabs are controlled with
-the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
-<h2>Example API usage</h2>
-<p>Example of opening one room. Requires the token to be set as an environment
-variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-async function bootstrap() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-
-    room.on('open-room-stop' (roomInfo) => {
-      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
-    });
-
-    room.openRoom({
-      roomName: `haxroomie`,
-      playerName: `host`,
-      maxPlayers: 10,
-      public: false,
-      token: process.env.HAXBALL_TOKEN
-    });
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-}
-
-bootstrap();
-
+<h1>Step 2: Install required dependencies</h1>
+<p>Haxroomie is developed with Node.js and is available in the npm repositories.</p>
+<p>Installing Node.js from the default repositories in Ubuntu 18.04 gets us version 8.10.0.
+Haxroomie requires a newer version.</p>
+<p>You can get a newer version following the installation instructions below.</p>
+<p>To install Node.js and npm:</p>
+<pre class="prettyprint source"><code>cd ~
+curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+sudo bash nodesource_setup.sh
+sudo apt install -y nodejs
 </code></pre>
-<p>If you wish to get information about repositories before opening a room you
-need to initialize the room before using
-<a href="RoomController.html#repositories">RoomController#repositories</a>.
-Initializing loads the Haxball Headless Manager library required to use the
-object.</p>
+<h1>Step 3: Configure npm</h1>
+<p>Node Package Manager (npm) needs a bit of configuring before you can use it to
+install haxroomie with it.</p>
+<p>Follow
+<a href="https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3">this guide</a>
+to configure your npm properly!</p>
+<h1>Step 4: Install haxroomie</h1>
+<p>Next we use npm to install haxroomie:</p>
+<pre class="prettyprint source"><code>npm install haxroomie -g
+</code></pre>
+<h1>Step 5: Install dependencies for the Chrome browser</h1>
+<p>You can try running haxroomie already, but it will probably fail if you have not previously installed Chrome using the Ubuntu package manager etc. Chrome requires some system libraries to run.</p>
+<p>You can install the Chrome dependencies with:</p>
+<pre class="prettyprint source"><code>sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+</code></pre>
+<h1>Step 6: Install <code>screen</code></h1>
+<p>GNU screen is a full-screen window manager. It basically allows haxroomie to keep running when you disconnect from your SSH session. Without it haxroomie and all your rooms close when you disconnect.</p>
+<p>Install screen with:</p>
+<pre class="prettyprint source"><code>sudo apt install screen
+</code></pre>
+<p>Start a new screen session:</p>
+<pre class="prettyprint source"><code>screen -S haxroomie
+</code></pre>
+<p>Now you are controlling the newly created screen session.</p>
+<p>To exit the session press <code>Ctrl-a d</code>.</p>
+<p>To resume the session execute:</p>
+<pre class="prettyprint source"><code>screen -r haxroomie
+</code></pre>
+<p>When you connect to your server you have to resume the screen session to be able to control haxroomie again.</p>
+<h1>Step 7: Configuring haxroomie</h1>
+<p>Haxroomie uses a config file to define how many and what kind of rooms you want to run.</p>
+<p>You can copy one of the examples to <code>~/.haxroomie/config.js</code> to get a starting point.
+If you don't, then one of the examples is copied there anyways.</p>
 <p>e.g.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
-
-async function getRepoInfoExample() {
-  try {
-    let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
-    await room.init();
-
-    repoInfo = await room.repositories.getRepositoryInformation({
-      type: 'github',
-      repository: 'morko/hhm-sala-plugins'
-    });
-
-    console.log(repoInfo);
-
-  } catch (err) {
-    logger.error(err.stack);
-    process.exit(1);
-  }
-}
-
-getRepoInfoExample();
-</code></pre></article>
+<pre class="prettyprint source"><code>cp ~/haxroomie/examples/configs/1-public-room.js ./haxroomie/config.js
+nano ./config.js
+</code></pre>
+<p>If you do not like to edit the config file in the console, you can create/edit the config with your preferred editor and then upload the file with your preferred SFTP client e.g. <a href="https://filezilla-project.org/">FileZilla</a>.</p>
+<h1>Step 8: Start haxroomie</h1>
+<p>Now you are ready to run haxroomie!</p>
+<p>To see all available command line arguments:</p>
+<pre class="prettyprint source"><code>haxroomie --help
+</code></pre>
+<p>To start haxroomie:</p>
+<pre class="prettyprint source"><code>haxroomie
+</code></pre>
+<p>When started you will be prompted for tokens for rooms that have the <code>autoStart: true</code> option set in their config. Obtain tokens from <a href="https:%5C/%5C/www.haxball.com/headlesstoken">https://www.haxball.com/headlesstoken</a>. One token is valid for only some time (30-60 minutes?).</p>
+<p>After entering the tokens (if any) you can type <code>help</code> to see the commands that you can use to control the rooms.</p></article>
 		</section>
 			</div>
 				<div class="col-md-3 side-content">
