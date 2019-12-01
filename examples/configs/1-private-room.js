@@ -4,7 +4,7 @@
  */
 
 let config = {
-  'priv': {
+  priv: {
     autoStart: true,
     roomName: `haxroomie`,
     playerName: `host`,
@@ -14,7 +14,7 @@ let config = {
       // salamini's repository from https://github.com/morko/hhm-sala-plugins
       {
         type: 'github',
-        repository: 'morko/hhm-sala-plugins'
+        repository: 'morko/hhm-sala-plugins',
       },
     ],
     pluginConfig: {
@@ -34,12 +34,12 @@ let config = {
       // allows players to pause writing 'p'
       'hr/pause': {
         // tells this plugin that players can pause unlimited times per game
-        maxPauseTimes: 0
+        maxPauseTimes: 0,
       },
       // keeps track of banned players and has some commands for players with
       // admin or host priviledges
       'hr/kickban': {},
-    }
-  }
+    },
+  },
 };
 module.exports = config;

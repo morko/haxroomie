@@ -4,7 +4,7 @@
  */
 
 let config = {
-  'pub': {
+  pub: {
     autoStart: true,
     roomName: `haxroomie`,
     playerName: `host`,
@@ -14,12 +14,7 @@ let config = {
       // salamini's repository from https://github.com/morko/hhm-sala-plugins
       {
         type: 'github',
-        repository: 'morko/hhm-sala-plugins'
-      },
-      // Herna's repository from https://github.com/XHerna/hhm-plugins
-      {
-        type: 'github',
-        repository: 'XHerna/hhm-plugins'
+        repository: 'morko/hhm-sala-plugins',
       },
     ],
     pluginConfig: {
@@ -41,12 +36,12 @@ let config = {
       // allows players to pause writing 'p'
       'hr/pause': {
         // tells this plugin that players can pause 1 time per game
-        maxPauseTimes: 1
+        maxPauseTimes: 1,
       },
       // keeps track of banned players and has some commands for players with
       // admin or host priviledges
       'hr/kickban': {},
-    }
+    },
   },
 };
 module.exports = config;
