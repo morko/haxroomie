@@ -39,12 +39,14 @@ times.
 #### haxroomie-cli
 
 - Can now close haxroomie by pressing ctrl-c or ctrl-d.
+- Exit the app when starting if its already running.
 
 #### haxroomie-core
 
 - Fixed race condition that happened when adding multiple rooms into haxroomie
 "simultaniously". The rooms might have got the same page to control.
 - Fixed loading of local repositories in windows.
+- Starting of room should now fail immediately if hhm cannot be loaded.
 
 #### 1.1.3
 
