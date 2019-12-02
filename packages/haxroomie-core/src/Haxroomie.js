@@ -36,7 +36,7 @@ class Haxroomie extends EventEmitter {
   /**
    * Constructor for Haxroomie.
    *
-   * @param {object} options - options
+   * @param {object} [options] - options
    * @param {object} [options.viewport={ width: 400, height: 500 }] - Viewport
    *    size settings for the browser.
    * @param {number} [options.port=3066] - Port that the headless browser will use
@@ -60,7 +60,7 @@ class Haxroomie extends EventEmitter {
     headless = true,
     userDataDir = path.join(__dirname, '..', 'user-data-dir'),
     timeout = 30,
-  }) {
+  } = {}) {
     super();
     this.browser = null;
     this.rooms = new Map();
