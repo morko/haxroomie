@@ -7,9 +7,9 @@ haxroomie-cli is a tool to run and control HaxBall rooms from a Command Line Int
 ## Links
 
 - [Installation](#installing)
-- [Step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/tutorial-cli-install-to-vps.html)
+- [Step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-install.html)
 - [Changelog](https://github.com/morko/haxroomie/tree/master/CHANGELOG.md#changelog)
-- [Config file documentation](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html)
+- [Config file documentation](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html)
 - [Discord server for haxroomie](https://discord.gg/TeJAEWu)
 
 ## Installing
@@ -100,7 +100,7 @@ Every room requires a token from <https://www.haxball.com/headlesstoken>.
 
 You will be prompted for the tokens when opening a room. Or you can give
 it in the config
-([token property](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html#token)).
+([token property](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#token)).
 
 
 ## Config
@@ -111,7 +111,7 @@ HaxBall Headless Host
 [`HBInit` function](https://github.com/haxball/haxball-issues/wiki/Headless-Host#hbinitroomconfig--roomconfigobject--roomobject)
 with some additional ones.
 
-See [the config file documentation](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html)
+See [the config file documentation](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html)
 for all the possible options and their explanations.
 
 You can find examples of configs in
@@ -119,12 +119,12 @@ You can find examples of configs in
 
 To load a plugin repository in config:
 
-- use [repositories](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html#repositories)
+- use [repositories](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#repositories)
 option
 
 To load plugins from the repository:
 
-- use [pluginConfig](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html#pluginconfig)
+- use [pluginConfig](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#pluginconfig)
 option
 
 Here is a simple example of a config that starts two private rooms.
@@ -176,7 +176,7 @@ module.exports = config;
 ## Scripts and plugins
 
 You can run your script with the configs 
-[roomScript](https://morko.github.io/haxroomie/tutorial-cli-using-haxroomie-config.html#roomscript) 
+[roomScript](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#roomscript) 
 option.
 
 Running a script this way will disable the default plugins that haxroomie loads
