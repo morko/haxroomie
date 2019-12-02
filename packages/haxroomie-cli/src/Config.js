@@ -105,7 +105,7 @@ class Config {
    * Serializes the room config the
    *
    * Loads all the files in the config. The files get transformed into
-   * FileDef objects that the RoomController#open method accepts.
+   * File objects that the RoomController#open method accepts.
    *
    * Repositories that are of type 'local' get serialized to a format
    * that HHM accepts.
@@ -244,7 +244,7 @@ class Config {
    * Tries to load a file from given filePath.
    *
    * @param {string} filePath - Path to the file.
-   * @returns {FileDef} - FileDef with additional `modifiedTime` property that
+   * @returns {File} - File with additional `modifiedTime` property that
    *    tells when the file has last been modified. The `name` property will
    *    be set to the given `filePath`
    */

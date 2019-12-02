@@ -1,10 +1,10 @@
-<!-- start:source.tmpl.hbs -->
+<!-- start:readme.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>index.js</title>
+		<title>Using haxroomie-cli Config File</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -86,45 +86,125 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">source</span>
-				<h1><span class="name">index.js</span></h1>
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Using haxroomie-cli Config File</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-12 main-content">
-		<section class="source-section">
-			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/** @module haxroomie */
-
-require('dotenv').config();
-const Haxroomie = require('./src/Haxroomie');
-const logger = require('./src/logger');
-
-/**
- * Asynchronous factory function to create an instance of
- * [Haxroomie]{@link Haxroomie} without
- * the need to call [Haxroomie#launchBrowser]{@link Haxroomie#launchBrowser}
- * after constructing the object.
- *
- * @param {object} options - Options for the Haxroomie constructor.
- * @returns {Haxroomie} - Ready to use instance of
- * [Haxroomie]{@link Haxroomie}.
- */
-async function createHaxroomie(options) {
-  let haxroomie = new Haxroomie(options);
-  await haxroomie.launchBrowser();
-  return haxroomie;
-}
-
-module.exports = {
-  Haxroomie,
-  createHaxroomie,
-  logger,
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li class="active">Using haxroomie-cli Config File</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><h1>Using the haxroomie config</h1>
+<p>The config is a JavaScript
+<a href="https://www.dyn-web.com/tutorials/object-literal/">object literal</a>.
+You can use <a href="https://nodejs.org/en/">Node.js</a> API inside the config.</p>
+<p>Each room in the config can be given options.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>let config = {
+  'room1': {
+    // Options for room1 here
+  },
+  'room2': {
+    // Options for room2 here
+  }
 };
+module.exports = config;
 </code></pre>
+<p>In addition to normal values that the <code>HBInit</code> function accepts
+(see <a href="https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject">Haxball Headless Host WiKi</a>)
+, following options can be used:</p>
+<h2><code>autoStart</code></h2>
+<p>Set to <code>true</code> if you want the room to start on startup. Default is <code>false</code>.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>autoStart: true
+</code></pre>
+<h2><code>repositories</code></h2>
+<p>Array of plugin repositories to load.</p>
+<p>With this you can tell which repositories to load in addition to the default one
+(<a href="https://github.com/saviola777/hhm-plugins">plugin repository by saviola</a>).</p>
+<p>Adding a repository will not automagically load the plugins in them. To load
+plugins from a repository you must use the <a href="#pluginconfig">pluginConfig</a> option.</p>
+<p>To load a repository from GitHub:</p>
+<pre class="prettyprint source lang-js"><code>repositories: [
+  {
+    type: `github`,
+    repository: `morko/hhm-sala-plugins`,
+    path: `src`, // optional (defaults to src)
+    version: `master`, // optional (defaults to master)
+    suffix: `.js`, // optional (defaults to .js)
+  }
+],
+</code></pre>
+<p>To load a repository from local file system:</p>
+<pre class="prettyprint source lang-js"><code>repositories: [
+  {
+    type: `local`,
+    path: `/path/to/local/repo`,
+    subpath: `src`, // optional (defaults to src)
+    suffix: `.js`, // optional (defaults to .js)
+  }
+],
+</code></pre>
+<h2><code>pluginConfig</code></h2>
+<p>Object containing the plugins to load and their configurations.</p>
+<p>With this you can tell which plugins to load from the repositories that are
+available and give them optional configurations.</p>
+<p>By default the plugins from
+<a href="https://github.com/saviola777/hhm-plugins">saviolas repository</a> are available.</p>
+<p>The <code>pluginConfig</code> object follows the format of
+<a href="https://github.com/saviola777/haxball-headless-manager#configuration-file">HHM configuration file's</a>
+<code>HHM.config.plugin</code> object.</p>
+<p>See
+the <a href="https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins">guide for writing plugins</a>
+for information about saviolas default plugins and how to write your own.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>pluginConfig: {
+  'sav/roles': {
+    roles: {
+      admin: 'superSecretAdminPass',
+      host: 'superSecretHostPass',
+    }
+  },
+  'my/cool-plugin': {}
+}
+</code></pre>
+<h2><code>roomScript</code></h2>
+<p>Use this if you do not wish to use the plugin system and just run a traditional
+HaxBall headless script.</p>
+<p><strong>Disables the default plugins!</strong></p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>roomScript: '/path/to/myScript.js'
+</code></pre>
+<h2><code>token</code></h2>
+<p>You can give the token needed to open the rooms in the config.
+This is useful if you are testing something and need to restart
+the rooms often or if you wish to load it from an environment
+variable.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>token: process.env.HAXBALL_TOKEN
+</code></pre>
+<h2><code>hhmConfig</code></h2>
+<p>Path to custom Haxball Headless Manager (HHM) configuration file.
+You rarely need this.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhmConfig: '/path/to/hhmConfig.js'
+</code></pre>
+<h2><code>hhm</code></h2>
+<p>Path to built source of Headless Haxball Manager (HHM).</p>
+<p>Useful for testing changes to the source.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>hhm: '/path/to/hhm.js'
+</code></pre></article>
 		</section>
 			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
 		</div>
 	</div>
 	<footer>
@@ -156,4 +236,4 @@ module.exports = {
 	
 </body>
 </html>
-<!-- end:source.tmpl.hbs -->
+<!-- end:readme.hbs -->

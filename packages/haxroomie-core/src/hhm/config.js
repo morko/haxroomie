@@ -14,7 +14,7 @@ HHM.config.repositories = [];
 
 // Merge user repositories with default ones.
 if (hrConfig.repositories && !Array.isArray(hrConfig.repositories)) {
-  throw new Error(`Haxroomie's "repositories" should be an array!`);
+  throw new TypeError(`repositories should be an array!`);
 } else if (hrConfig.repositories) {
   HHM.config.repositories = [...hrConfig.repositories];
 }
@@ -42,7 +42,7 @@ HHM.config.plugins = hrConfig.pluginConfig || {};
 // load the plugin from a repository.
 const removedPluginConfigs = {};
 if (hrConfig.plugins && !Array.isArray(hrConfig.plugins)) {
-  throw new Error(`Haxroomie's "plugins" should be an array!`);
+  throw new TypeError(`plugins should be an array!`);
 } else if (hrConfig.plugins) {
   for (let plugin of hrConfig.plugins) {
     if (HHM.config.plugins[plugin.name]) {

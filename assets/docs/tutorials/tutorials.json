@@ -1,8 +1,11 @@
 {
-  "cli-using-haxroomie-config": {
-    "title":"Using the haxroomie config (CLI)"
+  "haxroomie-cli-config": {
+    "title":"Using haxroomie-cli Config File"
   },
-  "cli-install-to-vps": {
-    "title":"Install haxroomie to a VPS (CLI)"
+  "haxroomie-cli-install": {
+    "title":"Install haxroomie-cli to Ubuntu"
+  },
+  "custom-hhm-config": {
+    "title":"Using a Custom HHM Config"
   }
 }

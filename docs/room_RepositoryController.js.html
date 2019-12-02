@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>index.js</title>
+		<title>room/RepositoryController.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -38,9 +38,10 @@
 								<li class="dropdown">
 									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="global.html#File">File</a></li>
-											<li><a href="global.html#Plugin">Plugin</a></li>
+											<li><a href="global.html#createHaxroomie">createHaxroomie</a></li>
+											<li><a href="global.html#FileDef">FileDef</a></li>
 											<li><a href="global.html#PluginData">PluginData</a></li>
+											<li><a href="global.html#PluginDef">PluginDef</a></li>
 											<li><a href="global.html#Repository">Repository</a></li>
 											<li><a href="global.html#RepositoryData">RepositoryData</a></li>
 											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
@@ -56,17 +57,11 @@
 									</ul>
 								</li>
 								<li class="dropdown">
-									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="module-haxroomie.html">haxroomie</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
 									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="tutorial-custom-hhm-config.html">Using a Custom HHM Config</a></li>
-											<li><a href="tutorial-haxroomie-cli-config.html">Using haxroomie-cli Config File</a></li>
-											<li><a href="tutorial-haxroomie-cli-install.html">Install haxroomie-cli to Ubuntu</a></li>
+											<li><a href="tutorial-custom-hhm-config.html">custom-hhm-config</a></li>
+											<li><a href="tutorial-haxroomie-cli-config.html">haxroomie-cli-config</a></li>
+											<li><a href="tutorial-haxroomie-cli-install.html">haxroomie-cli-install</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -87,7 +82,7 @@
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
 				<span class="kind">source</span>
-				<h1><span class="name">index.js</span></h1>
+				<h1><span class="name">room/RepositoryController.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
@@ -95,33 +90,125 @@
 			<div class="col-md-12 main-content">
 		<section class="source-section">
 			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/** @module haxroomie */
-
-require('dotenv').config();
-const Haxroomie = require('./src/Haxroomie');
-const logger = require('./src/logger');
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Repository definition.
+ *
+ * @typedef {Object} Repository
+ * @property {string} type - Repository type. Can be one of `github`, `url`
+ *    or `local`.
+ * @property {string} [repository] - When type is `github` this is a
+ *    **mandatory** field. If your GitHub repository is at
+ *    `https://github.com/user/repository` then this value should be
+ *    `user/repository`.
+ * @property {string} [path] - When type is `github` this is an **optional**
+ *    field. The path under the repository where the plugins are. Default is
+ *    `src`.
+ * @property {string} [version] - When type is `github` this is an **optional**
+ *    field. This is the branch, tag or commit of the repository you want to
+ *    use.
+ * @property {string} [url] - When type is `url` this is a **mandatory**
+ *    field. The URL to your repository. Take care that your host has CORS
+ *    enabled.
+ * @property {object} [plugins] - When type is `local` this is a
+ *    **mandatory** field. This property contains the code for plugins in
+ *    a `local` repository.
+ *
+ *    e.g.
+ * ```js
+ * {
+ *   type: 'local',
+ *   plugins: {
+ *     'pluginName1': 'JavaScript code',
+ *     'pluginName2': 'JavaScript code'
+ *   }
+ * }
+ * ```
+ * @property {string} [path] - When type is `local` this is an
+ *    **optional** field. This property contains the path from where the
+ *    local repository has been loaded.
+ */
 
 /**
- * Asynchronous factory function to create an instance of
- * [Haxroomie]{@link Haxroomie} without
- * the need to call [Haxroomie#launchBrowser]{@link Haxroomie#launchBrowser}
- * after constructing the object.
+ * Repository data.
  *
- * @param {object} options - Options for the Haxroomie constructor.
- * @returns {Haxroomie} - Ready to use instance of
- * [Haxroomie]{@link Haxroomie}.
+ * @typedef {Object} RepositoryData
+ *
+ * @property {string} name - Name of the repository.
+ * @property {string} [description] - Description of repository.
+ * @property {string} [author] - Author of the repository.
+ * @property {Array.&lt;string>} [plugins] - Plugins that the repository contains.
+ * @property {object} [config] - Configuration object for this repository.
+ *    Can for example define the path of where to load the plugins.
  */
-async function createHaxroomie(options) {
-  let haxroomie = new Haxroomie(options);
-  await haxroomie.launchBrowser();
-  return haxroomie;
+
+/**
+ * Class for controlling Haxball Headless Manager (HHM) repositories.
+ */
+class RepositoryController {
+  constructor(opt) {
+    this.page = opt.page;
+    this.running = false;
+    this._usable = false;
+  }
+
+  /**
+   * Adds a repository.
+   *
+   * If append is set to true, the new repository will be added with the
+   * lowest priority, i.e. plugins will only be loaded from it they can't
+   * be found in any other repository. Otherwise the repository will be
+   * added with the highest priority.
+   *
+   * @param {Repository} repository - The repository to be added.
+   * @param {boolean} [append] - Whether to append or prepend the repository
+   *    to the Array of repositories.
+   * @returns {Promise.&lt;boolean>} - Whether the repository was successfully added.
+   *
+   */
+  async addRepository(repository, append) {
+    if (!repository) {
+      throw new TypeError('Missing required argument: repository');
+    }
+
+    return this.page.evaluate(
+      async (repository, append) => {
+        return HHM.manager.getPluginLoader().addRepository(repository, append);
+      },
+      repository,
+      append
+    );
+  }
+
+  /**
+   * Returns available repositories.
+   * @returns {Array.&lt;Repository>} - An array of available repositories.
+   *
+   */
+  async getRepositories() {
+    return this.page.evaluate(() => {
+      return HHM.manager.getPluginLoader().repositories;
+    });
+  }
+
+  /**
+   * Retrieves information about the given repository.
+   *
+   * The information is loaded from repositorys `repository.json` config file.
+   * @param {Repository} repository - The repository that you want to get
+   *    information from.
+   * @returns {RepositoryData} - The metadata of the repository.
+   */
+  async getRepositoryInformation(repository) {
+    return this.page.evaluate(async rd => {
+      let r = await HHM.manager
+        .getPluginRepositoryFactory()
+        .createRepository(rd);
+      return r.repositoryInformation;
+    }, repository);
+  }
 }
 
-module.exports = {
-  Haxroomie,
-  createHaxroomie,
-  logger,
-};
+module.exports = RepositoryController;
 </code></pre>
 		</section>
 			</div>

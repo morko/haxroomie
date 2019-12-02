@@ -1,10 +1,11 @@
-const { createHaxroomie } = require('../../');
+const { createHaxroomie } = require('haxroomie-core');
+const colors = require('colors/safe');
+
 const Commands = require('./Commands');
 const RoomEventHandler = require('./RoomEventHandler');
-const colors = require('colors/safe');
 const Config = require('./Config');
-const logger = require('../logger');
 const cprompt = require('./cprompt');
+const { logger } = require('haxroomie-core');
 
 /**
  * Class for managing RoomController instances.

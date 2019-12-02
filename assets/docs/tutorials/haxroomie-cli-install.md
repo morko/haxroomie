@@ -1,14 +1,14 @@
 # Introduction
 
-This tutorial will show you how to install haxroomie into a VPS running Ubuntu 18.04 LTS (probably works for Debian too).
+This tutorial will show you how to install haxroomie-cli into a VPS running Ubuntu 18.04 LTS (probably works for Debian too).
 
 # Prerequisites
 
 - VPS with Ubuntu 18.04 LTS installed
 - SSH access to the server
-- An user to run haxroomie with 
+- An user to run haxroomie-cli with 
   - **DO NOT RUN HAXROOMIE AS ROOT USER**
-  - search how to `create linux user` if u dont know how
+  - search how to `create linux user` if you dont know how
 
 # Step 1: Make sure your system is updated
 
@@ -20,9 +20,9 @@ sudo apt upgrade
 
 # Step 2: Install required dependencies
 
-Haxroomie is developed with Node.js and is available in the npm repositories.
+Haxroomie-cli is developed with Node.js and is available in the npm repositories.
 
-Installing Node.js from the default repositories in Ubuntu 18.04 gets us version 8.10.0.
+Installing Node.js from the default repositories in Ubuntu 18.04 gets us version 8.10.0 (at the time of writing).
 Haxroomie requires a newer version.
 
 You can get a newer version following the installation instructions below.
@@ -48,12 +48,12 @@ to configure your npm properly!
 
 Next we use npm to install haxroomie:
 ```
-npm install haxroomie -g
+npm install haxroomie-cli -g
 ```
 
 # Step 5: Install dependencies for the Chrome browser
 
-You can try running haxroomie already, but it will probably fail if you have not previously installed Chrome using the Ubuntu package manager etc. Chrome requires some system libraries to run.
+You can try running haxroomie-cli already, but it will probably fail if you have not previously installed Chrome using the Ubuntu package manager etc. Chrome requires some system libraries to run.
 
 You can install the Chrome dependencies with:
 ```
@@ -62,7 +62,7 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 
 # Step 6: Install `screen`
 
-GNU screen is a full-screen window manager. It basically allows haxroomie to keep running when you disconnect from your SSH session. Without it haxroomie and all your rooms close when you disconnect.
+GNU screen is a full-screen window manager. It basically allows haxroomie-cli to keep running when you disconnect from your SSH session. Without it haxroomie-cli and all your rooms close when you disconnect.
 
 Install screen with:
 ```
@@ -88,15 +88,12 @@ When you connect to your server you have to resume the screen session to be able
 # Step 7: Configuring haxroomie
 
 Haxroomie uses a config file to define how many and what kind of rooms you want to run.
+When you start haxroomie a default one will be created in `~/.haxroomie/config.js`
+(`~` means your users home directory).
 
-You can copy one of the examples to `~/.haxroomie/config.js` to get a starting point.
-If you don't, then one of the examples is copied there anyways.
-
-e.g.
-```
-cp ~/haxroomie/examples/configs/1-public-room.js ./haxroomie/config.js
-nano ./config.js
-```
+See [this page](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html)
+for guide about the configuration file. For example configuration files see
+[this page](https://github.com/morko/haxroomie/tree/master/packages/haxroomie-cli/examples/configs).
 
 If you do not like to edit the config file in the console, you can create/edit the config with your preferred editor and then upload the file with your preferred SFTP client e.g. [FileZilla](https://filezilla-project.org/).
 

@@ -52,10 +52,10 @@ window.lunrData = {
         ],
         "undefined": [
           "cli",
-          "config",
           "haxroomi",
+          "instal",
           "tutori",
-          "us"
+          "ubuntu"
         ],
         "list_tutorial.html": [
           "avail",
@@ -338,7 +338,7 @@ window.lunrData = {
           "note",
           "object",
           "open",
-          "opt",
+          "option",
           "page",
           "repositori",
           "room",
@@ -525,7 +525,6 @@ window.lunrData = {
           "plugin",
           "pluginconfig",
           "plugincontroller#addplugin",
-          "plugindef",
           "promise.&lt;number&gt",
           "repositori",
           "string"
@@ -632,13 +631,9 @@ window.lunrData = {
           "retriev"
         ],
         "module-haxroomie.html": [
-          "const",
           "haxroomi",
-          "main",
           "modul",
-          "module:haxroomi",
-          "obtain",
-          "require('haxroomi"
+          "module:haxroomi"
         ]
       },
       "length": 45
@@ -820,7 +815,7 @@ window.lunrData = {
                             "tf": 600
                           },
                           "undefined": {
-                            "tf": 475
+                            "tf": 625
                           },
                           "Haxroomie.html": {
                             "ref": "Haxroomie.html",
@@ -832,7 +827,7 @@ window.lunrData = {
                           },
                           "module-haxroomie.html": {
                             "ref": "module-haxroomie.html",
-                            "tf": 614.2857142857143
+                            "tf": 600
                           }
                         },
                         "e": {
@@ -1163,71 +1158,13 @@ window.lunrData = {
               }
             }
           },
-          "e": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "d": {
-                "docs": {},
-                "l": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "s": {
-                      "docs": {},
-                      "s": {
-                        "docs": {
-                          "Haxroomie.html": {
-                            "ref": "Haxroomie.html",
-                            "tf": 2
-                          },
-                          "RoomController.html": {
-                            "ref": "RoomController.html",
-                            "tf": 4.3478260869565215
-                          },
-                          "RoomController.html#hhmLoaded": {
-                            "ref": "RoomController.html#hhmLoaded",
-                            "tf": 12.5
-                          },
-                          "RoomController.html#init": {
-                            "ref": "RoomController.html#init",
-                            "tf": 4
-                          },
-                          "RoomController.html#closeRoom": {
-                            "ref": "RoomController.html#closeRoom",
-                            "tf": 10
-                          },
-                          "PluginController.html": {
-                            "ref": "PluginController.html",
-                            "tf": 7.142857142857142
-                          },
-                          "RepositoryController.html": {
-                            "ref": "RepositoryController.html",
-                            "tf": 7.142857142857142
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "r": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "RoomController.html#openRoom": {
-                    "ref": "RoomController.html#openRoom",
-                    "tf": 1.8518518518518516
-                  }
-                }
-              }
-            }
-          },
           "h": {
             "docs": {},
             "m": {
               "docs": {
+                "undefined": {
+                  "tf": 625
+                },
                 "RoomController.html": {
                   "ref": "RoomController.html",
                   "tf": 2.1739130434782608
@@ -1315,6 +1252,67 @@ window.lunrData = {
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          },
+          "e": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "d": {
+                "docs": {},
+                "l": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "s": {
+                      "docs": {},
+                      "s": {
+                        "docs": {
+                          "Haxroomie.html": {
+                            "ref": "Haxroomie.html",
+                            "tf": 2
+                          },
+                          "RoomController.html": {
+                            "ref": "RoomController.html",
+                            "tf": 4.3478260869565215
+                          },
+                          "RoomController.html#hhmLoaded": {
+                            "ref": "RoomController.html#hhmLoaded",
+                            "tf": 12.5
+                          },
+                          "RoomController.html#init": {
+                            "ref": "RoomController.html#init",
+                            "tf": 4
+                          },
+                          "RoomController.html#closeRoom": {
+                            "ref": "RoomController.html#closeRoom",
+                            "tf": 10
+                          },
+                          "PluginController.html": {
+                            "ref": "PluginController.html",
+                            "tf": 7.142857142857142
+                          },
+                          "RepositoryController.html": {
+                            "ref": "RepositoryController.html",
+                            "tf": 7.142857142857142
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "RoomController.html#openRoom": {
+                    "ref": "RoomController.html#openRoom",
+                    "tf": 1.8518518518518516
                   }
                 }
               }
@@ -1610,44 +1608,6 @@ window.lunrData = {
                       "RoomController.html#roles": {
                         "ref": "RoomController.html#roles",
                         "tf": 4.166666666666666
-                      }
-                    },
-                    "e": {
-                      "docs": {},
-                      "(": {
-                        "docs": {},
-                        "'": {
-                          "docs": {},
-                          "h": {
-                            "docs": {},
-                            "a": {
-                              "docs": {},
-                              "x": {
-                                "docs": {},
-                                "r": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "o": {
-                                      "docs": {},
-                                      "m": {
-                                        "docs": {},
-                                        "i": {
-                                          "docs": {
-                                            "module-haxroomie.html": {
-                                              "ref": "module-haxroomie.html",
-                                              "tf": 7.142857142857142
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
                       }
                     }
                   }
@@ -3151,113 +3111,6 @@ window.lunrData = {
         },
         "c": {
           "docs": {},
-          "l": {
-            "docs": {},
-            "i": {
-              "docs": {
-                "undefined": {
-                  "tf": 475
-                }
-              }
-            },
-            "a": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "s": {
-                  "docs": {
-                    "list_class.html": {
-                      "ref": "list_class.html",
-                      "tf": 635
-                    },
-                    "Haxroomie.html": {
-                      "ref": "Haxroomie.html",
-                      "tf": 112
-                    },
-                    "Haxroomie.html#launchBrowser": {
-                      "ref": "Haxroomie.html#launchBrowser",
-                      "tf": 3.125
-                    },
-                    "RoomController.html": {
-                      "ref": "RoomController.html",
-                      "tf": 110
-                    },
-                    "PluginController.html": {
-                      "ref": "PluginController.html",
-                      "tf": 117.14285714285714
-                    },
-                    "RepositoryController.html": {
-                      "ref": "RepositoryController.html",
-                      "tf": 117.14285714285714
-                    }
-                  }
-                }
-              }
-            },
-            "o": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "e": {
-                  "docs": {
-                    "Haxroomie.html#closeBrowser": {
-                      "ref": "Haxroomie.html#closeBrowser",
-                      "tf": 12.5
-                    },
-                    "Haxroomie.html#removeRoom": {
-                      "ref": "Haxroomie.html#removeRoom",
-                      "tf": 4.545454545454546
-                    },
-                    "RoomController.html#init": {
-                      "ref": "RoomController.html#init",
-                      "tf": 2
-                    },
-                    "RoomController.html#closeRoom": {
-                      "ref": "RoomController.html#closeRoom",
-                      "tf": 5
-                    }
-                  },
-                  "b": {
-                    "docs": {},
-                    "r": {
-                      "docs": {},
-                      "o": {
-                        "docs": {},
-                        "w": {
-                          "docs": {},
-                          "s": {
-                            "docs": {
-                              "Haxroomie.html#closeBrowser": {
-                                "ref": "Haxroomie.html#closeBrowser",
-                                "tf": 700
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "r": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "o": {
-                        "docs": {},
-                        "m": {
-                          "docs": {
-                            "RoomController.html#closeRoom": {
-                              "ref": "RoomController.html#closeRoom",
-                              "tf": 700
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "o": {
             "docs": {},
             "n": {
@@ -3269,7 +3122,7 @@ window.lunrData = {
                   "g": {
                     "docs": {
                       "undefined": {
-                        "tf": 475
+                        "tf": 620
                       },
                       "RoomController.html#openRoom": {
                         "ref": "RoomController.html#openRoom",
@@ -3394,12 +3247,7 @@ window.lunrData = {
               "s": {
                 "docs": {},
                 "t": {
-                  "docs": {
-                    "module-haxroomie.html": {
-                      "ref": "module-haxroomie.html",
-                      "tf": 7.142857142857142
-                    }
-                  },
+                  "docs": {},
                   "r": {
                     "docs": {},
                     "u": {
@@ -3461,6 +3309,132 @@ window.lunrData = {
                   "RoomController.html#eval": {
                     "ref": "RoomController.html#eval",
                     "tf": 3.125
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "s": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "m": {
+                    "docs": {
+                      "undefined": {
+                        "tf": 625
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "l": {
+            "docs": {},
+            "i": {
+              "docs": {
+                "undefined": {
+                  "tf": 625
+                }
+              }
+            },
+            "a": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "s": {
+                  "docs": {
+                    "list_class.html": {
+                      "ref": "list_class.html",
+                      "tf": 635
+                    },
+                    "Haxroomie.html": {
+                      "ref": "Haxroomie.html",
+                      "tf": 112
+                    },
+                    "Haxroomie.html#launchBrowser": {
+                      "ref": "Haxroomie.html#launchBrowser",
+                      "tf": 3.125
+                    },
+                    "RoomController.html": {
+                      "ref": "RoomController.html",
+                      "tf": 110
+                    },
+                    "PluginController.html": {
+                      "ref": "PluginController.html",
+                      "tf": 117.14285714285714
+                    },
+                    "RepositoryController.html": {
+                      "ref": "RepositoryController.html",
+                      "tf": 117.14285714285714
+                    }
+                  }
+                }
+              }
+            },
+            "o": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "e": {
+                  "docs": {
+                    "Haxroomie.html#closeBrowser": {
+                      "ref": "Haxroomie.html#closeBrowser",
+                      "tf": 12.5
+                    },
+                    "Haxroomie.html#removeRoom": {
+                      "ref": "Haxroomie.html#removeRoom",
+                      "tf": 4.545454545454546
+                    },
+                    "RoomController.html#init": {
+                      "ref": "RoomController.html#init",
+                      "tf": 2
+                    },
+                    "RoomController.html#closeRoom": {
+                      "ref": "RoomController.html#closeRoom",
+                      "tf": 5
+                    }
+                  },
+                  "b": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "o": {
+                        "docs": {},
+                        "w": {
+                          "docs": {},
+                          "s": {
+                            "docs": {
+                              "Haxroomie.html#closeBrowser": {
+                                "ref": "Haxroomie.html#closeBrowser",
+                                "tf": 700
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "r": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "o": {
+                        "docs": {},
+                        "m": {
+                          "docs": {
+                            "RoomController.html#closeRoom": {
+                              "ref": "RoomController.html#closeRoom",
+                              "tf": 700
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -3575,22 +3549,12 @@ window.lunrData = {
             }
           }
         },
-        "v": {
-          "docs": {},
-          "p": {
-            "docs": {
-              "undefined": {
-                "tf": 625
-              }
-            }
-          }
-        },
         "u": {
           "docs": {},
           "s": {
             "docs": {
               "undefined": {
-                "tf": 475
+                "tf": 20
               },
               "Haxroomie.html#launchBrowser": {
                 "ref": "Haxroomie.html#launchBrowser",
@@ -3640,6 +3604,25 @@ window.lunrData = {
               }
             }
           },
+          "b": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "u": {
+                    "docs": {
+                      "undefined": {
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "n": {
             "docs": {},
             "d": {
@@ -3665,6 +3648,195 @@ window.lunrData = {
                 "RoomController.html#closeRoom": {
                   "ref": "RoomController.html#closeRoom",
                   "tf": 5
+                }
+              }
+            }
+          }
+        },
+        "f": {
+          "docs": {},
+          "i": {
+            "docs": {},
+            "l": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "undefined": {
+                    "tf": 20
+                  },
+                  "RoomController.html#openRoom": {
+                    "ref": "RoomController.html#openRoom",
+                    "tf": 1.8518518518518516
+                  },
+                  "RepositoryController.html#getRepositoryInformation": {
+                    "ref": "RepositoryController.html#getRepositoryInformation",
+                    "tf": 5
+                  }
+                }
+              }
+            },
+            "r": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "Haxroomie.html#getFirstRoom": {
+                      "ref": "Haxroomie.html#getFirstRoom",
+                      "tf": 12.5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "u": {
+            "docs": {},
+            "n": {
+              "docs": {},
+              "c": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "i": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "n": {
+                        "docs": {
+                          "Haxroomie.html#launchBrowser": {
+                            "ref": "Haxroomie.html#launchBrowser",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#closeBrowser": {
+                            "ref": "Haxroomie.html#closeBrowser",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#hasRoom": {
+                            "ref": "Haxroomie.html#hasRoom",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#getRoom": {
+                            "ref": "Haxroomie.html#getRoom",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#getRooms": {
+                            "ref": "Haxroomie.html#getRooms",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#getFirstRoom": {
+                            "ref": "Haxroomie.html#getFirstRoom",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#removeRoom": {
+                            "ref": "Haxroomie.html#removeRoom",
+                            "tf": 110
+                          },
+                          "Haxroomie.html#addRoom": {
+                            "ref": "Haxroomie.html#addRoom",
+                            "tf": 110
+                          },
+                          "RoomController.html#init": {
+                            "ref": "RoomController.html#init",
+                            "tf": 110
+                          },
+                          "RoomController.html#closeRoom": {
+                            "ref": "RoomController.html#closeRoom",
+                            "tf": 110
+                          },
+                          "RoomController.html#callRoom": {
+                            "ref": "RoomController.html#callRoom",
+                            "tf": 118.33333333333333
+                          },
+                          "RoomController.html#eval": {
+                            "ref": "RoomController.html#eval",
+                            "tf": 110
+                          },
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
+                            "tf": 110
+                          },
+                          "PluginController.html#getPlugins": {
+                            "ref": "PluginController.html#getPlugins",
+                            "tf": 110
+                          },
+                          "PluginController.html#getPlugin": {
+                            "ref": "PluginController.html#getPlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#enablePlugin": {
+                            "ref": "PluginController.html#enablePlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#disablePlugin": {
+                            "ref": "PluginController.html#disablePlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#getPluginsThatDependOn": {
+                            "ref": "PluginController.html#getPluginsThatDependOn",
+                            "tf": 110
+                          },
+                          "PluginController.html#hasPlugin": {
+                            "ref": "PluginController.html#hasPlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#addPlugin": {
+                            "ref": "PluginController.html#addPlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#removePlugin": {
+                            "ref": "PluginController.html#removePlugin",
+                            "tf": 110
+                          },
+                          "PluginController.html#setPluginConfig": {
+                            "ref": "PluginController.html#setPluginConfig",
+                            "tf": 110
+                          },
+                          "PluginController.html#getPluginConfig": {
+                            "ref": "PluginController.html#getPluginConfig",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#addRepository": {
+                            "ref": "RepositoryController.html#addRepository",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#getRepositories": {
+                            "ref": "RepositoryController.html#getRepositories",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#getRepositoryInformation": {
+                            "ref": "RepositoryController.html#getRepositoryInformation",
+                            "tf": 110
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {
+              "RoomController.html#callRoom": {
+                "ref": "RoomController.html#callRoom",
+                "tf": 25
+              }
+            }
+          },
+          "o": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "d": {
+                  "docs": {
+                    "RepositoryController.html#addRepository": {
+                      "ref": "RepositoryController.html#addRepository",
+                      "tf": 2.380952380952381
+                    }
+                  }
                 }
               }
             }
@@ -4377,7 +4549,7 @@ window.lunrData = {
                     },
                     "module-haxroomie.html": {
                       "ref": "module-haxroomie.html",
-                      "tf": 117.14285714285714
+                      "tf": 110
                     }
                   },
                   "e": {
@@ -4451,17 +4623,6 @@ window.lunrData = {
                       "ref": "RepositoryController.html",
                       "tf": 7.142857142857142
                     }
-                  }
-                }
-              }
-            },
-            "i": {
-              "docs": {},
-              "n": {
-                "docs": {
-                  "module-haxroomie.html": {
-                    "ref": "module-haxroomie.html",
-                    "tf": 7.142857142857142
                   }
                 }
               }
@@ -4820,23 +4981,6 @@ window.lunrData = {
                   }
                 }
               }
-            },
-            "t": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "i": {
-                  "docs": {},
-                  "n": {
-                    "docs": {
-                      "module-haxroomie.html": {
-                        "ref": "module-haxroomie.html",
-                        "tf": 7.142857142857142
-                      }
-                    }
-                  }
-                }
-              }
             }
           },
           "r": {
@@ -4937,10 +5081,19 @@ window.lunrData = {
               }
             },
             "t": {
-              "docs": {
-                "RoomController.html#init": {
-                  "ref": "RoomController.html#init",
-                  "tf": 33.33333333333333
+              "docs": {},
+              "i": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "n": {
+                    "docs": {
+                      "RoomController.html#init": {
+                        "ref": "RoomController.html#init",
+                        "tf": 33.33333333333333
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -5124,192 +5277,6 @@ window.lunrData = {
                           }
                         }
                       }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "f": {
-          "docs": {},
-          "u": {
-            "docs": {},
-            "n": {
-              "docs": {},
-              "c": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "i": {
-                    "docs": {},
-                    "o": {
-                      "docs": {},
-                      "n": {
-                        "docs": {
-                          "Haxroomie.html#launchBrowser": {
-                            "ref": "Haxroomie.html#launchBrowser",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#closeBrowser": {
-                            "ref": "Haxroomie.html#closeBrowser",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#hasRoom": {
-                            "ref": "Haxroomie.html#hasRoom",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#getRoom": {
-                            "ref": "Haxroomie.html#getRoom",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#getRooms": {
-                            "ref": "Haxroomie.html#getRooms",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#getFirstRoom": {
-                            "ref": "Haxroomie.html#getFirstRoom",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#removeRoom": {
-                            "ref": "Haxroomie.html#removeRoom",
-                            "tf": 110
-                          },
-                          "Haxroomie.html#addRoom": {
-                            "ref": "Haxroomie.html#addRoom",
-                            "tf": 110
-                          },
-                          "RoomController.html#init": {
-                            "ref": "RoomController.html#init",
-                            "tf": 110
-                          },
-                          "RoomController.html#closeRoom": {
-                            "ref": "RoomController.html#closeRoom",
-                            "tf": 110
-                          },
-                          "RoomController.html#callRoom": {
-                            "ref": "RoomController.html#callRoom",
-                            "tf": 118.33333333333333
-                          },
-                          "RoomController.html#eval": {
-                            "ref": "RoomController.html#eval",
-                            "tf": 110
-                          },
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
-                            "tf": 110
-                          },
-                          "PluginController.html#getPlugins": {
-                            "ref": "PluginController.html#getPlugins",
-                            "tf": 110
-                          },
-                          "PluginController.html#getPlugin": {
-                            "ref": "PluginController.html#getPlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#enablePlugin": {
-                            "ref": "PluginController.html#enablePlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#disablePlugin": {
-                            "ref": "PluginController.html#disablePlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#getPluginsThatDependOn": {
-                            "ref": "PluginController.html#getPluginsThatDependOn",
-                            "tf": 110
-                          },
-                          "PluginController.html#hasPlugin": {
-                            "ref": "PluginController.html#hasPlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#addPlugin": {
-                            "ref": "PluginController.html#addPlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#removePlugin": {
-                            "ref": "PluginController.html#removePlugin",
-                            "tf": 110
-                          },
-                          "PluginController.html#setPluginConfig": {
-                            "ref": "PluginController.html#setPluginConfig",
-                            "tf": 110
-                          },
-                          "PluginController.html#getPluginConfig": {
-                            "ref": "PluginController.html#getPluginConfig",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#addRepository": {
-                            "ref": "RepositoryController.html#addRepository",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#getRepositories": {
-                            "ref": "RepositoryController.html#getRepositories",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#getRepositoryInformation": {
-                            "ref": "RepositoryController.html#getRepositoryInformation",
-                            "tf": 110
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "i": {
-            "docs": {},
-            "r": {
-              "docs": {},
-              "s": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "Haxroomie.html#getFirstRoom": {
-                      "ref": "Haxroomie.html#getFirstRoom",
-                      "tf": 12.5
-                    }
-                  }
-                }
-              }
-            },
-            "l": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "RoomController.html#openRoom": {
-                    "ref": "RoomController.html#openRoom",
-                    "tf": 1.8518518518518516
-                  },
-                  "RepositoryController.html#getRepositoryInformation": {
-                    "ref": "RepositoryController.html#getRepositoryInformation",
-                    "tf": 5
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {
-              "RoomController.html#callRoom": {
-                "ref": "RoomController.html#callRoom",
-                "tf": 25
-              }
-            }
-          },
-          "o": {
-            "docs": {},
-            "u": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "d": {
-                  "docs": {
-                    "RepositoryController.html#addRepository": {
-                      "ref": "RepositoryController.html#addRepository",
-                      "tf": 2.380952380952381
                     }
                   }
                 }
@@ -5858,7 +5825,7 @@ window.lunrData = {
                       },
                       "PluginController.html#addPlugin": {
                         "ref": "PluginController.html#addPlugin",
-                        "tf": 31.53846153846154
+                        "tf": 39.23076923076923
                       },
                       "PluginController.html#removePlugin": {
                         "ref": "PluginController.html#removePlugin",
@@ -6295,17 +6262,6 @@ window.lunrData = {
                             }
                           }
                         }
-                      },
-                      "e": {
-                        "docs": {},
-                        "f": {
-                          "docs": {
-                            "PluginController.html#addPlugin": {
-                              "ref": "PluginController.html#addPlugin",
-                              "tf": 7.6923076923076925
-                            }
-                          }
-                        }
                       }
                     },
                     "n": {
@@ -6577,7 +6533,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 516
+      "length": 517
     },
     "corpusTokens": [
       "access",
@@ -6609,7 +6565,6 @@ window.lunrData = {
       "code",
       "commun",
       "config",
-      "const",
       "constructor",
       "contain",
       "content",
@@ -6617,6 +6572,7 @@ window.lunrData = {
       "control",
       "copi",
       "creat",
+      "custom",
       "data",
       "debug",
       "delet",
@@ -6684,7 +6640,6 @@ window.lunrData = {
       "load",
       "lowest",
       "lt;async&gt",
-      "main",
       "manag",
       "member",
       "method",
@@ -6697,12 +6652,11 @@ window.lunrData = {
       "null",
       "number",
       "object",
-      "obtain",
       "on",
       "open",
       "openroom",
       "openroomlock",
-      "opt",
+      "option",
       "order",
       "origin",
       "otherwis",
@@ -6723,7 +6677,6 @@ window.lunrData = {
       "plugincontroller#removeplugin",
       "plugincontroller#setpluginconfig",
       "plugindata",
-      "plugindef",
       "pluginnam",
       "port",
       "possibl",
@@ -6753,7 +6706,6 @@ window.lunrData = {
       "repositorycontroller#getrepositoryinform",
       "repositorydata",
       "requir",
-      "require('haxroomi",
       "retriev",
       "return",
       "role",
@@ -6791,11 +6743,11 @@ window.lunrData = {
       "tri",
       "true",
       "tutori",
+      "ubuntu",
       "undo",
       "url",
       "us",
       "usabl",
-      "vp",
       "want",
       "within",
       "wrapper"
@@ -6831,10 +6783,10 @@ window.lunrData = {
     },
     "undefined": {
       "kind": "tutorial",
-      "title": "Using the haxroomie config (CLI)",
-      "longname": "cli-using-haxroomie-config",
-      "name": "cli-using-haxroomie-config",
-      "tags": "cli-using-haxroomie-config",
+      "title": "Install haxroomie-cli to Ubuntu",
+      "longname": "haxroomie-cli-install",
+      "name": "haxroomie-cli-install",
+      "tags": "haxroomie-cli-install",
       "summary": "",
       "description": "",
       "body": ""
@@ -7057,7 +7009,7 @@ window.lunrData = {
     "RoomController.html#init": {
       "id": "RoomController.html#init",
       "kind": "function",
-      "title": "&lt;async&gt; init( [ opt ] )",
+      "title": "&lt;async&gt; init( [ options ] )",
       "longname": "RoomController#init",
       "name": "init",
       "tags": "RoomController#init init",
@@ -7183,7 +7135,7 @@ window.lunrData = {
       "name": "addPlugin",
       "tags": "PluginController#addPlugin addPlugin",
       "summary": "",
-      "description": "Adds a new plugin. If the plugin is string, then it will be loaded from the available repositories. If the plugin is PluginDef, then it will be loaded from contents of PluginDef."
+      "description": "Adds a new plugin. If the plugin is string, then it will be loaded from the available repositories. If the plugin is Plugin, then it will be loaded from contents of Plugin."
     },
     "PluginController.html#removePlugin": {
       "id": "PluginController.html#removePlugin",
@@ -7264,7 +7216,7 @@ window.lunrData = {
       "name": "haxroomie",
       "tags": "module:haxroomie",
       "summary": "",
-      "description": "Main module of Haxroomie. Can be obtained with const haxroomie = require('haxroomie');",
+      "description": "",
       "body": ""
     }
   }

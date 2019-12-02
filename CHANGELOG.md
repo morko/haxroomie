@@ -1,34 +1,46 @@
 # Changelog
 
-### 1.2.0 (not yet released)
+## 2.0.0 (not yet released)
 
-#### Potentially breaking changes
+### Potentially breaking changes
+
+- The 2.0.0 version splits the `haxroomie` package into 2 packages called `haxroomie-core` (API) and `haxroomie-cli` (Command Line Interface). The `haxroomie` npm package will be deprecated.
+
+#### haxroomie-core
 
 - Repository related methods are now organized under `RoomController.repositories`.
 - Plugin related methods are now organized under `RoomController.plugins`.
-- RoomController close-room event is now split into two events called
-"close-room-start" and "close-room-stop"
+- RoomController `close-room` event is now split into two events called
+`close-room-start` and `close-room-stop`.
 - `RoomController.openRoom(config)` can throw `RoomIsRunningError` if called on
 room that is already running.
 
-#### New Features (CLI)
+### New Features
+
+- Support `noPlayer` option (run rooms without host player).
+- Ability to load and remove plugins while room is running.
+
+#### haxroomie-cli
 
 - The commands in CLI are organized into categories.
 - Commands that are not usable when selected room is not running are now hidden.
-- New "init" command that reinitializes the room if it goes to a unusable state.
+- Commands that require a plugin are hidden if plugin is not loaded and enabled.
+- New `init` command that reinitializes the room if it goes to a unusable state.
 
-#### Fixed Bugs (CLI)
-
-- Can now close haxroomie by pressing ctrl-c or ctrl-d.
-
-#### New features (API)
+#### haxroomie-core
 
 - Ability to get repository information before opening a room with
 `RoomController.repositories.getRepositoryInformation(repository)`.
-- Support the new HHM repository.json definiton for faster loading
+- Support the new HHM `repository.json` definiton for faster loading
 times.
 
-#### Fixed bugs (API)
+### Fixed Bugs
+
+#### haxroomie-cli
+
+- Can now close haxroomie by pressing ctrl-c or ctrl-d.
+
+#### haxroomie-core
 
 - Fixed race condition that happened when adding multiple rooms into haxroomie
 "simultaniously". The rooms might have got the same page to control.

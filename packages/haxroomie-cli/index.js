@@ -1,10 +1,11 @@
 #! /usr/bin/env node
 const path = require(`path`);
-const HRConsoleApp = require(`./HRConsoleApp`);
-const logger = require(`../logger`);
 const fs = require('fs');
 const os = require('os');
 const lockFile = require(`lockfile`);
+
+const HRConsoleApp = require(`./src/HRConsoleApp`);
+const { logger } = require('haxroomie-core');
 
 const configDir = path.join(os.homedir(), '.haxroomie');
 const configSkeleton = path.join(
@@ -58,7 +59,7 @@ const argv = require(`yargs`)
   .describe(`window`, `Tries to spawn a browser window for debugging.`).argv;
 
 if (argv.version) {
-  console.log(require('../../package.json').version);
+  console.log(require('./package.json').version);
   process.exit(0);
 }
 

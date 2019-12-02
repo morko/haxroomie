@@ -1,10 +1,6 @@
-# Tutorials
+# haxroomie-core
 
-- {@tutorial haxroomie-cli-config}
-- {@tutorial haxroomie-cli-install}
-- {@tutorial custom-hhm-config}
-
-# API
+API made with `Node.js` for running and controlling HaxBall rooms.
 
 The most important interfaces the API offers are:
 
@@ -14,6 +10,13 @@ The most important interfaces the API offers are:
     - container for the room instances (controls the headless browser)
   - [RoomController](https://morko.github.io/haxroomie/RoomController.html)
     - controls the HaxBall room (owns a tab in the headless browser)
+
+## Installation
+
+To install haxroomie-core for your project its preferred to install it locally with
+```sh
+npm install haxroomie-core
+```
 
 ## Examples
 

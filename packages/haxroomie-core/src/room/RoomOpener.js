@@ -169,7 +169,7 @@ module.exports = class RoomOpener extends EventEmitter {
   /**
    * @param {object} opt - Options.
    * @param {string} opt.version - Version of HHM to load.
-   * @param {FileDef} [opt.hhm] - Optionally load HHM from a string.
+   * @param {File} [opt.hhm] - Optionally load HHM from a string.
    */
   async loadHHM(opt) {
     logger.debug(
@@ -192,7 +192,7 @@ module.exports = class RoomOpener extends EventEmitter {
       process.env.NODE_ENV === 'development' ? true : false
     );
 
-    // load HHM from a the FileDef if its provided
+    // load HHM from a the File if its provided
     if (config.hhm && config.hhm.content) {
       await this.page.addScriptTag({ content: config.hhm.content });
     } else {

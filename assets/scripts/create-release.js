@@ -36,8 +36,8 @@ async function createRelease() {
     process.exit(1);
   }
 
-  console.log(`BUMPING MASTER BRANCH NPM VERSION TO ${hrVersion}-git`);
-  result = await exec(`npm --no-git-tag-version version ${hrVersion}-git`);
+  console.log(`BUMPING MASTER BRANCH NPM VERSION TO ${hrVersion}`);
+  result = await exec(`npm --no-git-tag-version version ${hrVersion}`);
   if (result.error) process.exit(1);
 
   console.log(`CREATING DOCS FOR THE NEW VERSION`);
@@ -47,15 +47,11 @@ async function createRelease() {
   console.log(`COMMIT MASTER BRANCH BUMP AND DOCS`);
   result = await exec(`git add .`);
   if (result.error) process.exit(1);
-  result = await exec(`git commit -a -m "Version bumped to ${hrVersion}-git."`);
+  result = await exec(`git commit -a -m "Version bumped to ${hrVersion}."`);
   if (result.error) process.exit(1);
 
   console.log(`SWITCHING TO RELEASE BRANCH release-${hrVersion}`);
   result = await exec(`git checkout -b "release-${hrVersion}"`);
-  if (result.error) process.exit(1);
-
-  console.log(`BUMPING RELEASE BRANCH NPM VERSION TO ${hrVersion}`);
-  result = await exec(`npm --no-git-tag-version version ${hrVersion}`);
   if (result.error) process.exit(1);
 
   console.log(`SETTING THE HHM VERSION IN CONFIG`);
@@ -75,9 +71,17 @@ async function createRelease() {
 }
 
 function setHhmVersion(hhmVersion) {
-  let config = require('../config.json');
+  const hrCoreConfigPath = path.join(
+    __dirname,
+    '..',
+    '..',
+    'packages',
+    'haxroomie-core',
+    'config.json'
+  );
+  let config = require(hrCoreConfigPath);
   config.hhmVersion = hhmVersion;
   let configJson = JSON.stringify(config, null, 2);
-  fs.writeFileSync(path.join(__dirname, '..', 'config.json'), configJson);
+  fs.writeFileSync(hrCoreConfigPath, configJson);
 }
 createRelease();

@@ -1,10 +1,10 @@
-<!-- start:source.tmpl.hbs -->
+<!-- start:readme.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>index.js</title>
+		<title>Using a Custom HHM Config</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = false;
+			window.DOCLET_TOC_ENABLED = true;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -86,45 +86,75 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">source</span>
-				<h1><span class="name">index.js</span></h1>
+				<span class="kind">tutorial</span>
+				<h1><span class="title">Using a Custom HHM Config</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-12 main-content">
-		<section class="source-section">
-			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/** @module haxroomie */
-
-require('dotenv').config();
-const Haxroomie = require('./src/Haxroomie');
-const logger = require('./src/logger');
-
-/**
- * Asynchronous factory function to create an instance of
- * [Haxroomie]{@link Haxroomie} without
- * the need to call [Haxroomie#launchBrowser]{@link Haxroomie#launchBrowser}
- * after constructing the object.
- *
- * @param {object} options - Options for the Haxroomie constructor.
- * @returns {Haxroomie} - Ready to use instance of
- * [Haxroomie]{@link Haxroomie}.
- */
-async function createHaxroomie(options) {
-  let haxroomie = new Haxroomie(options);
-  await haxroomie.launchBrowser();
-  return haxroomie;
-}
-
-module.exports = {
-  Haxroomie,
-  createHaxroomie,
-  logger,
-};
+			<div class="col-md-9 main-content">
+						<ol class="breadcrumb">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="list_tutorial.html">Tutorials</a></li>
+							<li class="active">Using a Custom HHM Config</li>
+						</ol>
+		<section class="tutorial-section">
+			<article><h1>Custom config for Haxball Headless Manager</h1>
+<p>Haxroomie supports custom
+Haxball Headless Manager (HHM) configs. However there should rarely be a reason to do this.</p>
+<p>(see <a href="#hhm-config-requirements">HHM config requirements</a>).</p>
+<h2>Loading the config</h2>
+<h3>haxroomie-core</h3>
+<p>The config can be loaded when opening a room. You have to give it to
+<a href="https://morko.github.io/haxroomie/RoomController.html#openRoom">RoomController#openRoom</a>
+method as a string.</p>
+<p>e.g.</p>
+<pre class="prettyprint source lang-js"><code>room.openRoom({
+  // other options
+  hhmConfig: {
+    name: 'myHhmConfig',
+    content: theStringContainingTheCode
+  }
+})
 </code></pre>
+<h3>haxroomie-cli</h3>
+<p>The config can be given in the rooms config in the config file.</p>
+<pre class="prettyprint source lang-js"><code>hhmConfig: '/path/to/the/file.js'
+</code></pre>
+<h2>HHM config requirements</h2>
+<p><code>HHM.config.room</code> object must have a <code>token</code> property like this:</p>
+<pre class="prettyprint source lang-js"><code>HHM.config.room = {
+  token: hrConfig.token
+}
+</code></pre>
+<p>The <code>postInit</code> plugin should set the <code>window.hroomie.hhmStarted</code> property to
+<code>true</code> on the <code>onRoomLink</code> event like this:</p>
+<pre class="prettyprint source lang-js"><code>HHM.config.postInit = HBInit => {
+  let room = HBInit();
+
+  room.onRoomLink = () => {
+    window.hroomie.hhmStarted = true;
+  }
+}
+</code></pre>
+<h2>Differences to vanilla HHM config</h2>
+<p>Haxroomie injects a <code>hrConfig</code> object to the HHM config.
+The object contains all the properties sent to the function
+that is used to start the room.
+See the
+<a href="https://morko.github.io/haxroomie/RoomController.html#openRoom">API documentation for openRoom</a>
+for a list of these properties.</p>
+<p>See the
+<a href="https://www.github.com/morko/haxroomie/tree/master/packages/haxroomie-core/src/hhm/config.js">default configuration file</a>
+for a complete example.</p>
+<p>See
+<a href="https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration">HHM docs</a>
+for more information about the configuration file.</p></article>
 		</section>
 			</div>
+				<div class="col-md-3 side-content">
+					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
+				</div>
 		</div>
 	</div>
 	<footer>
@@ -156,4 +186,4 @@ module.exports = {
 	
 </body>
 </html>
-<!-- end:source.tmpl.hbs -->
+<!-- end:readme.hbs -->

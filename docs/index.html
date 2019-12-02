@@ -38,9 +38,9 @@
 								<li class="dropdown">
 									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="global.html#FileDef">FileDef</a></li>
+											<li><a href="global.html#File">File</a></li>
+											<li><a href="global.html#Plugin">Plugin</a></li>
 											<li><a href="global.html#PluginData">PluginData</a></li>
-											<li><a href="global.html#PluginDef">PluginDef</a></li>
 											<li><a href="global.html#Repository">Repository</a></li>
 											<li><a href="global.html#RepositoryData">RepositoryData</a></li>
 											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
@@ -64,8 +64,9 @@
 								<li class="dropdown">
 									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 									<ul class="dropdown-menu">
-											<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
-											<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
+											<li><a href="tutorial-custom-hhm-config.html">Using a Custom HHM Config</a></li>
+											<li><a href="tutorial-haxroomie-cli-config.html">Using haxroomie-cli Config File</a></li>
+											<li><a href="tutorial-haxroomie-cli-install.html">Install haxroomie-cli to Ubuntu</a></li>
 									</ul>
 								</li>
 				</ul>
@@ -95,37 +96,46 @@
 		<section class="readme-section">
 			<article><h1>Tutorials</h1>
 <ul>
-<li><a href="tutorial-cli-using-haxroomie-config.html">Using the haxroomie config (CLI)</a></li>
-<li><a href="tutorial-cli-install-to-vps.html">Install haxroomie to a VPS (CLI)</a></li>
+<li><a href="tutorial-haxroomie-cli-config.html">Using haxroomie-cli Config File</a></li>
+<li><a href="tutorial-haxroomie-cli-install.html">Install haxroomie-cli to Ubuntu</a></li>
+<li><a href="tutorial-custom-hhm-config.html">Using a Custom HHM Config</a></li>
 </ul>
 <h1>API</h1>
-<p>To install haxroomie for your project its preferred to install it locally with</p>
-<pre class="prettyprint source lang-sh"><code>npm install haxroomie
-</code></pre>
-<p>Easiest way to create
-<a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie instances</a>
-is to use the asynchronous factory function <code>createHaxroomie</code> in the
-<a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">haxroomie module</a>.</p>
-<p>Haxroomie controls one headless chrome browser with help of the Puppeteer library.
-Each browser tab can run one HaxBall room. These browser tabs are controlled with
-the <a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a> object.</p>
-<h2>Example API usage</h2>
-<p>Example of opening one room. Requires the token to be set as an environment
-variable named <code>HAXBALL_TOKEN</code>.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
+<p>The most important interfaces the API offers are:</p>
+<ul>
+<li><a href="https://morko.github.io/haxroomie/module-haxroomie.html#createHaxroomie">createHaxroomie</a>
+<ul>
+<li>creates instances of Haxroomie</li>
+</ul>
+</li>
+<li><a href="https://morko.github.io/haxroomie/Haxroomie.html">Haxroomie</a>
+<ul>
+<li>container for the room instances (controls the headless browser)</li>
+</ul>
+</li>
+<li><a href="https://morko.github.io/haxroomie/RoomController.html">RoomController</a>
+<ul>
+<li>controls the HaxBall room (owns a tab in the headless browser)</li>
+</ul>
+</li>
+</ul>
+<h2>Examples</h2>
+<h3>Opening One Room</h3>
+<p>Requires the token to be set as an environment variable named <code>HAXBALL_TOKEN</code>.</p>
+<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require('haxroomie');
 
 async function bootstrap() {
   try {
     let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
+    let room = await haxroomie.addRoom('example');
 
     room.on('open-room-stop' (roomInfo) => {
       console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
     });
 
     room.openRoom({
-      roomName: `haxroomie`,
-      playerName: `host`,
+      roomName: 'haxroomie',
+      playerName: 'host',
       maxPlayers: 10,
       public: false,
       token: process.env.HAXBALL_TOKEN
@@ -140,18 +150,19 @@ async function bootstrap() {
 bootstrap();
 
 </code></pre>
-<p>If you wish to get information about repositories before opening a room you
-need to initialize the room before using
-<a href="RoomController.html#repositories">RoomController#repositories</a>.
-Initializing loads the Haxball Headless Manager library required to use the
-object.</p>
-<p>e.g.</p>
-<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require(`haxroomie`);
+<h3>Getting Repository Info Before Opening Room</h3>
+<p>Initialize the room with
+<a href="https://morko.github.io/haxroomie/RoomController.html#init">RoomController.init</a>
+before using
+<a href="https://morko.github.io/haxroomie/RoomController.html#repositories">RoomController.repositories</a>.</p>
+<p>Initializing loads the Haxball Headless Manager (HHM) library. It is required to use the
+<code>repositories</code> property.</p>
+<pre class="prettyprint source lang-js"><code>const { createHaxroomie } = require('haxroomie');
 
 async function getRepoInfoExample() {
   try {
     let haxroomie = await createHaxroomie();
-    let room = await haxroomie.addRoom(`example`);
+    let room = await haxroomie.addRoom('example');
     await room.init();
 
     repoInfo = await room.repositories.getRepositoryInformation({
@@ -178,7 +189,7 @@ getRepoInfoExample();
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a> on 1st Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 2nd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

@@ -1,101 +1,4 @@
-<!-- start:source.tmpl.hbs -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-		<title>src/room/PluginController.js</title>
-		<!--[if lt IE 9]>
-		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-		<link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
-		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
-		<link type="text/css" rel="stylesheet" href="css/prism.min.css">
-		<link type="text/css" rel="stylesheet" href="css/template.min.css">
-		<script type="text/javascript">
-			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = false;
-			window.DOCLET_AFILTER_ENABLED = false;
-		</script>
-</head>
-<body>
-	<!-- start:navbar.hbs -->
-	<header class="navbar navbar-default navbar-fixed-top navbar-inverse">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="index.html">
-					Haxroomie
-				</a>
-				<!-- displayed on small devices -->
-				<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="navbar-collapse collapse" id="topNavigation">
-				<ul class="nav navbar-nav">
-								<li class="dropdown">
-									<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Globals<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="global.html#File">File</a></li>
-											<li><a href="global.html#Plugin">Plugin</a></li>
-											<li><a href="global.html#PluginData">PluginData</a></li>
-											<li><a href="global.html#Repository">Repository</a></li>
-											<li><a href="global.html#RepositoryData">RepositoryData</a></li>
-											<li><a href="global.html#RoomEventArgs">RoomEventArgs</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_class.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="Haxroomie.html">Haxroomie</a></li>
-											<li><a href="PluginController.html">PluginController</a></li>
-											<li><a href="RepositoryController.html">RepositoryController</a></li>
-											<li><a href="RoomController.html">RoomController</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_module.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="module-haxroomie.html">haxroomie</a></li>
-									</ul>
-								</li>
-								<li class="dropdown">
-									<a href="list_tutorial.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
-									<ul class="dropdown-menu">
-											<li><a href="tutorial-custom-hhm-config.html">Using a Custom HHM Config</a></li>
-											<li><a href="tutorial-haxroomie-cli-config.html">Using haxroomie-cli Config File</a></li>
-											<li><a href="tutorial-haxroomie-cli-install.html">Install haxroomie-cli to Ubuntu</a></li>
-									</ul>
-								</li>
-				</ul>
-					<!-- start:lunr-search-navbar.hbs -->
-					<form class="navbar-form navbar-right" role="search">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Search" id="lunr-search-input">
-							<div class="input-group-btn">
-								<button class="btn btn-default" id="lunr-search-submit">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
-							</div>
-						</div>
-					</form>
-					<!-- start:lunr-search-navbar.hbs -->		</div>
-		</div>
-	</header>
-	<!-- end:navbar.hbs -->		<div class="page-header">
-			<div class="container">
-				<span class="kind">source</span>
-				<h1><span class="name">src/room/PluginController.js</span></h1>
-			</div>
-		</div>
-	<div class="container content">
-		<div class="row">
-			<div class="col-md-12 main-content">
-		<section class="source-section">
-			<article></article>
-			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+/**
  * Object containing HHM plugin name and content.
  *
  * @typedef {Object} Plugin
@@ -125,7 +28,7 @@ class PluginController {
   /**
    * Returns loaded plugins.
    *
-   * @returns {Promise&lt;Array.&lt;PluginData>>} - Array of plugins.
+   * @returns {Promise<Array.<PluginData>>} - Array of plugins.
    */
   async getPlugins() {
     let result = await this.page.evaluate(() => {
@@ -147,7 +50,7 @@ class PluginController {
    * Returns PluginData of the given plugin name.
    *
    * @param {string} name - Name of the plugin.
-   * @returns {Promise.&lt;?PluginData>} - Data of the plugin or `null` if
+   * @returns {Promise.<?PluginData>} - Data of the plugin or `null` if
    *    plugin was not found.
    */
   async getPlugin(name) {
@@ -161,7 +64,7 @@ class PluginController {
    * Enables a HHM plugin with the given name.
    *
    * @param {string} name - Name of the plugin
-   * @returns {Promise.&lt;boolean>} - `true` if plugin was enabled, `false` otherwise.
+   * @returns {Promise.<boolean>} - `true` if plugin was enabled, `false` otherwise.
    */
   async enablePlugin(name) {
     return this.page.evaluate(name => {
@@ -175,10 +78,10 @@ class PluginController {
    * If the name is an Array then
    * it disables all the plugins in the given order.
    *
-   * @param {(string|Array.&lt;string>)} name - Name or array of names of the plugin(s).
+   * @param {(string|Array.<string>)} name - Name or array of names of the plugin(s).
    * @param {boolean} [recursive=false] - If true all the plugins that depend on
    *    the plugin will get disabled also.
-   * @returns {Promise.&lt;boolean>} - Was the plugin disabled or not?
+   * @returns {Promise.<boolean>} - Was the plugin disabled or not?
    */
   async disablePlugin(name, recursive = false) {
     return this.page.evaluate(
@@ -186,10 +89,10 @@ class PluginController {
         const { manager } = HHM;
 
         if (Array.isArray(name)) {
-          for (let i = 0; i &lt; name.length; i++) {
+          for (let i = 0; i < name.length; i++) {
             const success = manager.disablePlugin(name[i], recursive);
             if (!success) {
-              for (let j = 0; j &lt;= i; j++) {
+              for (let j = 0; j <= i; j++) {
                 manager.enablePlugin(name[i - j]);
               }
               return false;
@@ -210,7 +113,7 @@ class PluginController {
    * @param {string} name - Name or id of the plugin.
    * @param {boolean} [recursive=true] - Finds indirect dependencies also.
    * @param {boolean} [includeDisabled=false] - Include disabled plugins
-   * @returns {Promise&lt;Array.&lt;PluginData>>} - Array of plugins.
+   * @returns {Promise<Array.<PluginData>>} - Array of plugins.
    */
   async getPluginsThatDependOn(
     name,
@@ -232,7 +135,7 @@ class PluginController {
   /**
    * Checks if the room has a plugin with given name loaded.
    * @param {string} name - Name of the plugin.
-   * @returns {Promise.&lt;boolean>} - `true` if it had the plugin, `false` if not.
+   * @returns {Promise.<boolean>} - `true` if it had the plugin, `false` if not.
    */
   async hasPlugin(name) {
     return this.page.evaluate(async name => {
@@ -252,7 +155,7 @@ class PluginController {
    * @param {string|Plugin} plugin - Plugins name if loading from
    *    repositories or plugin definition if loading it from an object.
    * @param {object} [pluginConfig] - Configuration options for the plugin.
-   * @returns {Promise.&lt;number>} - Plugin ID if the plugin and all of its dependencies
+   * @returns {Promise.<number>} - Plugin ID if the plugin and all of its dependencies
    *    have been loaded, -1 otherwise.
    */
   async addPlugin(plugin, pluginConfig) {
@@ -264,7 +167,7 @@ class PluginController {
       return this.page.evaluate(
         async (name, pluginConfig) => {
           let id = HHM.manager.addPlugin({ pluginName: name });
-          if (id >= 0 &amp;&amp; pluginConfig) {
+          if (id >= 0 && pluginConfig) {
             HHM.manager.setPluginConfig(id, pluginConfig);
           }
           return id;
@@ -283,7 +186,7 @@ class PluginController {
         pluginCode: plugin.content,
         pluginName: plugin.name,
       });
-      if (id >= 0 &amp;&amp; pluginConfig) {
+      if (id >= 0 && pluginConfig) {
         HHM.manager.setPluginConfig(id, pluginConfig);
       }
       return id;
@@ -296,7 +199,7 @@ class PluginController {
    * @param {string} pluginName - Plugins name.
    * @param {boolean} [safe=true] - Remove plugin safely (see HHM
    *    PluginManager#removePlugin).
-   * @returns {Promise.&lt;boolean>} - Whether the removal was successful.
+   * @returns {Promise.<boolean>} - Whether the removal was successful.
    */
   async removePlugin(pluginName, safe = true) {
     if (!pluginName) {
@@ -340,9 +243,9 @@ class PluginController {
         async (pluginName, pluginConfig) => {
           let pluginId = HHM.manager.getPluginId(pluginName);
 
-          if (pluginId &lt; 0) {
+          if (pluginId < 0) {
             pluginId = await HHM.manager.addPlugin({ pluginName });
-            if (pluginId &lt; 0) {
+            if (pluginId < 0) {
               throw new Error(
                 `Cannot load plugin "${pluginName}" from available repositories.`
               );
@@ -364,9 +267,9 @@ class PluginController {
 
           let pluginId = manager.getPluginId(name);
 
-          if (pluginId &lt; 0) {
+          if (pluginId < 0) {
             pluginId = await manager.addPlugin({ pluginName: name });
-            if (pluginId &lt; 0) {
+            if (pluginId < 0) {
               return;
             }
           }
@@ -424,7 +327,7 @@ class PluginController {
    * if `pluginName` is given, then return the config for that plugin.
    *
    * @param {string} [pluginName] - The name of the plugin.
-   * @returns {Promise.&lt;object>} - The config object of plugin(s).
+   * @returns {Promise.<object>} - The config object of plugin(s).
    */
   async getPluginConfig(pluginName) {
     if (typeof pluginName === 'string') {
@@ -454,38 +357,3 @@ class PluginController {
 }
 
 module.exports = PluginController;
-</code></pre>
-		</section>
-			</div>
-		</div>
-	</div>
-	<footer>
-				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 2nd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
-	</footer>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/clipboard.min.js"></script>
-	<script src="js/prism.min.js"></script>
-	<script src="js/template.min.js"></script>
-		<!-- start:lunr-search-modal.hbs -->
-		<div class="modal fade" id="lunr-search-modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title">Search results</h4>
-					</div>
-					<div class="modal-body" id="lunr-search-body">
-					</div>
-					<div class="modal-footer" id="lunr-search-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div>
-		<!-- end:lunr-search-modal.hbs -->		<script src="js/lunr.min.js"></script>
-	
-</body>
-</html>
-<!-- end:source.tmpl.hbs -->

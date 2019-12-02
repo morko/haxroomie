@@ -1,5 +1,5 @@
 const parse = require('yargs-parser');
-const { InvalidCommandError, InvalidCommandArgsError } = require('../errors');
+const { InvalidCommandError, InvalidCommandArgsError } = require('./errors');
 
 class CommandHandler {
   constructor(opt) {

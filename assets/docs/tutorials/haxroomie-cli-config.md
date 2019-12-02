@@ -18,7 +18,7 @@ let config = {
 };
 module.exports = config;
 ```
-In addition to normal values that the HBInit function accepts
+In addition to normal values that the `HBInit` function accepts
 (see [Haxball Headless Host WiKi](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject))
 , following options can be used:
 
@@ -76,10 +76,6 @@ available and give them optional configurations.
 By default the plugins from
 [saviolas repository](https://github.com/saviola777/hhm-plugins) are available.
 
-Haxroomie loads `sav/roles`, `sav/commands`, `sav/help`, `sav/players` and
-`sav/chat` plugins even if you dont define them here. To disable these
-plugins you can use the [disableDefaultPlugins](#disabledefaultplugins) option.
-
 The `pluginConfig` object follows the format of
 [HHM configuration file's](https://github.com/saviola777/haxball-headless-manager#configuration-file)
 `HHM.config.plugin` object.
@@ -111,19 +107,6 @@ HaxBall headless script.
 e.g.
 ```js
 roomScript: '/path/to/myScript.js'
-```
-
-## `disableDefaultPlugins`
-
-Set to `true` if you want to disable the default
-HHM plugins that haxroomie loads.
-
-This can be useful if for example you
-want to test some plugins without others interfering with it.
-
-e.g.
-```js
-disableDefaultPlugins: true
 ```
 
 ## `token`

@@ -1,7 +1,7 @@
 const colors = require('colors/safe');
 const CommandHandler = require('./CommandHandler');
 const cprompt = require('./cprompt');
-const logger = require('../logger');
+const { logger } = require('haxroomie-core');
 
 class Commands extends CommandHandler {
   constructor(opt) {

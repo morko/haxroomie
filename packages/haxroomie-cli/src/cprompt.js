@@ -1,6 +1,6 @@
 const readline = require('readline');
 const colors = require('colors/safe');
-const logger = require('../logger');
+const { logger } = require('haxroomie-core');
 
 const COLORS = {
   'ADDING ROOM': colors.green,
