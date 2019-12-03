@@ -64,6 +64,20 @@ describe('RoomController', function() {
     });
   });
 
+  describe('error-logged event', function() {
+    it('should emit an event when browser loggerd error', function(done) {
+      let room = rooms[0];
+      let msg = 'testing';
+      room.on('error-logged', err => {
+        console.log(err);
+        done();
+      });
+      room.page.evaluate(msg => {
+        console.error(new Error(msg));
+      }, msg);
+    });
+  });
+
   describe('#closeRoom()', function() {
     it('should close the room', function(done) {
       this.timeout(20000);
