@@ -137,16 +137,19 @@ class HRConsoleApp {
    * @private
    */
   onNewRoom(room) {
-    room.on(`open-room-start`, e => this.onOpenRoomStart(room, e));
-    room.on(`open-room-stop`, e => this.onOpenRoomStop(room, e));
-    room.on(`open-room-error`, e => this.onOpenRoomError(room, e));
-    room.on(`close-room-start`, () => this.onCloseRoomStart(room));
-    room.on(`close-room-stop`, error => this.onCloseRoomStop(error, room));
-    room.on(`page-closed`, e => this.onPageClosed(e));
-    room.on(`page-crash`, e => cprompt.error(e));
-    room.on(`page-error`, e => cprompt.error(e));
-    room.on(`error-logged`, e => cprompt.error(e));
-    room.on(`warning-logged`, e => cprompt.warn(e));
+    room.on(`open-room-start`, (err, config) =>
+      this.onOpenRoomStart(err, room, config)
+    );
+    room.on(`open-room-stop`, (err, roomInfo) =>
+      this.onOpenRoomStop(err, room, roomInfo)
+    );
+    room.on(`close-room-start`, err => this.onCloseRoomStart(err, room));
+    room.on(`close-room-stop`, err => this.onCloseRoomStop(err, room));
+    room.on(`page-closed`, room => this.onPageClosed(room));
+    room.on(`page-crash`, err => cprompt.error(err));
+    room.on(`page-error`, err => cprompt.error(err));
+    room.on(`error-logged`, errMsg => cprompt.error(errMsg));
+    room.on(`warning-logged`, errMsg => cprompt.warn(errMsg));
   }
 
   /**
@@ -156,7 +159,6 @@ class HRConsoleApp {
   onRoomRemoved(room) {
     room.removeAllListeners(`open-room-start`);
     room.removeAllListeners(`open-room-stop`);
-    room.removeAllListeners(`open-room-error`);
     room.removeAllListeners(`close-room-start`);
     room.removeAllListeners(`close-room-stop`);
     room.removeAllListeners(`page-closed`);
@@ -166,11 +168,34 @@ class HRConsoleApp {
     room.removeAllListeners(`warning-logged`);
   }
 
-  onOpenRoomStart(room) {
+  onOpenRoomStart(err, room) {
+    if (err) {
+      cprompt.print(`Could not start room ${room.id}`, `ERROR`);
+      return;
+    }
     cprompt.print(`${colors.cyan(room.id)}`, `STARTING ROOM`);
   }
 
-  onOpenRoomStop(room, roomInfo) {
+  onOpenRoomStop(err, room, roomInfo) {
+    if (err) {
+      switch (err.name) {
+        case 'InvalidTokenError':
+          cprompt.print(
+            `${colors.cyan(room.id)}: ${err.message}`,
+            `INVALID TOKEN`
+          );
+          break;
+        default:
+          cprompt.print(
+            `Could not start room ${room.id}: ${err.message}`,
+            `ERROR`
+          );
+          break;
+      }
+      logger.debug(`[${room.id}] ${err.stack}`);
+      return;
+    }
+
     cprompt.print(
       `${colors.cyan(room.id)} - ${roomInfo.roomLink}`,
       `ROOM STARTED`
@@ -180,12 +205,19 @@ class HRConsoleApp {
     cmd.execute('plugins');
   }
 
-  onCloseRoomStart(room) {
-    cprompt.print(`${colors.cyan(room.id)}`, `CLOSING ROOM`);
+  onCloseRoomStart(err, room) {
+    if (err) {
+      cprompt.print(
+        `Room was not closed properly and is ` + `probably unusable.`,
+        `ERROR`
+      );
+    } else {
+      cprompt.print(`${colors.cyan(room.id)}`, `CLOSING ROOM`);
+    }
   }
 
-  onCloseRoomStop(error, room) {
-    if (error) {
+  onCloseRoomStop(err, room) {
+    if (err) {
       cprompt.print(
         `Room was not closed properly and is ` + `probably unusable.`,
         `ERROR`
@@ -193,10 +225,6 @@ class HRConsoleApp {
     } else {
       cprompt.print(`${colors.cyan(room.id)}`, `ROOM CLOSED`);
     }
-  }
-
-  onOpenRoomError(room, error) {
-    logger.debug(`[${room.id}] ${error.stack}`);
   }
 
   async onPageClosed(room) {
@@ -231,13 +259,7 @@ class HRConsoleApp {
           return roomInfo;
         }
       } catch (err) {
-        if (err.name === 'InvalidTokenError') {
-          cprompt.print(
-            `${colors.cyan(room.id)}: ${err.message}`,
-            `ROOM NOT STARTED`
-          );
-        } else {
-          cprompt.print(`${err.name}: ${err.message}`, 'ERROR');
+        if (err.name !== 'InvalidTokenError') {
           return;
         }
       }
@@ -256,7 +278,7 @@ class HRConsoleApp {
           } else if (newToken === 'c') {
             cprompt.print(
               `${colors.cyan(id)}: User canceled opening.`,
-              `ROOM NOT STARTED`
+              `ERROR`
             );
             return;
           }
@@ -267,7 +289,6 @@ class HRConsoleApp {
           try {
             roomInfo = await room.openRoom(roomConfig);
           } catch (err) {
-            cprompt.print(`${err.name}: ${err.message}`, 'ERROR');
             if (err.name !== 'InvalidTokenError') {
               return;
             }

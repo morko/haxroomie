@@ -9,7 +9,7 @@ const COLORS = {
   'ROOM CLOSED': colors.yellow.bold,
   'STARTING ROOM': colors.green,
   'ROOM STARTED': colors.green.bold,
-  'ROOM NOT STARTED': colors.red.bold,
+  'INVALID TOKEN': colors.red.bold,
   CHAT: colors.white.bold,
   'PLAYER JOINED': colors.green,
   'PLAYER LEFT': colors.cyan,

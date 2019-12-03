@@ -66,13 +66,13 @@ const { stringify } = require('../utils');
  * Emitted when the browser tab crashes.
  * Renders this RoomController unusable.
  * @event RoomController#page-crash
- * @param {Error} error - The error that was throwed.
+ * @param {Error} error - The error that was thrown.
  */
 
 /**
  * Emitted when some script throws an error in the browsers tab.
  * @event RoomController#page-error
- * @param {Error} error - The error that was throwed.
+ * @param {Error} error - The error that was thrown.
  */
 
 /**
@@ -90,6 +90,7 @@ const { stringify } = require('../utils');
 /**
  * Emitted when {@link RoomController#openRoom} has been called.
  * @event RoomController#open-room-start
+ * @param {Error|UnusableError|RoomIsRunningError|RoomLockedError} [error] - If error happened when starting to open room.
  * @param {object} config - Config object given as argument to
  *    {@link RoomController#openRoom}
  */
@@ -97,19 +98,26 @@ const { stringify } = require('../utils');
 /**
  * Emitted when {@link RoomController#openRoom} has finished and the room
  * is running.
+ * e.g.
+ * ```js
+ * room.on('open-room-stop', (err, roomInfo)=> {
+ *   if (err) {
+ *     console.log('Room did not open.', err);
+ *   } else {
+ *     console.log('Room was opened', roomInfo);
+ *   }
+ * });
+ * room.openRoom(config);
+ * ```
  * @event RoomController#open-room-stop
+ * @param {Error|ConnectionError|TimeoutError|InvalidTokenError} [error]
+ *    - If error happened when opening the room.
  * @param {object} roomInfo - Information about the room.
  */
 
 /**
- * Emitted when {@link RoomController#openRoom} fails.
- * @event RoomController#open-room-error
- * @param {Error|TypeError|ConnectionError|TimeoutError} error
- *    - Error that happened when opening the room.
- */
-
-/**
  * Emitted when {@link RoomController#closeRoom} has been called.
+ * @param {UnusableError} [error] - If the room is at unusable state.
  * @event RoomController#close-room-start
  */
 
@@ -154,11 +162,14 @@ const { stringify } = require('../utils');
  * [HaxBall roomObject]{@link https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject}
  * and
  * [Haxball Headless Manager (HHM)]{@link https://github.com/saviola777/haxball-headless-manager}.
+ *
  * Each RoomController controls one tab in the headless browser.
  *
- * You can also create new RoomController instances with the
- * [Haxroomie#addRoom]{@link Haxroomie#addRoom} method.
+ * You can create new RoomController instances with the
+ * [Haxroomie#addRoom]{@link Haxroomie#addRoom} factory method.
  *
+ * The API provides a Promise ready way to call the methods or optionally
+ * you can listen to the events each method fires.
  */
 class RoomController extends EventEmitter {
   /**
@@ -449,7 +460,7 @@ class RoomController extends EventEmitter {
    *    ```
    *
    *    See {@link Repository} for the types of repositories you can use.
-   * 
+   *
    * @param {object} [config.pluginConfig] - Haxball Headless Manager
    *    plugin config object. Passed to `HHM.config.plugins`.
    *
@@ -468,27 +479,39 @@ class RoomController extends EventEmitter {
    *
    * @emits RoomController#open-room-start
    * @emits RoomController#open-room-stop
-   * @emits RoomController#open-room-error
    *
+   * @throws {TypeError} - Something is wrong with the arguments.
    * @throws {UnusableError} - The instance is not usable because the browser
    *    page crashed or closed.
+   * @throws {RoomIsRunningError} - The room is already running.
+   * @throws {RoomLockedError} - The room is already being opened.
    * @throws {ConnectionError} - Could not connect to HaxBall headless page.
    * @throws {TimeoutError} - Haxball Headless Manager took too much time to
    *    start.
    * @throws {InvalidTokenError} - The token is invalid or expired.
-   * @throws {RoomLockedError} - The room is already being opened.
-   * @throws {RoomIsRunningError} - The room is already running.
    */
   async openRoom(config) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (this.running)
-      throw new RoomIsRunningError(
+    logger.debug(`RoomController#openRoom: ${this.id}`);
+
+    if (!this.usable) {
+      let err = new UnusableError('Instance unusable!');
+      this.emit(`open-room-start`, err);
+      throw err;
+    }
+    if (this.running) {
+      let err = new RoomIsRunningError(
         'The room is already running. Close it before opening again!'
       );
-    if (this._openRoomLock)
-      throw new RoomLockedError('Room is already being opened!');
-    logger.debug(`RoomController#openRoom: ${this.id}`);
-    this.emit(`open-room-start`, config);
+      this.emit(`open-room-start`, err);
+      throw err;
+    }
+    if (this._openRoomLock) {
+      let err = new RoomLockedError('Room is already being opened!');
+      this.emit(`open-room-start`, err);
+      throw err;
+    }
+
+    this.emit(`open-room-start`, null, config);
     this._openRoomLock = true;
 
     try {
@@ -497,11 +520,11 @@ class RoomController extends EventEmitter {
     } catch (err) {
       this._openRoomLock = false;
       if (process.env.NODE_ENV !== 'development') await this.closeRoom();
-      this.emit(`open-room-error`, err);
+      this.emit(`open-room-stop`, err);
       throw err;
     }
     this._openRoomLock = false;
-    this.emit(`open-room-stop`, this.roomInfo);
+    this.emit(`open-room-stop`, null, this.roomInfo);
     return this._roomInfo;
   }
 
@@ -515,8 +538,13 @@ class RoomController extends EventEmitter {
    *    page crashed or closed.
    */
   async closeRoom() {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
     logger.debug(`RoomController#closeRoom`);
+    if (!this.usable) {
+      let err = new UnusableError('Instance unusable!');
+      this.emit(`close-room-start`, err);
+      throw err;
+    }
+
     this.emit(`close-room-start`);
 
     try {
@@ -525,7 +553,7 @@ class RoomController extends EventEmitter {
       this._usable = false;
       this._hhmLoaded = false;
       this._roomInfo = null;
-      this.emit(`close-room-stop`, err);
+      this.emit(`close-room-stop`, new UnusableError(err.msg));
       throw new UnusableError(err.msg);
     }
     this._hhmLoaded = false;
@@ -547,12 +575,19 @@ class RoomController extends EventEmitter {
    * @throws {RoomNotRunningError} - The room is not running.
    */
   async callRoom(fn, ...args) {
-    if (!this.usable) throw new UnusableError('Instance unusable!');
-    if (!this.running) throw new RoomNotRunningError('Room is not running.');
-    if (!fn) throw new TypeError('Missing required argument: fn');
     logger.debug(
       `RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`
     );
+
+    if (!this.usable) {
+      throw new UnusableError('Instance unusable!');
+    }
+    if (!this.running) {
+      throw new RoomNotRunningError('Room is not running.');
+    }
+    if (!fn) {
+      throw new TypeError('Missing required argument: fn');
+    }
 
     let result = await this.page.evaluate(
       (fn, args) => {
@@ -561,7 +596,9 @@ class RoomController extends EventEmitter {
       fn,
       args
     );
-    if (result.error) throw new Error(result.payload);
+    if (result.error) {
+      throw new Error(result.payload);
+    }
     return result.payload.result;
   }
 

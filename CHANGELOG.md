@@ -10,10 +10,13 @@
 
 - Repository related methods are now organized under `RoomController.repositories`.
 - Plugin related methods are now organized under `RoomController.plugins`.
-- RoomController `close-room` event is now split into two events called
-`close-room-start` and `close-room-stop`.
 - `RoomController.openRoom(config)` can throw `RoomIsRunningError` if called on
 room that is already running.
+- RoomController `close-room` event got split into two events called
+`close-room-start` and `close-room-stop`.
+- RoomController `open-room-error` event was merged to `open-room-stop` and removed.
+- RoomController `open-room-start`, `open-room-start`, `close-room-start` and `close-room-stop`
+events send the error as first argument if one happens.
 
 ### New Features
 

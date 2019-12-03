@@ -21,7 +21,6 @@ describe('RoomController', function() {
   afterEach(function() {
     rooms[0].removeAllListeners('open-room-start');
     rooms[0].removeAllListeners('open-room-stop');
-    rooms[0].removeAllListeners('open-room-error');
     rooms[0].removeAllListeners('close-room-start');
     rooms[0].removeAllListeners('close-room-stop');
   });
@@ -29,13 +28,13 @@ describe('RoomController', function() {
   describe('#openRoom()', function() {
     it('should start the room', function(done) {
       this.timeout(20000);
-      rooms[0].on('open-room-start', config => {
+      rooms[0].on('open-room-start', (err, config) => {
+        expect(err).to.be.null;
         expect(config).to.deep.equal(configs[0]);
       });
       rooms[0].on('open-room-stop', async () => {
         done();
       });
-      rooms[0].on('open-room-error', done);
       rooms[0].openRoom(configs[0]);
     });
   });
