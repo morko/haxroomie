@@ -19,7 +19,9 @@ class HRConsoleApp {
     this.configPath = opt.config;
     this.userDataDir = opt.userDataDir;
     this.noSandbox = opt.noSandbox;
-    this.headless = opt.headless;
+    this.headless = Object.prototype.hasOwnProperty.call(opt, 'window')
+      ? !opt.window
+      : true;
     this.port = opt.port;
     this.timeout = opt.timeout || 30;
 
