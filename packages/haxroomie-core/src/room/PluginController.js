@@ -78,28 +78,15 @@ class PluginController {
    * If the name is an Array then
    * it disables all the plugins in the given order.
    *
-   * @param {(string|Array.<string>)} name - Name or array of names of the plugin(s).
+   * @param {string} name - Name the plugin.
    * @param {boolean} [recursive=false] - If true all the plugins that depend on
    *    the plugin will get disabled also.
-   * @returns {Promise.<boolean>} - Was the plugin disabled or not?
+   * @returns {Promise.<Array.<number>>} - Array of disabled plugin IDs or
+   *    empty array if the plugin could not be disabled or was already disabled.
    */
   async disablePlugin(name, recursive = false) {
     return this.page.evaluate(
       async (name, recursive) => {
-        const { manager } = HHM;
-
-        if (Array.isArray(name)) {
-          for (let i = 0; i < name.length; i++) {
-            const success = manager.disablePlugin(name[i], recursive);
-            if (!success) {
-              for (let j = 0; j <= i; j++) {
-                manager.enablePlugin(name[i - j]);
-              }
-              return false;
-            }
-          }
-          return true;
-        }
         return HHM.manager.disablePlugin(name, recursive);
       },
       name,

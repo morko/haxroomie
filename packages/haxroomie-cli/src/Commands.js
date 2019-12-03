@@ -631,10 +631,10 @@ class Commands extends CommandHandler {
           cprompt.print(`Invalid plugin name: ${name}`, `ERROR`);
           return;
         }
-        let success = await this.room.plugins.disablePlugin(name, true);
+        let disabledPlugins = await this.room.plugins.disablePlugin(name, true);
         pluginData = await this.room.plugins.getPlugin(name);
 
-        if (!success) {
+        if (disabledPlugins.length < 1) {
           cprompt.print(`Could not disable ${name}`, `ERROR`);
         }
       },
