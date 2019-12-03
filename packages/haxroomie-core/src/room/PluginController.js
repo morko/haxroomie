@@ -168,16 +168,20 @@ class PluginController {
       throw new TypeError('Plugin is missing required property: content');
     }
 
-    return this.page.evaluate(async plugin => {
-      let id = await HHM.manager.addPlugin({
-        pluginCode: plugin.content,
-        pluginName: plugin.name,
-      });
-      if (id >= 0 && pluginConfig) {
-        HHM.manager.setPluginConfig(id, pluginConfig);
-      }
-      return id;
-    }, plugin);
+    return this.page.evaluate(
+      async (plugin, pluginConfig) => {
+        let id = await HHM.manager.addPlugin({
+          pluginCode: plugin.content,
+          pluginName: plugin.name,
+        });
+        if (id >= 0 && pluginConfig) {
+          HHM.manager.setPluginConfig(id, pluginConfig);
+        }
+        return id;
+      },
+      plugin,
+      pluginConfig
+    );
   }
 
   /**
