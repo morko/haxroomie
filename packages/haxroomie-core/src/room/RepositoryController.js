@@ -80,7 +80,10 @@ class RepositoryController {
 
     return this.page.evaluate(
       async (repository, append) => {
-        return HHM.manager.getPluginLoader().addRepository(repository, append);
+        const repoFactory = HHM.manager.getPluginRepositoryFactory();
+        const pluginLoader = HHM.manager.getPluginLoader();
+        const r = await repoFactory.createRepository(repository);
+        return pluginLoader.addRepository(r, append);
       },
       repository,
       append
