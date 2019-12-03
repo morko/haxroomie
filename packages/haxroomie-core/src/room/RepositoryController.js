@@ -91,6 +91,24 @@ class RepositoryController {
   }
 
   /**
+   * Returns whether the given repository already exists.
+   * Repositories are considered equal if their configuration is the same.
+   * @param {Repository} repository - Repository config.
+   * @returns {boolean} - Did the repository exist.
+   */
+  async hasRepository(repository) {
+    if (!repository) {
+      return false;
+    }
+    return this.page.evaluate(async repository => {
+      const repoFactory = HHM.manager.getPluginRepositoryFactory();
+      const pluginLoader = HHM.manager.getPluginLoader();
+      const r = await repoFactory.createRepository(repository);
+      return pluginLoader.hasRepository(r);
+    }, repository);
+  }
+
+  /**
    * Returns available repositories.
    * @returns {Array.<Repository>} - An array of available repositories.
    *
