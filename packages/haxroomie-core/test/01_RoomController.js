@@ -29,13 +29,31 @@ describe('RoomController', function() {
     it('should start the room', function(done) {
       this.timeout(20000);
       rooms[0].on('open-room-start', (err, config) => {
-        expect(err).to.be.null;
-        expect(config).to.deep.equal(configs[0]);
+        if (err) done(err);
+        try {
+          expect(config).to.deep.equal(configs[0]);
+        } catch (err) {
+          done(err);
+        }
       });
-      rooms[0].on('open-room-stop', async () => {
+      rooms[0].on('open-room-stop', (err, roomInfo) => {
+        if (err) {
+          done(err);
+          return;
+        }
+        try {
+          expect(roomInfo).to.be.an('object');
+        } catch (err) {
+          done(err);
+          return;
+        }
         done();
       });
-      rooms[0].openRoom(configs[0]);
+      try {
+        rooms[0].openRoom(configs[0]);
+      } catch (err) {
+        // ignore async error
+      }
     });
   });
 
