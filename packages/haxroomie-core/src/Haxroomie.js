@@ -222,6 +222,17 @@ class Haxroomie extends EventEmitter {
   }
 
   /**
+   * Tests if the parameter is an instance of RoomController.
+   * @param {*} roomController
+   * @private
+   */
+  isRoomController(roomController) {
+    return (
+      typeof roomController === 'object' &&
+      roomController instanceof RoomController
+    );
+  }
+  /**
    * Adds a new RoomController.
    *
    * If `roomController` is a string or number, then it will be used as
@@ -237,7 +248,7 @@ class Haxroomie extends EventEmitter {
   async addRoom(roomController, roomControllerOptions) {
     this.ensureInstanceIsUsable();
 
-    if (typeof roomController === 'object') {
+    if (this.isRoomController(roomController)) {
       if (this.rooms.has(roomController.id))
         throw new Error('id must be unique');
       this.rooms.set(roomController.id, roomController);
