@@ -14,7 +14,13 @@ module.exports = {
         "HHM": "writable",
         "hroomie": "writable",
         "hrConfig": "readonly",
-        "HBInit": "readonly"
+        "HBInit": "readonly",
+        "describe": "readonly",
+        "it": "readonly",
+        "beforeEach": "readonly",
+        "afterEach": "readonly",
+        "before": "readonly",
+        "after": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018

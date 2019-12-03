@@ -1,8 +1,8 @@
 /**
  * Creates mock room configs for Haxroomie. Requires environment variables
- * `HR_TEST_TOKEN1...HR_TEST_TOKENn` to be set. If they are not, set then 
+ * `HR_TEST_TOKEN1...HR_TEST_TOKENn` to be set. If they are not, set then
  * `undefined` is returned.
- * 
+ *
  * @param {number} n - Amount of mock configs to create.
  * @returns {?Array.<roomConfig>} - Created config or `undefined` if n < 1 or if
  *    required amount of tokens is not provided.
@@ -19,10 +19,10 @@ function createConfigs(n = 1) {
       disableDefaultPlugins: true,
       pluginConfig: {
         'sav/commands': {
-          commandPrefix: '#'
-        }
-      }
-    }
+          commandPrefix: '#',
+        },
+      },
+    };
     configs[i - 1] = roomConfig;
   }
   return configs;

@@ -1,58 +1,57 @@
 require('./setup');
 const expect = require('chai').expect;
 
-const { Haxroomie } = require('../');
-const createConfigs = require('./utils/mock-config');
+const { createRooms } = require('./utils');
 
-describe('RoomController basic tests', function() {
-  let amountOfRooms = 1;
-  let configs = createConfigs(amountOfRooms);
-  if (!configs) return;
-  let rooms = [];
-  let haxroomie;
+describe('RoomController', function() {
+  let rooms, configs, haxroomie;
 
-  beforeEach(async function() {
-    haxroomie = new Haxroomie();
-    await haxroomie.launchBrowser();
-    for (let i = 1; i <= configs.length; i++) {
-      let r = await haxroomie.addRoom(i);
-      rooms.push(r);
-    }
+  before(async function() {
+    this.timeout(30000);
+    let data = await createRooms({ amount: 1, open: false });
+    rooms = data.rooms;
+    configs = data.configs;
+    haxroomie = data.haxroomie;
   });
 
-  afterEach(async function() {
+  after(async function() {
     await haxroomie.closeBrowser();
-    rooms = [];
+  });
+
+  afterEach(function() {
+    rooms[0].removeAllListeners('open-room-start');
+    rooms[0].removeAllListeners('open-room-stop');
+    rooms[0].removeAllListeners('open-room-error');
+    rooms[0].removeAllListeners('close-room-start');
+    rooms[0].removeAllListeners('close-room-stop');
   });
 
   describe('#openRoom()', function() {
-
     it('should start the room', function(done) {
       this.timeout(20000);
-      rooms[0].on('open-room-error', done);
-      rooms[0].on('open-room-stop', () => done());
-      rooms[0].openRoom(configs[0]);
-    });
-
-    it('should fire open-room-start event', function(done) {
-      this.timeout(3000);
-      rooms[0].on('open-room-start', (config) => {
+      rooms[0].on('open-room-start', config => {
         expect(config).to.deep.equal(configs[0]);
+      });
+      rooms[0].on('open-room-stop', async () => {
         done();
       });
+      rooms[0].on('open-room-error', done);
       rooms[0].openRoom(configs[0]);
+    });
+  });
+
+  describe('#callRoom', function() {
+    it('call a function in roomObject and return the result', async function() {
+      let players = await rooms[0].callRoom('getPlayerList');
+      expect(players).to.be.an('array');
     });
   });
 
   describe('#closeRoom()', function() {
     it('should close the room', function(done) {
       this.timeout(20000);
-      rooms[0].on('open-room-error', done);
-      rooms[0].on('open-room-stop', () => {
-        rooms[0].closeRoom();
-      });
-      rooms[0].on('close-room', () => done());
-      rooms[0].openRoom(configs[0]);
+      rooms[0].on('close-room-stop', () => done());
+      rooms[0].closeRoom();
     });
   });
 });
