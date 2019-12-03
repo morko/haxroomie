@@ -153,7 +153,7 @@ class PluginController {
     if (typeof plugin === 'string') {
       return this.page.evaluate(
         async (name, pluginConfig) => {
-          let id = HHM.manager.addPlugin({ pluginName: name });
+          let id = await HHM.manager.addPlugin({ pluginName: name });
           if (id >= 0 && pluginConfig) {
             HHM.manager.setPluginConfig(id, pluginConfig);
           }
@@ -169,7 +169,7 @@ class PluginController {
     }
 
     return this.page.evaluate(async plugin => {
-      let id = HHM.manager.addPlugin({
+      let id = await HHM.manager.addPlugin({
         pluginCode: plugin.content,
         pluginName: plugin.name,
       });

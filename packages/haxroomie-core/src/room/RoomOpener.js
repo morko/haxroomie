@@ -355,7 +355,7 @@ module.exports = class RoomOpener extends EventEmitter {
         path.join(__dirname, '..', 'hhm', 'core-plugin.js')
       );
       await this.page.evaluate(corePlugin => {
-        window.HHM.manager.addPlugin({
+        return HHM.manager.addPlugin({
           pluginCode: corePlugin,
           pluginName: 'hr/core',
         });
