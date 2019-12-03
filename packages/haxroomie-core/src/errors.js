@@ -57,6 +57,19 @@ class UnusableError extends Error {
 
 /**
  * Error thrown by RoomController methods when trying to call methods that
+ * require the room to NOT be running, but it is.
+ */
+class RoomIsRunningError extends Error {
+  constructor(message) {
+    message = message || 'This room is running!';
+    super(message);
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+/**
+ * Error thrown by RoomController methods when trying to call methods that
  * require the room to be running, but it is not.
  */
 class RoomNotRunningError extends Error {
@@ -100,6 +113,7 @@ module.exports = {
   InvalidTokenError,
   UnusableError,
   RoomNotRunningError,
+  RoomIsRunningError,
   RoomLockedError,
   HHMNotLoadedError,
 };
