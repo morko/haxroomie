@@ -720,244 +720,6 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="closeRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">closeRoom</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Closes the headless HaxBall room by navigating the page out of the
-			headless HaxBall URL.</p></div>
-			</div>			<div class="callout callout-warning"><h5>Fires</h5>		<form class="form-horizontal fires">
-							<div class="form-group">
-								<label class="col-sm-3 control-label fires-event">RoomController#event:close-room</label>
-								<div class="col-sm-9">
-									<div class="form-control-static fires-summary"></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
-							<div class="form-group">
-								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static exceptions-description"><ul>
-			<li>The instance is not usable because the browser
-			page crashed or closed.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-517">line 517</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="callRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">callRoom</span><span class="signature-params">( <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;any>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Calls a function of the
-			<a href="https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject">HaxBall roomObject</a>
-			in the browsers context.</p></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>fn</code></td>
-							<td><span class="param-type">string</span></td>
-							<td class="last">
-									<p>Name of the haxball roomObject function.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>..args</code></td>
-							<td><span class="param-type">any</span></td>
-							<td class="last">
-									<p>Arguments for the function.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;any></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Return value of the called function.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
-							<div class="form-group">
-								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static exceptions-description"><ul>
-			<li>The instance is not usable because the browser
-			page crashed or closed.</li>
-			</ul></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">RoomNotRunningError</span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static exceptions-description"><ul>
-			<li>The room is not running.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-549">line 549</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="eval" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">eval</span><span class="signature-params">( <span class="signature-param">pageFunction</span> [,&nbsp;<span class="signature-param">...args</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Serializable>}</span></h4>
-		</dt>
-<dd class="symbol-details function public  collapsible-symbol">
-	<div class="symbol-details-inner">
-			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Wrapper for Puppeteers
-			<a href="https://github.com/GoogleChrome/puppeteer/blob/v1.18.0/docs/api.md#pageevaluatepagefunction-args">page.evaluate</a>.</p>
-			<p>Evaluates the given code in the browser tab this instace is controlling.
-			You can access the HaxBall roomObject with <code>HHM.manager.room</code>.</p>
-			<p>e.g.</p>
-			<pre class="prettyprint source lang-js"><code>room.eval('HHM.manager.room.getPlayerList()');
-			</code></pre></div>
-			</div>			<div class="callout callout-info">
-				<h5>Parameters</h5>
-				<table class="params table table-striped">
-					<thead>
-					<tr>
-							<th>Name</th>
-						<th>Type</th>
-							<th>Attributes</th>
-						<th class="last">Description</th>
-					</tr>
-					</thead>
-					<tbody>
-						<tr>
-								<td><code>pageFunction</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">function</span></td>
-								<td class="attributes"></td>
-							<td class="last">
-									<p>JavaScript to evaluate.</p>
-							</td>
-						</tr>
-						<tr>
-								<td><code>args</code></td>
-							<td><span class="param-type">Serializable</span> | <span class="param-type">JSHandle</span></td>
-								<td class="attributes">&lt;optional&gt;<br/>&lt;repeatable&gt;<br/></td>
-							<td class="last">
-									<p>Arguments to pass to <code>js</code>.</p>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
-							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Serializable></span></label>
-								<div class="col-sm-9">
-									<div class="form-control-static returns-description"><ul>
-			<li>Promise which resolves to the
-			return value of pageFunction.</li>
-			</ul></div>
-								</div>
-							</div>
-					</form>
-			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-							<!-- source -->
-							<div class="form-group">
-								<label class="col-sm-3 control-label">Source</label>
-								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-585">line 585</a></p>
-								</div>
-							</div>
-			
-			
-			
-			
-					</form>
-			</div>	</div>
-</dd>
-											<hr/>
-											<dt class="symbol-title function public collapsible-symbol">
 			<h4 id="openRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">openRoom</span><span class="signature-params">( <span class="signature-param">config</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{object}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
@@ -1206,6 +968,244 @@
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
 									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-482">line 482</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="callRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">callRoom</span><span class="signature-params">( <span class="signature-param">fn</span>&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;any>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Calls a function of the
+			<a href="https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomobject">HaxBall roomObject</a>
+			in the browsers context.</p></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>fn</code></td>
+							<td><span class="param-type">string</span></td>
+							<td class="last">
+									<p>Name of the haxball roomObject function.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>..args</code></td>
+							<td><span class="param-type">any</span></td>
+							<td class="last">
+									<p>Arguments for the function.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;any></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Return value of the called function.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is not usable because the browser
+			page crashed or closed.</li>
+			</ul></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">RoomNotRunningError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The room is not running.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-549">line 549</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="eval" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">eval</span><span class="signature-params">( <span class="signature-param">pageFunction</span> [,&nbsp;<span class="signature-param">...args</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Serializable>}</span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Wrapper for Puppeteers
+			<a href="https://github.com/GoogleChrome/puppeteer/blob/v1.18.0/docs/api.md#pageevaluatepagefunction-args">page.evaluate</a>.</p>
+			<p>Evaluates the given code in the browser tab this instace is controlling.
+			You can access the HaxBall roomObject with <code>HHM.manager.room</code>.</p>
+			<p>e.g.</p>
+			<pre class="prettyprint source lang-js"><code>room.eval('HHM.manager.room.getPlayerList()');
+			</code></pre></div>
+			</div>			<div class="callout callout-info">
+				<h5>Parameters</h5>
+				<table class="params table table-striped">
+					<thead>
+					<tr>
+							<th>Name</th>
+						<th>Type</th>
+							<th>Attributes</th>
+						<th class="last">Description</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr>
+								<td><code>pageFunction</code></td>
+							<td><span class="param-type">string</span> | <span class="param-type">function</span></td>
+								<td class="attributes"></td>
+							<td class="last">
+									<p>JavaScript to evaluate.</p>
+							</td>
+						</tr>
+						<tr>
+								<td><code>args</code></td>
+							<td><span class="param-type">Serializable</span> | <span class="param-type">JSHandle</span></td>
+								<td class="attributes">&lt;optional&gt;<br/>&lt;repeatable&gt;<br/></td>
+							<td class="last">
+									<p>Arguments to pass to <code>js</code>.</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
+							<div class="form-group">
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Serializable></span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static returns-description"><ul>
+			<li>Promise which resolves to the
+			return value of pageFunction.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-585">line 585</a></p>
+								</div>
+							</div>
+			
+			
+			
+			
+					</form>
+			</div>	</div>
+</dd>
+											<hr/>
+											<dt class="symbol-title function public collapsible-symbol">
+			<h4 id="closeRoom" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">closeRoom</span><span class="signature-params">()</span><span class="signature-type"></span></h4>
+		</dt>
+<dd class="symbol-details function public  collapsible-symbol">
+	<div class="symbol-details-inner">
+			<div class="callout callout-primary"><h5>Description</h5>		<div class="description"><p>Closes the headless HaxBall room by navigating the page out of the
+			headless HaxBall URL.</p></div>
+			</div>			<div class="callout callout-warning"><h5>Fires</h5>		<form class="form-horizontal fires">
+							<div class="form-group">
+								<label class="col-sm-3 control-label fires-event">RoomController#event:close-room</label>
+								<div class="col-sm-9">
+									<div class="form-control-static fires-summary"></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-danger"><h5>Throws</h5>		<form class="form-horizontal exceptions">
+							<div class="form-group">
+								<label class="col-sm-3 control-label exceptions-type"><span class="param-type">UnusableError</span></label>
+								<div class="col-sm-9">
+									<div class="form-control-static exceptions-description"><ul>
+			<li>The instance is not usable because the browser
+			page crashed or closed.</li>
+			</ul></div>
+								</div>
+							</div>
+					</form>
+			</div>			<div class="callout callout-default"><h5>Details</h5>		<form class="form-horizontal details">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+							<!-- source -->
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Source</label>
+								<div class="col-sm-9">
+									<p class="form-control-static"><a href="src_room_RoomController.js.html">src/room/RoomController.js</a>, <a href="src_room_RoomController.js.html#line-517">line 517</a></p>
 								</div>
 							</div>
 			
@@ -2087,7 +2087,7 @@
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 2nd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 3rd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

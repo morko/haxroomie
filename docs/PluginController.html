@@ -325,7 +325,7 @@
 </dd>
 											<hr/>
 											<dt class="symbol-title function public collapsible-symbol">
-			<h4 id="disablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">disablePlugin</span><span class="signature-params">( <span class="signature-param">name</span> [,&nbsp;<span class="signature-param">recursive</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;boolean>}</span></h4>
+			<h4 id="disablePlugin" class="function public"><span class="signature-attribs">&lt;async> </span><span class="name">disablePlugin</span><span class="signature-params">( <span class="signature-param">name</span> [,&nbsp;<span class="signature-param">recursive</span>&nbsp;]&nbsp;)</span><span class="signature-type"> &rarr;&nbsp;{Promise.&lt;Array.&lt;number>>}</span></h4>
 		</dt>
 <dd class="symbol-details function public  collapsible-symbol">
 	<div class="symbol-details-inner">
@@ -347,11 +347,11 @@
 					<tbody>
 						<tr>
 								<td><code>name</code></td>
-							<td><span class="param-type">string</span> | <span class="param-type">Array.&lt;string></span></td>
+							<td><span class="param-type">string</span></td>
 								<td class="attributes"></td>
 								<td></td>
 							<td class="last">
-									<p>Name or array of names of the plugin(s).</p>
+									<p>Name the plugin.</p>
 							</td>
 						</tr>
 						<tr>
@@ -369,10 +369,11 @@
 			</div>
 			<div class="callout callout-success"><h5>Returns</h5>		<form class="form-horizontal returns">
 							<div class="form-group">
-								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;boolean></span></label>
+								<label class="col-sm-3 control-label returns-type"><span class="param-type">Promise.&lt;Array.&lt;number>></span></label>
 								<div class="col-sm-9">
 									<div class="form-control-static returns-description"><ul>
-			<li>Was the plugin disabled or not?</li>
+			<li>Array of disabled plugin IDs or
+			empty array if the plugin could not be disabled or was already disabled.</li>
 			</ul></div>
 								</div>
 							</div>
@@ -397,7 +398,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-86">line 86</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-87">line 87</a></p>
 								</div>
 							</div>
 			
@@ -487,7 +488,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-118">line 118</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-105">line 105</a></p>
 								</div>
 							</div>
 			
@@ -555,7 +556,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-140">line 140</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-127">line 127</a></p>
 								</div>
 							</div>
 			
@@ -639,7 +640,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-161">line 161</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-148">line 148</a></p>
 								</div>
 							</div>
 			
@@ -721,7 +722,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-204">line 204</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-191">line 191</a></p>
 								</div>
 							</div>
 			
@@ -795,7 +796,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-232">line 232</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-219">line 219</a></p>
 								</div>
 							</div>
 			
@@ -866,7 +867,7 @@
 							<div class="form-group">
 								<label class="col-sm-3 control-label">Source</label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-332">line 332</a></p>
+									<p class="form-control-static"><a href="src_room_PluginController.js.html">src/room/PluginController.js</a>, <a href="src_room_PluginController.js.html#line-319">line 319</a></p>
 								</div>
 							</div>
 			
@@ -887,7 +888,7 @@
 	</div>
 	<footer>
 				<div class="copyright">© Oskari Pöntinen 2019</div>
-			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 2nd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
+			<div class="generated-by">Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on 3rd Dec 2019 using the <a href="https://github.com/steveush/foodoc">FooDoc template</a>.</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

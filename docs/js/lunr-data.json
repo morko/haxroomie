@@ -348,19 +348,31 @@
           "url",
           "us"
         ],
-        "RoomController.html#closeRoom": [
-          "close",
-          "closeroom",
+        "RoomController.html#openRoom": [
+          "browser",
+          "config",
+          "contain",
+          "document",
+          "file",
           "function",
+          "global",
           "haxbal",
-          "headless",
+          "here",
+          "hhm",
+          "hrconfig",
           "lt;async&gt",
-          "navig",
-          "out",
-          "page",
+          "object",
+          "open",
+          "openroom",
+          "properti",
           "room",
-          "roomcontroller#closeroom",
-          "url"
+          "roomcontroller#openroom",
+          "tab",
+          "top",
+          "us",
+          "usabl",
+          "want",
+          "within"
         ],
         "RoomController.html#callRoom": [
           "browser",
@@ -400,31 +412,19 @@
           "tab",
           "wrapper"
         ],
-        "RoomController.html#openRoom": [
-          "browser",
-          "config",
-          "contain",
-          "document",
-          "file",
+        "RoomController.html#closeRoom": [
+          "close",
+          "closeroom",
           "function",
-          "global",
           "haxbal",
-          "here",
-          "hhm",
-          "hrconfig",
+          "headless",
           "lt;async&gt",
-          "object",
-          "open",
-          "openroom",
-          "properti",
+          "navig",
+          "out",
+          "page",
           "room",
-          "roomcontroller#openroom",
-          "tab",
-          "top",
-          "us",
-          "usabl",
-          "want",
-          "within"
+          "roomcontroller#closeroom",
+          "url"
         ],
         "PluginController.html": [
           "class",
@@ -482,7 +482,7 @@
           "order",
           "plugin",
           "plugincontroller#disableplugin",
-          "promise.&lt;boolean&gt",
+          "promise.&lt;array.&lt;number&gt;&gt",
           "recurs"
         ],
         "PluginController.html#getPluginsThatDependOn": [
@@ -605,6 +605,23 @@
           "set",
           "true"
         ],
+        "RepositoryController.html#hasRepository": [
+          "alreadi",
+          "boolean",
+          "configur",
+          "consid",
+          "equal",
+          "exist",
+          "function",
+          "given",
+          "hasrepositori",
+          "lt;async&gt",
+          "repositori",
+          "repositorycontroller#hasrepositori",
+          "return",
+          "same",
+          "whether"
+        ],
         "RepositoryController.html#getRepositories": [
           "array.&lt;repository&gt",
           "avail",
@@ -636,7 +653,7 @@
           "module:haxroomi"
         ]
       },
-      "length": 45
+      "length": 46
     },
     "tokenStore": {
       "root": {
@@ -1085,9 +1102,9 @@
                         "ref": "RoomController.html#init",
                         "tf": 4
                       },
-                      "RoomController.html#closeRoom": {
-                        "ref": "RoomController.html#closeRoom",
-                        "tf": 10
+                      "RoomController.html#openRoom": {
+                        "ref": "RoomController.html#openRoom",
+                        "tf": 1.8518518518518516
                       },
                       "RoomController.html#callRoom": {
                         "ref": "RoomController.html#callRoom",
@@ -1097,9 +1114,9 @@
                         "ref": "RoomController.html#eval",
                         "tf": 3.125
                       },
-                      "RoomController.html#openRoom": {
-                        "ref": "RoomController.html#openRoom",
-                        "tf": 1.8518518518518516
+                      "RoomController.html#closeRoom": {
+                        "ref": "RoomController.html#closeRoom",
+                        "tf": 10
                       },
                       "PluginController.html": {
                         "ref": "PluginController.html",
@@ -1127,6 +1144,38 @@
                         "Haxroomie.html#hasRoom": {
                           "ref": "Haxroomie.html#hasRoom",
                           "tf": 683.3333333333334
+                        }
+                      }
+                    }
+                  }
+                },
+                "e": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "s": {
+                        "docs": {},
+                        "i": {
+                          "docs": {},
+                          "t": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "r": {
+                                "docs": {},
+                                "i": {
+                                  "docs": {
+                                    "RepositoryController.html#hasRepository": {
+                                      "ref": "RepositoryController.html#hasRepository",
+                                      "tf": 675
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -1723,6 +1772,10 @@
                         "ref": "PluginController.html#getPluginConfig",
                         "tf": 9.090909090909092
                       },
+                      "RepositoryController.html#hasRepository": {
+                        "ref": "RepositoryController.html#hasRepository",
+                        "tf": 4.545454545454546
+                      },
                       "RepositoryController.html#getRepositories": {
                         "ref": "RepositoryController.html#getRepositories",
                         "tf": 16.666666666666664
@@ -1788,6 +1841,10 @@
                               "RepositoryController.html#addRepository": {
                                 "ref": "RepositoryController.html#addRepository",
                                 "tf": 29.523809523809526
+                              },
+                              "RepositoryController.html#hasRepository": {
+                                "ref": "RepositoryController.html#hasRepository",
+                                "tf": 34.09090909090909
                               },
                               "RepositoryController.html#getRepositories": {
                                 "ref": "RepositoryController.html#getRepositories",
@@ -1860,6 +1917,50 @@
                                                                             "docs": {
                                                                               "RepositoryController.html#addRepository": {
                                                                                 "ref": "RepositoryController.html#addRepository",
+                                                                                "tf": 1150
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "h": {
+                                                    "docs": {},
+                                                    "a": {
+                                                      "docs": {},
+                                                      "s": {
+                                                        "docs": {},
+                                                        "r": {
+                                                          "docs": {},
+                                                          "e": {
+                                                            "docs": {},
+                                                            "p": {
+                                                              "docs": {},
+                                                              "o": {
+                                                                "docs": {},
+                                                                "s": {
+                                                                  "docs": {},
+                                                                  "i": {
+                                                                    "docs": {},
+                                                                    "t": {
+                                                                      "docs": {},
+                                                                      "o": {
+                                                                        "docs": {},
+                                                                        "r": {
+                                                                          "docs": {},
+                                                                          "i": {
+                                                                            "docs": {
+                                                                              "RepositoryController.html#hasRepository": {
+                                                                                "ref": "RepositoryController.html#hasRepository",
                                                                                 "tf": 1150
                                                                               }
                                                                             }
@@ -2066,13 +2167,13 @@
                     "ref": "RoomController.html#init",
                     "tf": 2
                   },
-                  "RoomController.html#closeRoom": {
-                    "ref": "RoomController.html#closeRoom",
-                    "tf": 5
-                  },
                   "RoomController.html#openRoom": {
                     "ref": "RoomController.html#openRoom",
                     "tf": 1.8518518518518516
+                  },
+                  "RoomController.html#closeRoom": {
+                    "ref": "RoomController.html#closeRoom",
+                    "tf": 5
                   },
                   "PluginController.html#hasPlugin": {
                     "ref": "PluginController.html#hasPlugin",
@@ -2361,6 +2462,32 @@
                                       },
                                       "c": {
                                         "docs": {},
+                                        "a": {
+                                          "docs": {},
+                                          "l": {
+                                            "docs": {},
+                                            "l": {
+                                              "docs": {},
+                                              "r": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "o": {
+                                                    "docs": {},
+                                                    "m": {
+                                                      "docs": {
+                                                        "RoomController.html#callRoom": {
+                                                          "ref": "RoomController.html#callRoom",
+                                                          "tf": 1150
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
                                         "l": {
                                           "docs": {},
                                           "o": {
@@ -2381,32 +2508,6 @@
                                                             "ref": "RoomController.html#closeRoom",
                                                             "tf": 1150
                                                           }
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        },
-                                        "a": {
-                                          "docs": {},
-                                          "l": {
-                                            "docs": {},
-                                            "l": {
-                                              "docs": {},
-                                              "r": {
-                                                "docs": {},
-                                                "o": {
-                                                  "docs": {},
-                                                  "o": {
-                                                    "docs": {},
-                                                    "m": {
-                                                      "docs": {
-                                                        "RoomController.html#callRoom": {
-                                                          "ref": "RoomController.html#callRoom",
-                                                          "tf": 1150
                                                         }
                                                       }
                                                     }
@@ -2752,13 +2853,13 @@
                   "ref": "RoomController.html",
                   "tf": 2.1739130434782608
                 },
-                "RoomController.html#eval": {
-                  "ref": "RoomController.html#eval",
-                  "tf": 3.125
-                },
                 "RoomController.html#openRoom": {
                   "ref": "RoomController.html#openRoom",
                   "tf": 1.8518518518518516
+                },
+                "RoomController.html#eval": {
+                  "ref": "RoomController.html#eval",
+                  "tf": 3.125
                 }
               }
             }
@@ -2881,6 +2982,10 @@
                     },
                     "PluginController.html#getPluginConfig": {
                       "ref": "PluginController.html#getPluginConfig",
+                      "tf": 4.545454545454546
+                    },
+                    "RepositoryController.html#hasRepository": {
+                      "ref": "RepositoryController.html#hasRepository",
                       "tf": 4.545454545454546
                     },
                     "RepositoryController.html#getRepositoryInformation": {
@@ -3140,6 +3245,17 @@
                         "ref": "RepositoryController.html#getRepositoryInformation",
                         "tf": 5
                       }
+                    },
+                    "u": {
+                      "docs": {},
+                      "r": {
+                        "docs": {
+                          "RepositoryController.html#hasRepository": {
+                            "ref": "RepositoryController.html#hasRepository",
+                            "tf": 4.545454545454546
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -3268,6 +3384,17 @@
                             }
                           }
                         }
+                      }
+                    }
+                  }
+                },
+                "i": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "RepositoryController.html#hasRepository": {
+                        "ref": "RepositoryController.html#hasRepository",
+                        "tf": 4.545454545454546
                       }
                     }
                   }
@@ -3740,8 +3867,8 @@
                             "ref": "RoomController.html#init",
                             "tf": 110
                           },
-                          "RoomController.html#closeRoom": {
-                            "ref": "RoomController.html#closeRoom",
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
                             "tf": 110
                           },
                           "RoomController.html#callRoom": {
@@ -3752,8 +3879,8 @@
                             "ref": "RoomController.html#eval",
                             "tf": 110
                           },
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
+                          "RoomController.html#closeRoom": {
+                            "ref": "RoomController.html#closeRoom",
                             "tf": 110
                           },
                           "PluginController.html#getPlugins": {
@@ -3798,6 +3925,10 @@
                           },
                           "RepositoryController.html#addRepository": {
                             "ref": "RepositoryController.html#addRepository",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#hasRepository": {
+                            "ref": "RepositoryController.html#hasRepository",
                             "tf": 110
                           },
                           "RepositoryController.html#getRepositories": {
@@ -4174,6 +4305,29 @@
                 }
               }
             }
+          },
+          "l": {
+            "docs": {},
+            "r": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "d": {
+                    "docs": {},
+                    "i": {
+                      "docs": {
+                        "RepositoryController.html#hasRepository": {
+                          "ref": "RepositoryController.html#hasRepository",
+                          "tf": 4.545454545454546
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "l": {
@@ -4382,9 +4536,9 @@
                                   "ref": "RoomController.html#init",
                                   "tf": 33.33333333333333
                                 },
-                                "RoomController.html#closeRoom": {
-                                  "ref": "RoomController.html#closeRoom",
-                                  "tf": 50
+                                "RoomController.html#openRoom": {
+                                  "ref": "RoomController.html#openRoom",
+                                  "tf": 25
                                 },
                                 "RoomController.html#callRoom": {
                                   "ref": "RoomController.html#callRoom",
@@ -4394,9 +4548,9 @@
                                   "ref": "RoomController.html#eval",
                                   "tf": 20
                                 },
-                                "RoomController.html#openRoom": {
-                                  "ref": "RoomController.html#openRoom",
-                                  "tf": 25
+                                "RoomController.html#closeRoom": {
+                                  "ref": "RoomController.html#closeRoom",
+                                  "tf": 50
                                 },
                                 "PluginController.html#getPlugins": {
                                   "ref": "PluginController.html#getPlugins",
@@ -4441,6 +4595,10 @@
                                 "RepositoryController.html#addRepository": {
                                   "ref": "RepositoryController.html#addRepository",
                                   "tf": 20
+                                },
+                                "RepositoryController.html#hasRepository": {
+                                  "ref": "RepositoryController.html#hasRepository",
+                                  "tf": 25
                                 },
                                 "RepositoryController.html#getRepositories": {
                                   "ref": "RepositoryController.html#getRepositories",
@@ -4757,6 +4915,10 @@
                           "ref": "RoomController.html",
                           "tf": 2.1739130434782608
                         },
+                        "RoomController.html#openRoom": {
+                          "ref": "RoomController.html#openRoom",
+                          "tf": 1.8518518518518516
+                        },
                         "RoomController.html#callRoom": {
                           "ref": "RoomController.html#callRoom",
                           "tf": 8.333333333333332
@@ -4764,10 +4926,6 @@
                         "RoomController.html#eval": {
                           "ref": "RoomController.html#eval",
                           "tf": 3.125
-                        },
-                        "RoomController.html#openRoom": {
-                          "ref": "RoomController.html#openRoom",
-                          "tf": 1.8518518518518516
                         }
                       }
                     }
@@ -4807,6 +4965,10 @@
                         "RoomController.html#openRoomLock": {
                           "ref": "RoomController.html#openRoomLock",
                           "tf": 50
+                        },
+                        "RepositoryController.html#hasRepository": {
+                          "ref": "RepositoryController.html#hasRepository",
+                          "tf": 25
                         }
                       }
                     }
@@ -4918,6 +5080,40 @@
                     "RoomController.html#eval": {
                       "ref": "RoomController.html#eval",
                       "tf": 3.125
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "q": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "RepositoryController.html#hasRepository": {
+                      "ref": "RepositoryController.html#hasRepository",
+                      "tf": 4.545454545454546
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "x": {
+            "docs": {},
+            "i": {
+              "docs": {},
+              "s": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "RepositoryController.html#hasRepository": {
+                      "ref": "RepositoryController.html#hasRepository",
+                      "tf": 4.545454545454546
                     }
                   }
                 }
@@ -5225,6 +5421,17 @@
                   }
                 }
               }
+            },
+            "m": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "RepositoryController.html#hasRepository": {
+                    "ref": "RepositoryController.html#hasRepository",
+                    "tf": 4.545454545454546
+                  }
+                }
+              }
             }
           },
           "e": {
@@ -5383,6 +5590,26 @@
                   }
                 }
               },
+              "p": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "t": {
+                      "docs": {},
+                      "i": {
+                        "docs": {
+                          "RoomController.html#openRoom": {
+                            "ref": "RoomController.html#openRoom",
+                            "tf": 3.7037037037037033
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "m": {
                 "docs": {},
                 "i": {
@@ -5486,6 +5713,50 @@
                                                                                       }
                                                                                     }
                                                                                   }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    },
+                                                    "n": {
+                                                      "docs": {},
+                                                      "u": {
+                                                        "docs": {},
+                                                        "m": {
+                                                          "docs": {},
+                                                          "b": {
+                                                            "docs": {},
+                                                            "e": {
+                                                              "docs": {},
+                                                              "r": {
+                                                                "docs": {},
+                                                                "&": {
+                                                                  "docs": {},
+                                                                  "g": {
+                                                                    "docs": {},
+                                                                    "t": {
+                                                                      "docs": {},
+                                                                      ";": {
+                                                                        "docs": {},
+                                                                        "&": {
+                                                                          "docs": {},
+                                                                          "g": {
+                                                                            "docs": {},
+                                                                            "t": {
+                                                                              "docs": {
+                                                                                "PluginController.html#disablePlugin": {
+                                                                                  "ref": "PluginController.html#disablePlugin",
+                                                                                  "tf": 20
                                                                                 }
                                                                               }
                                                                             }
@@ -5632,10 +5903,6 @@
                                                         "ref": "PluginController.html#enablePlugin",
                                                         "tf": 25
                                                       },
-                                                      "PluginController.html#disablePlugin": {
-                                                        "ref": "PluginController.html#disablePlugin",
-                                                        "tf": 20
-                                                      },
                                                       "PluginController.html#hasPlugin": {
                                                         "ref": "PluginController.html#hasPlugin",
                                                         "tf": 25
@@ -5725,26 +5992,6 @@
                                 }
                               }
                             }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "p": {
-                "docs": {},
-                "e": {
-                  "docs": {},
-                  "r": {
-                    "docs": {},
-                    "t": {
-                      "docs": {},
-                      "i": {
-                        "docs": {
-                          "RoomController.html#openRoom": {
-                            "ref": "RoomController.html#openRoom",
-                            "tf": 3.7037037037037033
                           }
                         }
                       }
@@ -6474,29 +6721,6 @@
         },
         "w": {
           "docs": {},
-          "r": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "p": {
-                "docs": {},
-                "p": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "RoomController.html#eval": {
-                          "ref": "RoomController.html#eval",
-                          "tf": 3.125
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
           "a": {
             "docs": {},
             "n": {
@@ -6530,10 +6754,56 @@
                 }
               }
             }
+          },
+          "r": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "p": {
+                "docs": {},
+                "p": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "RoomController.html#eval": {
+                          "ref": "RoomController.html#eval",
+                          "tf": 3.125
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "h": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "h": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "RepositoryController.html#hasRepository": {
+                          "ref": "RepositoryController.html#hasRepository",
+                          "tf": 4.545454545454546
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       },
-      "length": 517
+      "length": 532
     },
     "corpusTokens": [
       "access",
@@ -6542,6 +6812,7 @@
       "addplugin",
       "addrepositori",
       "addroom",
+      "alreadi",
       "anyth",
       "append",
       "arg",
@@ -6565,6 +6836,8 @@
       "code",
       "commun",
       "config",
+      "configur",
+      "consid",
       "constructor",
       "contain",
       "content",
@@ -6584,8 +6857,10 @@
       "each",
       "enabl",
       "enableplugin",
+      "equal",
       "eval",
       "evalu",
+      "exist",
       "file",
       "first",
       "fn",
@@ -6602,6 +6877,7 @@
       "given",
       "global",
       "hasplugin",
+      "hasrepositori",
       "hasroom",
       "haxbal",
       "haxroomi",
@@ -6684,6 +6960,7 @@
       "process",
       "promise.&lt;?plugindata&gt",
       "promise.&lt;any&gt",
+      "promise.&lt;array.&lt;number&gt;&gt",
       "promise.&lt;array.&lt;plugindata&gt;&gt",
       "promise.&lt;boolean&gt",
       "promise.&lt;number&gt",
@@ -6704,6 +6981,7 @@
       "repositorycontroller#addrepositori",
       "repositorycontroller#getrepositori",
       "repositorycontroller#getrepositoryinform",
+      "repositorycontroller#hasrepositori",
       "repositorydata",
       "requir",
       "retriev",
@@ -6732,6 +7010,7 @@
       "roomobject",
       "run",
       "safe",
+      "same",
       "sav/rol",
       "set",
       "setpluginconfig",
@@ -6749,6 +7028,7 @@
       "us",
       "usabl",
       "want",
+      "whether",
       "within",
       "wrapper"
     ],
@@ -7016,15 +7296,15 @@
       "summary": "",
       "description": "Initializes the RoomController by navigating the page to the headless HaxBall URL and loads the Haxball Headless Manager library. This enables the use of the repositories object to get information about repositories before opening the room. Note that calling close will undo this."
     },
-    "RoomController.html#closeRoom": {
-      "id": "RoomController.html#closeRoom",
+    "RoomController.html#openRoom": {
+      "id": "RoomController.html#openRoom",
       "kind": "function",
-      "title": "&lt;async&gt; closeRoom()",
-      "longname": "RoomController#closeRoom",
-      "name": "closeRoom",
-      "tags": "RoomController#closeRoom closeRoom",
+      "title": "&lt;async&gt; openRoom( config ) → {object}",
+      "longname": "RoomController#openRoom",
+      "name": "openRoom",
+      "tags": "RoomController#openRoom openRoom",
       "summary": "",
-      "description": "Closes the headless HaxBall room by navigating the page out of the headless HaxBall URL."
+      "description": "Opens a HaxBall room in a browser tab. On top of the documentated properties here, the config object can contain any properties you want to use in your own HHM config file. The config object is usable globally from within the HHM config as the hrConfig object."
     },
     "RoomController.html#callRoom": {
       "id": "RoomController.html#callRoom",
@@ -7046,15 +7326,15 @@
       "summary": "",
       "description": "Wrapper for Puppeteers page.evaluate. Evaluates the given code in the browser tab this instace is controlling. You can access the HaxBall roomObject with HHM.manager.room. e.g. room.eval('HHM.manager.room.getPlayerList()');"
     },
-    "RoomController.html#openRoom": {
-      "id": "RoomController.html#openRoom",
+    "RoomController.html#closeRoom": {
+      "id": "RoomController.html#closeRoom",
       "kind": "function",
-      "title": "&lt;async&gt; openRoom( config ) → {object}",
-      "longname": "RoomController#openRoom",
-      "name": "openRoom",
-      "tags": "RoomController#openRoom openRoom",
+      "title": "&lt;async&gt; closeRoom()",
+      "longname": "RoomController#closeRoom",
+      "name": "closeRoom",
+      "tags": "RoomController#closeRoom closeRoom",
       "summary": "",
-      "description": "Opens a HaxBall room in a browser tab. On top of the documentated properties here, the config object can contain any properties you want to use in your own HHM config file. The config object is usable globally from within the HHM config as the hrConfig object."
+      "description": "Closes the headless HaxBall room by navigating the page out of the headless HaxBall URL."
     },
     "PluginController.html": {
       "id": "PluginController.html",
@@ -7100,7 +7380,7 @@
     "PluginController.html#disablePlugin": {
       "id": "PluginController.html#disablePlugin",
       "kind": "function",
-      "title": "&lt;async&gt; disablePlugin( name [, recursive ] ) → {Promise.&lt;boolean&gt;}",
+      "title": "&lt;async&gt; disablePlugin( name [, recursive ] ) → {Promise.&lt;Array.&lt;number&gt;&gt;}",
       "longname": "PluginController#disablePlugin",
       "name": "disablePlugin",
       "tags": "PluginController#disablePlugin disablePlugin",
@@ -7187,6 +7467,16 @@
       "tags": "RepositoryController#addRepository addRepository",
       "summary": "",
       "description": "Adds a repository. If append is set to true, the new repository will be added with the lowest priority, i.e. plugins will only be loaded from it they can't be found in any other repository. Otherwise the repository will be added with the highest priority."
+    },
+    "RepositoryController.html#hasRepository": {
+      "id": "RepositoryController.html#hasRepository",
+      "kind": "function",
+      "title": "&lt;async&gt; hasRepository( repository ) → {boolean}",
+      "longname": "RepositoryController#hasRepository",
+      "name": "hasRepository",
+      "tags": "RepositoryController#hasRepository hasRepository",
+      "summary": "",
+      "description": "Returns whether the given repository already exists. Repositories are considered equal if their configuration is the same."
     },
     "RepositoryController.html#getRepositories": {
       "id": "RepositoryController.html#getRepositories",
