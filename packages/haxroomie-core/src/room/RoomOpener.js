@@ -114,7 +114,7 @@ module.exports = class RoomOpener extends EventEmitter {
     await this.navigateToHaxballHeadlessPage();
     await this.waitForHaxballToLoad();
     await this.injectSharedStorage();
-    await this.injectUtils();
+    await this.injectHroomie();
     await this.loadHHM({ version: hhmVersion, hhm });
   }
 
@@ -386,12 +386,12 @@ module.exports = class RoomOpener extends EventEmitter {
   /**
    * Injects the utils to the headless browser context.
    */
-  async injectUtils() {
+  async injectHroomie() {
     logger.debug(
       `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
         `Injecting utils module.`
     );
-    let utils = this.readFile(path.join(__dirname, '..', 'hhm', 'utils.js'));
+    let utils = this.readFile(path.join(__dirname, '..', 'hhm', 'hroomie.js'));
     await this.page.evaluate(utils);
   }
 
