@@ -24,18 +24,6 @@ describe('RoomController.repositories', async function() {
     });
   });
 
-  describe('#hasRepository', function() {
-    it('should detect that the default repository is added', async function() {
-      let repo = {
-        type: 'github',
-        repository: 'saviola777/hhm-plugins',
-        version: 'master',
-      };
-      let hasRepo = await rooms[0].repositories.hasRepository(repo);
-      expect(hasRepo).to.equal(true);
-    });
-  });
-
   describe('#addRepository', function() {
     it('should add a repository from github', async function() {
       let repo = {
@@ -44,8 +32,18 @@ describe('RoomController.repositories', async function() {
       };
       let wasAdded = await rooms[0].repositories.addRepository(repo);
       expect(wasAdded).to.equal(true);
+    });
+  });
+
+  describe('#hasRepository', function() {
+    it('should detect that the repository was added', async function() {
+      let repo = {
+        type: 'github',
+        repository: 'morko/hhm-sala-plugins',
+      };
       let hasRepo = await rooms[0].repositories.hasRepository(repo);
       expect(hasRepo).to.equal(true);
     });
   });
+
 });
