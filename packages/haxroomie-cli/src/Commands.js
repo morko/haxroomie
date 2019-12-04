@@ -129,7 +129,8 @@ class Commands extends CommandHandler {
             let roomLink = 'Link: ' + colors.cyan(r.roomInfo.roomLink);
             let maxPlayers = r.roomInfo.maxPlayers;
             let playerList = await r.callRoom('getPlayerList');
-            let players = colors.cyan(playerList.length - 1 + '/' + maxPlayers);
+            let playersLength = playerList.length - r.roomInfo.noPlayer ? 0 : 1;
+            let players = colors.cyan(playersLength + '/' + maxPlayers);
             let amountOfPlayers = `Players: ${players}`;
 
             return `${id} ${isRunning} ${amountOfPlayers} ${roomLink}`;
@@ -323,7 +324,9 @@ class Commands extends CommandHandler {
       run: async () => {
         let playerList = await this.room.callRoom('getPlayerList');
         playerList = playerList.filter(p => p.id !== 0);
-        let players = [`${playerList.length}/${this.room.roomInfo.maxPlayers}`];
+        let playersLength =
+          playerList.length - this.room.roomInfo.noPlayer ? 0 : 1;
+        let players = [`${playersLength}/${this.room.roomInfo.maxPlayers}`];
 
         for (let player of playerList) {
           if (!player) continue;

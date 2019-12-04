@@ -582,7 +582,9 @@ class RoomController extends EventEmitter {
    */
   async callRoom(fn, ...args) {
     logger.debug(
-      `RoomController#callRoom: ${stringify(fn)} ARGS: ${stringify(args)}`
+      `[${this.id}] RoomController#callRoom: ${stringify(fn)}, ${stringify(
+        args
+      )}`
     );
 
     if (!this.usable) {
