@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/morko/haxroomie/packages/haxroomie-cli#readme",
   "dependencies": {
-    "haxroomie-core": "^2.0.0",
     "colors": "^1.3.3",
     "deep-equal": "^1.0.1",
-    "yargs": "^12.0.5",
-    "lockfile": "^1.0.4"
+    "haxroomie-core": "^2.0.0",
+    "lockfile": "^1.0.4",
+    "yargs": "^12.0.5"
   }
 }
