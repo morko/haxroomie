@@ -349,6 +349,7 @@ class Commands extends CommandHandler {
     };
   }
 
+  /*
   async onCommand_role() {
     let isDisabled;
     if (!this.room.running) {
@@ -429,6 +430,7 @@ class Commands extends CommandHandler {
       },
     };
   }
+  */
 
   onCommand_kick() {
     return {
