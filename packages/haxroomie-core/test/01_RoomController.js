@@ -64,17 +64,65 @@ describe('RoomController', function() {
     });
   });
 
-  describe('error-logged event', function() {
-    it('should emit an event when browser loggerd error', function(done) {
-      let room = rooms[0];
-      let msg = 'testing';
-      room.on('error-logged', err => {
-        console.log(err);
-        done();
+  describe('log events', function() {
+    afterEach(function() {
+      rooms[0].removeAllListeners('error-logged');
+      rooms[0].removeAllListeners('warning-logged');
+      rooms[0].removeAllListeners('info-logged');
+    });
+
+    describe('error-logged', function() {
+      it('should emit an event when browser logged error', function(done) {
+        let msg = 'testing';
+        let room = rooms[0];
+        room.on('error-logged', eMsg => {
+          try {
+            expect(eMsg).to.equal(msg);
+          } catch (err) {
+            done(err);
+          }
+          done();
+        });
+        room.page.evaluate(msg => {
+          console.error(msg);
+        }, msg);
       });
-      room.page.evaluate(msg => {
-        console.error(new Error(msg));
-      }, msg);
+    });
+
+    describe('warning-logged', function() {
+      it('should emit an event when browser logged warning', function(done) {
+        let msg = 'testing';
+        let room = rooms[0];
+        room.on('warning-logged', eMsg => {
+          try {
+            expect(eMsg).to.equal(msg);
+          } catch (err) {
+            done(err);
+          }
+          done();
+        });
+        room.page.evaluate(msg => {
+          console.warn(msg);
+        }, msg);
+      });
+    });
+
+    describe('info-logged', function() {
+      it('should emit an event when browser logged message that is not a warning or error', function(done) {
+        let msg = 'testing';
+        let room = rooms[0];
+        room.on('info-logged', iMsg => {
+          try {
+            expect(iMsg).to.equal(msg);
+          } catch (err) {
+            done(err);
+          }
+          done();
+        });
+        room.page.evaluate(msg => {
+          console.log(msg);
+        }, msg);
+      });
     });
   });
 

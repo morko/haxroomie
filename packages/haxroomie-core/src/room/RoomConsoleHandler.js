@@ -27,14 +27,12 @@ class RoomErrorHandler {
     } else if (msg.type() === 'warning') {
       this.handleConsoleWarning(msg);
     } else {
-      logger.debug(
-        `[${colors.cyan(this.roomId)}] ` +
-          `[${colors.green('INFO')}] ${msg.text()}`
-      );
+      this.handleConsoleLog(msg);
     }
   }
   /**
    * Handle console messages of type `error`.
+   * @emits RoomController#error-logged
    */
   handleConsoleError(msg) {
     if (this.ignoreConsoleMsg(msg)) {
@@ -50,7 +48,7 @@ class RoomErrorHandler {
     if (!logMsg) logMsg = msg.text();
     if (!logMsg) return;
 
-    this.emit(`error-logged`, logMsg);
+    this.emit('error-logged', logMsg);
     logger.debug(
       `[${colors.cyan(this.roomId)}] [${colors.red('ERROR')}] ${logMsg}`
     );
@@ -58,6 +56,7 @@ class RoomErrorHandler {
 
   /**
    * Handle console messages of type `warning`.
+   * @emits RoomController#warning-logged
    */
   handleConsoleWarning(msg) {
     if (this.ignoreConsoleMsg(msg)) {
@@ -67,10 +66,24 @@ class RoomErrorHandler {
     let logMsg = msg.text();
     if (!logMsg) return;
 
-    this.emit(`warning-logged`, logMsg);
+    this.emit('warning-logged', logMsg);
     logger.debug(
       `[${colors.cyan(this.roomId)}] ` +
         `[${colors.yellow('WARNING')}] ${logMsg}`
+    );
+  }
+
+  /**
+   * Handle console messages that are not warnings or errors.
+   * @emits RoomController#info-logged
+   */
+  handleConsoleLog(msg) {
+    let logMsg = msg.text();
+    if (!logMsg) return;
+    this.emit('info-logged', logMsg);
+    logger.debug(
+      `[${colors.cyan(this.roomId)}] ` +
+        `[${colors.green('INFO')}] ${msg.text()}`
     );
   }
 

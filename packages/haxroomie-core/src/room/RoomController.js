@@ -76,15 +76,21 @@ const { stringify } = require('../utils');
  */
 
 /**
- * Emitted when a browser tab logs an error to the console
+ * Emitted when a browser tab logs an error to the console.
  * @event RoomController#error-logged
  * @param {string} message - The logged error message.
  */
 
 /**
- * Emitted when a browser tab logs a warning to the console
+ * Emitted when a browser tab logs a warning to the console.
  * @event RoomController#warning-logged
  * @param {string} message - The logged warning message.
+ */
+
+/**
+ * Emitted when a browser tab logs to console.
+ * @event RoomController#info-logged
+ * @param {string} message - The logged message.
  */
 
 /**
@@ -217,13 +223,13 @@ class RoomController extends EventEmitter {
     });
     this._errorHandler = new RoomErrorHandler({
       page: this.page,
-      setRoomState: this.setRoomState,
-      emit: this.emit,
+      setRoomState: this.setRoomState.bind(this),
+      emit: this.emit.bind(this),
       roomId: this.id,
     });
     this._consoleHandler = new RoomConsoleHandler({
       page: this.page,
-      emit: this.emit,
+      emit: this.emit.bind(this),
       roomId: this.id,
     });
 
