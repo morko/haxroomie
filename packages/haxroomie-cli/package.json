@@ -1,6 +1,6 @@
 {
   "name": "haxroomie-cli",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Command Line Interface for haxroomie to run and control HaxBall rooms.",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,7 @@
   "dependencies": {
     "colors": "^1.3.3",
     "deep-equal": "^1.0.1",
-    "haxroomie-core": "^2.0.0",
+    "haxroomie-core": "^2.0.1",
     "lockfile": "^1.0.4",
     "yargs": "^12.0.5"
   }
