@@ -90,7 +90,7 @@ module.exports = class RoomOpener extends EventEmitter {
     let configCopy = { ...config };
     configCopy.token = this.trimToken(configCopy.token);
 
-    await this.startHHM(config);
+    await this.startHHM(configCopy);
 
     let roomLink = await this.waitForHHMToStart(this.timeout * 1000);
     if (!roomLink) {
