@@ -3,6 +3,7 @@ const colors = require('colors/safe');
 const { logger } = require('haxroomie-core');
 
 const COLORS = {
+  BOOTSTRAP: colors.green,
   'ADDING ROOM': colors.green,
   'ROOM ADDED': colors.green.bold,
   'CLOSING ROOM': colors.yellow,

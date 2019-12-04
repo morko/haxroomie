@@ -168,15 +168,26 @@ class HRConsoleApp {
     room.removeAllListeners(`warning-logged`);
   }
 
+  onStartupLog(msg) {
+    const msgPrefix = '[INFO HHM]:  ';
+    const parsedMsg = msg.slice(msgPrefix.length);
+    cprompt.print(parsedMsg, 'BOOTSTRAP');
+  }
+
   onOpenRoomStart(err, room) {
     if (err) {
       cprompt.print(`Could not start room ${room.id}`, `ERROR`);
       return;
     }
+    if (process.env.NODE_ENV !== 'development') {
+      room.on('info-logged', this.onStartupLog);
+    }
+
     cprompt.print(`${colors.cyan(room.id)}`, `STARTING ROOM`);
   }
 
   onOpenRoomStop(err, room, roomInfo) {
+    room.removeListener('info-logged', this.onStartupLog);
     if (err) {
       switch (err.name) {
         case 'InvalidTokenError':
@@ -200,9 +211,6 @@ class HRConsoleApp {
       `${colors.cyan(room.id)} - ${roomInfo.roomLink}`,
       `ROOM STARTED`
     );
-    cprompt.print(`for ${colors.cyan(room.id)}`, 'PLUGINS LOADED');
-    let cmd = this.createCommands(room);
-    cmd.execute('plugins');
   }
 
   onCloseRoomStart(err, room) {
@@ -249,9 +257,9 @@ class HRConsoleApp {
 
     let roomConfig = this.config.getRoomConfig(id);
     let token = this.config.getToken(id);
+    let room = this.haxroomie.getRoom(id);
 
     if (token && tryWithConfigToken) {
-      let room = this.haxroomie.getRoom(id);
       roomConfig.token = token;
       try {
         let roomInfo = await room.openRoom(roomConfig);
@@ -284,7 +292,6 @@ class HRConsoleApp {
           }
 
           roomConfig.token = newToken;
-          let room = this.haxroomie.getRoom(id);
           let roomInfo;
           try {
             roomInfo = await room.openRoom(roomConfig);
