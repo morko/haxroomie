@@ -268,48 +268,39 @@ class HRConsoleApp {
         }
       } catch (err) {
         if (err.name !== 'InvalidTokenError') {
-          return;
+          let roomInfo = await this.openRoom(id, false);
+          return roomInfo;
         }
       }
     }
 
-    return new Promise(resolve => {
-      cprompt.print('Get tokens from https://www.haxball.com/headlesstoken');
-      cprompt.question(
-        `Enter token for ${colors.green(id)} (c to cancel): `,
-        async newToken => {
-          if (!newToken) {
-            cprompt.print('You have to give a token!', 'ERROR');
-            let roomInfo = await this.openRoom(id, false);
-            if (roomInfo) resolve(roomInfo);
-            return;
-          } else if (newToken === 'c') {
-            cprompt.print(
-              `${colors.cyan(id)}: User canceled opening.`,
-              `ERROR`
-            );
-            return;
-          }
+    let newToken = await cprompt.question(
+      `Enter token for ${colors.green(id)} (c to cancel): `
+    );
 
-          roomConfig.token = newToken;
-          let roomInfo;
-          try {
-            roomInfo = await room.openRoom(roomConfig);
-          } catch (err) {
-            if (err.name !== 'InvalidTokenError') {
-              return;
-            }
-          }
-          if (!roomInfo) {
-            roomInfo = await this.openRoom(id, false);
-            if (roomInfo) resolve(roomInfo);
-            return;
-          }
-          this.config.setToken(id, newToken);
-          resolve(roomInfo);
-        }
-      );
-    });
+    if (!newToken) {
+      cprompt.print('You have to give a token!', 'ERROR');
+      await this.openRoom(id, false);
+    } else if (newToken === 'c') {
+      cprompt.print(`${colors.cyan(id)}: User canceled opening.`, `ERROR`);
+      return;
+    }
+
+    this.config.setToken(id, newToken);
+    let newConfig = { ...roomConfig, token: newToken };
+
+    let roomInfo;
+    try {
+      roomInfo = await room.openRoom(newConfig);
+    } catch (err) {
+      if (err.name === 'InvalidTokenError') {
+        roomInfo = await this.openRoom(id, false);
+      }
+    }
+    if (!roomInfo) {
+      return;
+    }
+    return roomInfo;
   }
 
   /**

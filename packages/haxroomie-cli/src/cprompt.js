@@ -74,9 +74,14 @@ function setCommands(commands) {
  * @param {string} question - Question to ask.
  * @param {function} cb - Callback that receives the answer.
  */
-function question(question, cb) {
-  rl.question(question, cb);
+async function question(question) {
+  let answer = await new Promise(resolve => {
+    rl.question(question, answer => {
+      resolve(answer);
+    });
+  });
   createPrompt();
+  return answer;
 }
 
 /**
