@@ -30,8 +30,9 @@ for (let repo of HHM.config.repositories) {
 if (!hasDefaultRepo) {
   // Add default plugin repository.
   HHM.config.repositories.push({
-    type: `github`,
-    repository: `saviola777/hhm-plugins`,
+    type: 'github',
+    repository: 'saviola777/hhm-plugins',
+    version: 'a2fb254967d00572c08585d408cce65a3ec83b3a',
   });
 }
 
