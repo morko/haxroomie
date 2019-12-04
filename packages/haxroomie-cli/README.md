@@ -35,7 +35,7 @@ npm install haxroomie-cli -g
 
 To start the interactive CLI run:
 ```sh
-haxroomie-cli
+haxroomie
 ```
 
 If you get an error like *"Failed to launch Chrome"*, it is possible that you are missing some libraries that the headless Chrome depend on.
@@ -79,21 +79,21 @@ using [this](examples/configs/1-private-room.js) example configuration.
 
 To start the interactive interface run:
 ```sh
-haxroomie-cli
+haxroomie
 ```
 
 Once haxroomie-cli is running you can type `help` for available commands.
 
 To list all possible arguments for the executable:
 ```sh
-haxroomie-cli --help
+haxroomie --help
 ```
 
 If you wish to load the config from elsewhere you can give haxroomie the `-c` argument.
 
 e.g.
 ```sh
-haxroomie-cli -c path/to/config.js
+haxroomie -c path/to/config.js
 ```
 
 Every room requires a token from <https://www.haxball.com/headlesstoken>.
