@@ -168,7 +168,8 @@ class Commands extends CommandHandler {
       args: ['id'],
       category: 'Basic commands',
       run: id => {
-        if (this.room.running) {
+        const room = this.haxroomie.getRoom(id);
+        if (room.running) {
           cprompt.print(
             `The room is already running. Close it before opening!`
           );
