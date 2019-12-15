@@ -32,11 +32,7 @@ async function bootstrap() {
     let haxroomie = await createHaxroomie();
     let room = await haxroomie.addRoom('example');
 
-    room.on('open-room-stop' (roomInfo) => {
-      console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
-    });
-
-    room.openRoom({
+    let roomInfo = await room.openRoom({
       roomName: 'haxroomie',
       playerName: 'host',
       maxPlayers: 10,
@@ -44,8 +40,10 @@ async function bootstrap() {
       token: process.env.HAXBALL_TOKEN
     });
 
+    console.log(`Room started. Here is the link: ${roomInfo.roomLink}`);
+
   } catch (err) {
-    logger.error(err.stack);
+    console.error(err);
     process.exit(1);
   }
 }
@@ -81,7 +79,7 @@ async function getRepoInfoExample() {
     console.log(repoInfo);
 
   } catch (err) {
-    logger.error(err.stack);
+    console.error(err);
     process.exit(1);
   }
 }

@@ -1,7 +1,6 @@
 # Using the haxroomie config
 
-The config is a JavaScript
-[object literal](https://www.dyn-web.com/tutorials/object-literal/).
+The config file is a JavaScript CommonJS module that exports the room options.
 You can use [Node.js](https://nodejs.org/en/) API inside the config.
 
 Each room in the config can be given options.
@@ -18,7 +17,7 @@ let config = {
 };
 module.exports = config;
 ```
-In addition to normal values that the `HBInit` function accepts
+In addition to options that the `HBInit` function accepts
 (see [Haxball Headless Host WiKi](https://github.com/haxball/haxball-issues/wiki/Headless-Host#roomconfigobject))
 , following options can be used:
 
@@ -38,7 +37,7 @@ Array of plugin repositories to load.
 With this you can tell which repositories to load in addition to the default one 
 ([plugin repository by saviola](https://github.com/saviola777/hhm-plugins)).
 
-Adding a repository will not automagically load the plugins in them. To load
+**Adding a repository will not automagically load the plugins in them.** To load
 plugins from a repository you must use the [pluginConfig](#pluginconfig) option.
 
 To load a repository from GitHub:
@@ -64,6 +63,27 @@ repositories: [
     suffix: `.js`, // optional (defaults to .js)
   }
 ],
+```
+
+## `plugins`
+
+If you do not wish to create a repository you can load multiple plugins also
+by givin them in the `plugins` property. **The plugins that are given this way
+will be automatically loaded when room is opened.** Use
+[pluginConfig](#pluginconfig) to pass them configurations if they support them.
+
+e.g.
+```js
+plugins: [
+  {
+    name: 'my/first-plugin',
+    path: '/path/to/first/plugin.js'
+  },
+  {
+    name: 'my/second-plugin',
+    path: '/path/to/second/plugin.js'
+  }
+]
 ```
 
 ## `pluginConfig`
@@ -99,10 +119,8 @@ pluginConfig: {
 
 ## `roomScript`
 
-Use this if you do not wish to use the plugin system and just run a traditional
-HaxBall headless script.
-
-**Disables the default plugins!**
+This is a handy option if you just need to be running one script. You can give
+the path to the script with the `roomScript` property.
 
 e.g.
 ```js
@@ -116,7 +134,7 @@ This is useful if you are testing something and need to restart
 the rooms often or if you wish to load it from an environment
 variable.
 
-e.g.
+e.g. to load the token from environment variable `HAXBALL_TOKEN`.
 ```js
 token: process.env.HAXBALL_TOKEN
 ```
@@ -133,7 +151,8 @@ hhmConfig: '/path/to/hhmConfig.js'
 
 ## `hhm`
 
-Path to built source of Headless Haxball Manager (HHM).
+Path to built source of haxroomies plugin system by saviola
+[Haxball Headless Manager (HHM)](https://github.com/saviola777/haxball-headless-manager).
 
 Useful for testing changes to the source.
 
