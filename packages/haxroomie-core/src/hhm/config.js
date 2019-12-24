@@ -32,7 +32,7 @@ if (!hasDefaultRepo) {
   HHM.config.repositories.push({
     type: 'github',
     repository: 'saviola777/hhm-plugins',
-    version: 'a2fb254967d00572c08585d408cce65a3ec83b3a',
+    version: hrConfig.defaultRepoVersion,
   });
 }
 

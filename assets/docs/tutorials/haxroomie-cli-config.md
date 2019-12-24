@@ -1,4 +1,4 @@
-# Using the haxroomie config
+# haxroomie-cli config file
 
 The config file is a JavaScript CommonJS module that exports the room options.
 You can use [Node.js](https://nodejs.org/en/) API inside the config.
@@ -159,4 +159,18 @@ Useful for testing changes to the source.
 e.g.
 ```js
 hhm: '/path/to/hhm.js'
+```
+
+## `defaultRepoVersion`
+
+**Added in haxroomie version 2.1.0.**
+
+Sets which version of the saviola's default plugin repository to use.
+You can find the repository GitHub page from
+[here](https://github.com/saviola777/hhm-plugins). The version can be
+commit, tag or branch.
+
+e.g.
+```js
+defaultRepoVersion: 'development'
 ```

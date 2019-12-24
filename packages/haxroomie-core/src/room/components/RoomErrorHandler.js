@@ -1,4 +1,4 @@
-const logger = require('../logger');
+const logger = require('../../logger');
 const colors = require('colors');
 
 /** Handles the errors that happen in the headless browser. */

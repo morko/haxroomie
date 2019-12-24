@@ -7,12 +7,12 @@ const {
   HHMNotLoadedError,
 } = require('../errors');
 const EventEmitter = require('events');
-const RoomOpener = require('./RoomOpener');
-const RepositoryController = require('./RepositoryController');
-const PluginController = require('./PluginController');
-const RoleController = require('./RoleController');
-const RoomErrorHandler = require('./RoomErrorHandler');
-const RoomConsoleHandler = require('./RoomConsoleHandler');
+const RoomOpener = require('./components/RoomOpener');
+const RepositoryController = require('./components/RepositoryController');
+const PluginController = require('./components/PluginController');
+const RoleController = require('./components/RoleController');
+const RoomErrorHandler = require('./components/RoomErrorHandler');
+const RoomConsoleHandler = require('./components/RoomConsoleHandler');
 const { stringify } = require('../utils');
 
 /**
@@ -200,6 +200,7 @@ class RoomController extends EventEmitter {
     this.timeout = options.timeout || 30;
 
     this._hhmVersion = options.hhmVersion;
+    this._defaultRepoVersion = options.defaultRepoVersion;
     this._hhm = options.hhm;
 
     this._usable = true;
@@ -412,19 +413,21 @@ class RoomController extends EventEmitter {
    * **Note that calling [close]{@link RoomController#close} will undo this.**
    *
    * @param {object} [options] - Options.
-   * @param {string} [options.hhmVersion] - Version of HHM to load. By default this
-   *    is set to whatever is given in constructors `hhmVersion` option.
+   * @param {string} [options.hhmVersion] - Version of Haxball Headless
+   *    Manager to load. By default a compatible version is used.
    * @param {File} [options.hhm] - Optionally load HHM source from a string.
    */
-  async init(options) {
+  async init(options = {}) {
     if (!this.usable) throw new UnusableError('Instance unusable!');
 
-    options = options || {};
     const hhmVersion = options.hhmVersion || this._hhmVersion;
     const hhm = options.hhm || this._hhm;
 
     try {
-      await this.roomOpener.initializePage({ hhmVersion, hhm });
+      await this.roomOpener.initializePage({
+        hhmVersion,
+        hhm,
+      });
     } catch (err) {
       this._hhmLoaded = false;
       throw err;
@@ -479,6 +482,10 @@ class RoomController extends EventEmitter {
    *    Disables the non essential default plugins.
    * @param {File} [config.hhmConfig] - Configuration for the haxball
    *    headless manager (HHM).
+   * @param {string} [config.defaultRepoVersion] - Version of saviola's
+   *    plugin repository for Haxball Headless Manager to load. By default
+   *    a compatible version is used. This can be overriden by adding the
+   *    repository in the `repository` property.
    * @returns {object} - Config that the room was started with.
    *    The `roomLink` property is added to the config (contains URL to the
    *    room).
@@ -519,6 +526,8 @@ class RoomController extends EventEmitter {
 
     this.emit(`open-room-start`, null, config);
     this._openRoomLock = true;
+    config.defaultRepoVersion =
+      config.defaultRepoVersion || this._defaultRepoVersion;
 
     try {
       if (!this.hhmLoaded) await this.init();

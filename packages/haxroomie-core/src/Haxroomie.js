@@ -4,7 +4,7 @@ const EventEmitter = require('events');
 
 const { RoomController } = require('./room');
 const logger = require('./logger');
-const config = require('../config.json');
+const versionConfig = require('../version-config.json');
 
 /**
  * Emitted when new RoomController is added.
@@ -261,9 +261,10 @@ class Haxroomie extends EventEmitter {
     this.validateRoomID(id);
     if (this.rooms.has(id)) throw new Error('id must be unique');
 
-    const rcOptions = { ...roomControllerOptions };
-    rcOptions.id = rcOptions.id || id;
-    rcOptions.hhmVersion = rcOptions.hhmVersion || config.hhmVersion;
+    const rcOptions = { id: id, ...roomControllerOptions };
+    rcOptions.hhmVersion = rcOptions.hhmVersion || versionConfig.hhmVersion;
+    rcOptions.defaultRepoVersion =
+      rcOptions.defaultRepoVersion || versionConfig.defaultRepoVersion;
 
     const room = await this.createRoomController(rcOptions);
     this.rooms.set(id, room);

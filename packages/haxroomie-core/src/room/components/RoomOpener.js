@@ -1,14 +1,14 @@
 const path = require('path');
 const fs = require('fs');
-const sleep = require('../utils').sleep;
 const colors = require('colors');
-const logger = require('../logger');
+const logger = require('../../logger');
+const sleep = require('../../utils').sleep;
 const EventEmitter = require('events');
 const {
   ConnectionError,
   TimeoutError,
   InvalidTokenError,
-} = require('../errors');
+} = require('../../errors');
 
 /**
  * Handles the opening and closing processes of the haxball room using puppeteer.
@@ -48,9 +48,6 @@ module.exports = class RoomOpener extends EventEmitter {
     this.onHHMEvent = opt.onHHMEvent;
     this.timeout = opt.timeout || 30;
     this.id = opt.id;
-
-    this._hhmVersion = null;
-    this._hhm = null;
 
     /** URL of the HaxBall headless host site. */
     this.url = 'https://haxball.com/headless';
@@ -108,14 +105,11 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async initializePage({ hhmVersion, hhm = {} }) {
-    this._hhmVersion = hhmVersion;
-    this._hhm = hhm;
-
     await this.navigateToHaxballHeadlessPage();
     await this.waitForHaxballToLoad();
     await this.injectSharedStorage();
     await this.injectHroomie();
-    await this.loadHHM({ version: hhmVersion, hhm });
+    await this.loadHHM({ hhmVersion, hhm });
   }
 
   /**
@@ -197,17 +191,17 @@ module.exports = class RoomOpener extends EventEmitter {
       await this.page.addScriptTag({ content: config.hhm.content });
     } else {
       // prevent caching if using the development version
-      if (config.version === 'git') {
+      if (config.hhmVersion === 'git') {
         await this.page.addScriptTag({
           url: `https://hhm.surge.sh/releases/hhm-${
-            config.version
+            config.hhmVersion
           }.js?_=${Date.now()}`,
         });
 
         // load the possibly cached version
       } else {
         await this.page.addScriptTag({
-          url: `https://hhm.surge.sh/releases/hhm-${config.version}.js`,
+          url: `https://hhm.surge.sh/releases/hhm-${config.hhmVersion}.js`,
         });
       }
     }
@@ -239,7 +233,7 @@ module.exports = class RoomOpener extends EventEmitter {
       } else {
         configFn = new Function(
           'hrConfig',
-          this.readFile(path.join(__dirname, '..', 'hhm', 'config.js'))
+          this.readFile(path.join(__dirname, '..', '..', 'hhm', 'config.js'))
         );
       }
     } catch (err) {
@@ -352,7 +346,7 @@ module.exports = class RoomOpener extends EventEmitter {
     );
     try {
       let corePlugin = this.readFile(
-        path.join(__dirname, '..', 'hhm', 'core-plugin.js')
+        path.join(__dirname, '..', '..', 'hhm', 'core-plugin.js')
       );
       await this.page.evaluate(corePlugin => {
         return HHM.manager.addPlugin({
@@ -391,7 +385,9 @@ module.exports = class RoomOpener extends EventEmitter {
       `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
         `Injecting utils module.`
     );
-    let utils = this.readFile(path.join(__dirname, '..', 'hhm', 'hroomie.js'));
+    let utils = this.readFile(
+      path.join(__dirname, '..', '..', 'hhm', 'hroomie.js')
+    );
     await this.page.evaluate(utils);
   }
 
