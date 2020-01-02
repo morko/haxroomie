@@ -45,5 +45,4 @@ describe('RoomController.repositories', async function() {
       expect(hasRepo).to.equal(true);
     });
   });
-
 });

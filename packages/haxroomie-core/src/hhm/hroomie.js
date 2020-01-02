@@ -88,7 +88,7 @@ Object.assign(
       let p = null;
       if (typeof plugin === 'object') {
         p = plugin;
-      // prevent getPlugin to create a new plugin
+        // prevent getPlugin to create a new plugin
       } else if (plugin !== undefined) {
         p = manager.getPlugin(plugin);
       }

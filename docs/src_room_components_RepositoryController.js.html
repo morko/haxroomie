@@ -1,10 +1,10 @@
-<!-- start:readme.hbs -->
+<!-- start:source.tmpl.hbs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-		<title>Custom HHM Config</title>
+		<title>src/room/components/RepositoryController.js</title>
 		<!--[if lt IE 9]>
 		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -14,7 +14,7 @@
 		<link type="text/css" rel="stylesheet" href="css/template.min.css">
 		<script type="text/javascript">
 			window.TEMPLATE_OPTIONS = {"includeDate":true,"dateFormat":"Do MMM YYYY","systemName":"Haxroomie","systemSummary":"Documentation and tutorials.","systemLogo":"","systemColor":"","navMembers":[{"kind":"class","title":"Classes","summary":"All documented classes."},{"kind":"external","title":"Externals","summary":"All documented external members."},{"kind":"global","title":"Globals","summary":"All documented globals."},{"kind":"mixin","title":"Mixins","summary":"All documented mixins."},{"kind":"interface","title":"Interfaces","summary":"All documented interfaces."},{"kind":"module","title":"Modules","summary":"All documented modules."},{"kind":"namespace","title":"Namespaces","summary":"All documented namespaces."},{"kind":"tutorial","title":"Tutorials","summary":"All available tutorials."}],"footer":"","copyright":"© Oskari Pöntinen 2019","linenums":true,"collapseSymbols":true,"inverseNav":true,"inlineNav":false,"outputSourceFiles":true,"sourceRootPath":null,"disablePackagePath":true,"outputSourcePath":false,"showTableOfContents":true,"showAccessFilter":true,"analytics":null,"methodHeadingReturns":true,"sort":"linenum, longname, version, since","search":true,"favicon":null,"stylesheets":[],"scripts":[],"monospaceLinks":false,"cleverLinks":false};
-			window.DOCLET_TOC_ENABLED = true;
+			window.DOCLET_TOC_ENABLED = false;
 			window.DOCLET_AFILTER_ENABLED = false;
 		</script>
 </head>
@@ -86,75 +86,158 @@
 	</header>
 	<!-- end:navbar.hbs -->		<div class="page-header">
 			<div class="container">
-				<span class="kind">tutorial</span>
-				<h1><span class="title">Custom HHM Config</span></h1>
+				<span class="kind">source</span>
+				<h1><span class="name">src/room/components/RepositoryController.js</span></h1>
 			</div>
 		</div>
 	<div class="container content">
 		<div class="row">
-			<div class="col-md-9 main-content">
-						<ol class="breadcrumb">
-							<li><a href="index.html">Home</a></li>
-							<li><a href="list_tutorial.html">Tutorials</a></li>
-							<li class="active">Custom HHM Config</li>
-						</ol>
-		<section class="tutorial-section">
-			<article><h1>Custom config for Haxball Headless Manager</h1>
-<p>Haxroomie supports custom
-Haxball Headless Manager (HHM) configs. However there should rarely be a reason to do this.</p>
-<p>(see <a href="#hhm-config-requirements">HHM config requirements</a>).</p>
-<h2>Loading the config</h2>
-<h3>haxroomie-core</h3>
-<p>The config can be loaded when opening a room. You have to give it to
-<a href="https://morko.github.io/haxroomie/RoomController.html#openRoom">RoomController#openRoom</a>
-method as a string.</p>
-<p>e.g.</p>
-<pre class="prettyprint source lang-js"><code>room.openRoom({
-  // other options
-  hhmConfig: {
-    name: 'myHhmConfig',
-    content: theStringContainingTheCode
-  }
-})
-</code></pre>
-<h3>haxroomie-cli</h3>
-<p>The config can be given in the rooms config in the config file.</p>
-<pre class="prettyprint source lang-js"><code>hhmConfig: '/path/to/the/file.js'
-</code></pre>
-<h2>HHM config requirements</h2>
-<p><code>HHM.config.room</code> object must have a <code>token</code> property like this:</p>
-<pre class="prettyprint source lang-js"><code>HHM.config.room = {
-  token: hrConfig.token
-}
-</code></pre>
-<p>The <code>postInit</code> plugin should set the <code>window.hroomie.hhmStarted</code> property to
-<code>true</code> on the <code>onRoomLink</code> event like this:</p>
-<pre class="prettyprint source lang-js"><code>HHM.config.postInit = HBInit => {
-  let room = HBInit();
+			<div class="col-md-12 main-content">
+		<section class="source-section">
+			<article></article>
+			<pre class="prettyprint source language-javascript line-numbers"><code class="language-javascript">/**
+ * Repository definition.
+ *
+ * @typedef {Object} Repository
+ * @property {string} type - Repository type. Can be one of `github`, `url`
+ *    or `local`.
+ * @property {string} [repository] - When type is `github` this is a
+ *    **mandatory** field. If your GitHub repository is at
+ *    `https://github.com/user/repository` then this value should be
+ *    `user/repository`.
+ * @property {string} [path] - When type is `github` this is an **optional**
+ *    field. The path under the repository where the plugins are. Default is
+ *    `src`.
+ * @property {string} [version] - When type is `github` this is an **optional**
+ *    field. This is the branch, tag or commit of the repository you want to
+ *    use.
+ * @property {string} [url] - When type is `url` this is a **mandatory**
+ *    field. The URL to your repository. Take care that your host has CORS
+ *    enabled.
+ * @property {object} [plugins] - When type is `local` this is a
+ *    **mandatory** field. This property contains the code for plugins in
+ *    a `local` repository.
+ *
+ *    e.g.
+ * ```js
+ * {
+ *   type: 'local',
+ *   plugins: {
+ *     'pluginName1': 'JavaScript code',
+ *     'pluginName2': 'JavaScript code'
+ *   }
+ * }
+ * ```
+ * @property {string} [path] - When type is `local` this is an
+ *    **optional** field. This property contains the path from where the
+ *    local repository has been loaded.
+ */
 
-  room.onRoomLink = () => {
-    window.hroomie.hhmStarted = true;
+/**
+ * Repository data.
+ *
+ * @typedef {Object} RepositoryData
+ *
+ * @property {string} name - Name of the repository.
+ * @property {string} [description] - Description of repository.
+ * @property {string} [author] - Author of the repository.
+ * @property {Array.&lt;string>} [plugins] - Plugins that the repository contains.
+ * @property {object} [config] - Configuration object for this repository.
+ *    Can for example define the path of where to load the plugins.
+ */
+
+/**
+ * Class for controlling Haxball Headless Manager (HHM) repositories.
+ */
+class RepositoryController {
+  constructor(opt) {
+    this.page = opt.page;
+    this.running = false;
+    this._usable = false;
+  }
+
+  /**
+   * Adds a repository.
+   *
+   * If append is set to true, the new repository will be added with the
+   * lowest priority, i.e. plugins will only be loaded from it they can't
+   * be found in any other repository. Otherwise the repository will be
+   * added with the highest priority.
+   *
+   * @param {Repository} repository - The repository to be added.
+   * @param {boolean} [append] - Whether to append or prepend the repository
+   *    to the Array of repositories.
+   * @returns {Promise.&lt;boolean>} - Whether the repository was successfully added.
+   *
+   */
+  async addRepository(repository, append) {
+    if (!repository) {
+      throw new TypeError('Missing required argument: repository');
+    }
+
+    return this.page.evaluate(
+      async (repository, append) => {
+        const repoFactory = HHM.manager.getPluginRepositoryFactory();
+        const pluginLoader = HHM.manager.getPluginLoader();
+        const r = await repoFactory.createRepository(repository);
+        return pluginLoader.addRepository(r, append);
+      },
+      repository,
+      append
+    );
+  }
+
+  /**
+   * Returns whether the given repository already exists.
+   * Repositories are considered equal if their configuration is the same.
+   * @param {Repository} repository - Repository config.
+   * @returns {boolean} - Did the repository exist.
+   */
+  async hasRepository(repository) {
+    if (!repository) {
+      return false;
+    }
+    return this.page.evaluate(async repository => {
+      const repoFactory = HHM.manager.getPluginRepositoryFactory();
+      const pluginLoader = HHM.manager.getPluginLoader();
+      const r = await repoFactory.createRepository(repository);
+      return pluginLoader.hasRepository(r);
+    }, repository);
+  }
+
+  /**
+   * Returns available repositories.
+   * @returns {Array.&lt;Repository>} - An array of available repositories.
+   *
+   */
+  async getRepositories() {
+    return this.page.evaluate(() => {
+      return HHM.manager.getPluginLoader().repositories;
+    });
+  }
+
+  /**
+   * Retrieves information about the given repository.
+   *
+   * The information is loaded from repositorys `repository.json` config file.
+   * @param {Repository} repository - The repository that you want to get
+   *    information from.
+   * @returns {RepositoryData} - The metadata of the repository.
+   */
+  async getRepositoryInformation(repository) {
+    return this.page.evaluate(async rd => {
+      let r = await HHM.manager
+        .getPluginRepositoryFactory()
+        .createRepository(rd);
+      return r.repositoryInformation;
+    }, repository);
   }
 }
+
+module.exports = RepositoryController;
 </code></pre>
-<h2>Differences to vanilla HHM config</h2>
-<p>Haxroomie injects a <code>hrConfig</code> object to the HHM config.
-The object contains all the properties sent to the function
-that is used to start the room.
-See the
-<a href="https://morko.github.io/haxroomie/RoomController.html#openRoom">API documentation for openRoom</a>
-for a list of these properties.</p>
-<p>See the
-<a href="https://www.github.com/morko/haxroomie/tree/master/packages/haxroomie-core/src/hhm/config.js">default configuration file</a>
-for a complete example.</p>
-<p>See
-<a href="https://www.github.com/saviola777/haxball-headless-manager#preparing-your-configuration">HHM docs</a>
-for more information about the configuration file.</p></article>
 		</section>
 			</div>
-				<div class="col-md-3 side-content">
-					<nav class="toc hidden-print hidden-sm hidden-xs"></nav>
-				</div>
 		</div>
 	</div>
 	<footer>
@@ -186,4 +269,4 @@ for more information about the configuration file.</p></article>
 	
 </body>
 </html>
-<!-- end:readme.hbs -->
+<!-- end:source.tmpl.hbs -->

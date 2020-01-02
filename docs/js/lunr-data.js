@@ -1222,7 +1222,7 @@ window.lunrData = {
             "m": {
               "docs": {
                 "undefined": {
-                  "tf": 625
+                  "tf": 633.3333333333334
                 },
                 "RoomController.html": {
                   "ref": "RoomController.html",
@@ -3245,7 +3245,7 @@ window.lunrData = {
                   "g": {
                     "docs": {
                       "undefined": {
-                        "tf": 620
+                        "tf": 625
                       },
                       "RoomController.html#openRoom": {
                         "ref": "RoomController.html#openRoom",
@@ -3470,7 +3470,7 @@ window.lunrData = {
                   "m": {
                     "docs": {
                       "undefined": {
-                        "tf": 625
+                        "tf": 633.3333333333334
                       }
                     }
                   }
@@ -3698,110 +3698,6 @@ window.lunrData = {
             }
           }
         },
-        "u": {
-          "docs": {},
-          "s": {
-            "docs": {
-              "undefined": {
-                "tf": 20
-              },
-              "Haxroomie.html#launchBrowser": {
-                "ref": "Haxroomie.html#launchBrowser",
-                "tf": 3.125
-              },
-              "Haxroomie.html#addRoom": {
-                "ref": "Haxroomie.html#addRoom",
-                "tf": 5
-              },
-              "RoomController.html#plugins": {
-                "ref": "RoomController.html#plugins",
-                "tf": 6.25
-              },
-              "RoomController.html#repositories": {
-                "ref": "RoomController.html#repositories",
-                "tf": 5.88235294117647
-              },
-              "RoomController.html#roles": {
-                "ref": "RoomController.html#roles",
-                "tf": 4.166666666666666
-              },
-              "RoomController.html#init": {
-                "ref": "RoomController.html#init",
-                "tf": 2
-              },
-              "RoomController.html#openRoom": {
-                "ref": "RoomController.html#openRoom",
-                "tf": 1.8518518518518516
-              }
-            },
-            "a": {
-              "docs": {},
-              "b": {
-                "docs": {},
-                "l": {
-                  "docs": {
-                    "RoomController.html#usable": {
-                      "ref": "RoomController.html#usable",
-                      "tf": 716.6666666666666
-                    },
-                    "RoomController.html#openRoom": {
-                      "ref": "RoomController.html#openRoom",
-                      "tf": 1.8518518518518516
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "b": {
-            "docs": {},
-            "u": {
-              "docs": {},
-              "n": {
-                "docs": {},
-                "t": {
-                  "docs": {},
-                  "u": {
-                    "docs": {
-                      "undefined": {
-                        "tf": 25
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {},
-            "d": {
-              "docs": {},
-              "o": {
-                "docs": {
-                  "RoomController.html#init": {
-                    "ref": "RoomController.html#init",
-                    "tf": 2
-                  }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "l": {
-              "docs": {
-                "RoomController.html#init": {
-                  "ref": "RoomController.html#init",
-                  "tf": 2
-                },
-                "RoomController.html#closeRoom": {
-                  "ref": "RoomController.html#closeRoom",
-                  "tf": 5
-                }
-              }
-            }
-          }
-        },
         "f": {
           "docs": {},
           "i": {
@@ -3811,7 +3707,7 @@ window.lunrData = {
               "e": {
                 "docs": {
                   "undefined": {
-                    "tf": 20
+                    "tf": 25
                   },
                   "RoomController.html#openRoom": {
                     "ref": "RoomController.html#openRoom",
@@ -4021,6 +3917,107 @@ window.lunrData = {
                       "tf": 2.380952380952381
                     }
                   }
+                }
+              }
+            }
+          }
+        },
+        "u": {
+          "docs": {},
+          "b": {
+            "docs": {},
+            "u": {
+              "docs": {},
+              "n": {
+                "docs": {},
+                "t": {
+                  "docs": {},
+                  "u": {
+                    "docs": {
+                      "undefined": {
+                        "tf": 25
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "s": {
+            "docs": {
+              "Haxroomie.html#launchBrowser": {
+                "ref": "Haxroomie.html#launchBrowser",
+                "tf": 3.125
+              },
+              "Haxroomie.html#addRoom": {
+                "ref": "Haxroomie.html#addRoom",
+                "tf": 5
+              },
+              "RoomController.html#plugins": {
+                "ref": "RoomController.html#plugins",
+                "tf": 6.25
+              },
+              "RoomController.html#repositories": {
+                "ref": "RoomController.html#repositories",
+                "tf": 5.88235294117647
+              },
+              "RoomController.html#roles": {
+                "ref": "RoomController.html#roles",
+                "tf": 4.166666666666666
+              },
+              "RoomController.html#init": {
+                "ref": "RoomController.html#init",
+                "tf": 2
+              },
+              "RoomController.html#openRoom": {
+                "ref": "RoomController.html#openRoom",
+                "tf": 1.8518518518518516
+              }
+            },
+            "a": {
+              "docs": {},
+              "b": {
+                "docs": {},
+                "l": {
+                  "docs": {
+                    "RoomController.html#usable": {
+                      "ref": "RoomController.html#usable",
+                      "tf": 716.6666666666666
+                    },
+                    "RoomController.html#openRoom": {
+                      "ref": "RoomController.html#openRoom",
+                      "tf": 1.8518518518518516
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {},
+            "d": {
+              "docs": {},
+              "o": {
+                "docs": {
+                  "RoomController.html#init": {
+                    "ref": "RoomController.html#init",
+                    "tf": 2
+                  }
+                }
+              }
+            }
+          },
+          "r": {
+            "docs": {},
+            "l": {
+              "docs": {
+                "RoomController.html#init": {
+                  "ref": "RoomController.html#init",
+                  "tf": 2
+                },
+                "RoomController.html#closeRoom": {
+                  "ref": "RoomController.html#closeRoom",
+                  "tf": 5
                 }
               }
             }
@@ -6906,7 +6903,7 @@ window.lunrData = {
           }
         }
       },
-      "length": 542
+      "length": 540
     },
     "corpusTokens": [
       "access",
@@ -7174,7 +7171,7 @@ window.lunrData = {
     },
     "undefined": {
       "kind": "tutorial",
-      "title": "Install haxroomie-cli to Ubuntu",
+      "title": "Installing haxroomie-cli in Ubuntu",
       "longname": "haxroomie-cli-install",
       "name": "haxroomie-cli-install",
       "tags": "haxroomie-cli-install",
