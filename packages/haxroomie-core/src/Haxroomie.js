@@ -91,14 +91,17 @@ class Haxroomie extends EventEmitter {
 
     browserLock = true;
 
+    let browserArgs = [`--remote-debugging-port=${this.port}`];
+    if (this.noSandbox) {
+      browserArgs.push('--no-sandbox');
+      browserArgs.push('--disable-setuid-sandbox');
+    }
+
     this.browser = await puppeteer.launch({
       headless: this.headless,
       devtools: !this.headless,
       userDataDir: this.userDataDir,
-      args: [
-        `--remote-debugging-port=${this.port}`,
-        `--no-sandbox=${this.noSandbox}`,
-      ],
+      args: browserArgs,
     });
     return this.browser;
   }
