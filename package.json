@@ -1,8 +1,5 @@
 {
-  "name": "haxroomie",
-  "version": "2.0.0",
-  "description": "Host haxball rooms without GUI.",
-  "main": "index.js",
+  "name": "haxroomie-monorepo",
   "scripts": {
     "start": "node packages/haxroomie-cli",
     "test": "mocha ./packages/haxroomie-core/test",
@@ -11,9 +8,6 @@
     "format": "eslint --fix ./packages",
     "bootstrap": "lerna bootstrap"
   },
-  "keywords": [
-    "haxball"
-  ],
   "author": "Oskari Pöntinen <mail.morko@gmail.com>",
   "license": "MIT",
   "bin": {
