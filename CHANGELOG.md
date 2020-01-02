@@ -1,6 +1,23 @@
 # Changelog
 
-## 2.0.0 (not yet released)
+### 2.1.0
+
+#### haxroomie-cli
+
+- Saviola's plugin repository version can be set in config file with
+  `defaultRepositoryVersion` property.
+
+#### haxroomie-core
+
+- Fixed running with no sandbox.
+
+#### 2.0.1
+
+##### haxroomie-cli
+
+- Fixed close command.
+
+## 2.0.0
 
 ### Potentially breaking changes
 
