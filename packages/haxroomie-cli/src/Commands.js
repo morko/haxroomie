@@ -129,7 +129,8 @@ class Commands extends CommandHandler {
             let roomLink = 'Link: ' + colors.cyan(r.roomInfo.roomLink);
             let maxPlayers = r.roomInfo.maxPlayers;
             let playerList = await r.callRoom('getPlayerList');
-            let playersLength = playerList.length - r.roomInfo.noPlayer ? 0 : 1;
+            let playersLength =
+              playerList.length - (r.roomInfo.noPlayer ? 0 : 1);
             let players = colors.cyan(playersLength + '/' + maxPlayers);
             let amountOfPlayers = `Players: ${players}`;
 
