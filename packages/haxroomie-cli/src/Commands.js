@@ -313,7 +313,13 @@ class Commands extends CommandHandler {
       category: 'Room control',
       run: async msg => {
         if (!msg && msg !== 0) return;
-        await this.room.callRoom('sendChat', msg);
+        await this.room.callRoom(
+          'sendAnnouncement',
+          msg,
+          null,
+          0xffffff,
+          'bold'
+        );
       },
     };
   }
