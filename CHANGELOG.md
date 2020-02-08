@@ -1,5 +1,16 @@
 # Changelog
 
+### 2.2.0
+
+- Added `executablePath` to `Haxroomie` constructor and `--executablePath` to
+  `haxroomie-cli` to be able to set the path to chrome/chromium executable.
+
+#### haxroomie-cli
+
+- Fixed `rooms` command player count.
+- Use `sendAnnouncement` instead of `sendChat` with `chat` command so it works
+  without a host player.
+
 ### 2.1.0
 
 #### haxroomie-cli
@@ -28,12 +39,12 @@
 - Repository related methods are now organized under `RoomController.repositories`.
 - Plugin related methods are now organized under `RoomController.plugins`.
 - `RoomController.openRoom(config)` can throw `RoomIsRunningError` if called on
-room that is already running.
+  room that is already running.
 - RoomController `close-room` event got split into two events called
-`close-room-start` and `close-room-stop`.
+  `close-room-start` and `close-room-stop`.
 - RoomController `open-room-error` event was merged to `open-room-stop` and removed.
 - RoomController `open-room-start`, `open-room-start`, `close-room-start` and `close-room-stop`
-events send the error as first argument if one happens.
+  events send the error as first argument if one happens.
 
 ### New Features
 
@@ -50,9 +61,9 @@ events send the error as first argument if one happens.
 #### haxroomie-core
 
 - Ability to get repository information before opening a room with
-`RoomController.repositories.getRepositoryInformation(repository)`.
+  `RoomController.repositories.getRepositoryInformation(repository)`.
 - Support the new HHM `repository.json` definiton for faster loading
-times.
+  times.
 
 ### Fixed Bugs
 
@@ -64,7 +75,7 @@ times.
 #### haxroomie-core
 
 - Fixed race condition that happened when adding multiple rooms into haxroomie
-"simultaniously". The rooms might have got the same page to control.
+  "simultaniously". The rooms might have got the same page to control.
 - Fixed loading of local repositories in windows.
 - Starting of room should now fail immediately if hhm cannot be loaded.
 
@@ -91,7 +102,7 @@ times.
 - In API the `RoomController.openRoom` method now throws an Error if it fails to open the room.
 - The API of `RoomController` has changed so that now the methods can throw bunch of custom errors for better error handling. Please review the new API at [documentation website](https://morko.github.io/haxroomie/RoomController.html).
 
-\* *`~` is a shorthand for users home directory in Linux*
+\* _`~` is a shorthand for users home directory in Linux_
 
 #### Migration guide from 1.0.x => 1.1.0
 
@@ -135,7 +146,7 @@ times.
 
 - if `RoomController.openRoom` failed the room might still be left open
 - updated `RoomController` documentation and added documentation for missing properties
-- do not close the page on ´open-room-error` when `NODE_ENV === development'
+- do not close the page on ´open-room-error`when`NODE_ENV === development'
 
 #### 1.0.7
 
@@ -146,7 +157,7 @@ times.
 ##### Fixed bugs (CLI)
 
 - Fixed hiding the unuseful error messages at startup.
- 
+
 #### 1.0.5
 
 ##### Fixed bugs (CLI)
