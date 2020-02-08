@@ -18,6 +18,7 @@ class HRConsoleApp {
 
     this.configPath = opt.config;
     this.userDataDir = opt.userDataDir;
+    this.executablePath = opt.executablePath;
     this.noSandbox = opt.noSandbox;
     this.headless = Object.prototype.hasOwnProperty.call(opt, 'window')
       ? !opt.window
@@ -33,6 +34,7 @@ class HRConsoleApp {
   async start() {
     this.haxroomie = await createHaxroomie({
       userDataDir: this.userDataDir,
+      executablePath: this.executablePath,
       noSandbox: this.noSandbox,
       headless: this.headless,
       port: this.port,

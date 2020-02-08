@@ -52,6 +52,7 @@ class Haxroomie extends EventEmitter {
    *    root directory]/user-data-dir.
    * @param {boolean} [options.timeout=30] - How long to wait for a room to open
    *    before failing.
+   * @param {string} [options.executablePath] - Path to chrome launcher.
    */
   constructor({
     viewport = { width: 400, height: 500 },
@@ -60,6 +61,7 @@ class Haxroomie extends EventEmitter {
     headless = true,
     userDataDir = path.join(__dirname, '..', 'user-data-dir'),
     timeout = 30,
+    executablePath,
   } = {}) {
     super();
     this.browser = null;
@@ -75,6 +77,9 @@ class Haxroomie extends EventEmitter {
     this.userDataDir = userDataDir;
     this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
     this.timeout = timeout;
+    this.executablePath = executablePath
+      ? path.resolve(process.cwd(), executablePath)
+      : undefined;
   }
 
   /**
@@ -97,12 +102,15 @@ class Haxroomie extends EventEmitter {
       browserArgs.push('--disable-setuid-sandbox');
     }
 
-    this.browser = await puppeteer.launch({
+    let launchOptions = {
       headless: this.headless,
       devtools: !this.headless,
       userDataDir: this.userDataDir,
       args: browserArgs,
-    });
+    };
+    if (this.executablePath) launchOptions.executablePath = this.executablePath;
+
+    this.browser = await puppeteer.launch(launchOptions);
     return this.browser;
   }
 

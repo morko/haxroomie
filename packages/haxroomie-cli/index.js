@@ -39,6 +39,9 @@ const argv = require(`yargs`)
   )
   .default(`user-data-dir`, path.join(configDir, 'user-data-dir'))
 
+  .alias(`e`, `executable-path`)
+  .describe(`executable-path`, `Path to chrome browser executable.`)
+
   .alias(`t`, `timeout`)
   .describe(
     `timeout`,
@@ -64,6 +67,7 @@ if (argv.version) {
 }
 
 argv.noSandbox = argv.noSandbox || process.env.HR_NO_SANDBOX;
+argv.executablePath = argv.executablePath || process.env.HR_EXECUTABLE_PATH;
 argv.headless = !argv.window || process.env.HR_WINDOW;
 argv.port = argv.port || process.env.HR_PORT;
 
