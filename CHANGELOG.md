@@ -2,6 +2,12 @@
 
 ### 2.2.0
 
+#### haxroomie-cli
+
+- Fixed config skeleton path that prevented haxroomie-cli running for the first time if ~/.haxroomie/config.js did not exist.
+
+### 2.2.1
+
 - Added `executablePath` to `Haxroomie` constructor and `--executablePath` to
   `haxroomie-cli` to be able to set the path to chrome/chromium executable.
 
