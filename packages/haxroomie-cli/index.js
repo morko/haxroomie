@@ -10,8 +10,6 @@ const { logger } = require('haxroomie-core');
 const configDir = path.join(os.homedir(), '.haxroomie');
 const configSkeleton = path.join(
   __dirname,
-  '..',
-  '..',
   'examples',
   'configs',
   '1-private-room.js'
