@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const deepEqual = require('deep-equal');
-const cprompt = require('./cprompt');
+const commandPrompt = require('./command-prompt');
 
 /**
  * Object containing information about reloaded config.
@@ -83,13 +83,13 @@ class Config {
    *    current working directory.
    */
   load(configPath) {
-    cprompt.print(`from ${configPath}`, 'LOADING CONFIG');
+    commandPrompt.print(`from ${configPath}`, 'LOADING CONFIG');
 
     let config;
     try {
       config = require(configPath);
     } catch (err) {
-      cprompt.print(`Could not load the config: ${configPath}`, 'ERROR');
+      commandPrompt.print(`Could not load the config: ${configPath}`, 'ERROR');
       throw err;
     }
 
@@ -250,7 +250,7 @@ class Config {
    */
   loadFile(filePath) {
     if (!fs.existsSync(filePath)) {
-      cprompt.print(`No such file: ${filePath}`, 'ERROR');
+      commandPrompt.print(`No such file: ${filePath}`, 'ERROR');
       return;
     }
     let modifiedTime = fs.statSync(filePath).mtimeMs;

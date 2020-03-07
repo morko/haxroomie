@@ -40,6 +40,7 @@ const COLORS = {
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
+  terminal: false,
 });
 
 let cmd = null;
@@ -62,17 +63,17 @@ function setPrompt(prompt) {
 }
 
 /**
- * Sets the current command handler.
- * @param {CommandHandler} commands - Object that contains commands.
+ * Sets the command manager.
+ * @param {CommandManager} commands - Object that handles parsing user input
+ *    and exection of commands.
  */
-function setCommands(commands) {
-  cmd = commands;
+function setCommandManager(commandManager) {
+  cmd = commandManager;
 }
 
 /**
  * Asks user a question.
  * @param {string} question - Question to ask.
- * @param {function} cb - Callback that receives the answer.
  */
 async function question(question) {
   let answer = await new Promise(resolve => {
@@ -178,11 +179,10 @@ async function onNewLine(line) {
 
     logger.debug(err.stack);
   }
-  createPrompt();
 }
 
 module.exports = {
-  setCommands,
+  setCommandManager,
   setPrompt,
   print,
   error,
