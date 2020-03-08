@@ -5,7 +5,6 @@ const AdminCommands = require('./handlers/AdminCommands');
 const CoreCommands = require('./handlers/CoreCommands');
 const KickBanCommands = require('./handlers/KickBanCommands');
 const PluginCommands = require('./handlers/PluginCommands');
-const RoleCommands = require('./handlers/RoleCommands');
 
 /**
  * Class to manage CommandHandler instances.
@@ -32,7 +31,7 @@ class CommandManager {
       new CoreCommands({ roomContext: this.roomContext }),
       new KickBanCommands({ roomContext: this.roomContext }),
       new PluginCommands({ roomContext: this.roomContext }),
-      new RoleCommands({ roomContext: this.roomContext }),
+      //new RoleCommands({ roomContext: this.roomContext }),
     ];
     this.handlers = await this.validateHandlers(handlers);
   }
