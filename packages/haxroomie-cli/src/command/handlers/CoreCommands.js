@@ -276,7 +276,9 @@ class CoreCommands extends CommandHandler {
             playerString += ' ' + colors.green('admin');
           }
           playerString += `\n  id: ${player.id}`;
-          playerString += `\n  auth: ${player.auth}`;
+          if (player.auth) {
+            playerString += `\n  auth: ${player.auth}`;
+          }
 
           try {
             let roles = await this.room.roles.getPlayerRoles(player.id);
