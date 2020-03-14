@@ -10,7 +10,32 @@ haxroomie-cli is a tool to run and control HaxBall rooms from a Command Line Int
 - [Changelog](https://github.com/morko/haxroomie/tree/master/CHANGELOG.md#changelog)
 - [Discord server for haxroomie](https://discord.gg/TeJAEWu)
 
-## Installing
+## Quick Start
+
+**Installation script is tested only on Ubuntu 18.04 but it should work on Debian based distributions. Use at your own risk!**
+
+The installation script `creates an user` for running haxroomie-cli, installs `Node.js` (with nvm),
+`dependencies for chromium browser` and `screen` to keep haxroomie-cli running when not connected to the server.
+
+Run the installation script as root or with sudo.
+
+```
+bash <(curl -s https://raw.githubusercontent.com/morko/haxroomie/master/scripts/install-haxroomie-cli-debian.sh)
+```
+
+Start haxroomie in a screen session (kinda like window manager for terminal) with the newly created user.
+
+```
+su - haxroomie
+screen -S haxroomie
+haxroomie
+```
+
+To detach the screen (return to "main terminal window") press `ctrl-a d` and then you can exit the session and keep the room running.
+
+By default `haxroomie-cli` will start one private room with the default config. You can edit the config in `~/.haxroomie/config.js`. See [config file documentation](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html) for information about the config file.
+
+## Manual Install
 
 If you are new with Node.js applications see the [step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-install.html).
 
