@@ -1,12 +1,23 @@
 # Changelog
 
-### 2.2.0
+### 2.3.0
 
 #### haxroomie-cli
 
+- Fixed `players` command displaying wrong amount of players
+- Reintroduced `eval` command
+
+#### haxroomie-core
+
+- Added `--disable-features=WebRtcHideLocalIpsWithMdns` to fix connection problems with chrome versions 78 or greater. See https://github.com/haxball/haxball-issues/wiki/Headless-Host#connectivity-warning.
+
+#### 2.2.1
+
+##### haxroomie-cli
+
 - Fixed config skeleton path that prevented haxroomie-cli running for the first time if ~/.haxroomie/config.js did not exist.
 
-### 2.2.1
+### 2.2.0
 
 - Added `executablePath` to `Haxroomie` constructor and `--executablePath` to
   `haxroomie-cli` to be able to set the path to chrome/chromium executable.
