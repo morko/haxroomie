@@ -96,7 +96,11 @@ class Haxroomie extends EventEmitter {
 
     browserLock = true;
 
-    let browserArgs = [`--remote-debugging-port=${this.port}`];
+    let browserArgs = [
+      `--remote-debugging-port=${this.port}`,
+      `--disable-features=WebRtcHideLocalIpsWithMdns`,
+    ];
+
     if (this.noSandbox) {
       browserArgs.push('--no-sandbox');
       browserArgs.push('--disable-setuid-sandbox');
