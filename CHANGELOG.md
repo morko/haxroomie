@@ -1,5 +1,11 @@
 # Changelog
 
+### 2.3.1
+
+#### haxroomie-cli
+
+- Fixed `--no-sandbox` command line option
+
 ### 2.3.0
 
 #### haxroomie-cli
