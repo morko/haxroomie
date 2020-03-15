@@ -14,8 +14,13 @@ haxroomie-cli is a tool to run and control HaxBall rooms from a Command Line Int
 
 **Installation script is tested only on Ubuntu 18.04 but it should work on Debian based distributions. Use at your own risk!**
 
-The installation script `creates an user` for running haxroomie-cli, installs `Node.js` (with nvm),
-`dependencies for chromium browser` and `screen` to keep haxroomie-cli running when not connected to the server.
+The installation script
+
+- creates `an user` for running haxroomie-cli (default: `haxroomie`)
+- installs `Node.js` (with nvm)
+- installs `dependencies for chromium browser` and
+- installs `tmux` to keep haxroomie-cli running when not connected to the server
+- creates a `startup script` that automatically switches to the haxroomie user and starts/resumes haxroomie-cli in a `tmux` session.
 
 Run the installation script as root or with sudo.
 
@@ -23,21 +28,19 @@ Run the installation script as root or with sudo.
 bash <(curl -s https://raw.githubusercontent.com/morko/haxroomie/master/scripts/install-haxroomie-cli-debian.sh)
 ```
 
-Start haxroomie in a screen session (kinda like window manager for terminal) with the newly created user.
+Start haxroomie.
 
 ```
-su - haxroomie
-screen -S haxroomie
 haxroomie
 ```
 
-To detach the screen (return to "main terminal window") press `ctrl-a d` and then you can exit the session and keep the room running.
+Once you have your rooms running you can use the `min` command "minimize" haxroomie and haxroomie will keep running on background.
 
-By default `haxroomie-cli` will start one private room with the default config. You can edit the config in `~/.haxroomie/config.js`. See [config file documentation](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html) for information about the config file.
+Read [CLI usage](#cli-usage) for usage instructions and how to add more rooms.
 
 ## Manual Install
 
-If you are new with Node.js applications see the [step-by-step installation tutorial for beginners](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-install.html).
+If you do not wish to use the installation script you can only install the `haxroomie-cli` package from npm.
 
 **Prerequisites:**
 
@@ -48,7 +51,9 @@ If you are new with Node.js applications see the [step-by-step installation tuto
 
 Use [nvm (Node Virtual Manager)](https://github.com/nvm-sh/nvm) to install Node.js or see
 [this guide](https://medium.com/@sifium/using-npm-install-without-sudo-2de6f8a9e1a3)
-to configure your npm properly! Installing wont work if your user does not have permissions for the global npm installation directory.
+to configure your npm properly!
+
+Install wont work if your user does not have permissions for the global npm installation directory.
 
 To install haxroomie-cli run:
 
@@ -65,7 +70,7 @@ sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 l
 To start the interactive CLI run:
 
 ```sh
-haxroomie
+haxroomie-cli
 ```
 
 If you get an error like _"Failed to launch Chrome"_, it is possible that you are missing some libraries that the headless Chrome depend on.
@@ -79,7 +84,7 @@ Please see the
 [CHANGELOG](https://github.com/morko/haxroomie/tree/master/CHANGELOG.md#changelog)
 before updating to watch out for any breaking updates!
 
-To update to latest release run the install command again:
+To update to latest release:
 
 ```
 npm install haxroomie-cli -g

@@ -7,7 +7,7 @@
 # The script must be ran as root or with sudo!
 #
 # Creates an user for running haxroomie-cli, installs Node.js (with nvm), 
-# dependencies for chromium browser and screen to keep haxroomie-cli running
+# dependencies for chromium browser and tmux to keep haxroomie-cli running
 # when not connected to the server.
 #
 # The original script was drafted by saviola777 and is available at
@@ -83,14 +83,14 @@ fi
 egrep "^$USERNAME" /etc/passwd >/dev/null
 
 if [ $? -eq 0 ]; then
-  echo -e "\e[32mUser $USERNAME already exists!\e[0m"
+  echo -e "\n\e[32mUser $USERNAME already exists!\e[0m"
   if [ "$NO_CONFIRM" = false ]; then
     confirm_continue
   fi
 else
-  adduser $USERNAME
+  adduser $USERNAME --gecos "First Last,RoomNumber,WorkPhone,HomePhone"
   if [ $? -eq 0 ]; then
-    echo "\e[32mUser $USERNAME has been added to system!\e[0m"
+    echo -e "\e[32mUser $USERNAME has been added to system!\e[0m"
   else
     echo -e "\e[31mERROR: Failed to add user!\e[0m"
     exit 1
@@ -106,7 +106,7 @@ if ! which curl > /dev/null; then
 fi
 
 echo -e "\n\e[32mInstalling dependencies for chromium browser...\e[0m"
-apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget screen
+apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget tmux
 
 if ! command -v nvm > /dev/null; then
   echo -e "\n\e[32mInstalling nvm (Node Version Manager)...\e[0m"
@@ -138,5 +138,24 @@ if ! [ $? -eq 0 ]; then
   exit 1
 fi
 
+echo -e "\n\e[32mCreating startup script...\e[0m"
+cat <<EOF > /usr/local/bin/haxroomie
+export ARGS="\$@"
+
+if [ "\$(whoami)" = "$USERNAME" ]; then
+  tmux new-session -A -s haxroomie bash -c \\
+  "haxroomie-cli \$ARGS; echo; read -s -p \"Press enter to exit.\""
+else
+  su $USERNAME -c \\
+  'source ~$USERNAME/.nvm/nvm.sh && \\
+  tmux new-session -A -s haxroomie bash -c \\
+  "haxroomie-cli \$ARGS; echo; read -s -p \"Press enter to exit.\""'
+fi
+EOF
+chmod 755 /usr/local/bin/haxroomie
+
 echo -e "\n\e[32mHaxroomie-cli installed!\e[0m"
-echo -e "See https://github.com/morko/haxroomie/packages/haxroomie-cli#quick-start for usage instructions.\e[0m"
+
+echo -e "\n\e[32mFor usage instructions go to\e[0m"
+echo -e "https://github.com/morko/haxroomie/tree/master/packages/haxroomie-cli#cli-usage"
+echo ""

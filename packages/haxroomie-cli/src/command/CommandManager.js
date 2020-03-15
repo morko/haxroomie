@@ -3,6 +3,7 @@ const colors = require('colors/safe');
 const commandPrompt = require('../command-prompt');
 const AdminCommands = require('./handlers/AdminCommands');
 const CoreCommands = require('./handlers/CoreCommands');
+const BaseCommands = require('./handlers/BaseCommands');
 const KickBanCommands = require('./handlers/KickBanCommands');
 const PluginCommands = require('./handlers/PluginCommands');
 
@@ -27,8 +28,9 @@ class CommandManager {
 
   async init() {
     const handlers = [
-      new AdminCommands({ roomContext: this.roomContext }),
       new CoreCommands({ roomContext: this.roomContext }),
+      new BaseCommands({ roomContext: this.roomContext }),
+      new AdminCommands({ roomContext: this.roomContext }),
       new KickBanCommands({ roomContext: this.roomContext }),
       new PluginCommands({ roomContext: this.roomContext }),
       //new RoleCommands({ roomContext: this.roomContext }),
