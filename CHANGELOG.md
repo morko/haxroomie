@@ -1,5 +1,29 @@
 # Changelog
 
+## 2.4.0
+
+### Potentially breaking changes
+
+The new installer creates a global startup script called `haxroomie`.
+This name overlaps with the old haxroomie-cli command.
+
+If you already have haxroomie installed and want to use the new installation script
+it is preferable to uninstall the old version first with
+
+```
+npm uninstall haxroomie-cli -g
+```
+
+or rename the `haxroomie` command into `haxroomie-cli`.
+
+### haxroomie-cli
+
+- Easier installation with a script
+- Automatically starts haxroomie in tmux session if installed using the
+  installation script. There is now also a `min` command when haxroomie
+  is running to detach from the tmux session. This helps new users
+  so they do not have to bother learning `screen` or `tmux`.
+
 ### 2.3.1
 
 #### haxroomie-cli
