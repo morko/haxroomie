@@ -30,5 +30,6 @@
     "haxroomie-core": "^2.3.0",
     "lockfile": "^1.0.4",
     "yargs": "^12.0.5"
-  }
+  },
+  "gitHead": "b773af539d9782d9376ca72bf2b4e0732f608d01"
 }
