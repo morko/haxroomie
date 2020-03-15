@@ -146,7 +146,7 @@ if [ "\$(whoami)" = "$USERNAME" ]; then
   tmux new-session -A -s haxroomie bash -c \\
   "haxroomie-cli \$ARGS; echo; read -s -p \"Press enter to exit.\""
 else
-  cd / \\
+  cd / && \\
   su $USERNAME -c \\
   'source ~$USERNAME/.nvm/nvm.sh && \\
   tmux new-session -A -s haxroomie bash -c \\
