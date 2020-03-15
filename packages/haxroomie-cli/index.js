@@ -33,7 +33,7 @@ const argv = require(`yargs`)
   .alias(`d`, `user-data-dir`)
   .describe(
     `user-data-dir`,
-    `Path to where browser should store ` + `the data like localStorage.`
+    `Path to where browser should store the data like LocalStorage.`
   )
   .default(`user-data-dir`, path.join(configDir, 'user-data-dir'))
 
@@ -49,11 +49,7 @@ const argv = require(`yargs`)
   .default(`timeout`, 40)
 
   .boolean(`no-sandbox`)
-  .describe(
-    `no-sandbox`,
-    `Makes chrome run without sandbox (useful only if ` +
-      `running with sandbox wont work in your machine)`
-  )
+  .describe(`no-sandbox`, `Runs headless Chrome without sandboxing.`)
 
   .alias(`w`, `window`)
   .boolean(`window`)
@@ -64,7 +60,8 @@ if (argv.version) {
   process.exit(0);
 }
 
-argv.noSandbox = argv.noSandbox || process.env.HR_NO_SANDBOX;
+// yargs saves --no-sandbox as argv.sandbox = false
+argv.noSandbox = argv.sandbox === false || process.env.HR_NO_SANDBOX;
 argv.executablePath = argv.executablePath || process.env.HR_EXECUTABLE_PATH;
 argv.headless = !argv.window || process.env.HR_WINDOW;
 argv.port = argv.port || process.env.HR_PORT;
