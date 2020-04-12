@@ -59,7 +59,6 @@ HHM.config.postInit = HBInit => {
 
   // Load the additional `plugins` outside of repositories.
   if (hrConfig.plugins && Array.isArray(hrConfig.plugins)) {
-    console.log(hrConfig);
     for (let plugin of hrConfig.plugins) {
       window.HHM.manager.addPlugin({
         pluginCode: plugin.content,
@@ -86,7 +85,7 @@ HHM.config.postInit = HBInit => {
 
   room.onRoomLink = () => {
     // This tells Haxroomie that HHM has fully loaded.
-    window.hroomie.hhmStarted = true;
+    window.haxroomie.hhmStarted = true;
   };
 };
 

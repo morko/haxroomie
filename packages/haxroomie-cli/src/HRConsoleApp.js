@@ -7,6 +7,12 @@ const Config = require('./Config');
 const commandPrompt = require('./command-prompt');
 const { logger } = require('haxroomie-core');
 
+const loglevels = {
+  error: 0,
+  warn: 1,
+  info: 2,
+};
+
 /**
  * Class for managing RoomController instances.
  */
@@ -25,10 +31,16 @@ class HRConsoleApp {
       : true;
     this.port = opt.port;
     this.timeout = opt.timeout || 30;
+    this.loglevel =
+      loglevels[opt.loglevel] !== undefined
+        ? loglevels[opt.loglevel]
+        : loglevels.warn;
 
     this.config = null;
     this.currentRoom = null;
     this.roomEventHandler = null;
+
+    this.onStartupLog = this.onStartupLog.bind(this);
   }
 
   async start() {
@@ -139,6 +151,9 @@ class HRConsoleApp {
     await commandManager.init();
     return commandManager;
   }
+  logPrefix(room) {
+    return `[${colors.cyan(room.id)}] [${new Date().toLocaleString()}]`;
+  }
 
   /**
    * Called when a new room is added to haxroomie.
@@ -156,8 +171,33 @@ class HRConsoleApp {
     room.on(`page-closed`, room => this.onPageClosed(room));
     room.on(`page-crash`, err => commandPrompt.error(err));
     room.on(`page-error`, err => commandPrompt.error(err));
-    room.on(`error-logged`, errMsg => commandPrompt.error(errMsg));
-    room.on(`warning-logged`, errMsg => commandPrompt.warn(errMsg));
+
+    // Set listening for the log events only if we are not in development
+    // mode, because it will log anything to stdout anyways.
+    if (process.env.NODE_ENV !== 'development') {
+      room.on(`error-logged`, msg => {
+        commandPrompt.print(
+          `${this.logPrefix(room)} ${msg}`,
+          'BROWSER LOG ERROR'
+        );
+      });
+      if (this.loglevel >= loglevels.warn) {
+        room.on(`warning-logged`, msg => {
+          commandPrompt.print(
+            `${this.logPrefix(room)} ${msg}`,
+            'BROWSER LOG WARN'
+          );
+        });
+      }
+      if (this.loglevel >= loglevels.info) {
+        room.on(`info-logged`, msg => {
+          commandPrompt.print(
+            `${this.logPrefix(room)} ${msg}`,
+            'BROWSER LOG INFO'
+          );
+        });
+      }
+    }
   }
 
   /**
@@ -174,12 +214,14 @@ class HRConsoleApp {
     room.removeAllListeners(`page-error`);
     room.removeAllListeners(`error-logged`);
     room.removeAllListeners(`warning-logged`);
+    room.removeAllListeners(`info-logged`);
   }
 
   onStartupLog(msg) {
-    const msgPrefix = '[INFO HHM]:  ';
-    const parsedMsg = msg.slice(msgPrefix.length);
-    commandPrompt.print(parsedMsg, 'BOOTSTRAP');
+    commandPrompt.print(
+      `${this.logPrefix(this.currentRoom)} ${msg}`,
+      'BOOTSTRAP'
+    );
   }
 
   onOpenRoomStart(err, room) {
@@ -187,7 +229,10 @@ class HRConsoleApp {
       commandPrompt.print(`Could not start room ${room.id}`, `ERROR`);
       return;
     }
-    if (process.env.NODE_ENV !== 'development') {
+    if (
+      process.env.NODE_ENV !== 'development' &&
+      this.loglevel < loglevels.info
+    ) {
       room.on('info-logged', this.onStartupLog);
     }
 

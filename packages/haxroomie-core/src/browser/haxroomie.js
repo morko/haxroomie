@@ -1,17 +1,19 @@
+/* global haxroomieSendBrowserAction */
 /**
  * This module contains utility/helper functions that should be loaded to the
  * browser context before loading the HHM config.
  */
-window.hroomie = window.hroomie || {};
+window.haxroomie = window.haxroomie || {};
 
 Object.assign(
-  window.hroomie,
+  window.haxroomie,
   (function() {
     return {
       isObject,
       mergeDeep,
       callRoom,
       serializePlugin,
+      send,
     };
 
     /**
@@ -32,7 +34,6 @@ Object.assign(
      */
     function mergeDeep(target, ...sources) {
       if (!sources.length) return target;
-      const isObject = window.hroomie.isObject;
       const source = sources.shift();
 
       if (isObject(target) && isObject(source)) {
@@ -103,6 +104,29 @@ Object.assign(
       };
 
       return pluginData;
+    }
+
+    /**
+     * Sends an action (data) to the main context.
+     *
+     * The action object should be in flux standard action format
+     * (https://github.com/redux-utilities/flux-standard-action).
+     *
+     * Recognized types:
+     *
+     * - LOG
+     *   - payload: { msg: String }
+     * - HHM_EVENT
+     *   - payload: { eventType: String }
+     * - ROOM_EVENT
+     *   - payload: { handlerName: String, args: Array }
+     *   - See BrowserAction type in RoomController for definition of the
+     *     payload.
+     *
+     * @param {BrowserAction} action - Data to be sent to the main context.
+     */
+    function send(action) {
+      haxroomieSendBrowserAction(action);
     }
   })()
 );

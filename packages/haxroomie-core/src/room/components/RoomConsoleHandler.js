@@ -19,75 +19,91 @@ class RoomErrorHandler {
   }
 
   /**
+   * Parses the message from ConsoleMessage into strings.
+   * @param {ConsoleMessage} consoleMessage - Puppeteer ConsoleMessage object.
+   * @return {Array<string>} - Parsed messages in array.
+   */
+  async parseConsoleMessage(consoleMessage) {
+    let messages = [];
+    let everyMessageWasString = true;
+    for (let jsHandle of consoleMessage.args()) {
+      if (jsHandle._remoteObject.type === 'object') {
+        everyMessageWasString = false;
+        if (jsHandle._remoteObject.subtype === 'error') {
+          messages.push(jsHandle._remoteObject.description);
+        } else {
+          let jsonValue = await jsHandle.jsonValue();
+          messages.push('Object: \n' + JSON.stringify(jsonValue, null, 2));
+        }
+      } else if (jsHandle._remoteObject.type === 'string') {
+        messages.push(jsHandle._remoteObject.value);
+      }
+    }
+    if (messages.length < 1) return [consoleMessage.text()];
+    if (everyMessageWasString) {
+      return [messages.join(' ')];
+    }
+    return messages;
+  }
+
+  /**
    * Handle the `console` event from Puppeteer.
    */
-  handleConsole(msg) {
-    if (msg.type() === 'error') {
-      this.handleConsoleError(msg);
-    } else if (msg.type() === 'warning') {
-      this.handleConsoleWarning(msg);
+  async handleConsole(consoleMessage) {
+    if (this.isIgnoredConsoleMessage(consoleMessage)) {
+      return;
+    }
+    let messages = await this.parseConsoleMessage(consoleMessage);
+    if (messages.length < 1) return;
+
+    if (consoleMessage.type() === 'error') {
+      this.handleConsoleError(messages);
+    } else if (consoleMessage.type() === 'warning') {
+      this.handleConsoleWarning(messages);
     } else {
-      this.handleConsoleLog(msg);
+      this.handleConsoleLog(messages);
     }
   }
   /**
    * Handle console messages of type `error`.
    * @emits RoomController#error-logged
    */
-  handleConsoleError(msg) {
-    if (this.ignoreConsoleMsg(msg)) {
-      return;
+  async handleConsoleError(messages) {
+    for (let msg of messages) {
+      this.emit('error-logged', msg);
+      logger.debug(
+        `[${colors.cyan(this.roomId)}] [${colors.red('ERROR')}] ${msg}`
+      );
     }
-
-    let logMsg = '';
-    for (let jsHandle of msg.args()) {
-      if (jsHandle._remoteObject.type === 'object') {
-        logMsg += jsHandle._remoteObject.description;
-      }
-    }
-    if (!logMsg) logMsg = msg.text();
-    if (!logMsg) return;
-
-    this.emit('error-logged', logMsg);
-    logger.debug(
-      `[${colors.cyan(this.roomId)}] [${colors.red('ERROR')}] ${logMsg}`
-    );
   }
 
   /**
    * Handle console messages of type `warning`.
    * @emits RoomController#warning-logged
    */
-  handleConsoleWarning(msg) {
-    if (this.ignoreConsoleMsg(msg)) {
-      return;
+  async handleConsoleWarning(messages) {
+    for (let msg of messages) {
+      this.emit('warning-logged', msg);
+      logger.debug(
+        `[${colors.cyan(this.roomId)}] [${colors.yellow('WARNING')}] ${msg}`
+      );
     }
-
-    let logMsg = msg.text();
-    if (!logMsg) return;
-
-    this.emit('warning-logged', logMsg);
-    logger.debug(
-      `[${colors.cyan(this.roomId)}] ` +
-        `[${colors.yellow('WARNING')}] ${logMsg}`
-    );
   }
 
   /**
    * Handle console messages that are not warnings or errors.
    * @emits RoomController#info-logged
    */
-  handleConsoleLog(msg) {
-    let logMsg = msg.text();
-    if (!logMsg) return;
-    this.emit('info-logged', logMsg);
-    logger.debug(
-      `[${colors.cyan(this.roomId)}] ` +
-        `[${colors.green('INFO')}] ${msg.text()}`
-    );
+  handleConsoleLog(messages) {
+    for (let msg of messages) {
+      this.emit('info-logged', msg);
+      logger.debug(
+        `[${colors.cyan(this.roomId)}] [${colors.green('INFO')}] ${msg}`
+      );
+    }
   }
 
-  ignoreConsoleMsg(msg) {
+  isIgnoredConsoleMessage(msg) {
     const text = msg.text();
 
     // ignore the errors that happen during loading plugins

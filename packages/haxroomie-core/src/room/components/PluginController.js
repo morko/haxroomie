@@ -1,3 +1,4 @@
+/* global haxroomie */
 /**
  * Object containing HHM plugin name and content.
  *
@@ -34,12 +35,12 @@ class PluginController {
     let result = await this.page.evaluate(() => {
       let plugins = HHM.manager
         .getLoadedPluginIds()
-        .map(id => hroomie.serializePlugin(id))
+        .map(id => haxroomie.serializePlugin(id))
         .filter(pluginData => {
           const name = pluginData.pluginSpec.name;
           // ignore these plugins
-          if (!hroomie.ignoredPlugins) return true;
-          return !hroomie.ignoredPlugins.has(name);
+          if (!haxroomie.ignoredPlugins) return true;
+          return !haxroomie.ignoredPlugins.has(name);
         });
       return plugins;
     });
@@ -56,7 +57,7 @@ class PluginController {
   async getPlugin(name) {
     return this.page.evaluate(name => {
       const plugin = HHM.manager.getPlugin(name);
-      return hroomie.serializePlugin(plugin);
+      return haxroomie.serializePlugin(plugin);
     }, name);
   }
 
@@ -111,7 +112,7 @@ class PluginController {
       (name, recursive, includeDisabled) => {
         return HHM.manager
           .getDependentPlugins(name, recursive, includeDisabled)
-          .map(id => hroomie.serializePlugin(id));
+          .map(id => haxroomie.serializePlugin(id));
       },
       name,
       recursive,

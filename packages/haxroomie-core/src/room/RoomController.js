@@ -47,6 +47,23 @@ const { stringify } = require('../utils');
  */
 
 /**
+ * Data object sent from the browser context.
+ *
+ * Used internally to communicate with the headless browser.
+ *
+ * Follows the flux standard action form loosely.
+ * See (https://github.com/redux-utilities/flux-standard-action).
+ *
+ * @typedef {Object} BrowserAction
+ * @property {string} type - The type of data identifies to the consumer the
+ *    nature of the data that was sent.
+ * @property {any} [payload] - The optional payload property MAY be any type
+ *    of value.
+ * @property {boolean} [error] - The optional error property MAY be set to true
+ *    if the data represents an error.
+ */
+
+/**
  * Represents a file.
  *
  * @typedef {Object} File
@@ -211,8 +228,7 @@ class RoomController extends EventEmitter {
     this.roomOpener = new RoomOpener({
       id: this.id,
       page: this.page,
-      onRoomEvent: eventArgs => this.onRoomEvent(eventArgs),
-      onHHMEvent: eventArgs => this.onHHMEvent(eventArgs),
+      onBrowserAction: data => this.onBrowserAction(data),
       timeout: this.timeout,
     });
 
@@ -364,41 +380,48 @@ class RoomController extends EventEmitter {
   }
 
   /**
-   * This function gets called from browser when a registered roomObject event
-   * happens.
+   * This function gets called when the browser wants to send data to the
+   * main context.
    *
-   * @param {RoomEventArgs} eventArgs - Event arguments.
+   * @param {BrowserAction} action - Event arguments.
    * @emits RoomController#room-event
+   * @emits RoomController#
    * @private
    */
-  async onRoomEvent(eventArgs) {
-    this.emit('room-event', eventArgs);
+  async onBrowserAction(action) {
+    switch (action.type) {
+      case 'HHM_EVENT':
+        this.handleHhmEvent;
+        break;
+      case 'ROOM_EVENT':
+        this.emit('room-event', action.payload);
+        break;
+    }
   }
 
   /**
-   * This function gets called from browser when a registered HHM event
-   * happens.
+   * Handles the HHM_EVENT action type sent from browser context.
    *
-   * @param {HHMEventArgs} eventArgs - Event arguments.
    * @emits RoomController#plugin-loaded
    * @emits RoomController#plugin-removed
    * @emits RoomController#plugin-enabled
    * @emits RoomController#plugin-disabled
+   * @param {BrowserAction} action - Data sent from browser.
    * @private
    */
-  async onHHMEvent(eventArgs) {
-    switch (eventArgs.eventType) {
+  handleHhmEvent(action) {
+    switch (action.payload.eventType) {
       case `pluginLoaded`:
-        this.emit('plugin-loaded', eventArgs.pluginData);
+        this.emit('plugin-loaded', action.payload.pluginData);
         break;
       case `pluginRemoved`:
-        this.emit('plugin-removed', eventArgs.pluginData);
+        this.emit('plugin-removed', action.payload.pluginData);
         break;
       case `pluginEnabled`:
-        this.emit('plugin-enabled', eventArgs.pluginData);
+        this.emit('plugin-enabled', action.payload.pluginData);
         break;
       case `pluginDisabled`:
-        this.emit('plugin-disabled', eventArgs.pluginData);
+        this.emit('plugin-disabled', action.payload.pluginData);
         break;
     }
   }
@@ -608,7 +631,7 @@ class RoomController extends EventEmitter {
 
     let result = await this.page.evaluate(
       (fn, args) => {
-        return window.hroomie.callRoom(fn, ...args);
+        return window.haxroomie.callRoom(fn, ...args);
       },
       fn,
       args

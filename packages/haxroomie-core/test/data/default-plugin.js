@@ -1,3 +1,4 @@
+/* global haxroomie */
 /**
  * This a plugin for testing.
  */
@@ -8,6 +9,8 @@ room.pluginSpec = {
   author: `salamini`,
   version: `1.0.0`,
 };
+
+haxroomie.log('default plugin loaded...');
 
 // If there are no admins left in the room give admin to one of the remaining players.
 function updateAdmins() {
