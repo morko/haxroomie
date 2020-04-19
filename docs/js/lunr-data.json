@@ -196,6 +196,10 @@
           "given",
           "load",
           "lt;async&gt",
+          "merg",
+          "new",
+          "old",
+          "on",
           "plugin",
           "pluginconfig",
           "plugincontroller#setpluginconfig",
@@ -1761,7 +1765,7 @@
                               },
                               "PluginController.html#setPluginConfig": {
                                 "ref": "PluginController.html#setPluginConfig",
-                                "tf": 2.380952380952381
+                                "tf": 1.9230769230769231
                               },
                               "RepositoryController.html": {
                                 "ref": "RepositoryController.html",
@@ -2052,7 +2056,7 @@
                     },
                     "PluginController.html#setPluginConfig": {
                       "ref": "PluginController.html#setPluginConfig",
-                      "tf": 2.380952380952381
+                      "tf": 1.9230769230769231
                     },
                     "Haxroomie.html#removeRoom": {
                       "ref": "Haxroomie.html#removeRoom",
@@ -2155,7 +2159,7 @@
                   },
                   "PluginController.html#setPluginConfig": {
                     "ref": "PluginController.html#setPluginConfig",
-                    "tf": 2.380952380952381
+                    "tf": 1.9230769230769231
                   },
                   "PluginController.html#getPluginConfig": {
                     "ref": "PluginController.html#getPluginConfig",
@@ -2861,7 +2865,7 @@
               "docs": {
                 "PluginController.html#setPluginConfig": {
                   "ref": "PluginController.html#setPluginConfig",
-                  "tf": 2.380952380952381
+                  "tf": 1.9230769230769231
                 }
               }
             },
@@ -3192,7 +3196,7 @@
                     },
                     "PluginController.html#setPluginConfig": {
                       "ref": "PluginController.html#setPluginConfig",
-                      "tf": 7.142857142857142
+                      "tf": 5.769230769230769
                     },
                     "PluginController.html#getPluginConfig": {
                       "ref": "PluginController.html#getPluginConfig",
@@ -3249,7 +3253,7 @@
                       },
                       "PluginController.html#setPluginConfig": {
                         "ref": "PluginController.html#setPluginConfig",
-                        "tf": 7.142857142857142
+                        "tf": 7.6923076923076925
                       },
                       "PluginController.html#getPluginConfig": {
                         "ref": "PluginController.html#getPluginConfig",
@@ -4172,7 +4176,7 @@
                   },
                   "PluginController.html#setPluginConfig": {
                     "ref": "PluginController.html#setPluginConfig",
-                    "tf": 7.142857142857142
+                    "tf": 5.769230769230769
                   },
                   "PluginController.html#getPluginConfig": {
                     "ref": "PluginController.html#getPluginConfig",
@@ -4492,6 +4496,17 @@
           },
           "e": {
             "docs": {},
+            "r": {
+              "docs": {},
+              "g": {
+                "docs": {
+                  "PluginController.html#setPluginConfig": {
+                    "ref": "PluginController.html#setPluginConfig",
+                    "tf": 1.9230769230769231
+                  }
+                }
+              }
+            },
             "t": {
               "docs": {},
               "h": {
@@ -4584,7 +4599,7 @@
                     },
                     "PluginController.html#setPluginConfig": {
                       "ref": "PluginController.html#setPluginConfig",
-                      "tf": 2.380952380952381
+                      "tf": 1.9230769230769231
                     },
                     "RepositoryController.html#getRepositories": {
                       "ref": "RepositoryController.html#getRepositories",
@@ -4979,7 +4994,7 @@
                       },
                       "PluginController.html#setPluginConfig": {
                         "ref": "PluginController.html#setPluginConfig",
-                        "tf": 9.523809523809524
+                        "tf": 7.6923076923076925
                       },
                       "PluginController.html#getPluginConfig": {
                         "ref": "PluginController.html#getPluginConfig",
@@ -5430,7 +5445,7 @@
                             },
                             "PluginController.html#setPluginConfig": {
                               "ref": "PluginController.html#setPluginConfig",
-                              "tf": 27.38095238095238
+                              "tf": 26.923076923076923
                             },
                             "PluginController.html#getPluginConfig": {
                               "ref": "PluginController.html#getPluginConfig",
@@ -6101,6 +6116,10 @@
                   "ref": "PluginController.html#addPlugin",
                   "tf": 3.8461538461538463
                 },
+                "PluginController.html#setPluginConfig": {
+                  "ref": "PluginController.html#setPluginConfig",
+                  "tf": 1.9230769230769231
+                },
                 "RepositoryController.html#addRepository": {
                   "ref": "RepositoryController.html#addRepository",
                   "tf": 2.380952380952381
@@ -6355,6 +6374,37 @@
               }
             }
           },
+          "l": {
+            "docs": {},
+            "d": {
+              "docs": {
+                "PluginController.html#setPluginConfig": {
+                  "ref": "PluginController.html#setPluginConfig",
+                  "tf": 1.9230769230769231
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {
+              "PluginController.html#setPluginConfig": {
+                "ref": "PluginController.html#setPluginConfig",
+                "tf": 1.9230769230769231
+              },
+              "Haxroomie.html": {
+                "ref": "Haxroomie.html",
+                "tf": 2
+              },
+              "Haxroomie.html#launchBrowser": {
+                "ref": "Haxroomie.html#launchBrowser",
+                "tf": 3.125
+              },
+              "RoomController.html": {
+                "ref": "RoomController.html",
+                "tf": 1.3513513513513513
+              }
+            }
+          },
           "t": {
             "docs": {},
             "h": {
@@ -6378,22 +6428,6 @@
                     }
                   }
                 }
-              }
-            }
-          },
-          "n": {
-            "docs": {
-              "Haxroomie.html": {
-                "ref": "Haxroomie.html",
-                "tf": 2
-              },
-              "Haxroomie.html#launchBrowser": {
-                "ref": "Haxroomie.html#launchBrowser",
-                "tf": 3.125
-              },
-              "RoomController.html": {
-                "ref": "RoomController.html",
-                "tf": 1.3513513513513513
               }
             }
           },
@@ -6625,7 +6659,7 @@
               "docs": {
                 "PluginController.html#setPluginConfig": {
                   "ref": "PluginController.html#setPluginConfig",
-                  "tf": 4.761904761904762
+                  "tf": 3.8461538461538463
                 },
                 "RepositoryController.html#addRepository": {
                   "ref": "RepositoryController.html#addRepository",
@@ -6903,7 +6937,7 @@
           }
         }
       },
-      "length": 540
+      "length": 544
     },
     "corpusTokens": [
       "access",
@@ -7023,6 +7057,7 @@
       "lt;async&gt",
       "manag",
       "member",
+      "merg",
       "method",
       "modul",
       "module:haxroomi",
@@ -7033,6 +7068,7 @@
       "null",
       "number",
       "object",
+      "old",
       "on",
       "open",
       "openroom",
@@ -7311,7 +7347,7 @@
       "name": "setPluginConfig",
       "tags": "PluginController#setPluginConfig setPluginConfig",
       "summary": "",
-      "description": "Sets the rooms plugin config. Tries to load plugins that are not loaded from the available repositories and removes the loaded plugins that are not in the given config. If pluginName is given then only config for the given plugin is set."
+      "description": "Sets the rooms plugin config. Merges the new config with the old one. Tries to load plugins that are not loaded from the available repositories and removes the loaded plugins that are not in the given config. If pluginName is given then only config for the given plugin is set."
     },
     "PluginController.html#getPluginConfig": {
       "id": "PluginController.html#getPluginConfig",
