@@ -208,7 +208,7 @@ class PluginController {
   }
 
   /**
-   * Sets the rooms plugin config.
+   * Sets the rooms plugin config. Merges the new config with the old one.
    *
    * Tries to load plugins that are not loaded from the available
    * repositories and removes the loaded plugins that are not in the given
@@ -242,7 +242,12 @@ class PluginController {
               );
             }
           }
-          HHM.manager.setPluginConfig(pluginId, pluginConfig);
+          // merge the new config with old one
+          let plugin = HHM.manager.getPlugin(pluginName);
+          HHM.manager.setPluginConfig(pluginId, {
+            ...plugin.pluginSpec.config,
+            ...pluginConfig,
+          });
         },
         pluginName,
         pluginConfig
@@ -254,17 +259,20 @@ class PluginController {
     for (let [name, config] of Object.entries(pluginConfig)) {
       await this.page.evaluate(
         async (name, config) => {
-          const { manager } = HHM;
-
-          let pluginId = manager.getPluginId(name);
+          let pluginId = HHM.manager.getPluginId(name);
 
           if (pluginId < 0) {
-            pluginId = await manager.addPlugin({ pluginName: name });
+            pluginId = await HHM.manager.addPlugin({ pluginName: name });
             if (pluginId < 0) {
               return;
             }
           }
-          manager.setPluginConfig(pluginId, config);
+          // merge the new config with the old one
+          let plugin = HHM.manager.getPlugin(name);
+          HHM.manager.setPluginConfig(pluginId, {
+            ...plugin.pluginSpec.config,
+            ...config,
+          });
         },
         name,
         config
