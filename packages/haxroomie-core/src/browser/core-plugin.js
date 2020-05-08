@@ -1,8 +1,9 @@
+/* global haxroomie */
 /**
  * This is a Haxball Headless Manager plugin for Haxroomie that handles sending
  * the room events from browser to Haxroomie.
  *
- * Haxroomie exposes two functions as window.haxroomieOnRoomEvent
+ * Haxroomie exposes functions window.haxroomieOnRoomEvent
  * and window.haxroomieOnHHMEvent that can be used to send event data to
  * the Haxroomie from the browser context.
  */
@@ -19,7 +20,7 @@ room.pluginSpec = {
 };
 
 Object.assign(
-  window.hroomie,
+  window.haxroomie,
   (function() {
     /**
      * List of default roomObject event handlers that the plugin will send
@@ -77,7 +78,10 @@ Object.assign(
       // send roomObject events to the main context
       for (let handlerName of roomEventHandlers) {
         room[handlerName] = function(...args) {
-          window.haxroomieOnRoomEvent({ handlerName, args });
+          haxroomie.send({
+            type: 'ROOM_EVENT',
+            payload: { handlerName, args },
+          });
         };
       }
 
@@ -85,9 +89,12 @@ Object.assign(
       for (let eventType of defaultHHMEvents) {
         room[`onHhm_${eventType}`] = function(...args) {
           if (args[0].plugin) {
-            const pluginData = hroomie.serializePlugin(args[0].plugin);
+            const pluginData = haxroomie.serializePlugin(args[0].plugin);
             if (!pluginData || ignoredPlugins.has(pluginData.name)) return;
-            window.haxroomieOnHHMEvent({ eventType, pluginData });
+            haxroomie({
+              type: 'HHM_EVENT',
+              payload: { eventType, pluginData },
+            });
           }
         };
       }

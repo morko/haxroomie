@@ -21,10 +21,8 @@ module.exports = class RoomOpener extends EventEmitter {
    * @param {object} opt.id - The RoomController id that this object belongs
    *    to.
    * @param {object} opt.page - Puppeteer.Page object.
-   * @param {function} opt.onRoomEvent - Function that gets called from the
-   *    browser context when a haxball roomObject event happens.
-   * @param {function} opt.onHHMEvent - Function that gets called from the
-   *    browser context when a Haxball Headless Manager (HHM) event happens.
+   * @param {function} opt.onBrowserAction - Function that gets called from the
+   *    browser context when browser wants to send data.
    * @param {number} [opt.timeout=30] - Time to wait for the room link before
    *    giving up.
    */
@@ -37,15 +35,11 @@ module.exports = class RoomOpener extends EventEmitter {
     if (!opt.page) {
       throw new TypeError('Missing required argument: opt.page');
     }
-    if (!opt.onRoomEvent) {
-      throw new TypeError('Missing required argument: opt.onRoomEvent');
-    }
-    if (!opt.onHHMEvent) {
-      throw new TypeError('Missing required argument: opt.onHHMEvent');
+    if (!opt.onBrowserAction) {
+      throw new TypeError('Missing required argument: opt.onBrowserAction');
     }
     this.page = opt.page;
-    this.onRoomEvent = opt.onRoomEvent;
-    this.onHHMEvent = opt.onHHMEvent;
+    this.onBrowserAction = opt.onBrowserAction;
     this.timeout = opt.timeout || 30;
     this.id = opt.id;
 
@@ -108,7 +102,8 @@ module.exports = class RoomOpener extends EventEmitter {
     await this.navigateToHaxballHeadlessPage();
     await this.waitForHaxballToLoad();
     await this.injectSharedStorage();
-    await this.injectHroomie();
+    await this.initBrowserCommunicationChannel();
+    await this.injectHaxroomieNamespace();
     await this.loadHHM({ hhmVersion, hhm });
   }
 
@@ -151,8 +146,7 @@ module.exports = class RoomOpener extends EventEmitter {
    * @private
    */
   async onRoomStarted(config) {
-    await this.exposeListenersToBrowser();
-    await this.injectCorePlugins();
+    await this.injectCorePlugin();
 
     let hhmRoomInfo = await this.getRoomInfoFromHHM();
     // merge the roomInfo to the config so all properties get returned
@@ -233,7 +227,9 @@ module.exports = class RoomOpener extends EventEmitter {
       } else {
         configFn = new Function(
           'hrConfig',
-          this.readFile(path.join(__dirname, '..', '..', 'hhm', 'config.js'))
+          this.readFile(
+            path.join(__dirname, '..', '..', 'browser', 'hhm-config.js')
+          )
         );
       }
     } catch (err) {
@@ -276,27 +272,23 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
-   * Creates window.haxroomieOnRoomEvent and window.haxroomieOnHHMEvent
-   * functions in the browser. These will get called from the browsers
-   * context whenever a HaxBall roomObject event or HHM event happens.
+   * Creates window.haxroomieSendBrowserAction function in the browser. That
+   * can be used to communicate with the main context from browser.
    *
-   * Whenever the functions in the browser context are called puppeteer calls
-   * their counterparts (this.onRoomEvent and this.onHHMEvent) with the same
+   * Whenever the haxroomieSendBrowserAction in the browser context is called,
+   * puppeteer calls its counterpart (this.onBrowserAction) with the given
    * arguments.
    * @private
    */
-  async exposeListenersToBrowser() {
+  async initBrowserCommunicationChannel() {
     let hasOnRoomEvent = await this.page.evaluate(() => {
-      return window.haxroomieOnRoomEvent;
+      return window.haxroomieSendBrowserAction;
     });
     if (!hasOnRoomEvent) {
-      await this.page.exposeFunction('haxroomieOnRoomEvent', this.onRoomEvent);
-    }
-    let hasOnHHMEvent = await this.page.evaluate(() => {
-      return window.haxroomieOnHHMEvent;
-    });
-    if (!hasOnHHMEvent) {
-      await this.page.exposeFunction('haxroomieOnHHMEvent', this.onHHMEvent);
+      await this.page.exposeFunction(
+        'haxroomieSendBrowserAction',
+        this.onBrowserAction
+      );
     }
   }
 
@@ -335,18 +327,17 @@ module.exports = class RoomOpener extends EventEmitter {
   }
 
   /**
-   * Injects the haxroomies headless host manager plugin to the headless
-   * browser context.
+   * Injects and adds the haxroomies HHM plugin in browser.
    * @private
    */
-  async injectCorePlugins() {
+  async injectCorePlugin() {
     logger.debug(
       `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
-        `Injecting haxroomie core HHM plugins.`
+        `Injecting haxroomie core HHM plugin.`
     );
     try {
       let corePlugin = this.readFile(
-        path.join(__dirname, '..', '..', 'hhm', 'core-plugin.js')
+        path.join(__dirname, '..', '..', 'browser', 'core-plugin.js')
       );
       await this.page.evaluate(corePlugin => {
         return HHM.manager.addPlugin({
@@ -358,14 +349,14 @@ module.exports = class RoomOpener extends EventEmitter {
       logger.debug(
         `[${colors.cyan(this.id)}] [${colors.red('ERROR')}] ` + `${err}`
       );
-      throw new Error(`Failed to inject haxroomie core HHM plugins!`);
+      throw new Error(`Failed to inject haxroomie core HHM plugin!`);
     }
   }
 
   /**
    * Injects the shared storage module to the headless browser. The module
    * overrides default localStorage getItem, setItem and IndexedDB open
-   * functions so that each will be prefixed by id of the tabs ROomController.
+   * functions so that each will be prefixed by id of the tabs RoomController.
    * @private
    */
   async injectSharedStorage() {
@@ -373,22 +364,23 @@ module.exports = class RoomOpener extends EventEmitter {
       `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
         `Injecting shared-storage module.`
     );
-    let ss = require('./shared-storage');
+    let ss = require('../../browser/shared-storage');
     await this.page.evaluate(ss, this.id);
   }
 
   /**
-   * Injects the utils to the headless browser context.
+   * Creates the haxroomie namespace in the browser context. The namespace
+   * contains utils that haxroomie needs and can be used from HHM plugins.
    */
-  async injectHroomie() {
+  async injectHaxroomieNamespace() {
     logger.debug(
       `[${colors.cyan(this.id)}] [${colors.green('INFO')}] ` +
-        `Injecting utils module.`
+        `Creating haxroomie namespace for the browser.`
     );
-    let utils = this.readFile(
-      path.join(__dirname, '..', '..', 'hhm', 'hroomie.js')
+    let haxroomie = this.readFile(
+      path.join(__dirname, '..', '..', 'browser', 'haxroomie.js')
     );
-    await this.page.evaluate(utils);
+    await this.page.evaluate(haxroomie);
   }
 
   /**
@@ -402,10 +394,10 @@ module.exports = class RoomOpener extends EventEmitter {
 
   /**
    * Waits for the Haxball Headless Manager to start.
-   * Creates a loop that polls for the window.hroomie.hhmStarted to
+   * Creates a loop that polls for the window.haxroomie.hhmStarted to
    * be true. 
    * 
-   * The window.hroomie.hhmStarted gets set in the HHM config postInit
+   * The window.haxroomie.hhmStarted gets set in the HHM config postInit
    * plugin.
    * 
    * @param {int} timeout Time to wait in ms before failing.
@@ -432,7 +424,7 @@ module.exports = class RoomOpener extends EventEmitter {
       if (recaptcha) {
         throw new InvalidTokenError(`Token is invalid or has expired!`);
       }
-      hhmStarted = await this.page.evaluate(`window.hroomie.hhmStarted`);
+      hhmStarted = await this.page.evaluate(`window.haxroomie.hhmStarted`);
       await sleep(1000);
       currentTime = new Date().getTime();
     }
