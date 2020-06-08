@@ -25,7 +25,7 @@ npm install haxroomie-core
 Requires the token to be set as an environment variable named `HAXBALL_TOKEN`.
 
 ```js
-const { createHaxroomie } = require('haxroomie');
+const { createHaxroomie } = require('haxroomie-core');
 
 async function bootstrap() {
   try {
@@ -63,7 +63,7 @@ Initializing loads the Haxball Headless Manager (HHM) library. It is required to
 `repositories` property.
 
 ```js
-const { createHaxroomie } = require('haxroomie');
+const { createHaxroomie } = require('haxroomie-core');
 
 async function getRepoInfoExample() {
   try {
