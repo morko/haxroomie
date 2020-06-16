@@ -25,6 +25,13 @@ function parseCommandLineArgs(configDirectory) {
     .alias(`e`, `executable-path`)
     .describe(`executable-path`, `Path to chrome browser executable.`)
 
+    .alias(`o`, `download-directory`)
+    .describe(
+      `download-directory`,
+      `Directory where the downloaded files will get saved to.`
+    )
+    .default(`download-directory`, path.join(configDirectory, 'downloads'))
+
     .alias(`t`, `timeout`)
     .describe(
       `timeout`,

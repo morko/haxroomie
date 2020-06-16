@@ -44,7 +44,7 @@ argv.port = argv.port || process.env.HR_PORT;
   }
 
   try {
-    initConfigDir();
+    initFilesAndDirectories();
     let app = new HRConsoleApp(argv);
     await app.start();
     process.on('exit', () => {
@@ -60,7 +60,7 @@ argv.port = argv.port || process.env.HR_PORT;
 /**
  * Creates the config directory and necessary files if missing.
  */
-function initConfigDir() {
+function initFilesAndDirectories() {
   if (!fs.existsSync(configDirectory)) {
     fs.mkdirSync(configDirectory, { mode: '0770', recursive: true });
   }
@@ -68,5 +68,8 @@ function initConfigDir() {
     if (!fs.existsSync(argv.config)) {
       fs.copyFileSync(configSkeleton, argv.config);
     }
+  }
+  if (!fs.existsSync(argv.downloadDirectory)) {
+    fs.mkdirSync(argv.downloadDirectory, { mode: '0770', recursive: true });
   }
 }

@@ -53,6 +53,8 @@ class Haxroomie extends EventEmitter {
    * @param {boolean} [options.timeout=30] - How long to wait for a room to open
    *    before failing.
    * @param {string} [options.executablePath] - Path to chrome launcher.
+   * @param {string} [options.downloadDirectory] - Directory to where the files
+   *    downloaded from the browser are saved.
    */
   constructor({
     viewport = { width: 400, height: 500 },
@@ -62,8 +64,12 @@ class Haxroomie extends EventEmitter {
     userDataDir = path.join(__dirname, '..', 'user-data-dir'),
     timeout = 30,
     executablePath,
+    downloadDirectory,
   } = {}) {
     super();
+    if (!downloadDirectory) {
+      throw new Error('Missing argument: downloadDirectory');
+    }
     this.browser = null;
     this.rooms = new Map();
 
@@ -72,6 +78,7 @@ class Haxroomie extends EventEmitter {
     if (this.port === 0) {
       throw new Error('INVALID_PORT: 0');
     }
+    this.downloadDirectory = downloadDirectory;
     this.noSandbox = noSandbox;
     this.headless = headless;
     this.userDataDir = userDataDir;
@@ -264,8 +271,14 @@ class Haxroomie extends EventEmitter {
     this.ensureInstanceIsUsable();
 
     if (this.isRoomController(roomController)) {
-      if (this.rooms.has(roomController.id))
+      if (this.rooms.has(roomController.id)) {
         throw new Error('id must be unique');
+      }
+      // Set the download path.
+      await roomController.page._client.send('Page.setDownloadBehavior', {
+        behavior: 'allow',
+        downloadPath: this.downloadDirectory,
+      });
       this.rooms.set(roomController.id, roomController);
       this.emit('room-added', roomController);
       return roomController;
@@ -282,6 +295,11 @@ class Haxroomie extends EventEmitter {
       rcOptions.defaultRepoVersion || versionConfig.defaultRepoVersion;
 
     const room = await this.createRoomController(rcOptions);
+    // Set the download path.
+    await room.page._client.send('Page.setDownloadBehavior', {
+      behavior: 'allow',
+      downloadPath: this.downloadDirectory,
+    });
     this.rooms.set(id, room);
     this.emit('room-added', room);
     return room;

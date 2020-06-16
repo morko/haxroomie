@@ -14,6 +14,8 @@ Object.assign(
       callRoom,
       serializePlugin,
       send,
+      download,
+      downloadRec,
     };
 
     /**
@@ -127,6 +129,40 @@ Object.assign(
      */
     function send(action) {
       haxroomieSendBrowserAction(action);
+    }
+
+    /**
+     * Downloads a file.
+     *
+     * @param {object} opt - Options
+     * @param {Blob} opt.file - Options
+     * @param {string} opt.fileName - Options
+     */
+    function download({ file, fileName }) {
+      var c = window.document.createElement('a');
+      c.style.display = 'display: none';
+      window.document.body.appendChild(c);
+      var d = URL.createObjectURL(file);
+      c.href = d;
+      c.download = fileName;
+      c.click();
+      URL.revokeObjectURL(d);
+      c.remove();
+    }
+
+    /**
+     * Downloads HaxBall rec file.
+     *
+     * @param {Uint8Array} opt.rec - The haxball rec returned by RoomObject.stopRecording().
+     * @param {string} opt.fileName
+     */
+    function downloadRec({ rec, fileName }) {
+      download({
+        file: new Blob([rec], {
+          type: 'octet/stream',
+        }),
+        fileName,
+      });
     }
   })()
 );
