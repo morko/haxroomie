@@ -91,7 +91,7 @@ Object.assign(
           if (args[0].plugin) {
             const pluginData = haxroomie.serializePlugin(args[0].plugin);
             if (!pluginData || ignoredPlugins.has(pluginData.name)) return;
-            haxroomie({
+            haxroomie.send({
               type: 'HHM_EVENT',
               payload: { eventType, pluginData },
             });
