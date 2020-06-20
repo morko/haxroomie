@@ -154,7 +154,7 @@ class HRConsoleApp {
     return commandManager;
   }
   logPrefix(room) {
-    return `[${colors.cyan(room.id)}] [${new Date().toLocaleString()}]`;
+    return `[${new Date().toISOString()}] [${colors.cyan(room.id)}]`;
   }
 
   /**
