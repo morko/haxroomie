@@ -53,8 +53,9 @@
  * Class for controlling Haxball Headless Manager (HHM) repositories.
  */
 class RepositoryController {
-  constructor(opt) {
-    this.page = opt.page;
+  constructor({ page, defaultRepoVersion }) {
+    this.page = page;
+    this.defaultRepoVersion = defaultRepoVersion;
     this.running = false;
     this._usable = false;
   }
@@ -88,6 +89,50 @@ class RepositoryController {
       repository,
       append
     );
+  }
+
+  /**
+   * Sets the repositories.
+   *
+   * Overwrites all repositories with the given array of repositories. Adds
+   * saviolas default repository if its not defined in the given array.
+   *
+   * @param {Array.<Repository>} repository - The repository to be added.
+   * @returns {Promise}
+   */
+  async setRepositories(repositories) {
+    return this.page.evaluate(async repositories => {
+      const repoFactory = HHM.manager.getPluginRepositoryFactory();
+      const pluginLoader = HHM.manager.getPluginLoader();
+
+      pluginLoader.repositories = [];
+
+      let hasDefaultRepo = false;
+      for (let repo of repositories) {
+        if (
+          repo.type === `github` &&
+          repo.repository === `saviola777/hhm-plugins`
+        ) {
+          hasDefaultRepo = true;
+          break;
+        }
+      }
+
+      if (!hasDefaultRepo) {
+        // Add default plugin repository.
+        const defaultRepo = await repoFactory.createRepository({
+          type: 'github',
+          repository: 'saviola777/hhm-plugins',
+          version: this.defaultRepoVersion,
+        });
+        pluginLoader.addRepository(defaultRepo);
+      }
+
+      for (const repoDefinition of repositories) {
+        const repo = await repoFactory.createRepository(repoDefinition);
+        pluginLoader.addRepository(repo);
+      }
+    }, repositories);
   }
 
   /**

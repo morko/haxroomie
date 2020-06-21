@@ -232,7 +232,10 @@ class RoomController extends EventEmitter {
       timeout: this.timeout,
     });
 
-    this._repositories = new RepositoryController({ page: this.page });
+    this._repositories = new RepositoryController({
+      page: this.page,
+      defaultRepoVersion: this._defaultRepoVersion,
+    });
     this._plugins = new PluginController({ page: this.page });
     this._roles = new RoleController({
       page: this.page,

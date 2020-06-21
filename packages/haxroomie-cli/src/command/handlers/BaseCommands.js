@@ -154,36 +154,66 @@ class BaseCommands extends CommandHandler {
         continue;
       }
 
-      // Restart/modify running rooms.
       let room = this.haxroomie.getRoom(roomId);
+
+      // Update repositories.
+      if (modifiedProperties.includes('repositories')) {
+        commandPrompt.print(
+          `Updating repositories of ${colors.cyan(roomId)}.`,
+          'RELOAD CONFIG'
+        );
+        try {
+          await room.repositories.setRepositories(
+            newConfig[roomId].repositories
+          );
+        } catch (err) {
+          commandPrompt.print(err.message);
+          logger.debug(err.stack);
+        }
+      }
+
+      // Reload running rooms.
       if (room.running) {
-        let cannotHotLoad = modifiedProperties.find(p => {
-          return p !== 'pluginConfig';
+        const cannotHotLoad = modifiedProperties.some(p => {
+          return p !== 'pluginConfig' && p !== 'repositories';
         });
 
-        // Restart rooms that cannot be hotloaded.
+        // Restart rooms that cannot be hotloaded and bail out early.
         if (cannotHotLoad) {
           await this.closeRoom(roomId);
           await this.openRoom(roomId);
           continue;
         }
 
-        // If we can hotload the properties.
-        for (let prop of modifiedProperties) {
-          if (prop === 'pluginConfig') {
-            commandPrompt.print(
-              `Setting plugin config for ${colors.cyan(roomId)}.`,
-              'RELOAD CONFIG'
-            );
-            try {
-              await room.plugins.setPluginConfig(
-                newConfig[roomId].pluginConfig
-              );
-            } catch (err) {
-              commandPrompt.print(err.message);
-              logger.debug(err.stack);
+        // Update pluginConfig.
+        commandPrompt.print(
+          `Updating pluginConfig of ${colors.cyan(roomId)}.`,
+          'RELOAD CONFIG'
+        );
+        try {
+          await room.plugins.setPluginConfig(newConfig[roomId].pluginConfig);
+        } catch (err) {
+          commandPrompt.print(err.message);
+          logger.debug(err.stack);
+        }
+
+        // Reload all plugins.
+        commandPrompt.print(
+          `Reloading plugins of ${colors.cyan(roomId)}.`,
+          'RELOAD CONFIG'
+        );
+        try {
+          for (let pluginName of Object.keys(newConfig[roomId].pluginConfig)) {
+            // The sav/players plugin cannot be reloaded because a bug in the plugin.
+            // See https://github.com/saviola777/hhm-plugins/issues/19
+            if (pluginName === 'sav/players') {
+              continue;
             }
+            await room.plugins.reloadPlugin(pluginName);
           }
+        } catch (err) {
+          commandPrompt.print(err.message);
+          logger.debug(err.stack);
         }
       }
     }
