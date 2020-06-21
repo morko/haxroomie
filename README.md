@@ -53,7 +53,7 @@ I accept well documented pull request to master branch.
 
 To enable more extensive logging for development, you can set environment variable `NODE_ENV=development`.
 
-For even more extensive loggin you can enable [Puppeteers](https://github.com/puppeteer/puppeteer/) debug logs by setting environment variable `DEBUG="puppeteer:*"`. See more about debugging puppeteer at https://developers.google.com/web/tools/puppeteer/debugging.
+For even more extensive logging you can enable [Puppeteers](https://github.com/puppeteer/puppeteer/) debug logs by setting environment variable `DEBUG="puppeteer:*"`. See more about debugging puppeteer at https://developers.google.com/web/tools/puppeteer/debugging.
 
 
 ### Version Control
