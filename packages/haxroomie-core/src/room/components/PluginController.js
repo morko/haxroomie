@@ -284,7 +284,6 @@ class PluginController {
             ? plugin._pluginSpecOriginal.config
             : {};
 
-          console.log({ ...pluginDefaultConfig, ...config });
           // merge the new config with plugins default values
           HHM.manager.setPluginConfig(pluginId, {
             ...pluginDefaultConfig,
@@ -369,6 +368,29 @@ class PluginController {
       return cfg;
     });
     return config;
+  }
+
+  /**
+   * Reloads a plugin from the configured repositories.
+   *
+   * This is a wrapper around the HHM PluginManager.reloadPlugin method.
+   * See https://github.com/saviola777/haxball-headless-manager/blob/master/src/classes/PluginManager.js#L565
+   *
+   * @param {string} pluginName Plugin name to be reloaded.
+   * @param {boolean} [safe] Whether to disable dependent plugins before
+   *  unloading the given plugin.
+   * @returns {boolean} Whether the plugin was successfully reloaded
+   * @throws {Error} If the given plugin is not loaded or if safe mode was
+   *  enabled but the plugin can't be disabled.
+   */
+  async reloadPlugin(pluginName, safe = true) {
+    return this.page.evaluate(
+      (pluginName, safe) => {
+        return HHM.manager.reloadPlugin(pluginName, safe);
+      },
+      pluginName,
+      safe
+    );
   }
 }
 
