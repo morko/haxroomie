@@ -13,7 +13,6 @@
   "bin": {
     "haxroomie": "./packages/haxroomie-cli/index.js"
   },
-  "eslintConfig": ".eslintrc.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/morko/haxroomie.git"
