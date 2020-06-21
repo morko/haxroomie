@@ -225,6 +225,28 @@
           "return",
           "room"
         ],
+        "PluginController.html#reloadPlugin": [
+          "around",
+          "boolean",
+          "configur",
+          "function",
+          "headless",
+          "hhm",
+          "https://github.com/saviola777/haxbal",
+          "lt;async&gt",
+          "manager/blob/master/src/classes/pluginmanager.js#l565",
+          "method",
+          "plugin",
+          "plugincontroller#reloadplugin",
+          "pluginmanager.reloadplugin",
+          "pluginnam",
+          "reload",
+          "reloadplugin",
+          "repositori",
+          "safe",
+          "see",
+          "wrapper"
+        ],
         "RepositoryController.html": [
           "class",
           "control",
@@ -257,6 +279,22 @@
           "repositorycontroller#addrepositori",
           "set",
           "true"
+        ],
+        "RepositoryController.html#setRepositories": [
+          "add",
+          "array",
+          "default",
+          "defin",
+          "function",
+          "given",
+          "lt;async&gt",
+          "overwrit",
+          "promis",
+          "repositori",
+          "repositorycontroller#setrepositori",
+          "saviola",
+          "set",
+          "setrepositori"
         ],
         "RepositoryController.html#hasRepository": [
           "alreadi",
@@ -667,7 +705,7 @@
           "module:haxroomi"
         ]
       },
-      "length": 46
+      "length": 48
     },
     "tokenStore": {
       "root": {
@@ -776,6 +814,37 @@
                         "ref": "PluginController.html#getPluginsThatDependOn",
                         "tf": 8.333333333333332
                       }
+                    }
+                  }
+                }
+              }
+            },
+            "f": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "u": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "t": {
+                      "docs": {
+                        "RepositoryController.html#setRepositories": {
+                          "ref": "RepositoryController.html#setRepositories",
+                          "tf": 3.571428571428571
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "i": {
+                "docs": {},
+                "n": {
+                  "docs": {
+                    "RepositoryController.html#setRepositories": {
+                      "ref": "RepositoryController.html#setRepositories",
+                      "tf": 3.571428571428571
                     }
                   }
                 }
@@ -1240,6 +1309,10 @@
                   "ref": "PluginController.html#disablePlugin",
                   "tf": 4.545454545454546
                 },
+                "PluginController.html#reloadPlugin": {
+                  "ref": "PluginController.html#reloadPlugin",
+                  "tf": 3.8461538461538463
+                },
                 "RepositoryController.html": {
                   "ref": "RepositoryController.html",
                   "tf": 7.142857142857142
@@ -1338,6 +1411,10 @@
                             "ref": "PluginController.html",
                             "tf": 7.142857142857142
                           },
+                          "PluginController.html#reloadPlugin": {
+                            "ref": "PluginController.html#reloadPlugin",
+                            "tf": 3.8461538461538463
+                          },
                           "RepositoryController.html": {
                             "ref": "RepositoryController.html",
                             "tf": 7.142857142857142
@@ -1376,6 +1453,116 @@
                   "RoomController.html#openRoom": {
                     "ref": "RoomController.html#openRoom",
                     "tf": 1.8518518518518516
+                  }
+                }
+              }
+            }
+          },
+          "t": {
+            "docs": {},
+            "t": {
+              "docs": {},
+              "p": {
+                "docs": {},
+                "s": {
+                  "docs": {},
+                  ":": {
+                    "docs": {},
+                    "/": {
+                      "docs": {},
+                      "/": {
+                        "docs": {},
+                        "g": {
+                          "docs": {},
+                          "i": {
+                            "docs": {},
+                            "t": {
+                              "docs": {},
+                              "h": {
+                                "docs": {},
+                                "u": {
+                                  "docs": {},
+                                  "b": {
+                                    "docs": {},
+                                    ".": {
+                                      "docs": {},
+                                      "c": {
+                                        "docs": {},
+                                        "o": {
+                                          "docs": {},
+                                          "m": {
+                                            "docs": {},
+                                            "/": {
+                                              "docs": {},
+                                              "s": {
+                                                "docs": {},
+                                                "a": {
+                                                  "docs": {},
+                                                  "v": {
+                                                    "docs": {},
+                                                    "i": {
+                                                      "docs": {},
+                                                      "o": {
+                                                        "docs": {},
+                                                        "l": {
+                                                          "docs": {},
+                                                          "a": {
+                                                            "7": {
+                                                              "7": {
+                                                                "7": {
+                                                                  "docs": {},
+                                                                  "/": {
+                                                                    "docs": {},
+                                                                    "h": {
+                                                                      "docs": {},
+                                                                      "a": {
+                                                                        "docs": {},
+                                                                        "x": {
+                                                                          "docs": {},
+                                                                          "b": {
+                                                                            "docs": {},
+                                                                            "a": {
+                                                                              "docs": {},
+                                                                              "l": {
+                                                                                "docs": {
+                                                                                  "PluginController.html#reloadPlugin": {
+                                                                                    "ref": "PluginController.html#reloadPlugin",
+                                                                                    "tf": 3.8461538461538463
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "docs": {}
+                                                              },
+                                                              "docs": {}
+                                                            },
+                                                            "docs": {}
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1767,6 +1954,10 @@
                                 "ref": "PluginController.html#setPluginConfig",
                                 "tf": 1.9230769230769231
                               },
+                              "PluginController.html#reloadPlugin": {
+                                "ref": "PluginController.html#reloadPlugin",
+                                "tf": 3.8461538461538463
+                              },
                               "RepositoryController.html": {
                                 "ref": "RepositoryController.html",
                                 "tf": 7.142857142857142
@@ -1774,6 +1965,10 @@
                               "RepositoryController.html#addRepository": {
                                 "ref": "RepositoryController.html#addRepository",
                                 "tf": 29.523809523809526
+                              },
+                              "RepositoryController.html#setRepositories": {
+                                "ref": "RepositoryController.html#setRepositories",
+                                "tf": 39.285714285714285
                               },
                               "RepositoryController.html#hasRepository": {
                                 "ref": "RepositoryController.html#hasRepository",
@@ -1858,6 +2053,50 @@
                                                                             "docs": {
                                                                               "RepositoryController.html#addRepository": {
                                                                                 "ref": "RepositoryController.html#addRepository",
+                                                                                "tf": 1150
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "s": {
+                                                    "docs": {},
+                                                    "e": {
+                                                      "docs": {},
+                                                      "t": {
+                                                        "docs": {},
+                                                        "r": {
+                                                          "docs": {},
+                                                          "e": {
+                                                            "docs": {},
+                                                            "p": {
+                                                              "docs": {},
+                                                              "o": {
+                                                                "docs": {},
+                                                                "s": {
+                                                                  "docs": {},
+                                                                  "i": {
+                                                                    "docs": {},
+                                                                    "t": {
+                                                                      "docs": {},
+                                                                      "o": {
+                                                                        "docs": {},
+                                                                        "r": {
+                                                                          "docs": {},
+                                                                          "i": {
+                                                                            "docs": {
+                                                                              "RepositoryController.html#setRepositories": {
+                                                                                "ref": "RepositoryController.html#setRepositories",
                                                                                 "tf": 1150
                                                                               }
                                                                             }
@@ -2112,6 +2351,46 @@
                     "Haxroomie.html#launchBrowser": {
                       "ref": "Haxroomie.html#launchBrowser",
                       "tf": 3.125
+                    }
+                  }
+                }
+              }
+            },
+            "l": {
+              "docs": {},
+              "o": {
+                "docs": {},
+                "a": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "PluginController.html#reloadPlugin": {
+                        "ref": "PluginController.html#reloadPlugin",
+                        "tf": 3.8461538461538463
+                      }
+                    },
+                    "p": {
+                      "docs": {},
+                      "l": {
+                        "docs": {},
+                        "u": {
+                          "docs": {},
+                          "g": {
+                            "docs": {},
+                            "i": {
+                              "docs": {},
+                              "n": {
+                                "docs": {
+                                  "PluginController.html#reloadPlugin": {
+                                    "ref": "PluginController.html#reloadPlugin",
+                                    "tf": 670
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -3202,6 +3481,10 @@
                       "ref": "PluginController.html#getPluginConfig",
                       "tf": 4.545454545454546
                     },
+                    "RepositoryController.html#setRepositories": {
+                      "ref": "RepositoryController.html#setRepositories",
+                      "tf": 7.142857142857142
+                    },
                     "RepositoryController.html#hasRepository": {
                       "ref": "RepositoryController.html#hasRepository",
                       "tf": 4.545454545454546
@@ -3272,6 +3555,10 @@
                       "docs": {},
                       "r": {
                         "docs": {
+                          "PluginController.html#reloadPlugin": {
+                            "ref": "PluginController.html#reloadPlugin",
+                            "tf": 3.8461538461538463
+                          },
                           "RepositoryController.html#hasRepository": {
                             "ref": "RepositoryController.html#hasRepository",
                             "tf": 4.545454545454546
@@ -3801,8 +4088,16 @@
                             "ref": "PluginController.html#getPluginConfig",
                             "tf": 110
                           },
+                          "PluginController.html#reloadPlugin": {
+                            "ref": "PluginController.html#reloadPlugin",
+                            "tf": 110
+                          },
                           "RepositoryController.html#addRepository": {
                             "ref": "RepositoryController.html#addRepository",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#setRepositories": {
+                            "ref": "RepositoryController.html#setRepositories",
                             "tf": 110
                           },
                           "RepositoryController.html#hasRepository": {
@@ -4287,9 +4582,17 @@
                                   "ref": "PluginController.html#getPluginConfig",
                                   "tf": 25
                                 },
+                                "PluginController.html#reloadPlugin": {
+                                  "ref": "PluginController.html#reloadPlugin",
+                                  "tf": 20
+                                },
                                 "RepositoryController.html#addRepository": {
                                   "ref": "RepositoryController.html#addRepository",
                                   "tf": 20
+                                },
+                                "RepositoryController.html#setRepositories": {
+                                  "ref": "RepositoryController.html#setRepositories",
+                                  "tf": 25
                                 },
                                 "RepositoryController.html#hasRepository": {
                                   "ref": "RepositoryController.html#hasRepository",
@@ -4489,6 +4792,155 @@
                       "ref": "RoomController.html#init",
                       "tf": 2
                     }
+                  },
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {},
+                      "/": {
+                        "docs": {},
+                        "b": {
+                          "docs": {},
+                          "l": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "b": {
+                                "docs": {},
+                                "/": {
+                                  "docs": {},
+                                  "m": {
+                                    "docs": {},
+                                    "a": {
+                                      "docs": {},
+                                      "s": {
+                                        "docs": {},
+                                        "t": {
+                                          "docs": {},
+                                          "e": {
+                                            "docs": {},
+                                            "r": {
+                                              "docs": {},
+                                              "/": {
+                                                "docs": {},
+                                                "s": {
+                                                  "docs": {},
+                                                  "r": {
+                                                    "docs": {},
+                                                    "c": {
+                                                      "docs": {},
+                                                      "/": {
+                                                        "docs": {},
+                                                        "c": {
+                                                          "docs": {},
+                                                          "l": {
+                                                            "docs": {},
+                                                            "a": {
+                                                              "docs": {},
+                                                              "s": {
+                                                                "docs": {},
+                                                                "s": {
+                                                                  "docs": {},
+                                                                  "e": {
+                                                                    "docs": {},
+                                                                    "s": {
+                                                                      "docs": {},
+                                                                      "/": {
+                                                                        "docs": {},
+                                                                        "p": {
+                                                                          "docs": {},
+                                                                          "l": {
+                                                                            "docs": {},
+                                                                            "u": {
+                                                                              "docs": {},
+                                                                              "g": {
+                                                                                "docs": {},
+                                                                                "i": {
+                                                                                  "docs": {},
+                                                                                  "n": {
+                                                                                    "docs": {},
+                                                                                    "m": {
+                                                                                      "docs": {},
+                                                                                      "a": {
+                                                                                        "docs": {},
+                                                                                        "n": {
+                                                                                          "docs": {},
+                                                                                          "a": {
+                                                                                            "docs": {},
+                                                                                            "g": {
+                                                                                              "docs": {},
+                                                                                              "e": {
+                                                                                                "docs": {},
+                                                                                                "r": {
+                                                                                                  "docs": {},
+                                                                                                  ".": {
+                                                                                                    "docs": {},
+                                                                                                    "j": {
+                                                                                                      "docs": {},
+                                                                                                      "s": {
+                                                                                                        "docs": {},
+                                                                                                        "#": {
+                                                                                                          "docs": {},
+                                                                                                          "l": {
+                                                                                                            "5": {
+                                                                                                              "6": {
+                                                                                                                "5": {
+                                                                                                                  "docs": {
+                                                                                                                    "PluginController.html#reloadPlugin": {
+                                                                                                                      "ref": "PluginController.html#reloadPlugin",
+                                                                                                                      "tf": 3.8461538461538463
+                                                                                                                    }
+                                                                                                                  }
+                                                                                                                },
+                                                                                                                "docs": {}
+                                                                                                              },
+                                                                                                              "docs": {}
+                                                                                                            },
+                                                                                                            "docs": {}
+                                                                                                          }
+                                                                                                        }
+                                                                                                      }
+                                                                                                    }
+                                                                                                  }
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          }
+                                                                                        }
+                                                                                      }
+                                                                                    }
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -4515,6 +4967,10 @@
                   "docs": {},
                   "d": {
                     "docs": {
+                      "PluginController.html#reloadPlugin": {
+                        "ref": "PluginController.html#reloadPlugin",
+                        "tf": 3.8461538461538463
+                      },
                       "Haxroomie.html": {
                         "ref": "Haxroomie.html",
                         "tf": 2
@@ -4625,6 +5081,10 @@
                     "PluginController.html#disablePlugin": {
                       "ref": "PluginController.html#disablePlugin",
                       "tf": 4.545454545454546
+                    },
+                    "RepositoryController.html#setRepositories": {
+                      "ref": "RepositoryController.html#setRepositories",
+                      "tf": 7.142857142857142
                     },
                     "Haxroomie.html#getRooms": {
                       "ref": "Haxroomie.html#getRooms",
@@ -4746,6 +5206,23 @@
                 }
               }
             },
+            "o": {
+              "docs": {},
+              "u": {
+                "docs": {},
+                "n": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "PluginController.html#reloadPlugin": {
+                        "ref": "PluginController.html#reloadPlugin",
+                        "tf": 3.8461538461538463
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "g": {
               "docs": {
                 "RoomController.html#eval": {
@@ -4775,6 +5252,10 @@
                 "RepositoryController.html#addRepository": {
                   "ref": "RepositoryController.html#addRepository",
                   "tf": 2.380952380952381
+                },
+                "RepositoryController.html#setRepositories": {
+                  "ref": "RepositoryController.html#setRepositories",
+                  "tf": 3.571428571428571
                 },
                 "Haxroomie.html#addRoom": {
                   "ref": "Haxroomie.html#addRoom",
@@ -4999,6 +5480,10 @@
                       "PluginController.html#getPluginConfig": {
                         "ref": "PluginController.html#getPluginConfig",
                         "tf": 13.636363636363635
+                      },
+                      "PluginController.html#reloadPlugin": {
+                        "ref": "PluginController.html#reloadPlugin",
+                        "tf": 3.8461538461538463
                       },
                       "RepositoryController.html#addRepository": {
                         "ref": "RepositoryController.html#addRepository",
@@ -5334,6 +5819,41 @@
                                                     }
                                                   }
                                                 }
+                                              },
+                                              "l": {
+                                                "docs": {},
+                                                "o": {
+                                                  "docs": {},
+                                                  "a": {
+                                                    "docs": {},
+                                                    "d": {
+                                                      "docs": {},
+                                                      "p": {
+                                                        "docs": {},
+                                                        "l": {
+                                                          "docs": {},
+                                                          "u": {
+                                                            "docs": {},
+                                                            "g": {
+                                                              "docs": {},
+                                                              "i": {
+                                                                "docs": {},
+                                                                "n": {
+                                                                  "docs": {
+                                                                    "PluginController.html#reloadPlugin": {
+                                                                      "ref": "PluginController.html#reloadPlugin",
+                                                                      "tf": 1150
+                                                                    }
+                                                                  }
+                                                                }
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
                                               }
                                             }
                                           },
@@ -5450,6 +5970,75 @@
                             "PluginController.html#getPluginConfig": {
                               "ref": "PluginController.html#getPluginConfig",
                               "tf": 29.545454545454547
+                            },
+                            "PluginController.html#reloadPlugin": {
+                              "ref": "PluginController.html#reloadPlugin",
+                              "tf": 20
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "m": {
+                      "docs": {},
+                      "a": {
+                        "docs": {},
+                        "n": {
+                          "docs": {},
+                          "a": {
+                            "docs": {},
+                            "g": {
+                              "docs": {},
+                              "e": {
+                                "docs": {},
+                                "r": {
+                                  "docs": {},
+                                  ".": {
+                                    "docs": {},
+                                    "r": {
+                                      "docs": {},
+                                      "e": {
+                                        "docs": {},
+                                        "l": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "a": {
+                                              "docs": {},
+                                              "d": {
+                                                "docs": {},
+                                                "p": {
+                                                  "docs": {},
+                                                  "l": {
+                                                    "docs": {},
+                                                    "u": {
+                                                      "docs": {},
+                                                      "g": {
+                                                        "docs": {},
+                                                        "i": {
+                                                          "docs": {},
+                                                          "n": {
+                                                            "docs": {
+                                                              "PluginController.html#reloadPlugin": {
+                                                                "ref": "PluginController.html#reloadPlugin",
+                                                                "tf": 3.8461538461538463
+                                                              }
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -5470,6 +6059,10 @@
                   "docs": {},
                   "s": {
                     "docs": {
+                      "RepositoryController.html#setRepositories": {
+                        "ref": "RepositoryController.html#setRepositories",
+                        "tf": 25
+                      },
                       "RoomController.html": {
                         "ref": "RoomController.html",
                         "tf": 1.3513513513513513
@@ -6431,6 +7024,32 @@
               }
             }
           },
+          "v": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "r": {
+                "docs": {},
+                "w": {
+                  "docs": {},
+                  "r": {
+                    "docs": {},
+                    "i": {
+                      "docs": {},
+                      "t": {
+                        "docs": {
+                          "RepositoryController.html#setRepositories": {
+                            "ref": "RepositoryController.html#setRepositories",
+                            "tf": 3.571428571428571
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "p": {
             "docs": {},
             "t": {
@@ -6617,23 +7236,33 @@
                   "PluginController.html#removePlugin": {
                     "ref": "PluginController.html#removePlugin",
                     "tf": 20
-                  }
-                }
-              }
-            },
-            "m": {
-              "docs": {},
-              "e": {
-                "docs": {
-                  "RepositoryController.html#hasRepository": {
-                    "ref": "RepositoryController.html#hasRepository",
-                    "tf": 4.545454545454546
+                  },
+                  "PluginController.html#reloadPlugin": {
+                    "ref": "PluginController.html#reloadPlugin",
+                    "tf": 20
                   }
                 }
               }
             },
             "v": {
               "docs": {},
+              "i": {
+                "docs": {},
+                "o": {
+                  "docs": {},
+                  "l": {
+                    "docs": {},
+                    "a": {
+                      "docs": {
+                        "RepositoryController.html#setRepositories": {
+                          "ref": "RepositoryController.html#setRepositories",
+                          "tf": 3.571428571428571
+                        }
+                      }
+                    }
+                  }
+                }
+              },
               "/": {
                 "docs": {},
                 "r": {
@@ -6651,6 +7280,17 @@
                   }
                 }
               }
+            },
+            "m": {
+              "docs": {},
+              "e": {
+                "docs": {
+                  "RepositoryController.html#hasRepository": {
+                    "ref": "RepositoryController.html#hasRepository",
+                    "tf": 4.545454545454546
+                  }
+                }
+              }
             }
           },
           "e": {
@@ -6664,6 +7304,10 @@
                 "RepositoryController.html#addRepository": {
                   "ref": "RepositoryController.html#addRepository",
                   "tf": 2.380952380952381
+                },
+                "RepositoryController.html#setRepositories": {
+                  "ref": "RepositoryController.html#setRepositories",
+                  "tf": 3.571428571428571
                 }
               },
               "p": {
@@ -6706,6 +7350,49 @@
                     }
                   }
                 }
+              },
+              "r": {
+                "docs": {},
+                "e": {
+                  "docs": {},
+                  "p": {
+                    "docs": {},
+                    "o": {
+                      "docs": {},
+                      "s": {
+                        "docs": {},
+                        "i": {
+                          "docs": {},
+                          "t": {
+                            "docs": {},
+                            "o": {
+                              "docs": {},
+                              "r": {
+                                "docs": {},
+                                "i": {
+                                  "docs": {
+                                    "RepositoryController.html#setRepositories": {
+                                      "ref": "RepositoryController.html#setRepositories",
+                                      "tf": 675
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "e": {
+              "docs": {
+                "PluginController.html#reloadPlugin": {
+                  "ref": "PluginController.html#reloadPlugin",
+                  "tf": 3.8461538461538463
+                }
               }
             }
           },
@@ -6741,6 +7428,10 @@
                     "docs": {},
                     "n": {
                       "docs": {
+                        "PluginController.html#reloadPlugin": {
+                          "ref": "PluginController.html#reloadPlugin",
+                          "tf": 20
+                        },
                         "RepositoryController.html#hasRepository": {
                           "ref": "RepositoryController.html#hasRepository",
                           "tf": 25
@@ -6847,6 +7538,33 @@
         },
         "w": {
           "docs": {},
+          "r": {
+            "docs": {},
+            "a": {
+              "docs": {},
+              "p": {
+                "docs": {},
+                "p": {
+                  "docs": {},
+                  "e": {
+                    "docs": {},
+                    "r": {
+                      "docs": {
+                        "PluginController.html#reloadPlugin": {
+                          "ref": "PluginController.html#reloadPlugin",
+                          "tf": 3.8461538461538463
+                        },
+                        "RoomController.html#eval": {
+                          "ref": "RoomController.html#eval",
+                          "tf": 3.125
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "h": {
             "docs": {},
             "e": {
@@ -6911,33 +7629,10 @@
                 }
               }
             }
-          },
-          "r": {
-            "docs": {},
-            "a": {
-              "docs": {},
-              "p": {
-                "docs": {},
-                "p": {
-                  "docs": {},
-                  "e": {
-                    "docs": {},
-                    "r": {
-                      "docs": {
-                        "RoomController.html#eval": {
-                          "ref": "RoomController.html#eval",
-                          "tf": 3.125
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       },
-      "length": 544
+      "length": 578
     },
     "corpusTokens": [
       "access",
@@ -6951,6 +7646,7 @@
       "api",
       "append",
       "arg",
+      "around",
       "array",
       "array.&lt;repository&gt",
       "array.&lt;roomcontroller&gt",
@@ -6983,6 +7679,8 @@
       "custom",
       "data",
       "debug",
+      "default",
+      "defin",
       "delet",
       "depend",
       "disabl",
@@ -7033,6 +7731,7 @@
       "hhmload",
       "highest",
       "hrconfig",
+      "https://github.com/saviola777/haxbal",
       "i.",
       "id",
       "includedis",
@@ -7056,6 +7755,7 @@
       "lowest",
       "lt;async&gt",
       "manag",
+      "manager/blob/master/src/classes/pluginmanager.js#l565",
       "member",
       "merg",
       "method",
@@ -7078,6 +7778,7 @@
       "origin",
       "otherwis",
       "out",
+      "overwrit",
       "page",
       "page.evalu",
       "pagefunct",
@@ -7091,9 +7792,11 @@
       "plugincontroller#getpluginconfig",
       "plugincontroller#getpluginsthatdependon",
       "plugincontroller#hasplugin",
+      "plugincontroller#reloadplugin",
       "plugincontroller#removeplugin",
       "plugincontroller#setpluginconfig",
       "plugindata",
+      "pluginmanager.reloadplugin",
       "pluginnam",
       "port",
       "possibl",
@@ -7114,6 +7817,8 @@
       "readi",
       "readm",
       "recurs",
+      "reload",
+      "reloadplugin",
       "remot",
       "remov",
       "removeplugin",
@@ -7125,6 +7830,7 @@
       "repositorycontroller#getrepositori",
       "repositorycontroller#getrepositoryinform",
       "repositorycontroller#hasrepositori",
+      "repositorycontroller#setrepositori",
       "repositorydata",
       "requir",
       "retriev",
@@ -7155,8 +7861,11 @@
       "safe",
       "same",
       "sav/rol",
+      "saviola",
+      "see",
       "set",
       "setpluginconfig",
+      "setrepositori",
       "spawn",
       "still",
       "string",
@@ -7359,6 +8068,16 @@
       "summary": "",
       "description": "Returns the plugin config for all loaded plugins in the room or if pluginName is given, then return the config for that plugin."
     },
+    "PluginController.html#reloadPlugin": {
+      "id": "PluginController.html#reloadPlugin",
+      "kind": "function",
+      "title": "&lt;async&gt; reloadPlugin( pluginName [, safe ] ) → {boolean}",
+      "longname": "PluginController#reloadPlugin",
+      "name": "reloadPlugin",
+      "tags": "PluginController#reloadPlugin reloadPlugin",
+      "summary": "",
+      "description": "Reloads a plugin from the configured repositories. This is a wrapper around the HHM PluginManager.reloadPlugin method. See https://github.com/saviola777/haxball-headless-manager/blob/master/src/classes/PluginManager.js#L565"
+    },
     "RepositoryController.html": {
       "id": "RepositoryController.html",
       "kind": "class",
@@ -7379,6 +8098,16 @@
       "tags": "RepositoryController#addRepository addRepository",
       "summary": "",
       "description": "Adds a repository. If append is set to true, the new repository will be added with the lowest priority, i.e. plugins will only be loaded from it they can't be found in any other repository. Otherwise the repository will be added with the highest priority."
+    },
+    "RepositoryController.html#setRepositories": {
+      "id": "RepositoryController.html#setRepositories",
+      "kind": "function",
+      "title": "&lt;async&gt; setRepositories( repository ) → {Promise}",
+      "longname": "RepositoryController#setRepositories",
+      "name": "setRepositories",
+      "tags": "RepositoryController#setRepositories setRepositories",
+      "summary": "",
+      "description": "Sets the repositories. Overwrites all repositories with the given array of repositories. Adds saviolas default repository if its not defined in the given array."
     },
     "RepositoryController.html#hasRepository": {
       "id": "RepositoryController.html#hasRepository",
