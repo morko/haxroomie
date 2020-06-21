@@ -26,6 +26,7 @@ class HRConsoleApp {
     this.userDataDir = opt.userDataDir;
     this.downloadDirectory = opt.downloadDirectory;
     this.executablePath = opt.executablePath;
+    this.chromiumArgs = opt.chromiumArgs;
     this.noSandbox = opt.noSandbox;
     this.headless = Object.prototype.hasOwnProperty.call(opt, 'window')
       ? !opt.window
@@ -53,6 +54,7 @@ class HRConsoleApp {
       headless: this.headless,
       port: this.port,
       timeout: this.timeout,
+      chromiumArgs: this.chromiumArgs,
     });
 
     this.haxroomie.on('room-added', room => this.onNewRoom(room));

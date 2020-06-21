@@ -50,6 +50,13 @@ function parseCommandLineArgs(configDirectory) {
     )
     .default('loglevel', 'warn')
 
+    .alias('a', 'chromium-args')
+    .describe(
+      'chromium-args',
+      'Pass additional arguments for the headless Chrome browser. ' +
+        'E.g. --chromium-args="--enable-logging"'
+    )
+
     .boolean(`no-sandbox`)
     .describe(`no-sandbox`, `Runs headless Chrome without sandboxing.`)
 

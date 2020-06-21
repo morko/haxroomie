@@ -10,7 +10,6 @@ Rooms can be run
 - From the command line using
   [haxroomie-cli](https://github.com/morko/haxroomie/tree/master/packages/haxroomie-cli)
 
-
 With haxroomie you can
   - run rooms without desktop environment
   - run multiple rooms with ease
@@ -19,7 +18,12 @@ With haxroomie you can
   - monitor and control rooms from command line
   - use the API to create an interface to run rooms
 
-This repository is a monorepo containing all the different interfaces for haxroomie.
+**If you are looking to how to run rooms in your VPS then you probably want
+[haxroomie-cli](https://www.npmjs.com/package/haxroomie-cli).**
+
+This repository is a monorepo containing the main API
+[haxroomie-core](packages/haxroomie-core/) and interfaces using the API.
+
 
 ## Links
 
@@ -27,19 +31,30 @@ This repository is a monorepo containing all the different interfaces for haxroo
 - [haxroomie-cli](packages/haxroomie-cli/) (Command Line Interface)
 - [API Documentation](https://morko.github.io/haxroomie) (API documentation and tutorials)
 
-## Development
+## Contributing and Development
 
-1. Clone the repository.
-2. Install dependencies and create links between the subpackages (handled by lerna).
+1. Clone/fork the repository.
+2. Install main dependencies
+```sh
+npm install
+```
+3. Install dependencies and create links between the subpackages (handled by lerna).
 ```sh
 npm run bootstrap
 ```
-3. haxroomie-cli can be run from projects root.
+4. haxroomie-cli can be run from projects root.
 ```sh
 npm start
 ```
 
 I accept well documented pull request to master branch.
+
+### Debugging
+
+To enable more extensive logging for development, you can set environment variable `NODE_ENV=development`.
+
+For even more extensive loggin you can enable [Puppeteers](https://github.com/puppeteer/puppeteer/) debug logs by setting environment variable `DEBUG="puppeteer:*"`. See more about debugging puppeteer at https://developers.google.com/web/tools/puppeteer/debugging.
+
 
 ### Version Control
 

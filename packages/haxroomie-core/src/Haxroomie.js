@@ -55,6 +55,8 @@ class Haxroomie extends EventEmitter {
    * @param {string} [options.executablePath] - Path to chrome launcher.
    * @param {string} [options.downloadDirectory] - Directory to where the files
    *    downloaded from the browser are saved.
+   * @param {string} [options.chromiumArgs] - Additional arguments for the
+   *    chromium browser.
    */
   constructor({
     viewport = { width: 400, height: 500 },
@@ -65,6 +67,7 @@ class Haxroomie extends EventEmitter {
     timeout = 30,
     executablePath,
     downloadDirectory,
+    chromiumArgs,
   } = {}) {
     super();
     if (!downloadDirectory) {
@@ -87,6 +90,7 @@ class Haxroomie extends EventEmitter {
     this.executablePath = executablePath
       ? path.resolve(process.cwd(), executablePath)
       : undefined;
+    this.chromiumArgs = chromiumArgs;
   }
 
   /**
@@ -111,6 +115,10 @@ class Haxroomie extends EventEmitter {
     if (this.noSandbox) {
       browserArgs.push('--no-sandbox');
       browserArgs.push('--disable-setuid-sandbox');
+    }
+
+    if (this.chromiumArgs) {
+      browserArgs.push(this.chromiumArgs);
     }
 
     let launchOptions = {
