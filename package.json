@@ -4,7 +4,7 @@
     "start": "node packages/haxroomie-cli",
     "test": "mocha ./packages/haxroomie-core/test",
     "docs": "jsdoc ./packages/haxroomie-core/index.js ./packages/haxroomie-core/src/Haxroomie.js ./packages/haxroomie-core/src/room/RoomController.js ./packages/haxroomie-core/src/room/components/PluginController.js ./packages/haxroomie-core/src/room/components/RepositoryController.js ./assets/docs/HOMEPAGE.md -c ./assets/docs/jsdoc.config.js",
-    "publish": "npm run docs && npm run format && git add . && git commit -m 'pre-release commit' && lerna publish",
+    "publish": "npm run docs && npm run format && git add . && git commit -m 'pre-release commit' && git push && lerna publish",
     "format": "eslint --fix ./packages",
     "bootstrap": "lerna bootstrap"
   },
