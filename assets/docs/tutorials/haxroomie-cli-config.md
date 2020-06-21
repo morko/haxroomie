@@ -65,27 +65,6 @@ repositories: [
 ],
 ```
 
-## `plugins`
-
-If you do not wish to create a repository you can load multiple plugins also
-by givin them in the `plugins` property. **The plugins that are given this way
-will be automatically loaded when room is opened.** Use
-[pluginConfig](#pluginconfig) to pass them configurations if they support them.
-
-e.g.
-```js
-plugins: [
-  {
-    name: 'my/first-plugin',
-    path: '/path/to/first/plugin.js'
-  },
-  {
-    name: 'my/second-plugin',
-    path: '/path/to/second/plugin.js'
-  }
-]
-```
-
 ## `pluginConfig`
 
 Object containing the plugins to load and their configurations.
@@ -121,6 +100,10 @@ pluginConfig: {
 
 This is a handy option if you just need to be running one script. You can give
 the path to the script with the `roomScript` property.
+
+You might want to disable other plugins from 
+[pluginConfig](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#pluginconfig)
+to prevent them from interfering with yours.
 
 e.g.
 ```js

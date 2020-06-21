@@ -208,28 +208,56 @@ module.exports = config;
 
 ## Scripts and plugins
 
-You can run your script with the configs
-[roomScript](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#roomscript)
-option.
-
-Running a script this way will disable the default plugins that haxroomie loads
-(except few essential ones).
-
-### Running plugins instead of a room script
-
-[Haxball Headless Manager](https://github.com/saviola777/haxball-headless-manager) (HHM)
-allows you to modularize your room script. Instead of one massive
+Haxroomie uses [Haxball Headless Manager](https://github.com/saviola777/haxball-headless-manager) (HHM)
+that allows you to modularize your room script. Instead of one massive
 JavaScript file you can implement the functionality in smaller modules called
 plugins.
 
-See the saviolas
-[guide for writing plugins](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins).
+If you just need to run your own vanilla room script, you can use the
+[roomScript](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#roomscript)
+option.
 
-#### Developing plugins with haxroomie
+You might want to disable other plugins from 
+[pluginConfig](https://morko.github.io/haxroomie/tutorial-haxroomie-cli-config.html#pluginconfig)
+to prevent them from interfering with yours.
+
+### Using plugins
+
+The plugins live inside repositories like [hhm-sala-plugins](https://github.com/morko/hhm-sala-plugins).
+
+Repositories can be loaded with 
+`repositories`
+and plugins with
+`pluginConfig` option for [RoomController.open()](https://morko.github.io/haxroomie/RoomController.html#openRoom).
+
+If you want to write your own plugins, see 
+[saviolas guide for writing plugins](https://hhm.surge.sh/api/tutorial-writing-plugins.html#writing-publishing-plugins).
+
+#### Downloading files / haxball recordings
+
+You can download files from your plugins/room scripts with the global function `haxroomie.download()`.
+
+```js
+const obj = {hello: 'world'};
+const blob = new Blob([JSON.stringify(obj, null, 2)], {type : 'application/json'});
+haxroomie.download({ fileName: 'example.txt', file: blob});
+```
+See [more info about blobs](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
+
+The recs can be downloaded with the `haxroomie.downloadRec()` function.
+
+```js
+const bestGameEver = stopRecording();
+haxroomie.downloadRec({ fileName: 'best-game-ever.hbr2', rec: bestGameEver });
+```
+
+By default the files will be downloaded to `~/.haxroomie/downloads` (can be changed with `downloadDirectory` argument for [Haxroomie object](https://morko.github.io/haxroomie/Haxroomie.html#newhaxroomie-options)).
+
+#### Developing plugins with haxroomie-cli
 
 You can load your repository from the file system.
 
-Add this to the `repository` array in haxroomie config:
+Add this to the `repository` array in the config file:
 
 ```js
 {
@@ -239,6 +267,9 @@ Add this to the `repository` array in haxroomie config:
   suffix: '.js' // optional (.js is default)
 }
 ```
+
+You might also want to enable [more extensive logging](/README.md#debugging)
+and/or make haxroomie start the browser in windowed mode with `window` option  in the command line.
 
 #### Publishing your plugins
 
