@@ -1,5 +1,42 @@
 # Changelog
 
+## 2.5.0
+
+- It is now possible to download files within the plugins using
+  `haxroomie.download({ file: Blob, fileName: string })` and
+  HaxBall recs using `haxroomie.downloadRec({ rec: Uint8Array, fileName: string })`.
+- Log timestamps use ISO-8601 format.
+- Improved the deserialization of log messages from browser.
+  It should now be possible to log objects, strings and
+  errors with console.log, console.warn and console.error.
+- Fixed `reload` command possibly missing some settings 
+  (and same with `RoomController.plugins.setPluginConfig()`).
+- Running HHM version 1.0.2 and `saviola777/hhm-plugins` c8ee22cd46d38f4fa8ec29f201755a08ed5dc4a2.
+
+### haxroomie-cli
+
+- Added command line argument `--loglevel` 
+  that can be used to set the level of logging. The default
+  is `warn` and possible values are `error`, `warn` and `info`.
+  For e.g. if loglevel is set to `info` the cli will print
+  console.log, console.warn and console.error messages.
+- It should be now possible to get the newest versions of plugins
+  using the `reload` command in CLI. No need to restart the rooms to update
+  plugins anymore.
+- Added command line argument `--chromium-args` to pass arguments to the
+  browser haxroomie starts.
+- Added command line argument `--download-directory` for setting the download
+  location for files.
+
+### haxroomie-core
+
+- Added `RoomController.plugins.reloadPlugin()` to be able to reload plugins
+  from a repository.
+- `Haxroomie` constructor accepts `chromiumArgs` argument for setting additional
+  arguments for the browser.
+- `Haxroomie` constructor accepts `downloadDirectory` for setting the download
+  location for files.
+
 ## 2.4.0
 
 ### Potentially breaking changes
