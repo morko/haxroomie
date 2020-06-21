@@ -230,7 +230,7 @@ class BaseCommands extends CommandHandler {
       category: 'Room control',
       run: async () => {
         let playerList = await this.room.callRoom('getPlayerList');
-        playerList = playerList.filter(p => p.id !== 0);
+        playerList = playerList.filter(p => p && p.id !== 0);
 
         let players = [`${playerList.length}/${this.room.roomInfo.maxPlayers}`];
 
