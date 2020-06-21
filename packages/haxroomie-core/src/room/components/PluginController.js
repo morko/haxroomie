@@ -15,7 +15,8 @@
  * @property {number} id - The plugin id.
  * @property {string|number} name - The plugin name.
  * @property {boolean} isEnabled - Indicates whether the plugin is enabled or disabled.
- * @property {object} [pluginSpec] - HHM pluginSpec property.
+ * @property {object} pluginSpec - HHM pluginSpec property.
+ * @property {object} pluginSpecOriginal - Plugins initial pluginSpec (default values).
  */
 
 /**
@@ -243,10 +244,17 @@ class PluginController {
               );
             }
           }
-          // merge the new config with old one
+
           let plugin = HHM.manager.getPlugin(pluginName);
+
+          // get plugins default config
+          const pluginDefaultConfig = plugin._pluginSpecOriginal.config
+            ? plugin._pluginSpecOriginal.config
+            : {};
+
+          // merge the new config with plugins default values
           HHM.manager.setPluginConfig(pluginId, {
-            ...plugin.pluginSpec.config,
+            ...pluginDefaultConfig,
             ...pluginConfig,
           });
         },
@@ -268,10 +276,18 @@ class PluginController {
               return;
             }
           }
-          // merge the new config with the old one
+
           let plugin = HHM.manager.getPlugin(name);
+
+          // get plugins default config
+          const pluginDefaultConfig = plugin._pluginSpecOriginal.config
+            ? plugin._pluginSpecOriginal.config
+            : {};
+
+          console.log({ ...pluginDefaultConfig, ...config });
+          // merge the new config with plugins default values
           HHM.manager.setPluginConfig(pluginId, {
-            ...plugin.pluginSpec.config,
+            ...pluginDefaultConfig,
             ...config,
           });
         },

@@ -103,6 +103,7 @@ Object.assign(
         name: p.pluginSpec ? p.pluginSpec.name : undefined,
         isEnabled: p.isEnabled(),
         pluginSpec: p.pluginSpec,
+        pluginSpecOriginal: p._pluginSpecOriginal,
       };
 
       return pluginData;
