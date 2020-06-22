@@ -203,13 +203,14 @@ class BaseCommands extends CommandHandler {
           'RELOAD CONFIG'
         );
         try {
-          for (let pluginName of Object.keys(newConfig[roomId].pluginConfig)) {
+          const loadedPlugins = await room.plugins.getPlugins();
+          for (let plugin of loadedPlugins) {
             // The sav/players plugin cannot be reloaded because a bug in the plugin.
             // See https://github.com/saviola777/hhm-plugins/issues/19
-            if (pluginName === 'sav/players') {
+            if (plugin.name === 'sav/players') {
               continue;
             }
-            await room.plugins.reloadPlugin(pluginName);
+            await room.plugins.reloadPlugin(plugin.name);
           }
         } catch (err) {
           commandPrompt.print(err.message);
