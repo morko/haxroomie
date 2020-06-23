@@ -43,7 +43,6 @@ const COLORS = {
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  terminal: false,
 });
 
 let cmd = null;
@@ -55,6 +54,9 @@ rl.on(`close`, () => {
   } else {
     cmd.execute(`q`);
   }
+});
+rl.on('SIGCONT', () => {
+  rl.resume();
 });
 
 /**
@@ -182,6 +184,7 @@ async function onNewLine(line) {
 
     logger.debug(err.stack);
   }
+  createPrompt();
 }
 
 module.exports = {
