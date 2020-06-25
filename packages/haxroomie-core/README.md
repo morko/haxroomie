@@ -1,5 +1,8 @@
 # haxroomie-core
 
+**WARNING: there is currently some problem running with 20.04 version of Ubuntu crashing randomly.**
+This is being investigated but will take some time to debug.
+
 API made with `Node.js` for running and controlling HaxBall rooms.
 
 The most important interfaces the API offers are:
