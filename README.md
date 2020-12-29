@@ -50,7 +50,7 @@ npm run bootstrap
 npm start
 ```
 
-I accept well documented pull request to master branch.
+I accept well documented pull request to development branch.
 
 ### Debugging
 
@@ -58,17 +58,17 @@ To enable more extensive logging for development, you can set environment variab
 
 For even more extensive logging you can enable [Puppeteers](https://github.com/puppeteer/puppeteer/) debug logs by setting environment variable `DEBUG="puppeteer:*"`. See more about debugging puppeteer at https://developers.google.com/web/tools/puppeteer/debugging.
 
-
 ### Version Control
 
-Development is done on the `master` branch and publishing to npm is also done
-from `master`. If major update happens, then the old version will be branched
+Development is done on the `development` branch which will be merged to master
+on new release. The npm version will be published from the `master` branch.
+If major update happens, then the old version will be branched
 and new version will continue as `master`. Feature branches are highly engouraced.
 
 ## Running tests
 
 Tests can be ran with `npm test` in the projects root, but they require a
-token for the HaxBall room. The token(s) is loaded from environmental
+token for the HaxBall room. The token(s) is loaded from environment
 variables.
 e.g.
 ```
