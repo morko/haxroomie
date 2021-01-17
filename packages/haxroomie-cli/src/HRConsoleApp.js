@@ -1,5 +1,6 @@
 const { createHaxroomie } = require('haxroomie-core');
 const colors = require('colors/safe');
+const fs = require('fs');
 
 const { CommandManager, RoomContext } = require('./command');
 const RoomEventHandler = require('./RoomEventHandler');
@@ -12,6 +13,8 @@ const loglevels = {
   warn: 1,
   info: 2,
 };
+
+var logStream = fs.createWriteStream('/home/haxroomie/.haxroomie/logfile.log', {flags: 'a'});
 
 /**
  * Class for managing RoomController instances.
@@ -184,6 +187,7 @@ class HRConsoleApp {
           `${this.logPrefix(room)} ${msg}`,
           'BROWSER LOG ERROR'
         );
+        logStream.write(`BROWSER LOG ERROR: ${this.logPrefix(room)} ${msg}\n`);
       });
       if (this.loglevel >= loglevels.warn) {
         room.on(`warning-logged`, msg => {
@@ -192,6 +196,7 @@ class HRConsoleApp {
             'BROWSER LOG WARN'
           );
         });
+        logStream.write(`BROWSER LOG WARN: ${this.logPrefix(room)} ${msg}\n`);
       }
       if (this.loglevel >= loglevels.info) {
         room.on(`info-logged`, msg => {
@@ -199,6 +204,7 @@ class HRConsoleApp {
             `${this.logPrefix(room)} ${msg}`,
             'BROWSER LOG INFO'
           );
+        logStream.write(`BROWSER LOG INFO: ${this.logPrefix(room)} ${msg}\n`);
         });
       }
     }
