@@ -187,7 +187,7 @@ class HRConsoleApp {
           `${this.logPrefix(room)} ${msg}`,
           'BROWSER LOG ERROR'
         );
-        logStream.write(`BROWSER LOG ERROR: ${this.logPrefix(room)} ${msg}\n`);
+        logStream.write(`[${room.id}] BROWSER LOG ERROR: ${msg}\n`);
       });
       if (this.loglevel >= loglevels.warn) {
         room.on(`warning-logged`, msg => {
@@ -196,7 +196,7 @@ class HRConsoleApp {
             'BROWSER LOG WARN'
           );
         });
-        logStream.write(`BROWSER LOG WARN: ${this.logPrefix(room)} ${msg}\n`);
+        logStream.write(`[${room.id}] BROWSER LOG WARN: ${msg}\n`);
       }
       if (this.loglevel >= loglevels.info) {
         room.on(`info-logged`, msg => {
@@ -204,7 +204,7 @@ class HRConsoleApp {
             `${this.logPrefix(room)} ${msg}`,
             'BROWSER LOG INFO'
           );
-        logStream.write(`BROWSER LOG INFO: ${this.logPrefix(room)} ${msg}\n`);
+        logStream.write(`[${room.id}] BROWSER LOG INFO: ${msg}\n`);
         });
       }
     }
