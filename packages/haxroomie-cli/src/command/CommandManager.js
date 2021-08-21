@@ -153,10 +153,10 @@ class CommandManager {
     }
 
     for (let category of categories.keys()) {
-      commandPrompt.print('');
-      commandPrompt.print(colors.green.bold(category + ':'));
+      commandPrompt.printRaw('');
+      commandPrompt.printRaw(colors.green.bold(category + ':'));
       const helps = categories.get(category);
-      commandPrompt.print(helps.join(`\n`));
+      commandPrompt.printRaw(helps.join(`\n`));
     }
   }
 }

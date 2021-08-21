@@ -17,12 +17,16 @@ class AdminCommands extends CommandHandler {
       run: async id => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
-          commandPrompt.print('Player ID has to be a number!', 'ERROR');
+          commandPrompt.error('Player ID has to be a number!', {
+            room: this.room,
+          });
           return;
         }
         let hasPlayer = await doesRoomHavePlayer(this.room, intId);
         if (!hasPlayer) {
-          commandPrompt.print(`no player with id: ${intId}`, `ERROR`);
+          commandPrompt.error(`No player with id: ${intId}`, {
+            room: this.room,
+          });
           return;
         }
         await this.room.callRoom('setPlayerAdmin', intId, true);
@@ -39,12 +43,16 @@ class AdminCommands extends CommandHandler {
       run: async id => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
-          commandPrompt.print('Player ID has to be a number!', 'ERROR');
+          commandPrompt.error('Player ID has to be a number!', {
+            room: this.room,
+          });
           return;
         }
         let hasPlayer = await doesRoomHavePlayer(this.room, intId);
         if (!hasPlayer) {
-          commandPrompt.print(`no player with id: ${intId}`, `ERROR`);
+          commandPrompt.error(`No player with id: ${intId}`, {
+            room: this.room,
+          });
           return;
         }
         await this.room.callRoom('setPlayerAdmin', intId, false);

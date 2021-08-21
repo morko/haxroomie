@@ -57,6 +57,21 @@ class Haxroomie extends EventEmitter {
    *    downloaded from the browser are saved.
    * @param {string} [options.chromiumArgs] - Additional arguments for the
    *    chromium browser.
+   * @fires RoomController#page-closed
+   * @fires RoomController#page-crash
+   * @fires RoomController#page-error
+   * @fires RoomController#error-logged
+   * @fires RoomController#warning-logged
+   * @fires RoomController#info-logged
+   * @fires RoomController#open-room-start
+   * @fires RoomController#open-room-stop
+   * @fires RoomController#close-room-start
+   * @fires RoomController#close-room-stop
+   * @fires RoomController#room-event
+   * @fires RoomController#plugin-loaded
+   * @fires RoomController#plugin-removed
+   * @fires RoomController#plugin-enabled
+   * @fires RoomController#plugin-disabled
    */
   constructor({
     viewport = { width: 400, height: 500 },
@@ -70,17 +85,22 @@ class Haxroomie extends EventEmitter {
     chromiumArgs,
   } = {}) {
     super();
+
     if (!downloadDirectory) {
       throw new Error('Missing argument: downloadDirectory');
     }
+
     this.browser = null;
     this.rooms = new Map();
+    this.roomControllerEventHandlers = new Map();
 
     this.viewport = viewport;
     this.port = port;
+
     if (this.port === 0) {
       throw new Error('INVALID_PORT: 0');
     }
+
     this.downloadDirectory = downloadDirectory;
     this.noSandbox = noSandbox;
     this.headless = headless;
@@ -182,6 +202,61 @@ class Haxroomie extends EventEmitter {
   }
 
   /**
+   * Adds listener for RoomController that re emits the event from Haxroomie instance.
+   *
+   * @param {RoomController} room - RoomController to add listeners to.
+   * @param {string} eventName - Name of the event to listen to.
+   */
+  createRoomControllerEventHandler(room, eventName) {
+    const handler = (...args) => {
+      this.emit(eventName, ...args);
+    };
+    if (!this.roomControllerEventHandlers.get(room.id)) {
+      this.roomControllerEventHandlers.set(room.id, []);
+    }
+    const handlers = this.roomControllerEventHandlers.get(room.id);
+    handlers.push({ eventName, handler });
+    room.on(eventName, handler);
+  }
+
+  /**
+   * Add listeners to RoomController instance.
+   *
+   * @param {RoomController} roomController - Instance of RoomController.
+   * @private
+   */
+  addRoomControllerHandlers(room) {
+    this.createRoomControllerEventHandler(room, 'page-closed');
+    this.createRoomControllerEventHandler(room, 'page-crash');
+    this.createRoomControllerEventHandler(room, 'page-error');
+    this.createRoomControllerEventHandler(room, 'error-logged');
+    this.createRoomControllerEventHandler(room, 'warning-logged');
+    this.createRoomControllerEventHandler(room, 'info-logged');
+    this.createRoomControllerEventHandler(room, 'open-room-start');
+    this.createRoomControllerEventHandler(room, 'open-room-stop');
+    this.createRoomControllerEventHandler(room, 'room-event');
+    this.createRoomControllerEventHandler(room, 'plugin-loaded');
+    this.createRoomControllerEventHandler(room, 'plugin-removed');
+    this.createRoomControllerEventHandler(room, 'plugin-enabled');
+    this.createRoomControllerEventHandler(room, 'plugin-disabled');
+  }
+
+  /**
+   * Remove listeners from RoomController instance.
+   *
+   * @param {RoomController} roomController - Instance of RoomController.
+   * @private
+   */
+  removeRoomControllerHandlers(room) {
+    const handlers = this.roomControllerEventHandlers.get(room.id);
+    if (handlers) {
+      for (const handler of handlers) {
+        room.off(handler.eventName, handler);
+      }
+    }
+  }
+
+  /**
    * Checks if there is a room running with the given id.
    *
    * @param {string|number} id - An id of the room.
@@ -192,6 +267,7 @@ class Haxroomie extends EventEmitter {
     this.ensureInstanceIsUsable();
     return this.rooms.has(id);
   }
+
   /**
    * Returns a RoomController with the given id.
    *
@@ -246,6 +322,7 @@ class Haxroomie extends EventEmitter {
       } catch (err) {
         logger.debug(err);
       }
+      this.removeRoomControllerHandlers(roomController);
       this.rooms.delete(id);
       this.emit('room-removed', roomController);
     }
@@ -262,6 +339,7 @@ class Haxroomie extends EventEmitter {
       roomController instanceof RoomController
     );
   }
+
   /**
    * Adds a new RoomController.
    *
@@ -308,6 +386,9 @@ class Haxroomie extends EventEmitter {
       behavior: 'allow',
       downloadPath: this.downloadDirectory,
     });
+
+    this.addRoomControllerHandlers(room);
+
     this.rooms.set(id, room);
     this.emit('room-added', room);
     return room;

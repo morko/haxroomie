@@ -3,9 +3,9 @@ const colors = require('colors/safe');
 
 const { CommandManager, RoomContext } = require('./command');
 const RoomEventHandler = require('./RoomEventHandler');
+const NativeRoomEventHandler = require('./NativeRoomEventHandler');
 const Config = require('./Config');
 const commandPrompt = require('./command-prompt');
-const { logger } = require('haxroomie-core');
 
 const loglevels = {
   error: 0,
@@ -65,6 +65,11 @@ class HRConsoleApp {
       haxroomie: this.haxroomie,
     });
 
+    this.roomEventHandler = new RoomEventHandler({ haxroomie: this.haxroomie });
+    this.nativeRoomEventHandler = new NativeRoomEventHandler({
+      haxroomie: this.haxroomie,
+    });
+
     await this.createRooms();
     await this.setRoom(this.haxroomie.getFirstRoom());
     await this.autoStartRooms();
@@ -92,14 +97,20 @@ class HRConsoleApp {
   async createRoom(roomId) {
     const roomConfig = this.config.getRoomConfig(roomId);
 
-    commandPrompt.print(`${colors.cyan(roomId)}`, 'ADDING ROOM');
+    commandPrompt.print(roomId, {
+      type: 'adding room',
+      colorFn: colors.cyan,
+    });
 
     await this.haxroomie.addRoom(roomId, {
       hhmVersion: roomConfig.hhmVersion,
       hhm: roomConfig.hhm,
     });
 
-    commandPrompt.print(`${colors.cyan(roomId)}`, 'ROOM ADDED');
+    commandPrompt.print(roomId, {
+      type: 'room added',
+      colorFn: colors.cyan,
+    });
   }
 
   /**
@@ -112,7 +123,7 @@ class HRConsoleApp {
         try {
           roomInfo = await this.openRoom(id);
           if (!roomInfo) {
-            commandPrompt.print(`Could not open room: ${colors.cyan(id)}`);
+            commandPrompt.warn(`Could not open room: ${id}`);
           }
         } catch (err) {
           commandPrompt.error(err);
@@ -126,12 +137,6 @@ class HRConsoleApp {
    * @param {RoomController} room - The room to control.
    */
   async setRoom(room) {
-    if (this.roomEventHandler)
-      this.roomEventHandler.removeAllListeners('print');
-    this.roomEventHandler = new RoomEventHandler({ room });
-    this.roomEventHandler.on('print', (msg, type) =>
-      commandPrompt.print(msg, type)
-    );
     commandPrompt.setPrompt(`${colors.cyan(room.id)}> `);
     commandPrompt.setCommandManager(await this.createCommandManager(room));
     this.currentRoom = room;
@@ -155,149 +160,9 @@ class HRConsoleApp {
     await commandManager.init();
     return commandManager;
   }
+
   logPrefix(room) {
     return `[${new Date().toISOString()}] [${colors.cyan(room.id)}]`;
-  }
-
-  /**
-   * Called when a new room is added to haxroomie.
-   * @private
-   */
-  onNewRoom(room) {
-    room.on(`open-room-start`, (err, config) =>
-      this.onOpenRoomStart(err, room, config)
-    );
-    room.on(`open-room-stop`, (err, roomInfo) =>
-      this.onOpenRoomStop(err, room, roomInfo)
-    );
-    room.on(`close-room-start`, err => this.onCloseRoomStart(err, room));
-    room.on(`close-room-stop`, err => this.onCloseRoomStop(err, room));
-    room.on(`page-closed`, room => this.onPageClosed(room));
-    room.on(`page-crash`, err => commandPrompt.error(err));
-    room.on(`page-error`, err => commandPrompt.error(err));
-
-    // Set listening for the log events only if we are not in development
-    // mode, because it will log anything to stdout anyways.
-    if (process.env.NODE_ENV !== 'development') {
-      room.on(`error-logged`, msg => {
-        commandPrompt.print(
-          `${this.logPrefix(room)} ${msg}`,
-          'BROWSER LOG ERROR'
-        );
-      });
-      if (this.loglevel >= loglevels.warn) {
-        room.on(`warning-logged`, msg => {
-          commandPrompt.print(
-            `${this.logPrefix(room)} ${msg}`,
-            'BROWSER LOG WARN'
-          );
-        });
-      }
-      if (this.loglevel >= loglevels.info) {
-        room.on(`info-logged`, msg => {
-          commandPrompt.print(
-            `${this.logPrefix(room)} ${msg}`,
-            'BROWSER LOG INFO'
-          );
-        });
-      }
-    }
-  }
-
-  /**
-   * Called when a room is removed from haxroomie
-   * @private
-   */
-  onRoomRemoved(room) {
-    room.removeAllListeners(`open-room-start`);
-    room.removeAllListeners(`open-room-stop`);
-    room.removeAllListeners(`close-room-start`);
-    room.removeAllListeners(`close-room-stop`);
-    room.removeAllListeners(`page-closed`);
-    room.removeAllListeners(`page-crash`);
-    room.removeAllListeners(`page-error`);
-    room.removeAllListeners(`error-logged`);
-    room.removeAllListeners(`warning-logged`);
-    room.removeAllListeners(`info-logged`);
-  }
-
-  onStartupLog(msg) {
-    commandPrompt.print(
-      `${this.logPrefix(this.currentRoom)} ${msg}`,
-      'BOOTSTRAP'
-    );
-  }
-
-  onOpenRoomStart(err, room) {
-    if (err) {
-      commandPrompt.print(`Could not start room ${room.id}`, `ERROR`);
-      return;
-    }
-    if (
-      process.env.NODE_ENV !== 'development' &&
-      this.loglevel < loglevels.info
-    ) {
-      room.on('info-logged', this.onStartupLog);
-    }
-
-    commandPrompt.print(`${colors.cyan(room.id)}`, `STARTING ROOM`);
-  }
-
-  onOpenRoomStop(err, room, roomInfo) {
-    room.removeListener('info-logged', this.onStartupLog);
-    if (err) {
-      switch (err.name) {
-        case 'InvalidTokenError':
-          commandPrompt.print(
-            `${colors.cyan(room.id)}: ${err.message}`,
-            `INVALID TOKEN`
-          );
-          break;
-        default:
-          commandPrompt.print(
-            `Could not start room ${room.id}: ${err.message}`,
-            `ERROR`
-          );
-          break;
-      }
-      logger.debug(`[${room.id}] ${err.stack}`);
-      return;
-    }
-
-    commandPrompt.print(
-      `${colors.cyan(room.id)} - ${roomInfo.roomLink}`,
-      `ROOM STARTED`
-    );
-  }
-
-  onCloseRoomStart(err, room) {
-    if (err) {
-      commandPrompt.print(
-        `Room was not closed properly and is ` + `probably unusable.`,
-        `ERROR`
-      );
-    } else {
-      commandPrompt.print(`${colors.cyan(room.id)}`, `CLOSING ROOM`);
-    }
-  }
-
-  onCloseRoomStop(err, room) {
-    if (err) {
-      commandPrompt.print(
-        `Room was not closed properly and is ` + `probably unusable.`,
-        `ERROR`
-      );
-    } else {
-      commandPrompt.print(`${colors.cyan(room.id)}`, `ROOM CLOSED`);
-    }
-  }
-
-  async onPageClosed(room) {
-    await this.haxroomie.removeRoom(room.id);
-    commandPrompt.print(
-      `The page controlling ${colors.cyan(room.id)} was closed.`,
-      `PAGE CLOSED`
-    );
   }
 
   /**
@@ -308,7 +173,7 @@ class HRConsoleApp {
    */
   async openRoom(id, tryWithConfigToken = true) {
     if (!this.haxroomie.hasRoom(id)) {
-      commandPrompt.print(`No room with id: ${id}.`, `ERROR`);
+      commandPrompt.error(`No room with id: ${id}.`);
       return;
     }
 
@@ -336,13 +201,13 @@ class HRConsoleApp {
     );
 
     if (!newToken) {
-      commandPrompt.print('You have to give a token!', 'ERROR');
+      commandPrompt.error('You have to give a token!');
       await this.openRoom(id, false);
     } else if (newToken === 'c') {
-      commandPrompt.print(
-        `${colors.cyan(id)}: User canceled opening.`,
-        `ERROR`
-      );
+      commandPrompt.print(`id: ${id}.`, {
+        type: 'room open canceled',
+        colorFn: colors.cyan,
+      });
       return;
     }
 
@@ -369,7 +234,7 @@ class HRConsoleApp {
    */
   async closeRoom(id) {
     if (!this.haxroomie.hasRoom(id)) {
-      commandPrompt.print(`No room with id: ${id}.`, `ERROR`);
+      commandPrompt.error(`No room with id: ${id}.`);
       return;
     }
     let room = this.haxroomie.getRoom(id);

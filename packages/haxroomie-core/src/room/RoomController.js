@@ -73,46 +73,58 @@ const { stringify } = require('../utils');
 
 /**
  * Emitted when the browser tab gets closed.
- * Renders this RoomController unusable.
+ * Results the RoomController being unusable.
  * @event RoomController#page-closed
- * @param {RoomController} room - Instance of RoomController that was
- *    controlling the page.
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  */
 
 /**
  * Emitted when the browser tab crashes.
  * Renders this RoomController unusable.
  * @event RoomController#page-crash
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {Error} error - The error that was thrown.
  */
 
 /**
  * Emitted when some script throws an error in the browsers tab.
  * @event RoomController#page-error
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {Error} error - The error that was thrown.
  */
 
 /**
  * Emitted when a browser tab logs an error to the console.
  * @event RoomController#error-logged
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {string} message - The logged error message.
  */
 
 /**
  * Emitted when a browser tab logs a warning to the console.
  * @event RoomController#warning-logged
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {string} message - The logged warning message.
  */
 
 /**
  * Emitted when a browser tab logs to console.
  * @event RoomController#info-logged
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {string} message - The logged message.
  */
 
 /**
  * Emitted when {@link RoomController#openRoom} has been called.
  * @event RoomController#open-room-start
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {Error|UnusableError|RoomIsRunningError|RoomLockedError} [error] - If error happened when starting to open room.
  * @param {object} config - Config object given as argument to
  *    {@link RoomController#openRoom}
@@ -133,6 +145,8 @@ const { stringify } = require('../utils');
  * room.openRoom(config);
  * ```
  * @event RoomController#open-room-stop
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {Error|ConnectionError|TimeoutError|InvalidTokenError} [error]
  *    - If error happened when opening the room.
  * @param {object} roomInfo - Information about the room.
@@ -140,12 +154,16 @@ const { stringify } = require('../utils');
 
 /**
  * Emitted when {@link RoomController#closeRoom} has been called.
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {UnusableError} [error] - If the room is at unusable state.
  * @event RoomController#close-room-start
  */
 
 /**
  * Emitted when {@link RoomController#closeRoom} has finished.
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {Error} [error] - If error happened during closeRoom.
  * @event RoomController#close-room-stop
  */
@@ -153,30 +171,40 @@ const { stringify } = require('../utils');
 /**
  * Emitted when supported HaxBall roomObject event happens.
  * @event RoomController#room-event
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {RoomEventArgs} roomEventArgs - Event arguments.
  */
 
 /**
  * Emitted when a plugin is loaded.
  * @event RoomController#plugin-loaded
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {PluginData} pluginData - Information about the plugin.
  */
 
 /**
  * Emitted when a plugin is removed.
  * @event RoomController#plugin-removed
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {PluginData} pluginData - Information about the plugin.
  */
 
 /**
  * Emitted when a plugin is enabled.
  * @event RoomController#plugin-enabled
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {PluginData} pluginData - Information about the plugin.
  */
 
 /**
  * Emitted when a plugin is disabled.
  * @event RoomController#plugin-disabled
+ * @param {RoomController} room - Instance of RoomController that
+ *    emitted the event.
  * @param {PluginData} pluginData - Information about the plugin.
  */
 
@@ -225,6 +253,10 @@ class RoomController extends EventEmitter {
     this._roomInfo = null;
     this._openRoomLock = false;
 
+    // Bind to the context of this RoomController so the method can be passed
+    // around without breaking.
+    this.handleChildEmit = this.handleChildEmit.bind(this);
+
     this.roomOpener = new RoomOpener({
       id: this.id,
       page: this.page,
@@ -236,20 +268,24 @@ class RoomController extends EventEmitter {
       page: this.page,
       defaultRepoVersion: this._defaultRepoVersion,
     });
+
     this._plugins = new PluginController({ page: this.page });
+
     this._roles = new RoleController({
       page: this.page,
       plugins: this._plugins,
     });
+
     this._errorHandler = new RoomErrorHandler({
       page: this.page,
       setRoomState: this.setRoomState.bind(this),
-      emit: this.emit.bind(this),
+      emit: this.handleChildEmit,
       roomId: this.id,
     });
+
     this._consoleHandler = new RoomConsoleHandler({
       page: this.page,
-      emit: this.emit.bind(this),
+      emit: this.handleChildEmit,
       roomId: this.id,
     });
 
@@ -352,6 +388,7 @@ class RoomController extends EventEmitter {
     if (!this.running) throw new RoomNotRunningError();
     return this._roles;
   }
+
   /**
    * Validates the arguments for the constructor.
    *
@@ -388,7 +425,10 @@ class RoomController extends EventEmitter {
    *
    * @param {BrowserAction} action - Event arguments.
    * @emits RoomController#room-event
-   * @emits RoomController#
+   * @emits RoomController#plugin-loaded
+   * @emits RoomController#plugin-removed
+   * @emits RoomController#plugin-enabled
+   * @emits RoomController#plugin-disabled
    * @private
    */
   async onBrowserAction(action) {
@@ -397,7 +437,7 @@ class RoomController extends EventEmitter {
         this.handleHhmEvent;
         break;
       case 'ROOM_EVENT':
-        this.emit('room-event', action.payload);
+        this.emit('room-event', this, action.payload);
         break;
     }
   }
@@ -415,18 +455,31 @@ class RoomController extends EventEmitter {
   handleHhmEvent(action) {
     switch (action.payload.eventType) {
       case `pluginLoaded`:
-        this.emit('plugin-loaded', action.payload.pluginData);
+        this.emit('plugin-loaded', this, action.payload.pluginData);
         break;
       case `pluginRemoved`:
-        this.emit('plugin-removed', action.payload.pluginData);
+        this.emit('plugin-removed', this, action.payload.pluginData);
         break;
       case `pluginEnabled`:
-        this.emit('plugin-enabled', action.payload.pluginData);
+        this.emit('plugin-enabled', this, action.payload.pluginData);
         break;
       case `pluginDisabled`:
-        this.emit('plugin-disabled', action.payload.pluginData);
+        this.emit('plugin-disabled', this, action.payload.pluginData);
         break;
     }
+  }
+
+  /**
+   * Function that can be given to child components of RoomController for them
+   * to be able to emit events from the RoomControllers context.
+   *
+   * @param {string} eventName - Name of the event to emit.
+   * @param {any} [...args] - Data to send with the event.
+   * @returns {boolean} - Returns true if the event had listeners, false otherwise.
+   * @private
+   */
+  handleChildEmit(eventName, ...args) {
+    return this.emit(eventName, this, ...args);
   }
 
   /**
@@ -534,23 +587,23 @@ class RoomController extends EventEmitter {
 
     if (!this.usable) {
       let err = new UnusableError('Instance unusable!');
-      this.emit(`open-room-start`, err);
+      this.emit(`open-room-start`, this, err);
       throw err;
     }
     if (this.running) {
       let err = new RoomIsRunningError(
         'The room is already running. Close it before opening again!'
       );
-      this.emit(`open-room-start`, err);
+      this.emit(`open-room-start`, this, err);
       throw err;
     }
     if (this._openRoomLock) {
       let err = new RoomLockedError('Room is already being opened!');
-      this.emit(`open-room-start`, err);
+      this.emit(`open-room-start`, this, err);
       throw err;
     }
 
-    this.emit(`open-room-start`, null, config);
+    this.emit(`open-room-start`, this, null, config);
     this._openRoomLock = true;
     config.defaultRepoVersion =
       config.defaultRepoVersion || this._defaultRepoVersion;
@@ -561,11 +614,11 @@ class RoomController extends EventEmitter {
     } catch (err) {
       this._openRoomLock = false;
       if (process.env.NODE_ENV !== 'development') await this.closeRoom();
-      this.emit(`open-room-stop`, err);
+      this.emit(`open-room-stop`, this, err);
       throw err;
     }
     this._openRoomLock = false;
-    this.emit(`open-room-stop`, null, this.roomInfo);
+    this.emit(`open-room-stop`, this, null, this.roomInfo);
     return this._roomInfo;
   }
 
@@ -582,11 +635,11 @@ class RoomController extends EventEmitter {
     logger.debug(`RoomController#closeRoom`);
     if (!this.usable) {
       let err = new UnusableError('Instance unusable!');
-      this.emit(`close-room-start`, err);
+      this.emit(`close-room-start`, this, err);
       throw err;
     }
 
-    this.emit(`close-room-start`);
+    this.emit(`close-room-start`, this);
 
     try {
       await this.roomOpener.close();
@@ -594,12 +647,12 @@ class RoomController extends EventEmitter {
       this._usable = false;
       this._hhmLoaded = false;
       this._roomInfo = null;
-      this.emit(`close-room-stop`, new UnusableError(err.msg));
+      this.emit(`close-room-stop`, this, new UnusableError(err.msg));
       throw new UnusableError(err.msg);
     }
     this._hhmLoaded = false;
     this._roomInfo = null;
-    this.emit(`close-room-stop`);
+    this.emit(`close-room-stop`, this);
   }
 
   /**

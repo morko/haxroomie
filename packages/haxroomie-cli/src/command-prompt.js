@@ -2,6 +2,13 @@ const readline = require('readline');
 const colors = require('colors/safe');
 const { logger } = require('haxroomie-core');
 
+const messageContext = {
+  haxroomie: 0,
+  browser: 1,
+  plugin: 2,
+  nativeRoomEvent: 3,
+};
+
 const COLORS = {
   BOOTSTRAP: colors.green,
   'ADDING ROOM': colors.green,
@@ -93,12 +100,24 @@ async function question(question) {
 /**
  * Prints message to console.
  * @param {string} msg - The message.
- * @param {string} type - Type of message.
+ * @param {object} options - Additional options.
+ * @param {RoomController} options.room - Room that the message came from.
+ * @param {number} options.context - Context of the message.
+ * @param {string} options.type - Short description of the message type.
+ * @param {function} options.colorFn - Color function from `colors/safe` npm package.
  */
-function print(msg, type) {
+function print(msg, options) {
+  const styledMessage = styleMessage(msg, options);
+  printRaw(styledMessage);
+}
+
+/**
+ * Prints given message to console without styling it.
+ * @param {string} msg - The message.
+ */
+function printRaw(msg) {
   readline.clearLine(process.stdout, 0);
   readline.cursorTo(process.stdout, 0);
-  if (type) msg = createMessage(type, msg);
   console.log(msg);
   createPrompt();
 }
@@ -106,47 +125,101 @@ function print(msg, type) {
 /**
  * Prints error to console. If `err` is type of `Error` an error stack
  * will be printed.
- * @param {Error|string} err - The message.
+ * @param {Error|string} msg - The message.
+ * @param {object} options - Additional options.
+ * @param {RoomController} options.room - Room that the message came from.
+ * @param {number} [options.context=messageContext.haxroomie] - Context of the message.
+ * @param {string} [options.type='error'] - Short description of the message type.
+ * @param {function} [options.colorFn=colors.red.bold] - Color function from `colors/safe` npm package.
  */
-function error(err) {
-  readline.clearLine(process.stdout, 0);
-  readline.cursorTo(process.stdout, 0);
+function error(msg, options) {
+  const defaultOptions = {
+    context: messageContext.haxroomie,
+    type: 'error',
+    colorFn: colors.red.bold,
+  };
 
-  if (err && err.stack) {
-    logger.error(err.stack);
+  const newOptions = { ...defaultOptions, ...options };
+
+  if (msg && msg.stack) {
+    print(msg, newOptions);
+    print(msg.stack, newOptions);
   } else {
-    logger.error(err);
+    print(msg, newOptions);
   }
-  createPrompt();
 }
 
 /**
  * Prints warning message to console.
- * @param {string} msg - The message.
+ * @param {Error|string} msg - The message.
+ * @param {object} options - Additional options.
+ * @param {RoomController} options.room - Room that the message came from.
+ * @param {number} [options.context=messageContext.haxroomie] - Context of the message.
+ * @param {string} [options.type='warning'] - Short description of the message type.
+ * @param {function} [options.colorFn=colors.yellow.bold] - Color function from `colors/safe` npm package.
  */
-function warn(msg) {
-  readline.clearLine(process.stdout, 0);
-  readline.cursorTo(process.stdout, 0);
+function warn(msg, options) {
+  const defaultOptions = {
+    context: messageContext.haxroomie,
+    type: 'warning',
+    colorFn: colors.yellow.bold,
+  };
 
-  logger.warn(msg);
-  createPrompt();
+  const newOptions = { ...defaultOptions, ...options };
+
+  print(msg, newOptions);
 }
 
 /**
  * Formats the message based on its type.
- * @param {string} type - Type of message.
  * @param {string} msg - The message.
+ * @param {object} options - Additional options.
+ * @param {RoomController} options.room - Room that the message came from.
+ * @param {number} options.context - Context of the message.
+ * @param {string} options.type - Short description of the message type.
+ * @param {function} options.colorFn - Color function from `colors/safe` npm package.
  */
-function createMessage(type, msg) {
-  let coloredType = `[${type}]`;
-  if (COLORS[type]) coloredType = COLORS[type](type);
-  let fullMsg = `${coloredType}`;
-  if (!msg) return fullMsg;
-  if (typeof msg !== `string`) {
-    throw new Error(`Msg has to be typeof string`);
+function styleMessage(
+  msg,
+  { context = messageContext.haxroomie, room, type, colorFn }
+) {
+  let prefix = '';
+
+  switch (context) {
+    case messageContext.browser:
+      prefix += '🌍 ';
+      break;
+    case messageContext.haxroomie:
+      prefix += '🏡 ';
+      break;
+    case messageContext.plugin:
+      prefix += '🔌 ';
+      break;
+    case messageContext.nativeRoomEvent:
+      prefix += '⚽ ';
+      break;
+    default:
+      prefix += '🏡 ';
+      break;
   }
-  fullMsg += ` ${msg}`;
-  return fullMsg;
+
+  if (room) {
+    prefix += `<${room.id}> `;
+  }
+
+  if (type) {
+    prefix += `[${type}] `;
+  }
+
+  let coloredMessage = msg;
+
+  if (colorFn) {
+    coloredMessage = colorFn(msg);
+  }
+
+  const styledMessage = prefix + coloredMessage;
+
+  return styledMessage;
 }
 
 /**
@@ -165,21 +238,22 @@ async function onNewLine(line) {
     if (cmd) {
       await cmd.execute(line);
     } else {
-      print('Console is not yet ready.');
+      error('Console is not yet ready.');
     }
   } catch (err) {
     switch (err.name) {
       case 'InvalidCommandError':
-        print(`${line} (type "help" for commands)`, 'INVALID COMMAND');
+        error(`Command not found: '${line}' (type "help" for commands).`);
         break;
 
       case 'InvalidCommandArgsError':
-        print(err.message, 'INVALID ARGUMENTS');
+        error(err.message, {
+          type: 'invalid command arguments',
+        });
         break;
 
       default:
-        print(`Error executing: ${line}`, 'ERROR');
-        logger.error(err.stack);
+        error(err);
     }
 
     logger.debug(err.stack);
@@ -194,4 +268,5 @@ module.exports = {
   error,
   warn,
   question,
+  messageContext,
 };
