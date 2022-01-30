@@ -55,7 +55,7 @@ class Haxroomie extends EventEmitter {
    * @param {string} [options.executablePath] - Path to chrome launcher.
    * @param {string} [options.downloadDirectory] - Directory to where the files
    *    downloaded from the browser are saved.
-   * @param {string} [options.chromiumArgs] - Additional arguments for the
+   * @param {array} [options.chromiumArgs] - Additional arguments for the
    *    chromium browser.
    */
   constructor({
@@ -118,7 +118,7 @@ class Haxroomie extends EventEmitter {
     }
 
     if (this.chromiumArgs) {
-      browserArgs.push(this.chromiumArgs);
+      browserArgs.push(...this.chromiumArgs);
     }
 
     let launchOptions = {
