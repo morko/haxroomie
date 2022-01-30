@@ -14,7 +14,7 @@ class AdminCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async id => {
+      run: async (id) => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
           commandPrompt.print('Player ID has to be a number!', 'ERROR');
@@ -36,7 +36,7 @@ class AdminCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async id => {
+      run: async (id) => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
           commandPrompt.print('Player ID has to be a number!', 'ERROR');

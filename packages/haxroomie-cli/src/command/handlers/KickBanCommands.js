@@ -14,7 +14,7 @@ class KickBanCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async id => {
+      run: async (id) => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
           commandPrompt.print('Player ID has to be a number!', 'ERROR');
@@ -36,7 +36,7 @@ class KickBanCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async id => {
+      run: async (id) => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
           commandPrompt.print('Player ID has to be a number!', 'ERROR');
@@ -58,7 +58,7 @@ class KickBanCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['id'],
       category: 'Room control',
-      run: async id => {
+      run: async (id) => {
         let intId = parseInt(id);
         if (isNaN(intId)) {
           commandPrompt.print('Player ID has to be a number!', 'ERROR');
@@ -90,7 +90,7 @@ class KickBanCommands extends CommandHandler {
           commandPrompt.print('No banned players.');
           return;
         }
-        bannedPlayers = bannedPlayers.map(p => `id:${p.id} - ${p.name}`);
+        bannedPlayers = bannedPlayers.map((p) => `id:${p.id} - ${p.name}`);
         commandPrompt.print(bannedPlayers.join('\n'));
       },
     };

@@ -23,7 +23,7 @@ class RoleController {
     if (!rolesPlugin || !rolesPlugin.isEnabled) {
       throw new Error('sav/roles plugin needs to be loaded and enabled!');
     }
-    return this.page.evaluate(playerId => {
+    return this.page.evaluate((playerId) => {
       if (typeof playerId === 'number') {
         const rolesPlugin = HHM.manager.getPlugin('sav/roles');
         let roles = rolesPlugin.getPlayerRoles(playerId);

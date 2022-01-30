@@ -1,7 +1,7 @@
 const MAX_STRING_LENGTH = 256;
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function stringify(object) {

@@ -54,7 +54,7 @@ if (hrConfig.plugins && !Array.isArray(hrConfig.plugins)) {
 }
 
 // Work after HHM has been initialized.
-HHM.config.postInit = HBInit => {
+HHM.config.postInit = (HBInit) => {
   let room = HBInit();
 
   // Load the additional `plugins` outside of repositories.

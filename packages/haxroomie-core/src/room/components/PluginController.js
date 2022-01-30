@@ -36,8 +36,8 @@ class PluginController {
     let result = await this.page.evaluate(() => {
       let plugins = HHM.manager
         .getLoadedPluginIds()
-        .map(id => haxroomie.serializePlugin(id))
-        .filter(pluginData => {
+        .map((id) => haxroomie.serializePlugin(id))
+        .filter((pluginData) => {
           const name = pluginData.pluginSpec.name;
           // ignore these plugins
           if (!haxroomie.ignoredPlugins) return true;
@@ -56,7 +56,7 @@ class PluginController {
    *    plugin was not found.
    */
   async getPlugin(name) {
-    return this.page.evaluate(name => {
+    return this.page.evaluate((name) => {
       const plugin = HHM.manager.getPlugin(name);
       return haxroomie.serializePlugin(plugin);
     }, name);
@@ -69,7 +69,7 @@ class PluginController {
    * @returns {Promise.<boolean>} - `true` if plugin was enabled, `false` otherwise.
    */
   async enablePlugin(name) {
-    return this.page.evaluate(name => {
+    return this.page.evaluate((name) => {
       return HHM.manager.enablePlugin(name);
     }, name);
   }
@@ -113,7 +113,7 @@ class PluginController {
       (name, recursive, includeDisabled) => {
         return HHM.manager
           .getDependentPlugins(name, recursive, includeDisabled)
-          .map(id => haxroomie.serializePlugin(id));
+          .map((id) => haxroomie.serializePlugin(id));
       },
       name,
       recursive,
@@ -127,7 +127,7 @@ class PluginController {
    * @returns {Promise.<boolean>} - `true` if it had the plugin, `false` if not.
    */
   async hasPlugin(name) {
-    return this.page.evaluate(async name => {
+    return this.page.evaluate(async (name) => {
       return HHM.manager.hasPlugin(name);
     }, name);
   }
@@ -346,7 +346,7 @@ class PluginController {
    */
   async getPluginConfig(pluginName) {
     if (typeof pluginName === 'string') {
-      let config = await this.page.evaluate(pluginName => {
+      let config = await this.page.evaluate((pluginName) => {
         let plugin = HHM.manager.getPlugin(pluginName);
         if (!plugin) {
           throw new TypeError(`Invalid plugin "${pluginName}".`);
@@ -358,7 +358,7 @@ class PluginController {
     }
 
     let config = await this.page.evaluate(() => {
-      let plugins = HHM.manager.getLoadedPluginIds().map(id => {
+      let plugins = HHM.manager.getLoadedPluginIds().map((id) => {
         return HHM.manager.getPlugin(id);
       });
       let cfg = {};

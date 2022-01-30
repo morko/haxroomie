@@ -128,7 +128,7 @@ function enableSharedStorage(id) {
     }
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     let localStorageProxy = new Proxy(
       window.localStorage,
       createLocalStorageProxyHandler(id)
@@ -141,7 +141,7 @@ function enableSharedStorage(id) {
 
     function enableIDBPrefix() {
       const _open = IDBFactory.prototype.open;
-      IDBFactory.prototype.open = function(name, version) {
+      IDBFactory.prototype.open = function (name, version) {
         let modifiedName = `${id}_${name}`;
         return _open.call(this, modifiedName, version);
       };

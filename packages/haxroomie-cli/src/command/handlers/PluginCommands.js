@@ -34,7 +34,7 @@ class PluginCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async name => {
+      run: async (name) => {
         let plugin = await this.room.plugins.getPlugin(name);
         commandPrompt.print(pluginDataToString(plugin));
       },
@@ -47,7 +47,7 @@ class PluginCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async name => {
+      run: async (name) => {
         let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           commandPrompt.print(`Invalid plugin name: ${name}`, `ERROR`);
@@ -64,7 +64,7 @@ class PluginCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async name => {
+      run: async (name) => {
         let pluginData = await this.room.plugins.getPlugin(name);
         if (!pluginData) {
           commandPrompt.print(`Invalid plugin name: ${name}`, `ERROR`);
@@ -86,7 +86,7 @@ class PluginCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['name'],
       category: 'Plugin control',
-      run: async name => {
+      run: async (name) => {
         let plugins = await this.room.plugins.getPluginsThatDependOn(name);
         if (!plugins || plugins.length < 1) {
           commandPrompt.print(

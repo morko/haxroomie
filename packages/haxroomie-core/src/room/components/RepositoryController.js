@@ -101,7 +101,7 @@ class RepositoryController {
    * @returns {Promise}
    */
   async setRepositories(repositories) {
-    return this.page.evaluate(async repositories => {
+    return this.page.evaluate(async (repositories) => {
       const repoFactory = HHM.manager.getPluginRepositoryFactory();
       const pluginLoader = HHM.manager.getPluginLoader();
 
@@ -145,7 +145,7 @@ class RepositoryController {
     if (!repository) {
       return false;
     }
-    return this.page.evaluate(async repository => {
+    return this.page.evaluate(async (repository) => {
       const repoFactory = HHM.manager.getPluginRepositoryFactory();
       const pluginLoader = HHM.manager.getPluginLoader();
       const r = await repoFactory.createRepository(repository);
@@ -173,7 +173,7 @@ class RepositoryController {
    * @returns {RepositoryData} - The metadata of the repository.
    */
   async getRepositoryInformation(repository) {
-    return this.page.evaluate(async rd => {
+    return this.page.evaluate(async (rd) => {
       let r = await HHM.manager
         .getPluginRepositoryFactory()
         .createRepository(rd);

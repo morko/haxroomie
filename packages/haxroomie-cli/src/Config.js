@@ -282,7 +282,7 @@ class Config {
         modifiedRooms.set(roomId, modifiedProperties);
       }
 
-      if (modifiedProperties.find(p => p === 'token')) {
+      if (modifiedProperties.find((p) => p === 'token')) {
         this.setToken(roomId, newConfig[roomId].token);
       }
     }

@@ -21,7 +21,7 @@ room.pluginSpec = {
 
 Object.assign(
   window.haxroomie,
-  (function() {
+  (function () {
     /**
      * List of default roomObject event handlers that the plugin will send
      * to the main process.
@@ -77,7 +77,7 @@ Object.assign(
 
       // send roomObject events to the main context
       for (let handlerName of roomEventHandlers) {
-        room[handlerName] = function(...args) {
+        room[handlerName] = function (...args) {
           haxroomie.send({
             type: 'ROOM_EVENT',
             payload: { handlerName, args },
@@ -87,7 +87,7 @@ Object.assign(
 
       // send HHM events to the main context
       for (let eventType of defaultHHMEvents) {
-        room[`onHhm_${eventType}`] = function(...args) {
+        room[`onHhm_${eventType}`] = function (...args) {
           if (args[0].plugin) {
             const pluginData = haxroomie.serializePlugin(args[0].plugin);
             if (!pluginData || ignoredPlugins.has(pluginData.name)) return;

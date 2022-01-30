@@ -47,7 +47,7 @@ const rl = readline.createInterface({
 
 let cmd = null;
 
-rl.on(`line`, line => onNewLine(line));
+rl.on(`line`, (line) => onNewLine(line));
 rl.on(`close`, () => {
   if (!cmd) {
     process.exit(0);
@@ -81,8 +81,8 @@ function setCommandManager(commandManager) {
  * @param {string} question - Question to ask.
  */
 async function question(question) {
-  let answer = await new Promise(resolve => {
-    rl.question(question, answer => {
+  let answer = await new Promise((resolve) => {
+    rl.question(question, (answer) => {
       resolve(answer);
     });
   });

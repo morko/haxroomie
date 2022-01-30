@@ -17,7 +17,7 @@ class CoreCommands extends CommandHandler {
       description: `Tries to reinitialize if room goes to an unusable state.`,
       args: ['id'],
       category: 'Advanced commands',
-      run: async id => {
+      run: async (id) => {
         await this.haxroomie.removeRoom(id);
         await this.createRoom(id);
       },
@@ -32,7 +32,7 @@ class CoreCommands extends CommandHandler {
         `as "room". e.g. eval room.getPlayerList().`,
       args: ['line'],
       category: 'Advanced commands',
-      run: async line => {
+      run: async (line) => {
         try {
           let result = await this.room.eval(
             new Function(`const room = HHM.manager.room; return ` + line)
@@ -53,7 +53,7 @@ class CoreCommands extends CommandHandler {
       const haxroomieSessionExists = execSync('tmux ls')
         .toString()
         .split('\n')
-        .some(line => line.startsWith('haxroomie'));
+        .some((line) => line.startsWith('haxroomie'));
 
       if (haxroomieSessionExists) {
         disabled = false;

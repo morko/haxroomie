@@ -21,7 +21,7 @@ class RoleCommands extends CommandHandler {
       disabled: isDisabled,
       args: ['role'],
       category: 'Room control',
-      run: async role => {
+      run: async (role) => {
         const roleInfo = await this.room.roles.getRole(role, {
           offlinePlayers: true,
         });

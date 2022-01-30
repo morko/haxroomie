@@ -247,97 +247,6 @@ window.lunrData = {
           "see",
           "wrapper"
         ],
-        "RepositoryController.html": [
-          "class",
-          "control",
-          "haxbal",
-          "headless",
-          "hhm",
-          "manag",
-          "repositori",
-          "repositorycontrol"
-        ],
-        "RepositoryController.html#addRepository": [
-          "ad",
-          "add",
-          "addrepositori",
-          "append",
-          "can't",
-          "found",
-          "function",
-          "highest",
-          "i.",
-          "load",
-          "lowest",
-          "lt;async&gt",
-          "new",
-          "otherwis",
-          "plugin",
-          "prioriti",
-          "promise.&lt;boolean&gt",
-          "repositori",
-          "repositorycontroller#addrepositori",
-          "set",
-          "true"
-        ],
-        "RepositoryController.html#setRepositories": [
-          "add",
-          "array",
-          "default",
-          "defin",
-          "function",
-          "given",
-          "lt;async&gt",
-          "overwrit",
-          "promis",
-          "repositori",
-          "repositorycontroller#setrepositori",
-          "saviola",
-          "set",
-          "setrepositori"
-        ],
-        "RepositoryController.html#hasRepository": [
-          "alreadi",
-          "boolean",
-          "configur",
-          "consid",
-          "equal",
-          "exist",
-          "function",
-          "given",
-          "hasrepositori",
-          "lt;async&gt",
-          "repositori",
-          "repositorycontroller#hasrepositori",
-          "return",
-          "same",
-          "whether"
-        ],
-        "RepositoryController.html#getRepositories": [
-          "array.&lt;repository&gt",
-          "avail",
-          "function",
-          "getrepositori",
-          "lt;async&gt",
-          "repositori",
-          "repositorycontroller#getrepositori",
-          "return"
-        ],
-        "RepositoryController.html#getRepositoryInformation": [
-          "config",
-          "file",
-          "function",
-          "getrepositoryinform",
-          "given",
-          "inform",
-          "load",
-          "lt;async&gt",
-          "repositori",
-          "repository.json",
-          "repositorycontroller#getrepositoryinform",
-          "repositorydata",
-          "retriev"
-        ],
         "Haxroomie.html": [
           "anyth",
           "befor",
@@ -459,6 +368,97 @@ window.lunrData = {
           "roomcontrolleropt",
           "string",
           "us"
+        ],
+        "RepositoryController.html": [
+          "class",
+          "control",
+          "haxbal",
+          "headless",
+          "hhm",
+          "manag",
+          "repositori",
+          "repositorycontrol"
+        ],
+        "RepositoryController.html#addRepository": [
+          "ad",
+          "add",
+          "addrepositori",
+          "append",
+          "can't",
+          "found",
+          "function",
+          "highest",
+          "i.",
+          "load",
+          "lowest",
+          "lt;async&gt",
+          "new",
+          "otherwis",
+          "plugin",
+          "prioriti",
+          "promise.&lt;boolean&gt",
+          "repositori",
+          "repositorycontroller#addrepositori",
+          "set",
+          "true"
+        ],
+        "RepositoryController.html#setRepositories": [
+          "add",
+          "array",
+          "default",
+          "defin",
+          "function",
+          "given",
+          "lt;async&gt",
+          "overwrit",
+          "promis",
+          "repositori",
+          "repositorycontroller#setrepositori",
+          "saviola",
+          "set",
+          "setrepositori"
+        ],
+        "RepositoryController.html#hasRepository": [
+          "alreadi",
+          "boolean",
+          "configur",
+          "consid",
+          "equal",
+          "exist",
+          "function",
+          "given",
+          "hasrepositori",
+          "lt;async&gt",
+          "repositori",
+          "repositorycontroller#hasrepositori",
+          "return",
+          "same",
+          "whether"
+        ],
+        "RepositoryController.html#getRepositories": [
+          "array.&lt;repository&gt",
+          "avail",
+          "function",
+          "getrepositori",
+          "lt;async&gt",
+          "repositori",
+          "repositorycontroller#getrepositori",
+          "return"
+        ],
+        "RepositoryController.html#getRepositoryInformation": [
+          "config",
+          "file",
+          "function",
+          "getrepositoryinform",
+          "given",
+          "inform",
+          "load",
+          "lt;async&gt",
+          "repositori",
+          "repository.json",
+          "repositorycontroller#getrepositoryinform",
+          "repositorydata",
+          "retriev"
         ],
         "RoomController.html": [
           "api",
@@ -819,6 +819,34 @@ window.lunrData = {
                 }
               }
             },
+            "b": {
+              "docs": {},
+              "u": {
+                "docs": {},
+                "g": {
+                  "docs": {
+                    "Haxroomie.html#launchBrowser": {
+                      "ref": "Haxroomie.html#launchBrowser",
+                      "tf": 3.125
+                    }
+                  }
+                }
+              }
+            },
+            "l": {
+              "docs": {},
+              "e": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "Haxroomie.html#removeRoom": {
+                      "ref": "Haxroomie.html#removeRoom",
+                      "tf": 4.545454545454546
+                    }
+                  }
+                }
+              }
+            },
             "f": {
               "docs": {},
               "a": {
@@ -845,34 +873,6 @@ window.lunrData = {
                     "RepositoryController.html#setRepositories": {
                       "ref": "RepositoryController.html#setRepositories",
                       "tf": 3.571428571428571
-                    }
-                  }
-                }
-              }
-            },
-            "b": {
-              "docs": {},
-              "u": {
-                "docs": {},
-                "g": {
-                  "docs": {
-                    "Haxroomie.html#launchBrowser": {
-                      "ref": "Haxroomie.html#launchBrowser",
-                      "tf": 3.125
-                    }
-                  }
-                }
-              }
-            },
-            "l": {
-              "docs": {},
-              "e": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "Haxroomie.html#removeRoom": {
-                      "ref": "Haxroomie.html#removeRoom",
-                      "tf": 4.545454545454546
                     }
                   }
                 }
@@ -1241,6 +1241,20 @@ window.lunrData = {
               },
               "r": {
                 "docs": {},
+                "o": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "m": {
+                      "docs": {
+                        "Haxroomie.html#hasRoom": {
+                          "ref": "Haxroomie.html#hasRoom",
+                          "tf": 683.3333333333334
+                        }
+                      }
+                    }
+                  }
+                },
                 "e": {
                   "docs": {},
                   "p": {
@@ -1268,20 +1282,6 @@ window.lunrData = {
                               }
                             }
                           }
-                        }
-                      }
-                    }
-                  }
-                },
-                "o": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "Haxroomie.html#hasRoom": {
-                          "ref": "Haxroomie.html#hasRoom",
-                          "tf": 683.3333333333334
                         }
                       }
                     }
@@ -1415,13 +1415,13 @@ window.lunrData = {
                             "ref": "PluginController.html#reloadPlugin",
                             "tf": 3.8461538461538463
                           },
-                          "RepositoryController.html": {
-                            "ref": "RepositoryController.html",
-                            "tf": 7.142857142857142
-                          },
                           "Haxroomie.html": {
                             "ref": "Haxroomie.html",
                             "tf": 2
+                          },
+                          "RepositoryController.html": {
+                            "ref": "RepositoryController.html",
+                            "tf": 7.142857142857142
                           },
                           "RoomController.html": {
                             "ref": "RoomController.html",
@@ -1788,14 +1788,6 @@ window.lunrData = {
               }
             }
           },
-          ".": {
-            "docs": {
-              "RepositoryController.html#addRepository": {
-                "ref": "RepositoryController.html#addRepository",
-                "tf": 2.380952380952381
-              }
-            }
-          },
           "d": {
             "docs": {
               "Haxroomie.html#hasRoom": {
@@ -1813,6 +1805,14 @@ window.lunrData = {
               "Haxroomie.html#addRoom": {
                 "ref": "Haxroomie.html#addRoom",
                 "tf": 5
+              }
+            }
+          },
+          ".": {
+            "docs": {
+              "RepositoryController.html#addRepository": {
+                "ref": "RepositoryController.html#addRepository",
+                "tf": 2.380952380952381
               }
             }
           }
@@ -1863,14 +1863,6 @@ window.lunrData = {
                         "ref": "PluginController.html#getPluginConfig",
                         "tf": 9.090909090909092
                       },
-                      "RepositoryController.html#hasRepository": {
-                        "ref": "RepositoryController.html#hasRepository",
-                        "tf": 4.545454545454546
-                      },
-                      "RepositoryController.html#getRepositories": {
-                        "ref": "RepositoryController.html#getRepositories",
-                        "tf": 16.666666666666664
-                      },
                       "Haxroomie.html#getRoom": {
                         "ref": "Haxroomie.html#getRoom",
                         "tf": 12.5
@@ -1882,6 +1874,14 @@ window.lunrData = {
                       "Haxroomie.html#getFirstRoom": {
                         "ref": "Haxroomie.html#getFirstRoom",
                         "tf": 12.5
+                      },
+                      "RepositoryController.html#hasRepository": {
+                        "ref": "RepositoryController.html#hasRepository",
+                        "tf": 4.545454545454546
+                      },
+                      "RepositoryController.html#getRepositories": {
+                        "ref": "RepositoryController.html#getRepositories",
+                        "tf": 16.666666666666664
                       },
                       "RoomController.html#roomInfo": {
                         "ref": "RoomController.html#roomInfo",
@@ -3334,6 +3334,24 @@ window.lunrData = {
               },
               "r": {
                 "docs": {},
+                "o": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "m": {
+                      "docs": {
+                        "Haxroomie.html#getRoom": {
+                          "ref": "Haxroomie.html#getRoom",
+                          "tf": 683.3333333333334
+                        },
+                        "Haxroomie.html#getRooms": {
+                          "ref": "Haxroomie.html#getRooms",
+                          "tf": 700
+                        }
+                      }
+                    }
+                  }
+                },
                 "e": {
                   "docs": {},
                   "p": {
@@ -3387,24 +3405,6 @@ window.lunrData = {
                               }
                             }
                           }
-                        }
-                      }
-                    }
-                  }
-                },
-                "o": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "Haxroomie.html#getRoom": {
-                          "ref": "Haxroomie.html#getRoom",
-                          "tf": 683.3333333333334
-                        },
-                        "Haxroomie.html#getRooms": {
-                          "ref": "Haxroomie.html#getRooms",
-                          "tf": 700
                         }
                       }
                     }
@@ -3481,18 +3481,6 @@ window.lunrData = {
                       "ref": "PluginController.html#getPluginConfig",
                       "tf": 4.545454545454546
                     },
-                    "RepositoryController.html#setRepositories": {
-                      "ref": "RepositoryController.html#setRepositories",
-                      "tf": 7.142857142857142
-                    },
-                    "RepositoryController.html#hasRepository": {
-                      "ref": "RepositoryController.html#hasRepository",
-                      "tf": 4.545454545454546
-                    },
-                    "RepositoryController.html#getRepositoryInformation": {
-                      "ref": "RepositoryController.html#getRepositoryInformation",
-                      "tf": 5
-                    },
                     "Haxroomie.html#launchBrowser": {
                       "ref": "Haxroomie.html#launchBrowser",
                       "tf": 3.125
@@ -3508,6 +3496,18 @@ window.lunrData = {
                     "Haxroomie.html#removeRoom": {
                       "ref": "Haxroomie.html#removeRoom",
                       "tf": 4.545454545454546
+                    },
+                    "RepositoryController.html#setRepositories": {
+                      "ref": "RepositoryController.html#setRepositories",
+                      "tf": 7.142857142857142
+                    },
+                    "RepositoryController.html#hasRepository": {
+                      "ref": "RepositoryController.html#hasRepository",
+                      "tf": 4.545454545454546
+                    },
+                    "RepositoryController.html#getRepositoryInformation": {
+                      "ref": "RepositoryController.html#getRepositoryInformation",
+                      "tf": 5
                     },
                     "RoomController.html#eval": {
                       "ref": "RoomController.html#eval",
@@ -3581,10 +3581,6 @@ window.lunrData = {
                           "ref": "PluginController.html",
                           "tf": 7.142857142857142
                         },
-                        "RepositoryController.html": {
-                          "ref": "RepositoryController.html",
-                          "tf": 7.142857142857142
-                        },
                         "Haxroomie.html": {
                           "ref": "Haxroomie.html",
                           "tf": 2
@@ -3600,6 +3596,10 @@ window.lunrData = {
                         "Haxroomie.html#removeRoom": {
                           "ref": "Haxroomie.html#removeRoom",
                           "tf": 4.545454545454546
+                        },
+                        "RepositoryController.html": {
+                          "ref": "RepositoryController.html",
+                          "tf": 7.142857142857142
                         },
                         "RoomController.html": {
                           "ref": "RoomController.html",
@@ -3671,17 +3671,6 @@ window.lunrData = {
               },
               "s": {
                 "docs": {},
-                "i": {
-                  "docs": {},
-                  "d": {
-                    "docs": {
-                      "RepositoryController.html#hasRepository": {
-                        "ref": "RepositoryController.html#hasRepository",
-                        "tf": 4.545454545454546
-                      }
-                    }
-                  }
-                },
                 "t": {
                   "docs": {},
                   "r": {
@@ -3704,6 +3693,17 @@ window.lunrData = {
                             }
                           }
                         }
+                      }
+                    }
+                  }
+                },
+                "i": {
+                  "docs": {},
+                  "d": {
+                    "docs": {
+                      "RepositoryController.html#hasRepository": {
+                        "ref": "RepositoryController.html#hasRepository",
+                        "tf": 4.545454545454546
                       }
                     }
                   }
@@ -3792,10 +3792,6 @@ window.lunrData = {
                       "ref": "PluginController.html",
                       "tf": 117.14285714285714
                     },
-                    "RepositoryController.html": {
-                      "ref": "RepositoryController.html",
-                      "tf": 117.14285714285714
-                    },
                     "Haxroomie.html": {
                       "ref": "Haxroomie.html",
                       "tf": 112
@@ -3803,6 +3799,10 @@ window.lunrData = {
                     "Haxroomie.html#launchBrowser": {
                       "ref": "Haxroomie.html#launchBrowser",
                       "tf": 3.125
+                    },
+                    "RepositoryController.html": {
+                      "ref": "RepositoryController.html",
+                      "tf": 117.14285714285714
                     },
                     "RoomController.html": {
                       "ref": "RoomController.html",
@@ -3914,6 +3914,27 @@ window.lunrData = {
               }
             }
           },
+          "r": {
+            "docs": {},
+            "e": {
+              "docs": {},
+              "a": {
+                "docs": {},
+                "t": {
+                  "docs": {
+                    "Haxroomie.html": {
+                      "ref": "Haxroomie.html",
+                      "tf": 2
+                    },
+                    "RoomController.html": {
+                      "ref": "RoomController.html",
+                      "tf": 1.3513513513513513
+                    }
+                  }
+                }
+              }
+            }
+          },
           "a": {
             "docs": {},
             "n": {
@@ -3961,27 +3982,6 @@ window.lunrData = {
                           }
                         }
                       }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "r": {
-            "docs": {},
-            "e": {
-              "docs": {},
-              "a": {
-                "docs": {},
-                "t": {
-                  "docs": {
-                    "Haxroomie.html": {
-                      "ref": "Haxroomie.html",
-                      "tf": 2
-                    },
-                    "RoomController.html": {
-                      "ref": "RoomController.html",
-                      "tf": 1.3513513513513513
                     }
                   }
                 }
@@ -4092,26 +4092,6 @@ window.lunrData = {
                             "ref": "PluginController.html#reloadPlugin",
                             "tf": 110
                           },
-                          "RepositoryController.html#addRepository": {
-                            "ref": "RepositoryController.html#addRepository",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#setRepositories": {
-                            "ref": "RepositoryController.html#setRepositories",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#hasRepository": {
-                            "ref": "RepositoryController.html#hasRepository",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#getRepositories": {
-                            "ref": "RepositoryController.html#getRepositories",
-                            "tf": 110
-                          },
-                          "RepositoryController.html#getRepositoryInformation": {
-                            "ref": "RepositoryController.html#getRepositoryInformation",
-                            "tf": 110
-                          },
                           "Haxroomie.html#launchBrowser": {
                             "ref": "Haxroomie.html#launchBrowser",
                             "tf": 110
@@ -4142,6 +4122,26 @@ window.lunrData = {
                           },
                           "Haxroomie.html#addRoom": {
                             "ref": "Haxroomie.html#addRoom",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#addRepository": {
+                            "ref": "RepositoryController.html#addRepository",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#setRepositories": {
+                            "ref": "RepositoryController.html#setRepositories",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#hasRepository": {
+                            "ref": "RepositoryController.html#hasRepository",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#getRepositories": {
+                            "ref": "RepositoryController.html#getRepositories",
+                            "tf": 110
+                          },
+                          "RepositoryController.html#getRepositoryInformation": {
+                            "ref": "RepositoryController.html#getRepositoryInformation",
                             "tf": 110
                           },
                           "RoomController.html#init": {
@@ -4586,6 +4586,22 @@ window.lunrData = {
                                   "ref": "PluginController.html#reloadPlugin",
                                   "tf": 20
                                 },
+                                "Haxroomie.html#launchBrowser": {
+                                  "ref": "Haxroomie.html#launchBrowser",
+                                  "tf": 50
+                                },
+                                "Haxroomie.html#closeBrowser": {
+                                  "ref": "Haxroomie.html#closeBrowser",
+                                  "tf": 50
+                                },
+                                "Haxroomie.html#removeRoom": {
+                                  "ref": "Haxroomie.html#removeRoom",
+                                  "tf": 33.33333333333333
+                                },
+                                "Haxroomie.html#addRoom": {
+                                  "ref": "Haxroomie.html#addRoom",
+                                  "tf": 20
+                                },
                                 "RepositoryController.html#addRepository": {
                                   "ref": "RepositoryController.html#addRepository",
                                   "tf": 20
@@ -4605,22 +4621,6 @@ window.lunrData = {
                                 "RepositoryController.html#getRepositoryInformation": {
                                   "ref": "RepositoryController.html#getRepositoryInformation",
                                   "tf": 25
-                                },
-                                "Haxroomie.html#launchBrowser": {
-                                  "ref": "Haxroomie.html#launchBrowser",
-                                  "tf": 50
-                                },
-                                "Haxroomie.html#closeBrowser": {
-                                  "ref": "Haxroomie.html#closeBrowser",
-                                  "tf": 50
-                                },
-                                "Haxroomie.html#removeRoom": {
-                                  "ref": "Haxroomie.html#removeRoom",
-                                  "tf": 33.33333333333333
-                                },
-                                "Haxroomie.html#addRoom": {
-                                  "ref": "Haxroomie.html#addRoom",
-                                  "tf": 20
                                 },
                                 "RoomController.html#init": {
                                   "ref": "RoomController.html#init",
@@ -4772,13 +4772,13 @@ window.lunrData = {
                       "ref": "PluginController.html",
                       "tf": 7.142857142857142
                     },
-                    "RepositoryController.html": {
-                      "ref": "RepositoryController.html",
-                      "tf": 7.142857142857142
-                    },
                     "Haxroomie.html": {
                       "ref": "Haxroomie.html",
                       "tf": 2
+                    },
+                    "RepositoryController.html": {
+                      "ref": "RepositoryController.html",
+                      "tf": 7.142857142857142
                     },
                     "RoomController.html": {
                       "ref": "RoomController.html",
@@ -5057,13 +5057,13 @@ window.lunrData = {
                       "ref": "PluginController.html#setPluginConfig",
                       "tf": 1.9230769230769231
                     },
-                    "RepositoryController.html#getRepositories": {
-                      "ref": "RepositoryController.html#getRepositories",
-                      "tf": 16.666666666666664
-                    },
                     "Haxroomie.html#getRooms": {
                       "ref": "Haxroomie.html#getRooms",
                       "tf": 12.5
+                    },
+                    "RepositoryController.html#getRepositories": {
+                      "ref": "RepositoryController.html#getRepositories",
+                      "tf": 16.666666666666664
                     }
                   }
                 }
@@ -5082,13 +5082,13 @@ window.lunrData = {
                       "ref": "PluginController.html#disablePlugin",
                       "tf": 4.545454545454546
                     },
-                    "RepositoryController.html#setRepositories": {
-                      "ref": "RepositoryController.html#setRepositories",
-                      "tf": 7.142857142857142
-                    },
                     "Haxroomie.html#getRooms": {
                       "ref": "Haxroomie.html#getRooms",
                       "tf": 12.5
+                    },
+                    "RepositoryController.html#setRepositories": {
+                      "ref": "RepositoryController.html#setRepositories",
+                      "tf": 7.142857142857142
                     }
                   },
                   ".": {
@@ -5103,47 +5103,6 @@ window.lunrData = {
                             "docs": {},
                             "r": {
                               "docs": {},
-                              "e": {
-                                "docs": {},
-                                "p": {
-                                  "docs": {},
-                                  "o": {
-                                    "docs": {},
-                                    "s": {
-                                      "docs": {},
-                                      "i": {
-                                        "docs": {},
-                                        "t": {
-                                          "docs": {},
-                                          "o": {
-                                            "docs": {},
-                                            "r": {
-                                              "docs": {},
-                                              "y": {
-                                                "docs": {},
-                                                "&": {
-                                                  "docs": {},
-                                                  "g": {
-                                                    "docs": {},
-                                                    "t": {
-                                                      "docs": {
-                                                        "RepositoryController.html#getRepositories": {
-                                                          "ref": "RepositoryController.html#getRepositories",
-                                                          "tf": 33.33333333333333
-                                                        }
-                                                      }
-                                                    }
-                                                  }
-                                                }
-                                              }
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              },
                               "o": {
                                 "docs": {},
                                 "o": {
@@ -5196,6 +5155,47 @@ window.lunrData = {
                                     }
                                   }
                                 }
+                              },
+                              "e": {
+                                "docs": {},
+                                "p": {
+                                  "docs": {},
+                                  "o": {
+                                    "docs": {},
+                                    "s": {
+                                      "docs": {},
+                                      "i": {
+                                        "docs": {},
+                                        "t": {
+                                          "docs": {},
+                                          "o": {
+                                            "docs": {},
+                                            "r": {
+                                              "docs": {},
+                                              "y": {
+                                                "docs": {},
+                                                "&": {
+                                                  "docs": {},
+                                                  "g": {
+                                                    "docs": {},
+                                                    "t": {
+                                                      "docs": {
+                                                        "RepositoryController.html#getRepositories": {
+                                                          "ref": "RepositoryController.html#getRepositories",
+                                                          "tf": 33.33333333333333
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               }
                             }
                           }
@@ -5234,13 +5234,13 @@ window.lunrData = {
           },
           "d": {
             "docs": {
-              "RepositoryController.html#addRepository": {
-                "ref": "RepositoryController.html#addRepository",
-                "tf": 4.761904761904762
-              },
               "Haxroomie.html#getFirstRoom": {
                 "ref": "Haxroomie.html#getFirstRoom",
                 "tf": 12.5
+              },
+              "RepositoryController.html#addRepository": {
+                "ref": "RepositoryController.html#addRepository",
+                "tf": 4.761904761904762
               }
             },
             "d": {
@@ -5249,6 +5249,10 @@ window.lunrData = {
                   "ref": "PluginController.html#addPlugin",
                   "tf": 3.8461538461538463
                 },
+                "Haxroomie.html#addRoom": {
+                  "ref": "Haxroomie.html#addRoom",
+                  "tf": 5
+                },
                 "RepositoryController.html#addRepository": {
                   "ref": "RepositoryController.html#addRepository",
                   "tf": 2.380952380952381
@@ -5256,10 +5260,6 @@ window.lunrData = {
                 "RepositoryController.html#setRepositories": {
                   "ref": "RepositoryController.html#setRepositories",
                   "tf": 3.571428571428571
-                },
-                "Haxroomie.html#addRoom": {
-                  "ref": "Haxroomie.html#addRoom",
-                  "tf": 5
                 }
               },
               "p": {
@@ -5287,6 +5287,20 @@ window.lunrData = {
               },
               "r": {
                 "docs": {},
+                "o": {
+                  "docs": {},
+                  "o": {
+                    "docs": {},
+                    "m": {
+                      "docs": {
+                        "Haxroomie.html#addRoom": {
+                          "ref": "Haxroomie.html#addRoom",
+                          "tf": 670
+                        }
+                      }
+                    }
+                  }
+                },
                 "e": {
                   "docs": {},
                   "p": {
@@ -5318,18 +5332,21 @@ window.lunrData = {
                       }
                     }
                   }
-                },
-                "o": {
-                  "docs": {},
-                  "o": {
-                    "docs": {},
-                    "m": {
-                      "docs": {
-                        "Haxroomie.html#addRoom": {
-                          "ref": "Haxroomie.html#addRoom",
-                          "tf": 670
-                        }
-                      }
+                }
+              }
+            }
+          },
+          "n": {
+            "docs": {},
+            "y": {
+              "docs": {},
+              "t": {
+                "docs": {},
+                "h": {
+                  "docs": {
+                    "Haxroomie.html": {
+                      "ref": "Haxroomie.html",
+                      "tf": 2
                     }
                   }
                 }
@@ -5381,23 +5398,6 @@ window.lunrData = {
                           "tf": 4.545454545454546
                         }
                       }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "n": {
-            "docs": {},
-            "y": {
-              "docs": {},
-              "t": {
-                "docs": {},
-                "h": {
-                  "docs": {
-                    "Haxroomie.html": {
-                      "ref": "Haxroomie.html",
-                      "tf": 2
                     }
                   }
                 }
@@ -6713,13 +6713,13 @@ window.lunrData = {
                   "ref": "PluginController.html#setPluginConfig",
                   "tf": 1.9230769230769231
                 },
-                "RepositoryController.html#addRepository": {
-                  "ref": "RepositoryController.html#addRepository",
-                  "tf": 2.380952380952381
-                },
                 "Haxroomie.html#addRoom": {
                   "ref": "Haxroomie.html#addRoom",
                   "tf": 10
+                },
+                "RepositoryController.html#addRepository": {
+                  "ref": "RepositoryController.html#addRepository",
+                  "tf": 2.380952380952381
                 },
                 "RoomController.html": {
                   "ref": "RoomController.html",
@@ -6827,6 +6827,24 @@ window.lunrData = {
               }
             }
           },
+          "a": {
+            "docs": {},
+            "c": {
+              "docs": {},
+              "h": {
+                "docs": {
+                  "Haxroomie.html": {
+                    "ref": "Haxroomie.html",
+                    "tf": 2
+                  },
+                  "RoomController.html": {
+                    "ref": "RoomController.html",
+                    "tf": 2.7027027027027026
+                  }
+                }
+              }
+            }
+          },
           "q": {
             "docs": {},
             "u": {
@@ -6856,24 +6874,6 @@ window.lunrData = {
                       "ref": "RepositoryController.html#hasRepository",
                       "tf": 4.545454545454546
                     }
-                  }
-                }
-              }
-            }
-          },
-          "a": {
-            "docs": {},
-            "c": {
-              "docs": {},
-              "h": {
-                "docs": {
-                  "Haxroomie.html": {
-                    "ref": "Haxroomie.html",
-                    "tf": 2
-                  },
-                  "RoomController.html": {
-                    "ref": "RoomController.html",
-                    "tf": 2.7027027027027026
                   }
                 }
               }
@@ -7432,13 +7432,13 @@ window.lunrData = {
                           "ref": "PluginController.html#reloadPlugin",
                           "tf": 20
                         },
-                        "RepositoryController.html#hasRepository": {
-                          "ref": "RepositoryController.html#hasRepository",
-                          "tf": 25
-                        },
                         "Haxroomie.html#hasRoom": {
                           "ref": "Haxroomie.html#hasRoom",
                           "tf": 33.33333333333333
+                        },
+                        "RepositoryController.html#hasRepository": {
+                          "ref": "RepositoryController.html#hasRepository",
+                          "tf": 25
                         },
                         "RoomController.html#running": {
                           "ref": "RoomController.html#running",
@@ -8078,67 +8078,6 @@ window.lunrData = {
       "summary": "",
       "description": "Reloads a plugin from the configured repositories. This is a wrapper around the HHM PluginManager.reloadPlugin method. See https://github.com/saviola777/haxball-headless-manager/blob/master/src/classes/PluginManager.js#L565"
     },
-    "RepositoryController.html": {
-      "id": "RepositoryController.html",
-      "kind": "class",
-      "title": "RepositoryController",
-      "longname": "RepositoryController",
-      "name": "RepositoryController",
-      "tags": "RepositoryController",
-      "summary": "",
-      "description": "Class for controlling Haxball Headless Manager (HHM) repositories.",
-      "body": ""
-    },
-    "RepositoryController.html#addRepository": {
-      "id": "RepositoryController.html#addRepository",
-      "kind": "function",
-      "title": "&lt;async&gt; addRepository( repository [, append ] ) → {Promise.&lt;boolean&gt;}",
-      "longname": "RepositoryController#addRepository",
-      "name": "addRepository",
-      "tags": "RepositoryController#addRepository addRepository",
-      "summary": "",
-      "description": "Adds a repository. If append is set to true, the new repository will be added with the lowest priority, i.e. plugins will only be loaded from it they can't be found in any other repository. Otherwise the repository will be added with the highest priority."
-    },
-    "RepositoryController.html#setRepositories": {
-      "id": "RepositoryController.html#setRepositories",
-      "kind": "function",
-      "title": "&lt;async&gt; setRepositories( repository ) → {Promise}",
-      "longname": "RepositoryController#setRepositories",
-      "name": "setRepositories",
-      "tags": "RepositoryController#setRepositories setRepositories",
-      "summary": "",
-      "description": "Sets the repositories. Overwrites all repositories with the given array of repositories. Adds saviolas default repository if its not defined in the given array."
-    },
-    "RepositoryController.html#hasRepository": {
-      "id": "RepositoryController.html#hasRepository",
-      "kind": "function",
-      "title": "&lt;async&gt; hasRepository( repository ) → {boolean}",
-      "longname": "RepositoryController#hasRepository",
-      "name": "hasRepository",
-      "tags": "RepositoryController#hasRepository hasRepository",
-      "summary": "",
-      "description": "Returns whether the given repository already exists. Repositories are considered equal if their configuration is the same."
-    },
-    "RepositoryController.html#getRepositories": {
-      "id": "RepositoryController.html#getRepositories",
-      "kind": "function",
-      "title": "&lt;async&gt; getRepositories() → {Array.&lt;Repository&gt;}",
-      "longname": "RepositoryController#getRepositories",
-      "name": "getRepositories",
-      "tags": "RepositoryController#getRepositories getRepositories",
-      "summary": "",
-      "description": "Returns available repositories."
-    },
-    "RepositoryController.html#getRepositoryInformation": {
-      "id": "RepositoryController.html#getRepositoryInformation",
-      "kind": "function",
-      "title": "&lt;async&gt; getRepositoryInformation( repository ) → {RepositoryData}",
-      "longname": "RepositoryController#getRepositoryInformation",
-      "name": "getRepositoryInformation",
-      "tags": "RepositoryController#getRepositoryInformation getRepositoryInformation",
-      "summary": "",
-      "description": "Retrieves information about the given repository. The information is loaded from repositorys repository.json config file."
-    },
     "Haxroomie.html": {
       "id": "Haxroomie.html",
       "kind": "class",
@@ -8229,6 +8168,67 @@ window.lunrData = {
       "tags": "Haxroomie#addRoom addRoom",
       "summary": "",
       "description": "Adds a new RoomController. If roomController is a string or number, then it will be used as an id for the new RoomController."
+    },
+    "RepositoryController.html": {
+      "id": "RepositoryController.html",
+      "kind": "class",
+      "title": "RepositoryController",
+      "longname": "RepositoryController",
+      "name": "RepositoryController",
+      "tags": "RepositoryController",
+      "summary": "",
+      "description": "Class for controlling Haxball Headless Manager (HHM) repositories.",
+      "body": ""
+    },
+    "RepositoryController.html#addRepository": {
+      "id": "RepositoryController.html#addRepository",
+      "kind": "function",
+      "title": "&lt;async&gt; addRepository( repository [, append ] ) → {Promise.&lt;boolean&gt;}",
+      "longname": "RepositoryController#addRepository",
+      "name": "addRepository",
+      "tags": "RepositoryController#addRepository addRepository",
+      "summary": "",
+      "description": "Adds a repository. If append is set to true, the new repository will be added with the lowest priority, i.e. plugins will only be loaded from it they can't be found in any other repository. Otherwise the repository will be added with the highest priority."
+    },
+    "RepositoryController.html#setRepositories": {
+      "id": "RepositoryController.html#setRepositories",
+      "kind": "function",
+      "title": "&lt;async&gt; setRepositories( repository ) → {Promise}",
+      "longname": "RepositoryController#setRepositories",
+      "name": "setRepositories",
+      "tags": "RepositoryController#setRepositories setRepositories",
+      "summary": "",
+      "description": "Sets the repositories. Overwrites all repositories with the given array of repositories. Adds saviolas default repository if its not defined in the given array."
+    },
+    "RepositoryController.html#hasRepository": {
+      "id": "RepositoryController.html#hasRepository",
+      "kind": "function",
+      "title": "&lt;async&gt; hasRepository( repository ) → {boolean}",
+      "longname": "RepositoryController#hasRepository",
+      "name": "hasRepository",
+      "tags": "RepositoryController#hasRepository hasRepository",
+      "summary": "",
+      "description": "Returns whether the given repository already exists. Repositories are considered equal if their configuration is the same."
+    },
+    "RepositoryController.html#getRepositories": {
+      "id": "RepositoryController.html#getRepositories",
+      "kind": "function",
+      "title": "&lt;async&gt; getRepositories() → {Array.&lt;Repository&gt;}",
+      "longname": "RepositoryController#getRepositories",
+      "name": "getRepositories",
+      "tags": "RepositoryController#getRepositories getRepositories",
+      "summary": "",
+      "description": "Returns available repositories."
+    },
+    "RepositoryController.html#getRepositoryInformation": {
+      "id": "RepositoryController.html#getRepositoryInformation",
+      "kind": "function",
+      "title": "&lt;async&gt; getRepositoryInformation( repository ) → {RepositoryData}",
+      "longname": "RepositoryController#getRepositoryInformation",
+      "name": "getRepositoryInformation",
+      "tags": "RepositoryController#getRepositoryInformation getRepositoryInformation",
+      "summary": "",
+      "description": "Retrieves information about the given repository. The information is loaded from repositorys repository.json config file."
     },
     "RoomController.html": {
       "id": "RoomController.html",

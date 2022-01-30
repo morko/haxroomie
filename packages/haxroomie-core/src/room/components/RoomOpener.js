@@ -169,7 +169,7 @@ module.exports = class RoomOpener extends EventEmitter {
 
     // initialize the HHM object and the log level of HHM
     await this.page.evaluate(
-      debug => {
+      (debug) => {
         HHM = typeof HHM === `undefined` ? {} : HHM;
         HHM.config = HHM.config || {};
 
@@ -339,7 +339,7 @@ module.exports = class RoomOpener extends EventEmitter {
       let corePlugin = this.readFile(
         path.join(__dirname, '..', '..', 'browser', 'core-plugin.js')
       );
-      await this.page.evaluate(corePlugin => {
+      await this.page.evaluate((corePlugin) => {
         return HHM.manager.addPlugin({
           pluginCode: corePlugin,
           pluginName: 'hr/core',
@@ -420,7 +420,7 @@ module.exports = class RoomOpener extends EventEmitter {
 
     while (!hhmStarted && timeout > currentTime - startTime) {
       // if the recaptcha appears the token must be invalid
-      let recaptcha = await haxframe.$eval('#recaptcha', e => e.innerHTML);
+      let recaptcha = await haxframe.$eval('#recaptcha', (e) => e.innerHTML);
       if (recaptcha) {
         throw new InvalidTokenError(`Token is invalid or has expired!`);
       }
@@ -432,7 +432,7 @@ module.exports = class RoomOpener extends EventEmitter {
     if (timeout <= currentTime - startTime) {
       return null;
     }
-    return await haxframe.$eval('#roomlink a', element => {
+    return await haxframe.$eval('#roomlink a', (element) => {
       return element.getAttribute('href');
     });
   }

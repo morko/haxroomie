@@ -3,10 +3,10 @@ const expect = require('chai').expect;
 
 const { createRooms } = require('./utils');
 
-describe('RoomController', function() {
+describe('RoomController', function () {
   let rooms, configs, haxroomie;
 
-  before(async function() {
+  before(async function () {
     this.timeout(30000);
     let data = await createRooms({ amount: 1, open: false });
     rooms = data.rooms;
@@ -14,19 +14,19 @@ describe('RoomController', function() {
     haxroomie = data.haxroomie;
   });
 
-  after(async function() {
+  after(async function () {
     await haxroomie.closeBrowser();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     rooms[0].removeAllListeners('open-room-start');
     rooms[0].removeAllListeners('open-room-stop');
     rooms[0].removeAllListeners('close-room-start');
     rooms[0].removeAllListeners('close-room-stop');
   });
 
-  describe('#openRoom()', function() {
-    it('should start the room', function(done) {
+  describe('#openRoom()', function () {
+    it('should start the room', function (done) {
       this.timeout(20000);
       rooms[0].on('open-room-start', (err, config) => {
         if (err) done(err);
@@ -57,25 +57,25 @@ describe('RoomController', function() {
     });
   });
 
-  describe('#callRoom', function() {
-    it('call a function in roomObject and return the result', async function() {
+  describe('#callRoom', function () {
+    it('call a function in roomObject and return the result', async function () {
       let players = await rooms[0].callRoom('getPlayerList');
       expect(players).to.be.an('array');
     });
   });
 
-  describe('log events', function() {
-    afterEach(function() {
+  describe('log events', function () {
+    afterEach(function () {
       rooms[0].removeAllListeners('error-logged');
       rooms[0].removeAllListeners('warning-logged');
       rooms[0].removeAllListeners('info-logged');
     });
 
-    describe('error-logged', function() {
-      it('should emit an event when browser logged error', function(done) {
+    describe('error-logged', function () {
+      it('should emit an event when browser logged error', function (done) {
         let msg = 'testing';
         let room = rooms[0];
-        room.on('error-logged', eMsg => {
+        room.on('error-logged', (eMsg) => {
           try {
             expect(eMsg).to.equal(msg);
           } catch (err) {
@@ -83,17 +83,17 @@ describe('RoomController', function() {
           }
           done();
         });
-        room.page.evaluate(msg => {
+        room.page.evaluate((msg) => {
           console.error(msg);
         }, msg);
       });
     });
 
-    describe('warning-logged', function() {
-      it('should emit an event when browser logged warning', function(done) {
+    describe('warning-logged', function () {
+      it('should emit an event when browser logged warning', function (done) {
         let msg = 'testing';
         let room = rooms[0];
-        room.on('warning-logged', eMsg => {
+        room.on('warning-logged', (eMsg) => {
           try {
             expect(eMsg).to.equal(msg);
           } catch (err) {
@@ -101,17 +101,17 @@ describe('RoomController', function() {
           }
           done();
         });
-        room.page.evaluate(msg => {
+        room.page.evaluate((msg) => {
           console.warn(msg);
         }, msg);
       });
     });
 
-    describe('info-logged', function() {
-      it('should emit an event when browser logged message that is not a warning or error', function(done) {
+    describe('info-logged', function () {
+      it('should emit an event when browser logged message that is not a warning or error', function (done) {
         let msg = 'testing';
         let room = rooms[0];
-        room.on('info-logged', iMsg => {
+        room.on('info-logged', (iMsg) => {
           try {
             expect(iMsg).to.equal(msg);
           } catch (err) {
@@ -119,15 +119,15 @@ describe('RoomController', function() {
           }
           done();
         });
-        room.page.evaluate(msg => {
+        room.page.evaluate((msg) => {
           console.log(msg);
         }, msg);
       });
     });
   });
 
-  describe('#closeRoom()', function() {
-    it('should close the room', function(done) {
+  describe('#closeRoom()', function () {
+    it('should close the room', function (done) {
       this.timeout(20000);
       rooms[0].on('close-room-stop', () => done());
       rooms[0].closeRoom();

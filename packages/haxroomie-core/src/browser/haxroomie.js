@@ -7,7 +7,7 @@ window.haxroomie = window.haxroomie || {};
 
 Object.assign(
   window.haxroomie,
-  (function() {
+  (function () {
     return {
       isObject,
       mergeDeep,

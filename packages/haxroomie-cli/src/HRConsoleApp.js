@@ -57,8 +57,8 @@ class HRConsoleApp {
       chromiumArgs: this.chromiumArgs,
     });
 
-    this.haxroomie.on('room-added', room => this.onNewRoom(room));
-    this.haxroomie.on('room-removed', room => this.onRoomRemoved(room));
+    this.haxroomie.on('room-added', (room) => this.onNewRoom(room));
+    this.haxroomie.on('room-removed', (room) => this.onRoomRemoved(room));
 
     this.config = new Config({
       configPath: this.configPath,
@@ -80,7 +80,7 @@ class HRConsoleApp {
   async createRooms() {
     const roomIds = this.config.getRoomIds();
     await Promise.all(
-      roomIds.map(async roomId => {
+      roomIds.map(async (roomId) => {
         return this.createRoom(roomId);
       })
     );
@@ -145,10 +145,10 @@ class HRConsoleApp {
       room: room,
       haxroomie: this.haxroomie,
       config: this.config,
-      setRoom: room => this.setRoom(room),
-      openRoom: id => this.openRoom(id),
-      closeRoom: id => this.closeRoom(id),
-      createRoom: id => this.createRoom(id),
+      setRoom: (room) => this.setRoom(room),
+      openRoom: (id) => this.openRoom(id),
+      closeRoom: (id) => this.closeRoom(id),
+      createRoom: (id) => this.createRoom(id),
     });
 
     const commandManager = new CommandManager({ roomContext });
@@ -170,23 +170,23 @@ class HRConsoleApp {
     room.on(`open-room-stop`, (err, roomInfo) =>
       this.onOpenRoomStop(err, room, roomInfo)
     );
-    room.on(`close-room-start`, err => this.onCloseRoomStart(err, room));
-    room.on(`close-room-stop`, err => this.onCloseRoomStop(err, room));
-    room.on(`page-closed`, room => this.onPageClosed(room));
-    room.on(`page-crash`, err => commandPrompt.error(err));
-    room.on(`page-error`, err => commandPrompt.error(err));
+    room.on(`close-room-start`, (err) => this.onCloseRoomStart(err, room));
+    room.on(`close-room-stop`, (err) => this.onCloseRoomStop(err, room));
+    room.on(`page-closed`, (room) => this.onPageClosed(room));
+    room.on(`page-crash`, (err) => commandPrompt.error(err));
+    room.on(`page-error`, (err) => commandPrompt.error(err));
 
     // Set listening for the log events only if we are not in development
     // mode, because it will log anything to stdout anyways.
     if (process.env.NODE_ENV !== 'development') {
-      room.on(`error-logged`, msg => {
+      room.on(`error-logged`, (msg) => {
         commandPrompt.print(
           `${this.logPrefix(room)} ${msg}`,
           'BROWSER LOG ERROR'
         );
       });
       if (this.loglevel >= loglevels.warn) {
-        room.on(`warning-logged`, msg => {
+        room.on(`warning-logged`, (msg) => {
           commandPrompt.print(
             `${this.logPrefix(room)} ${msg}`,
             'BROWSER LOG WARN'
@@ -194,7 +194,7 @@ class HRConsoleApp {
         });
       }
       if (this.loglevel >= loglevels.info) {
-        room.on(`info-logged`, msg => {
+        room.on(`info-logged`, (msg) => {
           commandPrompt.print(
             `${this.logPrefix(room)} ${msg}`,
             'BROWSER LOG INFO'

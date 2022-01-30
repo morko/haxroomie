@@ -22,7 +22,7 @@ const alignedWithColorsAndTime = format.combine(
   format.colorize({ colors: customLevels.colors }),
   format.timestamp(),
   format.align(),
-  format.printf(info => {
+  format.printf((info) => {
     const { timestamp, level, message, ...args } = info;
     return `[${timestamp}] [${level}] ${message.trim()} ${
       Object.keys(args).length ? stringify(args) : ''

@@ -23,7 +23,7 @@ class BaseCommands extends CommandHandler {
       run: async () => {
         let rooms = this.haxroomie.getRooms();
         rooms = await Promise.all(
-          rooms.map(async r => {
+          rooms.map(async (r) => {
             let id = 'ID: ' + colors.cyan(r.id);
 
             if (!r.usable) {
@@ -60,7 +60,7 @@ class BaseCommands extends CommandHandler {
       )}).`,
       args: ['id'],
       category: 'Basic commands',
-      run: async id => {
+      run: async (id) => {
         let room = this.haxroomie.getRoom(id);
         if (!room) {
           commandPrompt.print(`Invalid room id`, `ERROR`);
@@ -80,7 +80,7 @@ class BaseCommands extends CommandHandler {
       alias: ['start'],
       args: ['id'],
       category: 'Basic commands',
-      run: id => {
+      run: (id) => {
         const room = this.haxroomie.getRoom(id);
         if (room.running) {
           commandPrompt.print(
@@ -101,7 +101,7 @@ class BaseCommands extends CommandHandler {
       args: ['id'],
       alias: ['stop'],
       category: 'Basic commands',
-      run: async id => {
+      run: async (id) => {
         return this.closeRoom(id);
       },
     };
@@ -174,7 +174,7 @@ class BaseCommands extends CommandHandler {
 
       // Reload running rooms.
       if (room.running) {
-        const cannotHotLoad = modifiedProperties.some(p => {
+        const cannotHotLoad = modifiedProperties.some((p) => {
           return p !== 'pluginConfig' && p !== 'repositories';
         });
 
@@ -240,7 +240,7 @@ class BaseCommands extends CommandHandler {
       disabled: !this.room.running,
       args: ['msg'],
       category: 'Room control',
-      run: async msg => {
+      run: async (msg) => {
         if (!msg && msg !== 0) return;
         commandPrompt.print(`MSG to ${this.room.id}: ${msg}`);
         await this.room.callRoom(
@@ -261,7 +261,7 @@ class BaseCommands extends CommandHandler {
       category: 'Room control',
       run: async () => {
         let playerList = await this.room.callRoom('getPlayerList');
-        playerList = playerList.filter(p => p && p.id !== 0);
+        playerList = playerList.filter((p) => p && p.id !== 0);
 
         let players = [`${playerList.length}/${this.room.roomInfo.maxPlayers}`];
 

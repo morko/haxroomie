@@ -228,7 +228,7 @@ class RoomController extends EventEmitter {
     this.roomOpener = new RoomOpener({
       id: this.id,
       page: this.page,
-      onBrowserAction: data => this.onBrowserAction(data),
+      onBrowserAction: (data) => this.onBrowserAction(data),
       timeout: this.timeout,
     });
 
