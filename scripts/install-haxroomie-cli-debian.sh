@@ -14,7 +14,7 @@
 # https://gist.github.com/saviola777/72ae8c001d0c6de75f19198652594151
 #
 
-NODE_VERSION=12.16
+NODE_VERSION=16
 
 if [ $(id -u) != 0 ]; then
   echo "This script must be run with root priviledges!"
@@ -88,7 +88,7 @@ if [ $? -eq 0 ]; then
     confirm_continue
   fi
 else
-  adduser $USERNAME --gecos "First Last,RoomNumber,WorkPhone,HomePhone"
+  adduser $USERNAME --gecos "Haxroomie"
   if [ $? -eq 0 ]; then
     echo -e "\e[32mUser $USERNAME has been added to system!\e[0m"
   else

@@ -16,7 +16,7 @@ haxroomie-cli is a tool to run and control HaxBall rooms from a Command Line Int
 
 ## Quick Start
 
-**Installation script is tested only on Ubuntu 18.04 but it should work on Debian based distributions. Use at your own risk!**
+**Installation script is tested only on Ubuntu but it should work on Debian based distributions. Use at your own risk!**
 
 The installation script
 
@@ -26,7 +26,7 @@ The installation script
 - installs `tmux` to keep haxroomie-cli running when not connected to the server
 - creates a `startup script` that automatically switches to the haxroomie user and starts/resumes haxroomie-cli in a `tmux` session.
 
-Run the installation script as root or with sudo.
+Run the installation script as root user. Using sudo will probably not work.
 
 ```
 bash <(curl -s https://raw.githubusercontent.com/morko/haxroomie/master/scripts/install-haxroomie-cli-debian.sh)
@@ -48,7 +48,7 @@ If you do not wish to use the installation script you can only install the `haxr
 
 **Prerequisites:**
 
-- [Node.js](https://nodejs.org) version 10.15.1 or newer
+- [Node.js](https://nodejs.org) version 16 or newer
 - `npm` (Node Package Manager that usually comes with [Node.js](https://nodejs.org))
 
 **It is not recommended to install/run haxroomie with root user!**

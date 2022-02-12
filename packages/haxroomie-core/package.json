@@ -20,6 +20,9 @@
     "url": "https://github.com/morko/haxroomie/issues"
   },
   "homepage": "https://github.com/morko/haxroomie/packages/haxroomie-core#readme",
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "colors": "^1.4.0",
     "dotenv": "^14.3.2",
