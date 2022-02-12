@@ -65,22 +65,14 @@ To install haxroomie-cli run:
 npm install haxroomie-cli -g
 ```
 
-To install dependencies for the headless browser in **Debian** based Linux you can use the following command:
-
-```sh
-sudo apt install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
-```
+You need to install some dependencies for the headless browser to work.
+See [puppeteer troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix) and install the dependencies for your system.
 
 To start the interactive CLI run:
 
 ```sh
 haxroomie-cli
 ```
-
-If you get an error like _"Failed to launch Chrome"_, it is possible that you are missing some libraries that the headless Chrome depend on.
-
-For dependencies in other systems see puppeteers
-[troubleshooting page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix).
 
 # Updating
 
