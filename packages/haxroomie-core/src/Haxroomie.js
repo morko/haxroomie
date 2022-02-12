@@ -5,6 +5,7 @@ const EventEmitter = require('events');
 const { RoomController } = require('./room');
 const logger = require('./logger');
 const versionConfig = require('../version-config.json');
+const { mkdirSync } = require('fs');
 
 /**
  * Emitted when new RoomController is added.
@@ -86,6 +87,11 @@ class Haxroomie extends EventEmitter {
     this.headless = headless;
     this.userDataDir = userDataDir;
     this.userDataDir = path.resolve(process.cwd(), this.userDataDir);
+    try {
+      mkdirSync(this.userDataDir, { recursive: true });
+    } catch (err) {
+      // Don't do anything. Directory probably exists already.
+    }
     this.timeout = timeout;
     this.executablePath = executablePath
       ? path.resolve(process.cwd(), executablePath)
