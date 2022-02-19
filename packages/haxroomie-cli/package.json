@@ -1,6 +1,6 @@
 {
   "name": "haxroomie-cli",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Command Line Interface for haxroomie to run and control HaxBall rooms.",
   "main": "index.js",
   "scripts": {
