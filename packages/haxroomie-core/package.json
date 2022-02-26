@@ -34,5 +34,6 @@
     "chai-as-promised": "^7.1.1",
     "mocha": "^9.2.0",
     "sinon": "^13.0.0"
-  }
+  },
+  "gitHead": "37b658ebc4c914a9525b8cb72d5e8ce4b5f56399"
 }
