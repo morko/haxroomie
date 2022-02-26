@@ -2,9 +2,6 @@
 
 <a href=https://discord.gg/TeJAEWu><img src="https://discordapp.com/api/guilds/580671475707674626/widget.png?style=shield" alt="Discord"/></a>
 
-**WARNING: there is currently some problem running with 20.04 version of Ubuntu crashing randomly.**
-This is being investigated but will take some time to debug.
-
 haxroomie-cli is a tool to run and control HaxBall rooms from a Command Line Interface.
 
 
