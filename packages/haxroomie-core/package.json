@@ -1,6 +1,6 @@
 {
   "name": "haxroomie-core",
-  "version": "2.6.0",
+  "version": "2.6.3",
   "description": "Node.js API for running and controlling HaxBall rooms.",
   "main": "index.js",
   "scripts": {
