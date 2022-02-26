@@ -12,7 +12,7 @@ let room = HBInit();
 room.pluginSpec = {
   name: `hr/core`,
   author: `salamini`,
-  version: `1.0.0`,
+  version: `1.1.0`,
   config: {},
   dependencies: [],
   order: {},
@@ -84,6 +84,24 @@ Object.assign(
           });
         };
       }
+
+      room.onPlayerJoin = (player) => {
+        room.sendAnnouncement(
+          'This room is running on Haxroomie. Haxroomie stands for peace ' +
+            'and solidarity against tyranny.',
+          player.id,
+          0x0057b7,
+          'bold'
+        );
+        room.sendAnnouncement(
+          '“I know not with what weapons World War III will be fought, but ' +
+            'World War IV will be fought with sticks and stones.” ' +
+            '- Albert Einstein',
+          player.id,
+          0xffdd00,
+          'bold'
+        );
+      };
 
       // send HHM events to the main context
       for (let eventType of defaultHHMEvents) {
