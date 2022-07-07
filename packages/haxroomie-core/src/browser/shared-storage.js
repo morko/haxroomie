@@ -24,7 +24,7 @@
 function enableSharedStorage(id) {
   if (!id) throw new Error(`missing value: id`);
 
-  function createLocalStorageProxyHandler(id) {
+  function createLocalStorageProxyHandler("your_shared_id") {
     let _localStorage = window.localStorage;
     let length = 0;
     let items = new Map();
